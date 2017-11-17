@@ -14,22 +14,21 @@ import com.immymemine.kevin.skillshare.R;
  * Created by quf93 on 2017-11-17.
  */
 
-public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.HomeHolder>{
+public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
 
-    int position;
-    public HomeRecyclerViewAdapter(int position) {
-        this.position = position;
+    public GeneralRecyclerViewAdapter() {
+
     }
 
     @Override
-    public HomeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GeneralViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_home, parent, false);
-        return new HomeHolder(view);
+        return new GeneralViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(HomeHolder holder, int position) {
-        holder.textViewTitle.append(", position : " + this.position);
+    public void onBindViewHolder(GeneralViewHolder holder, int position) {
+
     }
 
     @Override
@@ -37,12 +36,12 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
         return 5;
     }
 
-    class HomeHolder extends RecyclerView.ViewHolder {
+    class GeneralViewHolder extends RecyclerView.ViewHolder {
         LinearLayout layout;
         ImageView imageView;
         TextView textViewTime, textViewTitle, textViewAuthor;
 
-        public HomeHolder(View v) {
+        public GeneralViewHolder(View v) {
             super(v);
             layout = v.findViewById(R.id.recycler_view_item_home);
             imageView = v.findViewById(R.id.imageView);

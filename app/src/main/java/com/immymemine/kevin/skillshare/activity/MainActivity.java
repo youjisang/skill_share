@@ -8,15 +8,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.adapter.HomeRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.activity.adapter.GeneralRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,10 +51,29 @@ public class MainActivity extends AppCompatActivity {
         // view 추가
         addView(position);
         position++;
+        // if(/*로그인 되어 있지 않으면*/) {
+        addWelcomeView();
+        position++;
+        // }
 
         initView();
     }
 
+    private void addWelcomeView() {
+        View welcomeView = inflater.inflate(R.layout.welcome_view, null);
+        ImageButton close_button = welcomeView.findViewById(R.id.close_button);
+
+        close_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // welcome view 를 container 에서 제거
+                removeView(0);
+                position--;
+            }
+        });
+
+        container.addView(welcomeView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
 
     private void initView() {
         refreshLayout = findViewById(R.id.swipe_layout);
@@ -77,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
 
     // view 를 추가하는 함수
     private void addView(int position) {
-        View newView = inflater.inflate(R.layout.home_view, null);
+        View newView = inflater.inflate(R.layout.general_view, null);
 
-        recyclerView = newView.findViewById(R.id.home_recycler_view);
-        HomeRecyclerViewAdapter adapter = new HomeRecyclerViewAdapter(position);
+        recyclerView = newView.findViewById(R.id.general_recycler_view);
+        GeneralRecyclerViewAdapter adapter = new GeneralRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        Log.e("this position", position + "");
+
         container.addView(newView, position, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 

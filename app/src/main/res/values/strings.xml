@@ -5,10 +5,15 @@
     <string name="discover">Discover</string>
     <string name="your_classes">Your Classes</string>
     <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="welcome">Welcome to Skillshare</string>
+    <string name="welcome_message">Sign up to access thousands of classes taught by expert practitioners</string>
     <string name="me">Me</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="see_all">See All</string>
     <string name="best_this_month">Best This Month</string>
+
+
 </resources>
