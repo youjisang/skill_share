@@ -1,82 +1,71 @@
 package com.immymemine.kevin.skillshare.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.adapter.GeneralRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.activity.fragment.GroupFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // 당겼을 때 새로고침
-    SwipeRefreshLayout refreshLayout;
-
     // recycler view 를 가지고 있는 View 를 담는 container
     LinearLayout container;
+    LinearLayout.LayoutParams layoutParams;
 
-    // view 객체 만들기 위해 사용되는 inflater
-    LayoutInflater inflater;
-    RecyclerView recyclerView;
+    // view list <<< ( ? )
+    List<View> viewList = new ArrayList<>();
 
-    // for test
-    int position;
+    FragmentManager fragmentManager;
+    FragmentTransaction ft;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GroupFragment fragment = new GroupFragment();
+
         setNavigationView();
 
         // view 를 추가 삭제 할 container
         container = findViewById(R.id.container);
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // view 생성을 담당할 view factory
+        ViewFactory viewFactory = new ViewFactory(this);
 
-        // for test
-        position = 0;
-
-        // inflater initiate
-        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // view 추가
-        addView(position);
-        position++;
         // if(/*로그인 되어 있지 않으면*/) {
-        addWelcomeView();
-        position++;
+        viewList.add(viewFactory.getViewInstance(Const.WELCOME_VIEW, ""));
         // }
 
+        // 기본 view 추가
+        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Feature On SkillShare"));
+        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Trending now"));
+        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Best This Month"));
+
         initView();
-    }
 
-    private void addWelcomeView() {
-        View welcomeView = inflater.inflate(R.layout.welcome_view, null);
-        ImageButton close_button = welcomeView.findViewById(R.id.close_button);
-
-        close_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // welcome view 를 container 에서 제거
-                removeView(0);
-                position--;
-            }
-        });
-
-        container.addView(welcomeView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //fragment
+        fragmentManager = getSupportFragmentManager();
     }
 
     private void initView() {
-        refreshLayout = findViewById(R.id.swipe_layout);
+        for(int i=0; i<viewList.size(); i++) {
+            container.addView(viewList.get(i), i, layoutParams);
+        }
+
+        // refresh view setting
+        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -85,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 // 이전과 같다면 그대로 뿌려주고
 
                 // 다른 부분이 있으면 view 를 추가하거나 삭제
-                addView(position);
-                position++;
 
                 // 완료 되면 호출
                 refreshLayout.setRefreshing(false);
@@ -94,20 +81,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // view 를 추가하는 함수
-    private void addView(int position) {
-        View newView = inflater.inflate(R.layout.general_view, null);
-
-        recyclerView = newView.findViewById(R.id.general_recycler_view);
-        GeneralRecyclerViewAdapter adapter = new GeneralRecyclerViewAdapter();
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        container.addView(newView, position, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    // view 를 추가하는 메소드
+    private void addViewAt(View view, int position) {
+        container.addView(view, position, layoutParams);
     }
 
-    // view 를 제거하는 함수
-    private void removeView(int position) {
+    // view 를 제거하는 메소드
+    private void removeViewAt(int position) {
         container.removeViewAt(position);
     }
 
@@ -118,10 +98,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        removeView(0);
-                        position--;
                         return true;
                     case R.id.navigation_groups:
+                        container.removeAllViews();
+                        fragmentManager
+                                .beginTransaction()
+                                .add(container.getId(), new GroupFragment(), "group frag")
+                                .commit();
                         return true;
                     case R.id.navigation_discover:
                         return true;

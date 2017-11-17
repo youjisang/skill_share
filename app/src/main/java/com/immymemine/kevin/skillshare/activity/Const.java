@@ -6,5 +6,6 @@ package com.immymemine.kevin.skillshare.activity;
 
 public class Const {
     public static final int GENERAL_VIEW = 1872;
-
+    public static final int WELCOME_VIEW = 1873;
+    public static final int GROUP_VIEW = 1874;
 }
