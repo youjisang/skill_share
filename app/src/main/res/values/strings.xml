@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SkillShare</string>
+    <string name="title_home">Home</string>
+    <string name="groups">Groups</string>
+    <string name="discover">Discover</string>
+    <string name="your_classes">Your Classes</string>
+    <string name="sign_in">Sign in</string>
+    <string name="me">Me</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="see_all">See All</string>
+    <string name="best_this_month">Best This Month</string>
+</resources>
