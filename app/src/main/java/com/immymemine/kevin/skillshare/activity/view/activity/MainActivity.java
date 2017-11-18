@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // view 생성을 담당할 view factory
         viewFactory = new ViewFactory(this);
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // if(/*로그인 되어 있지 않으면*/) {
         viewList.add(viewFactory.getViewInstance(Const.WELCOME_VIEW, ""));
@@ -122,20 +123,17 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Trending Classes"));
                 viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Popular Classes"));
             } else if(id == R.id.navigation_your_classes) {
-
+                viewList.add(viewFactory.getYourClassesViewInstance());
             } else if(id == R.id.navigation_me) {
                 viewList.add(viewFactory.getMeViewInstance());
+                viewList.add(viewFactory.getMeSkillViewInstance());
             }
         }
     }
 
     private void drawingView() {
         container.removeAllViews();
-        if(viewList.size() == 1) {
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        } else {
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
+
         for(int i=0; i<viewList.size(); i++) {
             container.addView(viewList.get(i), i, layoutParams);
         }
@@ -143,16 +141,20 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     private void changeToolbar(int id) {
         if(id == R.id.navigation_home) {
+            toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Home");
             toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_groups) {
+            toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Groups");
             toolbar_left_button.setVisibility(View.GONE);
         } else if(id == R.id.navigation_discover) {
+            toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Discover");
             toolbar_left_button.setVisibility(View.VISIBLE);
             toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_your_classes) {
+            toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Your Classes");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);

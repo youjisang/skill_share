@@ -76,6 +76,14 @@ public class ViewFactory {
         return view;
     }
 
+    public View getYourClassesViewInstance() {
+        View view = inflater.inflate(R.layout.your_classes_view, null);
+        // video thumbnail setting
+        // ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+        // Glide.with(context).load(/*thumbnail*/).into(video_thumbnail);
+        return view;
+    }
+
     public View getMeViewInstance() {
         View view = inflater.inflate(R.layout.me_view, null);
 
@@ -88,6 +96,12 @@ public class ViewFactory {
         // followers, following <<< onClick setting...
         ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
         ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
+
+        return view;
+    }
+
+    public View getMeSkillViewInstance() {
+        View view = inflater.inflate(R.layout.me_skill_view, null);
 
         return view;
     }
