@@ -6,12 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.utility.Const;
 import com.immymemine.kevin.skillshare.activity.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.activity.adapter.GroupRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.activity.utility.Const;
 
 /**
  * Created by quf93 on 2017-11-18.
@@ -67,8 +70,24 @@ public class ViewFactory {
             recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
-            ((TextView)view.findViewById(R.id.text_view_title2)).setText(title);
+            ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
         }
+
+        return view;
+    }
+
+    public View getMeViewInstance() {
+        View view = inflater.inflate(R.layout.me_view, null);
+
+        // rounding image setting
+        ImageView me_image = view.findViewById(R.id.me_image);
+        Glide.with(context).load(R.drawable.ic_launcher_background).apply(RequestOptions.circleCropTransform()).into(me_image);
+        // 이름, 닉네임 세팅
+        ((TextView)view.findViewById(R.id.me_name)).setText("My name");
+        ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
+        // followers, following <<< onClick setting...
+        ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
+        ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
 
         return view;
     }

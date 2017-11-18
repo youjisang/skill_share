@@ -1,11 +1,10 @@
 package com.immymemine.kevin.skillshare.activity.view.activity;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -15,6 +14,9 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.utility.Const;
 import com.immymemine.kevin.skillshare.activity.view.ViewFactory;
+import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
+import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
+import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     int itemStack = R.id.navigation_home;
 
     // toolbar initiate
+    Toolbar toolbar;
     TextView toolbar_title;
     ImageButton toolbar_left_button, toolbar_right_button;
 
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // view 를 추가 삭제 할 container
         container = findViewById(R.id.container);
-        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         // view 생성을 담당할 view factory
         viewFactory = new ViewFactory(this);
 
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     private void initView() {
 
+        toolbar = findViewById(R.id.toolbar);
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_left_button = findViewById(R.id.toolbar_button_l);
         toolbar_right_button = findViewById(R.id.toolbar_button_r);
@@ -114,12 +118,24 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             if (id == R.id.navigation_groups) {
                 viewList.add(viewFactory.getViewInstance(Const.GROUP_VIEW, "Feature Groups"));
                 viewList.add(viewFactory.getViewInstance(Const.GROUP_VIEW, "Recently Active Groups"));
+            } else if(id == R.id.navigation_discover) {
+                viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Trending Classes"));
+                viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Popular Classes"));
+            } else if(id == R.id.navigation_your_classes) {
+
+            } else if(id == R.id.navigation_me) {
+                viewList.add(viewFactory.getMeViewInstance());
             }
         }
     }
 
     private void drawingView() {
         container.removeAllViews();
+        if(viewList.size() == 1) {
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        } else {
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
         for(int i=0; i<viewList.size(); i++) {
             container.addView(viewList.get(i), i, layoutParams);
         }
@@ -128,30 +144,58 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     private void changeToolbar(int id) {
         if(id == R.id.navigation_home) {
             toolbar_title.setText("Home");
+            toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_groups) {
             toolbar_title.setText("Groups");
             toolbar_left_button.setVisibility(View.GONE);
         } else if(id == R.id.navigation_discover) {
             toolbar_title.setText("Discover");
-            toolbar_left_button.setVisibility(View.GONE);
+            toolbar_left_button.setVisibility(View.VISIBLE);
+            toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_your_classes) {
             toolbar_title.setText("Your Classes");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);
-        } else if(id == R.id.navigation_my) {
-            // toolbar 를 바꿔야 함..................
+        } else if(id == R.id.navigation_me) {
+            toolbar.setVisibility(View.GONE);
         }
     }
 
     private void setNavigationView() {
-        final BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
+
+        bottomNavigationView.addTab(new BottomNavigationItem
+                ("Home", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_home_black_24dp));
+
+        bottomNavigationView.addTab(new BottomNavigationItem
+                ("Group", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_dashboard_black_24dp));
+        BottomNavigationItem item = new BottomNavigationItem(
+                "Discover", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_notifications_black_24dp);
+
+        bottomNavigationView.addTab(new BottomNavigationItem(
+                "Discover", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_notifications_black_24dp));
+
+        bottomNavigationView.addTab(new BottomNavigationItem
+                ("Your Classes", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_dashboard_black_24dp));
+
+        bottomNavigationView.addTab(new BottomNavigationItem
+                ("Me", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_home_black_24dp));
+
+        bottomNavigationView.isColoredBackground(false);
+        bottomNavigationView.setItemActiveColorWithoutColoredBackground(R.color.itemActiveColorWithoutColoredBackground);
+
+        bottomNavigationView.disableShadow();
+        bottomNavigationView.setTextInactiveSize(14);
+        bottomNavigationView.setTextActiveSize(16);
+        bottomNavigationView.selectTab(0);
+
+        bottomNavigationView.setOnBottomNavigationItemClickListener(new OnBottomNavigationItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
+            public void onNavigationItemClick(int index) {
+                switch (index) {
+                    case 0:
                         if(itemStack == R.id.navigation_home) {
-                            return true;
+                            break;
                         } else {
                             // 이전 페이지의 view 들을 캐싱한다.
                             cacheView(itemStack);
@@ -162,55 +206,53 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                             setViewList(itemStack);
                             // container 에 담기 ( 그리기 )
                             drawingView();
-                            return true;
+                            break;
                         }
-
-                    case R.id.navigation_groups:
+                    case 1:
                         if(itemStack == R.id.navigation_groups) {
-                            return true;
+                            break;
                         } else {
                             cacheView(itemStack);
                             itemStack = R.id.navigation_groups;
                             changeToolbar(itemStack);
                             setViewList(itemStack);
                             drawingView();
-                            return true;
+                            break;
                         }
-                    case R.id.navigation_discover:
+                    case 2:
                         if(itemStack == R.id.navigation_discover) {
-                            return true;
+                            break;
                         } else {
                             cacheView(itemStack);
                             itemStack = R.id.navigation_discover;
                             changeToolbar(itemStack);
                             setViewList(itemStack);
                             drawingView();
-                            return true;
+                            break;
                         }
-                    case R.id.navigation_your_classes:
+                    case 3:
                         if(itemStack == R.id.navigation_your_classes) {
-                            return true;
+                            break;
                         } else {
                             cacheView(itemStack);
                             itemStack = R.id.navigation_your_classes;
                             changeToolbar(itemStack);
                             setViewList(itemStack);
                             drawingView();
-                            return true;
+                            break;
                         }
-                    case R.id.navigation_my:
-                        if(itemStack == R.id.navigation_my) {
-                            return true;
+                    case 4:
+                        if(itemStack == R.id.navigation_me) {
+                            break;
                         } else {
                             cacheView(itemStack);
-                            itemStack = R.id.navigation_my;
+                            itemStack = R.id.navigation_me;
                             changeToolbar(itemStack);
                             setViewList(itemStack);
                             drawingView();
-                            return true;
+                            break;
                         }
                 }
-                return false;
             }
         });
     }

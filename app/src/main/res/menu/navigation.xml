@@ -22,7 +22,7 @@
         android:title="@string/discover" />
 
     <item
-        android:id="@+id/navigation_my"
+        android:id="@+id/navigation_me"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/discover" />
 
