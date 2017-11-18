@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.activity;
+package com.immymemine.kevin.skillshare.activity.utility;
 
 /**
  * Created by quf93 on 2017-11-18.

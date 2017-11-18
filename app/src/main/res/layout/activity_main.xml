@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.immymemine.kevin.skillshare.activity.MainActivity">
+    tools:context=".activity.view.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Home"
@@ -26,12 +27,26 @@
             tools:layout_editor_absoluteY="16dp" />
 
         <ImageButton
+            android:id="@+id/toolbar_button_r"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginRight="16dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_home_black_24dp" />
+            android:paddingRight="8dp"
+            app:srcCompat="@drawable/ic_home_black_24dp"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <ImageButton
+            android:id="@+id/toolbar_button_l"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@android:color/transparent"
+            android:paddingRight="8dp"
+            app:srcCompat="@drawable/ic_home_black_24dp"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="16dp" />
 
     </android.support.v7.widget.Toolbar>
 

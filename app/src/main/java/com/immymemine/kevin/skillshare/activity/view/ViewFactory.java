@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.activity;
+package com.immymemine.kevin.skillshare.activity.view;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.utility.Const;
 import com.immymemine.kevin.skillshare.activity.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.activity.adapter.GroupRecyclerViewAdapter;
 
@@ -20,11 +21,14 @@ public class ViewFactory {
     Context context;
     LayoutInflater inflater;
     RecyclerView recyclerView;
-
+    InteractionInterface interactionInterface;
     public ViewFactory(Context context) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        if(context instanceof InteractionInterface) {
+            interactionInterface = (InteractionInterface) context;
+        }
     }
 
     // type 에 따라 view 를 생성 / 반환
@@ -47,8 +51,15 @@ public class ViewFactory {
                     // see all page 이동
                 }
             });
+
         } else if(viewType == Const.WELCOME_VIEW) {
             view = inflater.inflate(R.layout.welcome_view, null);
+            view.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    interactionInterface.interact();
+                }
+            });
         } else if(viewType == Const.GROUP_VIEW) {
             view = inflater.inflate(R.layout.group_view, null);
             // recycler view setting
@@ -60,5 +71,9 @@ public class ViewFactory {
         }
 
         return view;
+    }
+
+    public interface InteractionInterface {
+        void interact();
     }
 }

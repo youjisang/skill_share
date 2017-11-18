@@ -52,6 +52,6 @@
         android:layout_height="60dp"
         android:paddingLeft="8dp"
         android:text="Graphic Designers"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black" />
 </LinearLayout>
