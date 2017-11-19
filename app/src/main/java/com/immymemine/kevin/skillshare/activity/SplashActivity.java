@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.view.activity.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

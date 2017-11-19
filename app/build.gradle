@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -39,4 +43,10 @@ dependencies {
 
     // bottom navigation view controller
     implementation 'com.github.armcha:LuseenBottomNavigation:1.8.2'
+
+    // toggle button
+    implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
+
+    // toggle image button
+    implementation 'net.colindodd:toggleimagebutton:1.2'
 }

@@ -1,5 +1,6 @@
-package com.immymemine.kevin.skillshare.activity.view.activity;
+package com.immymemine.kevin.skillshare.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.utility.Const;
-import com.immymemine.kevin.skillshare.activity.view.ViewFactory;
+import com.immymemine.kevin.skillshare.utility.Const;
+import com.immymemine.kevin.skillshare.view.ViewFactory;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
 import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void initView() {
-
         toolbar = findViewById(R.id.toolbar);
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_left_button = findViewById(R.id.toolbar_button_l);
@@ -143,11 +143,13 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         if(id == R.id.navigation_home) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Home");
+            toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_groups) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Groups");
             toolbar_left_button.setVisibility(View.GONE);
+            toolbar_right_button.setVisibility(View.VISIBLE);
         } else if(id == R.id.navigation_discover) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Discover");
@@ -259,11 +261,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         });
     }
 
-    @Override
-    public void interact() {
-        container.removeViewAt(0);
-    }
-
     // ------------------------------------------------------------------------------------------
     // view 를 추가하는 메소드
     private void addViewAt(View view, int position) {
@@ -273,5 +270,17 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // view 를 제거하는 메소드
     private void removeViewAt(int position) {
         container.removeViewAt(position);
+    }
+
+    @Override
+    public void close() {
+        container.removeViewAt(0);
+    }
+
+    @Override
+    public void select() {
+        // 선택된 카테고리들을 받아와서 그려줘야 함
+        // startActivityForResult();
+        startActivity(new Intent(MainActivity.this, SelectSkillsActivity.class));
     }
 }
