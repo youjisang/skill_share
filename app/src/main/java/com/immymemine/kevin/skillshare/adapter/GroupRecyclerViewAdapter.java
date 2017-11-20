@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,23 +17,29 @@ import com.immymemine.kevin.skillshare.R;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
-    public GroupRecyclerViewAdapter() {
-
+    Context context;
+    public GroupRecyclerViewAdapter(Context context) {
+        this.context = context;
     }
 
     @Override
     public GroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_group, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_group, parent, false);
         return new GroupViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(GroupViewHolder holder, int position) {
+        // Group group = data.get(position);
 
+        // holder.textViewGroup.setText(/* Group title ex) Graphic Designers */);
+        // holder.textViewCount.setText(/* ex) 3.1K */);
+        // Glide.with(context).load(/* Uri || Url */).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
+        // return data.size();
         return 5;
     }
 
@@ -47,11 +54,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             imageView = view.findViewById(R.id.imageView);
             textViewCount = view.findViewById(R.id.text_view_count);
             textViewGroup = view.findViewById(R.id.text_view_group);
-            recyclerViewItemGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // 그룹 가입
-                }
+            recyclerViewItemGroup.setOnClickListener(v -> {
+                // 그룹 가입
             });
         }
     }

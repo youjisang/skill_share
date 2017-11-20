@@ -1,10 +1,9 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
-import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.utility.Const;
 
 /**
  * Created by quf93 on 2017-11-18.
@@ -28,60 +26,124 @@ public class ViewFactory {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if(context instanceof InteractionInterface) {
-            interactionInterface = (InteractionInterface) context;
+        if(context instanceof ViewInteractionInterface) {
+            interactionInterface = (ViewInteractionInterface) context;
+        } else if (context instanceof BackButtonInterface) {
+            interactionInterface = (BackButtonInterface) context;
         }
     }
 
-    // type 에 따라 view 를 생성 / 반환
-    public View getViewInstance(int viewType, String title) {
-        // main thread 확인 결과 == main 에서 돈다 >>> TODO new thread 에서 돌리고 main 에서 필요한 부분만 main 에서 돌려야 함...
-        if(Looper.myLooper() == Looper.getMainLooper()) {
-            Log.d("getViewInstance ","main thread 에서 동작합니다.");
+    class WelcomeViewFactory implements Runnable {
+        View view;
+        @Override
+        public void run() {
+            view = inflater.inflate(R.layout.welcome_view, null);
+            view.findViewById(R.id.close_button).setOnClickListener(v -> ((ViewInteractionInterface)interactionInterface).close());
         }
 
-        View view = null;
-        if(viewType == Const.GENERAL_VIEW) {
-            // view initiate
+        public View getView() {
+            return view;
+        }
+    }
+
+    public View getWelcomeView() {
+        WelcomeViewFactory welcomeViewFactory = new WelcomeViewFactory();
+        Thread t = new Thread(welcomeViewFactory);
+        t.start();
+
+        try {
+            t.join();
+            return welcomeViewFactory.getView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class GeneralViewFactory implements Runnable {
+        View view;
+        String title;
+        public GeneralViewFactory(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public void run() {
             view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */));
+            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView)view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
             Button see_all_button = view.findViewById(R.id.button_see_all);
-            see_all_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // see all page 이동
-                }
+            see_all_button.setOnClickListener(v -> {
+                // see all page 이동
+                ((ViewInteractionInterface)interactionInterface).seeAll(title);
             });
+        }
 
-        } else if(viewType == Const.WELCOME_VIEW) {
-            view = inflater.inflate(R.layout.welcome_view, null);
-            view.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    interactionInterface.close();
-                }
-            });
-        } else if(viewType == Const.GROUP_VIEW) {
+        public View getView() {
+            return view;
+        }
+    }
+
+    public View getGeneralView(String title) {
+        GeneralViewFactory generalViewFactory = new GeneralViewFactory(title);
+        Thread t = new Thread(generalViewFactory);
+        t.start();
+
+        try {
+            t.join();
+            return generalViewFactory.getView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class GroupViewFactory implements Runnable {
+        View view;
+        String title;
+        public GroupViewFactory(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public void run() {
             view = inflater.inflate(R.layout.group_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */));
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
         }
 
-        return view;
+        public View getView() {
+            return view;
+        }
     }
 
-    public View getYourClassesViewInstance() {
+    public View getGroupView(String title) {
+        GroupViewFactory groupViewFactory = new GroupViewFactory(title);
+        Thread t = new Thread(groupViewFactory);
+        t.start();
+
+        try {
+            t.join();
+            return groupViewFactory.getView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public View getYourClassesView() {
         View view = inflater.inflate(R.layout.your_classes_view, null);
+
+        // main 영역
         // video thumbnail setting
         // ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
         // Glide.with(context).load(/*thumbnail*/).into(video_thumbnail);
@@ -114,7 +176,8 @@ public class ViewFactory {
             return view;
         }
     }
-    public View getMeViewInstance() {
+
+    public View getMeView() {
         MeViewFactory me_view_factory = new MeViewFactory();
         Thread t = new Thread(me_view_factory);
         t.start();
@@ -128,24 +191,77 @@ public class ViewFactory {
         }
     }
 
-    public View getMeSkillViewInstance() {
-        View view = inflater.inflate(R.layout.me_skill_view, null);
-        Button personalize = view.findViewById(R.id.personalize);
-        personalize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                interactionInterface.select();
-            }
-        });
+    class MeSkillViewFactory implements Runnable {
+        View view;
+        @Override
+        public void run() {
+            view = inflater.inflate(R.layout.me_skill_view, null);
+            Button personalize = view.findViewById(R.id.personalize);
+            personalize.setOnClickListener(view -> ((ViewInteractionInterface)interactionInterface).select());
+        }
 
-        return view;
+        public View getView() {
+            return view;
+        }
     }
 
-    public interface InteractionInterface {
+    public View getMeSkillView() {
+        MeSkillViewFactory meSkillViewFactory = new MeSkillViewFactory();
+        Thread t = new Thread(meSkillViewFactory);
+        t.start();
+
+        try {
+            t.join();
+            return meSkillViewFactory.getView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class ToolbarFactory implements Runnable {
+        Toolbar toolbar_with_back_button;
+        @Override
+        public void run() {
+            toolbar_with_back_button = (Toolbar) inflater.inflate(R.layout.toolbar_with_back_button, null);
+            toolbar_with_back_button.setOnMenuItemClickListener(item -> {
+                if(item.getItemId() == R.id.toolbar_button_back) {
+                    ((BackButtonInterface)interactionInterface).closeActivity();
+                }
+                return false;
+            });
+        }
+
+        public Toolbar getToolbar() {
+            return toolbar_with_back_button;
+        }
+    }
+
+    public Toolbar getToolbarWithBackButton() {
+        ToolbarFactory toolbarFactory = new ToolbarFactory();
+        Thread t = new Thread(toolbarFactory);
+        try {
+            t.join();
+            return toolbarFactory.toolbar_with_back_button;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public interface ViewInteractionInterface extends InteractionInterface {
         // welcome view 닫기
         void close();
 
         // select activity 로 이동
         void select();
+
+        // see all activity 이동
+        void seeAll(String title);
+    }
+
+    public interface BackButtonInterface extends InteractionInterface{
+        // back button >>> close Activity
+        void closeActivity();
     }
 }

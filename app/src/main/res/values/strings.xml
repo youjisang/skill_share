@@ -4,14 +4,12 @@
     <string name="groups">Groups</string>
     <string name="discover">Discover</string>
     <string name="your_classes">Your Classes</string>
-    <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign Up</string>
     <string name="welcome">Welcome to Skillshare</string>
     <string name="welcome_message">Sign up to access thousands of classes taught by expert practitioners</string>
     <string name="me">Me</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="see_all">See All</string>
     <string name="best_this_month">Best This Month</string>
     <string name="featured_groups">Featured Groups</string>
@@ -31,4 +29,17 @@
     <string name="gaming">Gaming</string>
     <string name="teaching">Teaching</string>
 
+    <!-- view factory title -->
+    <string name="recently_active_groups">Recently Active Groups</string>
+    <string name="trending_classes">Trending Classes</string>
+    <string name="popular_classes">Popular Classes</string>
+    <string name="my_groups">My Groups</string>
+    <string name="feature_on_skillShare">Feature On SkillShare</string>
+    <string name="trending_now">Trending Now</string>
+
+    <!-- sign in activity -->
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
 </resources>

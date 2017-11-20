@@ -41,12 +41,13 @@ dependencies {
     // cardview
     implementation 'com.android.support:cardview-v7:26.1.0'
 
-    // bottom navigation view controller
+    // bottom navigation view
     implementation 'com.github.armcha:LuseenBottomNavigation:1.8.2'
 
     // toggle button
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
-
     // toggle image button
     implementation 'net.colindodd:toggleimagebutton:1.2'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -9,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.utility.Const;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
@@ -24,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
+public class MainActivity extends AppCompatActivity implements ViewFactory.ViewInteractionInterface {
 
     // recycler view 를 가지고 있는 View 를 담는 container
     LinearLayout container;
@@ -63,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // if(/*로그인 되어 있지 않으면*/) {
-        viewList.add(viewFactory.getViewInstance(Const.WELCOME_VIEW, ""));
+        viewList.add(viewFactory.getWelcomeView());
         // }
 
         // 기본 view 추가
-        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Feature On SkillShare"));
-        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Trending now"));
-        viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Best This Month"));
+        viewList.add(viewFactory.getGeneralView(getString(R.string.feature_on_skillShare)));
+        viewList.add(viewFactory.getGeneralView(getString(R.string.trending_now)));
+        viewList.add(viewFactory.getGeneralView(getString(R.string.best_this_month)));
 
         initView();
         // 최초 view 그리기
@@ -87,16 +89,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // 데이터 변화 감지
+        refreshLayout.setOnRefreshListener( () -> {
+            // 데이터 변화 감지
 
-                // 다른 부분이 있으면 view 를 추가하거나 삭제
+            // 다른 부분이 있으면 view 를 추가하거나 삭제
 
-                // 완료 되면 호출 ∇
-                refreshLayout.setRefreshing(false);
-            }
+
+            // 완료 되면 호출 ∇
+            refreshLayout.setRefreshing(false);
         });
     }
 
@@ -117,16 +117,19 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             viewList.addAll(VIEW_CACHE.get(id));
         else {
             if (id == R.id.navigation_groups) {
-                viewList.add(viewFactory.getViewInstance(Const.GROUP_VIEW, "Feature Groups"));
-                viewList.add(viewFactory.getViewInstance(Const.GROUP_VIEW, "Recently Active Groups"));
+                viewList.add(viewFactory.getGroupView(getString(R.string.my_groups)));
+                viewList.add(viewFactory.getGroupView(getString(R.string.featured_groups)));
+                viewList.add(viewFactory.getGroupView(getString(R.string.recently_active_groups)));
             } else if(id == R.id.navigation_discover) {
-                viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Trending Classes"));
-                viewList.add(viewFactory.getViewInstance(Const.GENERAL_VIEW, "Popular Classes"));
+                viewList.add(viewFactory.getGeneralView(getString(R.string.trending_classes)));
+                viewList.add(viewFactory.getGeneralView(getString(R.string.popular_classes)));
             } else if(id == R.id.navigation_your_classes) {
-                viewList.add(viewFactory.getYourClassesViewInstance());
+                viewList.add(viewFactory.getYourClassesView());
             } else if(id == R.id.navigation_me) {
-                viewList.add(viewFactory.getMeViewInstance());
-                viewList.add(viewFactory.getMeSkillViewInstance());
+                View view = viewFactory.getMeView();
+                Glide.with(this).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into( ((ImageView)view.findViewById(R.id.me_image)) );
+                viewList.add(view);
+                viewList.add(viewFactory.getMeSkillView());
             }
         }
     }
@@ -165,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         }
     }
 
+    // TODO navigation view 사이즈 ... 색 변경 ... noti 가능한 navigation view 로 바꿔야 함
     private void setNavigationView() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
@@ -261,17 +265,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         });
     }
 
-    // ------------------------------------------------------------------------------------------
-    // view 를 추가하는 메소드
-    private void addViewAt(View view, int position) {
-        container.addView(view, position, layoutParams);
-    }
-
-    // view 를 제거하는 메소드
-    private void removeViewAt(int position) {
-        container.removeViewAt(position);
-    }
-
     @Override
     public void close() {
         container.removeViewAt(0);
@@ -282,5 +275,24 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 선택된 카테고리들을 받아와서 그려줘야 함
         // startActivityForResult();
         startActivity(new Intent(MainActivity.this, SelectSkillsActivity.class));
+    }
+
+    @Override
+    public void seeAll(String title) {
+        Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
+        intent.putExtra("Type", title);
+        startActivity(intent);
+    }
+
+
+    // ------------------------------------------------------------------------------------------
+    // view 를 추가하는 메소드
+    private void addViewAt(View view, int position) {
+        container.addView(view, position, layoutParams);
+    }
+
+    // view 를 제거하는 메소드
+    private void removeViewAt(int position) {
+        container.removeViewAt(position);
     }
 }

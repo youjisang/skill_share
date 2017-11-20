@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,24 +16,31 @@ import com.immymemine.kevin.skillshare.R;
  */
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
-
-    public GeneralRecyclerViewAdapter() {
-
+    // data 가 바뀔 일이 거의 없다 <<< 관리자가 바꿔주기 때문에
+    Context context;
+    public GeneralRecyclerViewAdapter(Context context) {
+        this.context = context;
     }
 
     @Override
     public GeneralViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_general, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_general, parent, false);
         return new GeneralViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
+        // OnlineClass class = data.get(position);
 
+        // holder.textViewTitle.setText(/* title */);
+        // holder.textViewAuthor.setText(/* author */);
+        // holder.textViewTime.setText(/* String type time */);
+        // Glide.with(context).load(/* Uri */).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
+        // return data.size();
         return 5;
     }
 
