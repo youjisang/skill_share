@@ -33,7 +33,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         // OnlineClass class = data.get(position);
 
         // holder.textViewTitle.setText(/* title */);
-        // holder.textViewAuthor.setText(/* author */);
+        // holder.textViewAuthor.setText(/* tutor */);
         // holder.textViewTime.setText(/* String type time */);
         // Glide.with(context).load(/* Uri */).into(holder.imageView);
     }
@@ -47,7 +47,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     class GeneralViewHolder extends RecyclerView.ViewHolder {
         LinearLayout recyclerViewItemGroup;
         ImageView imageView;
-        TextView textViewTime, textViewTitle, textViewAuthor;
+        TextView textViewTime, textViewTitle, textViewTutor;
 
         public GeneralViewHolder(View v) {
             super(v);
@@ -55,13 +55,13 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             imageView = v.findViewById(R.id.imageView);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
-            textViewAuthor = v.findViewById(R.id.text_view_author);
+            textViewTutor = v.findViewById(R.id.text_view_author);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             recyclerViewItemGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // click 시 해당 클래스 화면으로 이동 처리
+                    // TODO click 시 해당 클래스 화면으로 이동 처리
                 }
             });
         }

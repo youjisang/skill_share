@@ -23,6 +23,11 @@ public class SignInActivity extends AppCompatActivity{
         initiateView();
     }
 
+    // TODO (1) Google login 연동
+    // TODO (2) validation check util
+    // TODO (3) login 처리
+    // TODO (4) 비밀번호 찾기 >>> EMAIL... 비밀번호 찾는
+
     private void initiateView() {
         // back / close 버튼
         toolbarCloseButton = findViewById(R.id.toolbar_close_button);

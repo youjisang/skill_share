@@ -9,9 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view factory
     ViewFactory viewFactory;
+    ExecutorService executor;
 
     // item stack for navigation view control
     int itemStack = R.id.navigation_home;
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // view 생성을 담당할 view factory
         viewFactory = new ViewFactory(this);
+        executor = viewFactory.executor;
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // if(/*로그인 되어 있지 않으면*/) {
@@ -98,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void cacheView(int id) {
+        viewFactory.executor.submit(
+                () -> {
+
+                }
+        );
         new Thread() {
             public void run() {
                 if(VIEW_CACHE.get(id) == null) {
@@ -110,12 +121,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void setViewList(int id) {
-
-        new Thread(
-                () -> {
-
-                }
-        ).start();
         // view list 비우기
         viewList.clear();
 
@@ -131,9 +136,17 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 viewList.add(viewFactory.getGeneralView(getString(R.string.trending_classes)));
                 viewList.add(viewFactory.getGeneralView(getString(R.string.popular_classes)));
             } else if(id == R.id.navigation_your_classes) {
-                viewList.add(viewFactory.getYourClassesView());
+                View view = viewFactory.getYourClassesView();
+                ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+                Glide.with(this).load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal).into(video_thumbnail);
+                viewList.add(view);
             } else if(id == R.id.navigation_me) {
-                viewList.add(viewFactory.getMeView());
+                View meView = viewFactory.getMeView();
+                Glide.with(this)
+                        .load(R.drawable.design)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(((ImageView) meView.findViewById(R.id.me_image)));
+                viewList.add(meView);
                 viewList.add(viewFactory.getMeSkillView());
             }
         }
@@ -272,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     @Override
     public void close() {
         container.removeViewAt(0);
+        // TODO list 에서도 제거
     }
 
     @Override
@@ -284,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     @Override
     public void seeAll(String title) {
         Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
+        // title >> int
+        // Const
         intent.putExtra("Type", title);
         startActivity(intent);
     }

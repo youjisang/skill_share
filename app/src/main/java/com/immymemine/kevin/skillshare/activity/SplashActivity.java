@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
@@ -27,16 +27,32 @@ public class SplashActivity extends AppCompatActivity {
         // button get_started
         CardView get_started = findViewById(R.id.get_started);
         get_started.setOnClickListener(v -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
-            // Sign up page
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            // TODO Sign up page
+            new Thread() {
+                public void run() {
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                }
+            }.start();
         });
 
         // textview sign_in
-        TextView text_view_sign_in = findViewById(R.id.text_view_sign_in);
-        text_view_sign_in.setOnClickListener(v -> {
+        findViewById(R.id.text_view_sign_in).setOnClickListener(v -> {
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
             // Sign in page
-            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+            new Thread() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                }
+            }.start();
         });
+    }
+
+    @Override
+    protected void onResume() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        super.onResume();
     }
 }

@@ -69,14 +69,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/design"
-                        tools:foreground="#8d000000" />
+                        android:src="@drawable/design" />
 
                     <me.rishabhkhanna.customtogglebutton.CustomToggleButton
                         android:id="@+id/toggle_photography"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:checked="false"
+                        android:foreground="b"
                         android:textOff="@string/photography"
                         android:textOn="@string/photography"
                         android:textSize="18sp"

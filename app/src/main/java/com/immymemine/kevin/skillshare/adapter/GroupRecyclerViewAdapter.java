@@ -55,7 +55,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             textViewCount = view.findViewById(R.id.text_view_count);
             textViewGroup = view.findViewById(R.id.text_view_group);
             recyclerViewItemGroup.setOnClickListener(v -> {
-                // 그룹 가입
+                // TODO if (그룹원이 아니면) 그룹 가입 else 밑에 edittext 창이 나와야 함
             });
         }
     }

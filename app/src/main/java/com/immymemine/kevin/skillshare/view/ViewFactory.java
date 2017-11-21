@@ -4,22 +4,19 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  *  Main Activity 에서 사용하는 View Factory
@@ -32,8 +29,8 @@ public class ViewFactory {
     RecyclerView recyclerView;
     InteractionInterface interactionInterface;
 
-    // single thread pool
-    ExecutorService executor = Executors.newSingleThreadExecutor();
+    // 5개의 thread 를 가지고 있는 thread pool
+    public ExecutorService executor = Executors.newFixedThreadPool(5);
     public ViewFactory(Context context) {
         // context
         this.context = context;
@@ -44,43 +41,35 @@ public class ViewFactory {
             interactionInterface = (InteractionInterface) context;
     }
 
-    class WelcomeViewFactory implements Runnable {
-        View view;
-        @Override
-        public void run() {
-            view = inflater.inflate(R.layout.welcome_view, null);
-            view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
-        }
-
-        public View getView() {
-            return view;
-        }
-    }
-
     public View getWelcomeView() {
-        WelcomeViewFactory welcomeViewFactory = new WelcomeViewFactory();
-        Thread t = new Thread(welcomeViewFactory);
-        t.start();
+        // 하나의 Thread 를 Thread pool 에서 가져와서 Callable 객체를 던져서 Thread 를 실행시킨다.
+        // Future< ? > >>> thread 가 끝나면 객체를 반환받는다.
+        Future<View> f = executor.submit(() -> {
+            View view = inflater.inflate(R.layout.welcome_view, null);
+            view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
+
+            return view;
+        });
 
         try {
-            t.join();
-            return welcomeViewFactory.getView();
-        } catch (InterruptedException e) {
+            // thread process 가 끝나면 return 값 반환
+            return f.get();
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    class GeneralViewFactory implements Runnable {
-        View view;
+    class GeneralViewFactory implements Callable<View> {
         String title;
+
         public GeneralViewFactory(String title) {
             this.title = title;
         }
 
         @Override
-        public void run() {
-            view = inflater.inflate(R.layout.general_view, null);
+        public View call() throws Exception {
+            View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
             recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */ context));
@@ -93,149 +82,131 @@ public class ViewFactory {
                 // see all page 이동
                 interactionInterface.seeAll(title);
             });
-        }
-
-        public View getView() {
             return view;
         }
     }
 
     public View getGeneralView(String title) {
-        GeneralViewFactory generalViewFactory = new GeneralViewFactory(title);
-        Thread t = new Thread(generalViewFactory);
-        t.start();
-
+        Future<View> f = executor.submit(new GeneralViewFactory(title));
         try {
-            t.join();
-            return generalViewFactory.getView();
-        } catch (InterruptedException e) {
+            return f.get();
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    class GroupViewFactory implements Runnable {
-        View view;
+    class GroupViewFactory implements Callable<View> {
         String title;
         public GroupViewFactory(String title) {
             this.title = title;
         }
 
         @Override
-        public void run() {
-            view = inflater.inflate(R.layout.group_view, null);
+        public View call() throws Exception {
+            View view = inflater.inflate(R.layout.group_view, null);
+
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
             recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
-        }
 
-        public View getView() {
             return view;
         }
     }
 
     public View getGroupView(String title) {
-        GroupViewFactory groupViewFactory = new GroupViewFactory(title);
-        Thread t = new Thread(groupViewFactory);
-        t.start();
+        Future<View> f = executor.submit(new GroupViewFactory(title));
 
         try {
-            t.join();
-            return groupViewFactory.getView();
-        } catch (InterruptedException e) {
+            return f.get();
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
     public View getYourClassesView() {
-        View view = inflater.inflate(R.layout.your_classes_view, null);
+        Future<View> f = executor.submit(
+                () -> {
+                    View view = inflater.inflate(R.layout.your_classes_view, null);
 
-        // main 영역
-        // video thumbnail setting
-        // ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-        // Glide.with(context).load(/*thumbnail*/).into(video_thumbnail);
-        return view;
-    }
+                    // main thread 영역 ------------------------------------------------------------
+                    // video thumbnail setting
 
-    class MeViewFactory implements Runnable {
-        private View view;
-        @Override
-        public void run() {
-            // main thread 에서 굳이 해주지 않아도 된다
-            view = inflater.inflate(R.layout.me_view, null);
-
-            // 이름, 닉네임 세팅
-            ((TextView)view.findViewById(R.id.me_name)).setText("My name");
-            ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
-
-            // followers, following <<< onClick setting...
-            ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
-            ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
-
-            // main thread 영역 ------------------------------------------------------------
-            // rounding image setting
-            if(context instanceof MainActivity) {
-                ((MainActivity) context).runOnUiThread(
-                        () -> {
-                            Log.d("Thread Name", Thread.currentThread().getName());
-                            Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
-                        }
-                );
-            }
-        }
-
-        public View getView() {
-            return view;
-        }
-    }
-
-    public View getMeView() {
-        MeViewFactory me_view_factory = new MeViewFactory();
-        Thread t = new Thread(me_view_factory);
-        t.start();
-
-//        while(true) {
-//            if(!t.isAlive()) {
-//                return me_view_factory.getView();
-//            }
-//        }
+                    // Review ) 속도가 너무 느리다... MainActivity 에서 view 를 받아서 처리해주는게 훨씬 빠름
+//                    if(context instanceof MainActivity) {
+//                        ((MainActivity) context).runOnUiThread(
+//                                () -> {
+//                                    ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+//                                    Glide.with(context).load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal).into(video_thumbnail);
+//                                }
+//                        );
+//                    }
+                    return view;
+                }
+        );
 
         try {
-            t.join();
-            return me_view_factory.getView();
-        } catch (InterruptedException e) {
+            return f.get();
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    class MeSkillViewFactory implements Runnable {
-        View view;
-        @Override
-        public void run() {
-            view = inflater.inflate(R.layout.me_skill_view, null);
-            Button personalize = view.findViewById(R.id.personalize);
-            personalize.setOnClickListener(view -> interactionInterface.select());
-        }
+    public View getMeView() {
+        Future<View> f = executor.submit(
+                () -> {
+                    // main thread 에서 굳이 해주지 않아도 된다
+                    View view = inflater.inflate(R.layout.me_view, null);
 
-        public View getView() {
-            return view;
+                    // 이름, 닉네임 세팅
+                    ((TextView)view.findViewById(R.id.me_name)).setText("My name");
+                    ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
+
+                    // followers, following <<< onClick setting...
+                    ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
+                    ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
+
+                    // main thread 영역 ------------------------------------------------------------
+                    // rounding image setting
+//                    if(context instanceof MainActivity) {
+//                        ((MainActivity) context).runOnUiThread(
+//                                () -> {
+//                                    Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
+//                                }
+//                        );
+//                    }
+
+                    return view;
+                }
+        );
+
+        try {
+            return f.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
     public View getMeSkillView() {
-        MeSkillViewFactory meSkillViewFactory = new MeSkillViewFactory();
-        Thread t = new Thread(meSkillViewFactory);
-        t.start();
+        Future<View> f = executor.submit(
+                () -> {
+                    View view = inflater.inflate(R.layout.me_skill_view, null);
+                    Button personalize = view.findViewById(R.id.personalize);
+                    personalize.setOnClickListener(v -> interactionInterface.select());
+                    return view;
+                }
+        );
 
         try {
-            t.join();
-            return meSkillViewFactory.getView();
-        } catch (InterruptedException e) {
+            return f.get();
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -252,7 +223,7 @@ public class ViewFactory {
         void seeAll(String title);
     }
 
-    // Def ====================================================================
+    // 안쓰는 ====================================================================
     class ToolbarFactory implements Runnable {
         Toolbar toolbar_with_back_button;
         @Override
