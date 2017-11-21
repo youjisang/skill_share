@@ -9,12 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
@@ -26,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ViewFactory.ViewInteractionInterface {
+public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
 
     // recycler view 를 가지고 있는 View 를 담는 container
     LinearLayout container;
@@ -101,14 +98,24 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.ViewI
     }
 
     private void cacheView(int id) {
-        if(VIEW_CACHE.get(id) == null) {
-            List<View> cacheViewList = new ArrayList<>();
-            cacheViewList.addAll(viewList);
-            VIEW_CACHE.put(id, cacheViewList); // VIEW_CACHE 저장
-        }
+        new Thread() {
+            public void run() {
+                if(VIEW_CACHE.get(id) == null) {
+                    List<View> cacheViewList = new ArrayList<>();
+                    cacheViewList.addAll(viewList);
+                    VIEW_CACHE.put(id, cacheViewList); // VIEW_CACHE 저장
+                }
+            }
+        }.start();
     }
 
     private void setViewList(int id) {
+
+        new Thread(
+                () -> {
+
+                }
+        ).start();
         // view list 비우기
         viewList.clear();
 
@@ -126,9 +133,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.ViewI
             } else if(id == R.id.navigation_your_classes) {
                 viewList.add(viewFactory.getYourClassesView());
             } else if(id == R.id.navigation_me) {
-                View view = viewFactory.getMeView();
-                Glide.with(this).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into( ((ImageView)view.findViewById(R.id.me_image)) );
-                viewList.add(view);
+                viewList.add(viewFactory.getMeView());
                 viewList.add(viewFactory.getMeSkillView());
             }
         }
@@ -143,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.ViewI
     }
 
     private void changeToolbar(int id) {
+        // to do on main thread
         if(id == R.id.navigation_home) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Home");
@@ -177,8 +183,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.ViewI
 
         bottomNavigationView.addTab(new BottomNavigationItem
                 ("Group", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_dashboard_black_24dp));
-        BottomNavigationItem item = new BottomNavigationItem(
-                "Discover", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_notifications_black_24dp);
 
         bottomNavigationView.addTab(new BottomNavigationItem(
                 "Discover", ContextCompat.getColor(this, R.color.withoutColoredBackground), R.drawable.ic_notifications_black_24dp));

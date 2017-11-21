@@ -4,17 +4,26 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
- * Created by quf93 on 2017-11-18.
+ *  Main Activity 에서 사용하는 View Factory
+ *  Created by quf93 on 2017-11-18.
  */
 
 public class ViewFactory {
@@ -22,15 +31,17 @@ public class ViewFactory {
     LayoutInflater inflater;
     RecyclerView recyclerView;
     InteractionInterface interactionInterface;
-    public ViewFactory(Context context) {
-        this.context = context;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if(context instanceof ViewInteractionInterface) {
-            interactionInterface = (ViewInteractionInterface) context;
-        } else if (context instanceof BackButtonInterface) {
-            interactionInterface = (BackButtonInterface) context;
-        }
+    // single thread pool
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    public ViewFactory(Context context) {
+        // context
+        this.context = context;
+        // inflater
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // interface for interaction
+        if(context instanceof InteractionInterface)
+            interactionInterface = (InteractionInterface) context;
     }
 
     class WelcomeViewFactory implements Runnable {
@@ -38,7 +49,7 @@ public class ViewFactory {
         @Override
         public void run() {
             view = inflater.inflate(R.layout.welcome_view, null);
-            view.findViewById(R.id.close_button).setOnClickListener(v -> ((ViewInteractionInterface)interactionInterface).close());
+            view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
         }
 
         public View getView() {
@@ -80,7 +91,7 @@ public class ViewFactory {
             Button see_all_button = view.findViewById(R.id.button_see_all);
             see_all_button.setOnClickListener(v -> {
                 // see all page 이동
-                ((ViewInteractionInterface)interactionInterface).seeAll(title);
+                interactionInterface.seeAll(title);
             });
         }
 
@@ -157,19 +168,24 @@ public class ViewFactory {
             // main thread 에서 굳이 해주지 않아도 된다
             view = inflater.inflate(R.layout.me_view, null);
 
-            // main thread 영역 ------------------------------------------------------------
-            // rounding image setting
-            // ImageView me_image = view.findViewById(R.id.me_image);
-            // Glide.with(context).load(R.drawable.ic_launcher_background).apply(RequestOptions.circleCropTransform()).into(me_image);
-            // -----------------------------------------------------------------------------
-
-            // 이게 왜 sub thread 에서 돌아가지?..............???????????
             // 이름, 닉네임 세팅
             ((TextView)view.findViewById(R.id.me_name)).setText("My name");
             ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
+
             // followers, following <<< onClick setting...
             ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
             ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
+
+            // main thread 영역 ------------------------------------------------------------
+            // rounding image setting
+            if(context instanceof MainActivity) {
+                ((MainActivity) context).runOnUiThread(
+                        () -> {
+                            Log.d("Thread Name", Thread.currentThread().getName());
+                            Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
+                        }
+                );
+            }
         }
 
         public View getView() {
@@ -181,6 +197,12 @@ public class ViewFactory {
         MeViewFactory me_view_factory = new MeViewFactory();
         Thread t = new Thread(me_view_factory);
         t.start();
+
+//        while(true) {
+//            if(!t.isAlive()) {
+//                return me_view_factory.getView();
+//            }
+//        }
 
         try {
             t.join();
@@ -197,7 +219,7 @@ public class ViewFactory {
         public void run() {
             view = inflater.inflate(R.layout.me_skill_view, null);
             Button personalize = view.findViewById(R.id.personalize);
-            personalize.setOnClickListener(view -> ((ViewInteractionInterface)interactionInterface).select());
+            personalize.setOnClickListener(view -> interactionInterface.select());
         }
 
         public View getView() {
@@ -219,6 +241,18 @@ public class ViewFactory {
         }
     }
 
+    public interface InteractionInterface{
+        // welcome view 닫기
+        void close();
+
+        // select activity 로 이동
+        void select();
+
+        // see all activity 이동
+        void seeAll(String title);
+    }
+
+    // Def ====================================================================
     class ToolbarFactory implements Runnable {
         Toolbar toolbar_with_back_button;
         @Override
@@ -226,7 +260,7 @@ public class ViewFactory {
             toolbar_with_back_button = (Toolbar) inflater.inflate(R.layout.toolbar_with_back_button, null);
             toolbar_with_back_button.setOnMenuItemClickListener(item -> {
                 if(item.getItemId() == R.id.toolbar_button_back) {
-                    ((BackButtonInterface)interactionInterface).closeActivity();
+                    interactionInterface.close();
                 }
                 return false;
             });
@@ -247,21 +281,5 @@ public class ViewFactory {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public interface ViewInteractionInterface extends InteractionInterface {
-        // welcome view 닫기
-        void close();
-
-        // select activity 로 이동
-        void select();
-
-        // see all activity 이동
-        void seeAll(String title);
-    }
-
-    public interface BackButtonInterface extends InteractionInterface{
-        // back button >>> close Activity
-        void closeActivity();
     }
 }
