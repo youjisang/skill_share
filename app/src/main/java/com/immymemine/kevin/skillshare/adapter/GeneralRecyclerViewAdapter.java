@@ -17,6 +17,7 @@ import com.immymemine.kevin.skillshare.R;
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
     // data 가 바뀔 일이 거의 없다 <<< 관리자가 바꿔주기 때문에
+    // 바꾼 상태
     Context context;
     public GeneralRecyclerViewAdapter(Context context) {
         this.context = context;
