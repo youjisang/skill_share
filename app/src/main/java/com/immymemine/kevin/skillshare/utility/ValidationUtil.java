@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
  * Created by quf93 on 2017-11-20.
  */
 
-public class ValidityUtil {
-    private static final Pattern EMAIL_REGEX = Pattern.compile("^[_a-zA-Z0-9-\\\\.]+@[\\\\.a-zA-Z0-9-]+\\\\.[a-zA-Z]+$");
+public class ValidationUtil {
+    private static final Pattern EMAIL_REGEX = Pattern.compile("^[_0-9a-zA-Z-]+@[0-9a-zA-Z-]+(.[_0-9a-zA-Z-]+)*$");
     private static final Pattern PW_REGEX = Pattern.compile("^[a-zA-Z0-9!@.#$%^&*?_~]{8,16}$"); // 8 - 16 자리
 
     public static boolean isValidEmailAddress(String email_address) {
