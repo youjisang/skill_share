@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 
 /**
- * Created by quf93 on 2017-11-17.
+ *
+ *  Created by quf93 on 2017-11-17.
  */
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
