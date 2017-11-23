@@ -76,6 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:checked="false"
+                        android:foreground="#ffffff"
                         android:textOff="@string/photography"
                         android:textOn="@string/photography"
                         android:textSize="18sp"
