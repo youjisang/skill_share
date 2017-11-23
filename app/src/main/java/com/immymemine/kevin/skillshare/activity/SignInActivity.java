@@ -30,7 +30,7 @@ public class SignInActivity extends AppCompatActivity{
     // TODO (4) 비밀번호 찾기 >>> EMAIL... 비밀번호 찾는
 
     // for google sign_in
-    public static GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInClient mGoogleSignInClient;
 
     ImageButton toolbarCloseButton;
     SignInButton googleSignIn;

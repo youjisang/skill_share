@@ -32,7 +32,10 @@ public class ViewFactory {
 
     // TODO nThreads 를 정하는 합리적인 로직이 있어야한다.
     public ExecutorService executor = Executors.newCachedThreadPool();
-    public ViewFactory(Context context) {
+
+    // Singleton
+    private static ViewFactory v;
+    private ViewFactory(Context context) {
         // context
         this.context = context;
         // inflater
@@ -40,6 +43,14 @@ public class ViewFactory {
         // interface for interaction
         if(context instanceof InteractionInterface)
             interactionInterface = (InteractionInterface) context;
+    }
+
+    public static ViewFactory getInstance(Context context) {
+        if(v == null) {
+            v = new ViewFactory(context);
+        }
+
+        return v;
     }
 
     public LinearLayout getViewContainer() {

@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.domain;
+package com.immymemine.kevin.skillshare.model;
 
 import android.net.Uri;
 
