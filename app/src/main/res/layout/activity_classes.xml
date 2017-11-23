@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:orientation="vertical"
     tools:context="com.immymemine.kevin.skillshare.activity.ClassesActivity">
 
@@ -13,10 +13,11 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <VideoView
-            android:id="@+id/video_view"
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/simple_exo_player_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@android:color/background_dark" />
 
         <ImageButton
             android:id="@+id/button_back"
@@ -25,6 +26,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="12dp"
             android:background="@android:color/transparent"
+            android:onClick="back"
+            android:tint="?attr/colorAccent"
             app:srcCompat="?android:attr/actionModeCloseDrawable" />
 
         <ImageButton
@@ -45,7 +48,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:tint="@android:color/background_light"
+            android:tint="?attr/colorAccent"
             app:srcCompat="@android:drawable/ic_menu_share" />
 
     </FrameLayout>

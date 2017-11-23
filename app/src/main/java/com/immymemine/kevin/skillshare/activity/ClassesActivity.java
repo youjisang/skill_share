@@ -1,13 +1,40 @@
 package com.immymemine.kevin.skillshare.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Surface;
 import android.view.View;
-import android.widget.VideoView;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.LoopingMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
@@ -17,10 +44,9 @@ import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassesActivity extends AppCompatActivity {
+public class ClassesActivity extends AppCompatActivity implements VideoRendererEventListener{
 
-    // widgets
-    VideoView videoView;
+    // views
     ViewPager tabPager;
     TabLayout tabLayout;
 
@@ -43,10 +69,11 @@ public class ClassesActivity extends AppCompatActivity {
         setTabLayout();
         setTabPager();
         connectTabAndPager();
+
+        initiatePlayer();
     }
 
     private void initiateView() {
-        videoView = findViewById(R.id.video_view);
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
     }
@@ -83,10 +110,163 @@ public class ClassesActivity extends AppCompatActivity {
 
     public void back(View view) {
         // back button 클릭시
+        finish();
     }
 
     public void subscribe(View view) {
         // subscribe 버튼 클릭시
     }
 
+    // Exo Player -----------------------------------------------------------------------
+    // video play step : 1. networking  2. buffering  3. extraction  4. decoding  5. rendering
+
+    private static final String TAG = "ClassesActivity";
+
+    private SimpleExoPlayerView simpleExoPlayerView; // view
+    private SimpleExoPlayer player; // player
+
+    private void initiatePlayer() {
+        // =========================================================================================
+
+        // view
+        simpleExoPlayerView = new SimpleExoPlayerView(this);
+        simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
+        simpleExoPlayerView.requestFocus(); // ( ? )
+        simpleExoPlayerView.setUseController(true); //Set media controller
+
+        // Create a default TrackSelector
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        // Create the player
+        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+
+        // Bind the player to the view.
+        simpleExoPlayerView.setPlayer(player);
+
+        // Create a default LoadControl
+        // LoadControl loadControl = new DefaultLoadControl();
+        // =========================================================================================
+
+        // =========================================================================================
+        // I. ADJUST HERE:
+        // CHOOSE CONTENT: LiveStream / SdCard
+
+        // LIVE STREAM SOURCE: * Livestream links may be out of date so find any m3u8 files online and replace:
+
+        // Uri mp4VideoUri =Uri.parse("http://81.7.13.162/hls/ss1/index.m3u8"); //random 720p source
+        Uri mp4VideoUri =Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8"); //Radnom 540p indian channel
+        // Uri mp4VideoUri =Uri.parse("FIND A WORKING LINK ABD PLUg INTO HERE"); //PLUG INTO HERE<------------------------------------------
+
+
+        //VIDEO FROM SD CARD: (2 steps. set up file and path, then change videoSource to get the file)
+        //String urimp4 = "path/FileName.mp4"; //upload file to device and add path/name.mp4
+        //Uri mp4VideoUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
+        // =========================================================================================
+
+        // =========================================================================================
+        //Measures bandwidth during playback. Can be null if not required.
+        DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
+        //Produces DataSource instances through which media data is loaded.
+        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
+        //Produces Extractor instances for parsing the media data.
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        // =========================================================================================
+
+        // II. ADJUST HERE:
+
+        //This is the MediaSource representing the media to be played:
+        //FOR SD CARD SOURCE:
+        //        MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
+
+        //FOR LIVESTREAM LINK:
+        MediaSource videoSource = new HlsMediaSource(mp4VideoUri, dataSourceFactory, 1, null, null);
+        final LoopingMediaSource loopingSource = new LoopingMediaSource(videoSource);
+
+        // Prepare the player with the source.
+        player.prepare(loopingSource);
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest) {
+                Log.v(TAG, "Listener-onTimelineChanged...");
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                Log.v(TAG, "Listener-onTracksChanged...");
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+                Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                Log.v(TAG, "Listener-onPlayerStateChanged..." + playbackState);
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+                Log.v(TAG, "Listener-onRepeatModeChanged...");
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                Log.v(TAG, "Listener-onPlayerError...");
+                player.stop();
+                player.prepare(loopingSource);
+                player.setPlayWhenReady(true);
+            }
+
+            @Override
+            public void onPositionDiscontinuity() {
+                Log.v(TAG, "Listener-onPositionDiscontinuity...");
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+                Log.v(TAG, "Listener-onPlaybackParametersChanged...");
+            }
+        });
+
+        player.setPlayWhenReady(true); //run file/link when ready to play.
+        player.setVideoDebugListener(this); //for listening to resolution change and  outputing the resolution
+    }
+
+    @Override
+    public void onVideoEnabled(DecoderCounters counters) {
+
+    }
+
+    @Override
+    public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+
+    }
+
+    @Override
+    public void onVideoInputFormatChanged(Format format) {
+
+    }
+
+    @Override
+    public void onDroppedFrames(int count, long elapsedMs) {
+
+    }
+
+    @Override
+    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+        Log.v(TAG, "onVideoSizeChanged ["  + " width: " + width + " height: " + height + "]");
+    }
+
+    @Override
+    public void onRenderedFirstFrame(Surface surface) {
+
+    }
+
+    @Override
+    public void onVideoDisabled(DecoderCounters counters) {
+
+    }
 }
