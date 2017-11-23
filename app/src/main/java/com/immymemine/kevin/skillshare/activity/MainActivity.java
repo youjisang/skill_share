@@ -6,38 +6,32 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.model.AccountTemp;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
-import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
-
-    // recycler view 를 가지고 있는 View 를 담는 container
-    LinearLayout container;
-    LinearLayout.LayoutParams layoutParams;
-
-    // view list <<< ( ? )
-    List<View> viewList = new ArrayList<>();
-
-    // view cache
-    private static final Map<Integer, List<View>> VIEW_CACHE = new HashMap<>();
 
     // view factory
     ViewFactory viewFactory;
@@ -51,6 +45,18 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     TextView toolbar_title;
     ImageButton toolbar_left_button, toolbar_right_button;
 
+    // view container
+    LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
+    LinearLayout.LayoutParams layoutParams;
+    // attach view container to scroll view
+    ScrollView scrollView;
+
+    // temp account 객체
+    AccountTemp t = null;
+
+    // google sign in / out
+    GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,29 +65,70 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // navigation view setting
         setNavigationView();
 
-        // view 를 추가 삭제 할 container
-        container = findViewById(R.id.container);
-
         // view 생성을 담당할 view factory
-        viewFactory = new ViewFactory(this);
-        executor = viewFactory.executor;
+        viewFactory = ViewFactory.getInstance(this);
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        // if(/*로그인 되어 있지 않으면*/) {
-        viewList.add(viewFactory.getWelcomeView());
-        // }
+        // Thread pool
+        executor = viewFactory.executor;
 
-        // 기본 view 추가
-        viewList.add(viewFactory.getGeneralView(getString(R.string.feature_on_skillShare)));
-        viewList.add(viewFactory.getGeneralView(getString(R.string.trending_now)));
-        viewList.add(viewFactory.getGeneralView(getString(R.string.best_this_month)));
+        // view container
+        home_view_container = viewFactory.getViewContainer();
+
+        // sign in 상태 확인
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if(account != null) {
+            t = new AccountTemp(
+                    account.getDisplayName(), // name
+                    account.getEmail(), // email
+                    account.getId(), // id
+                    account.getPhotoUrl() // photo uri
+            );
+        } else {
+            home_view_container.addView(viewFactory.getWelcomeView());
+
+        }
 
         initView();
-        // 최초 view 그리기
-        drawingView();
 
-        // cache view
-        cacheView(R.id.navigation_home);
+        // 기본 view 추가
+        Future<Boolean> f = viewFactory.executor.submit(
+                () -> {
+                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.feature_on_skillShare)));
+                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.trending_now)));
+                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.best_this_month)));
+                    return true;
+                }
+        );
+
+        setContainer();
+
+        // 최초 view 그리기
+        try {
+            if(f.get())
+                drawingView(home_view_container);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        // 사용자 로그인 되어 있으면
+        if(t != null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                    GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+            // google api client connection
+            mGoogleApiClient.connect();
+        }
+
+        super.onStart();
     }
 
     private void initView() {
@@ -89,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_left_button = findViewById(R.id.toolbar_button_l);
         toolbar_right_button = findViewById(R.id.toolbar_button_r);
+
+        scrollView = findViewById(R.id.scroll_view);
 
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
@@ -103,61 +152,93 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         });
     }
 
-    private void cacheView(int id) {
-        viewFactory.executor.submit(
-                () -> {
+    private void setContainer() {
+        // for study
+        /*
+        executor.submit(
+              new Callable<Boolean>() {
+                  @Override
+                  public Boolean call() throws Exception {
+                      return null;
+                  }
+              }
+        );
+        */
 
+        Future<Boolean> f = executor.submit(
+                () -> {
+                        // view container 만들기
+                        group_view_container = viewFactory.getViewContainer();
+                        discover_view_container = viewFactory.getViewContainer();
+                        your_classes_view_container = viewFactory.getViewContainer();
+                        me_view_container = viewFactory.getViewContainer();
+                        return true;
                 }
         );
-        new Thread() {
-            public void run() {
-                if(VIEW_CACHE.get(id) == null) {
-                    List<View> cacheViewList = new ArrayList<>();
-                    cacheViewList.addAll(viewList);
-                    VIEW_CACHE.put(id, cacheViewList); // VIEW_CACHE 저장
+
+        try {
+            if(f.get())
+                setViews();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    Future<LinearLayout> g, d, y, m;
+    private void setViews() {
+        Log.d("start",System.currentTimeMillis()+"");
+        g = executor.submit(
+                () -> {
+                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups)));
+                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups)));
+                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups)));
+                    return group_view_container;
                 }
-            }
-        }.start();
+        );
+
+        d = executor.submit(
+                () -> {
+                    discover_view_container.addView(viewFactory.getGeneralView(getString(R.string.trending_classes)));
+                    discover_view_container.addView(viewFactory.getGeneralView(getString(R.string.popular_classes)));
+                    return discover_view_container;
+                }
+        );
+
+        // main 에서 처리해줘야 한다.
+        View view = viewFactory.getYourClassesView();
+        ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+        Glide.with(this)
+                .load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal)
+                .apply(RequestOptions.centerCropTransform())
+                .into(video_thumbnail);
+        your_classes_view_container.addView(view);
+
+
+        View meView;
+        if (t != null) {
+            meView = viewFactory.getMeView(t.getName());
+            Glide.with(this)
+                    .load(t.getPhoto())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(((ImageView) meView.findViewById(R.id.me_image)));
+        } else {
+            meView = viewFactory.getMeView("My Name");
+            Glide.with(this)
+                    .load(R.drawable.design)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(((ImageView) meView.findViewById(R.id.me_image)));
+        }
+        me_view_container.addView(meView);
+        me_view_container.addView(viewFactory.getMeSkillView());
     }
 
-    private void setViewList(int id) {
-        // view list 비우기
-        viewList.clear();
+    private void drawingView(LinearLayout view_container) {
+        // remove previous view
+        scrollView.removeAllViewsInLayout();
+        scrollView.requestLayout();
 
-        // view list 채우기
-        if(VIEW_CACHE.get(id) != null)
-            viewList.addAll(VIEW_CACHE.get(id));
-        else {
-            if (id == R.id.navigation_groups) {
-                viewList.add(viewFactory.getGroupView(getString(R.string.my_groups)));
-                viewList.add(viewFactory.getGroupView(getString(R.string.featured_groups)));
-                viewList.add(viewFactory.getGroupView(getString(R.string.recently_active_groups)));
-            } else if(id == R.id.navigation_discover) {
-                viewList.add(viewFactory.getGeneralView(getString(R.string.trending_classes)));
-                viewList.add(viewFactory.getGeneralView(getString(R.string.popular_classes)));
-            } else if(id == R.id.navigation_your_classes) {
-                View view = viewFactory.getYourClassesView();
-                ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-                Glide.with(this).load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal).into(video_thumbnail);
-                viewList.add(view);
-            } else if(id == R.id.navigation_me) {
-                View meView = viewFactory.getMeView();
-                Glide.with(this)
-                        .load(R.drawable.design)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(((ImageView) meView.findViewById(R.id.me_image)));
-                viewList.add(meView);
-                viewList.add(viewFactory.getMeSkillView());
-            }
-        }
-    }
-
-    private void drawingView() {
-        container.removeAllViews();
-
-        for(int i=0; i<viewList.size(); i++) {
-            container.addView(viewList.get(i), i, layoutParams);
-        }
+        // add selected view
+        scrollView.addView(view_container);
     }
 
     private void changeToolbar(int id) {
@@ -210,82 +291,78 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         bottomNavigationView.setItemActiveColorWithoutColoredBackground(R.color.itemActiveColorWithoutColoredBackground);
 
         bottomNavigationView.disableShadow();
-        bottomNavigationView.setTextInactiveSize(14);
-        bottomNavigationView.setTextActiveSize(16);
+        bottomNavigationView.setTextInactiveSize(30);
+        bottomNavigationView.setTextActiveSize(35);
         bottomNavigationView.selectTab(0);
 
-        bottomNavigationView.setOnBottomNavigationItemClickListener(new OnBottomNavigationItemClickListener() {
-            @Override
-            public void onNavigationItemClick(int index) {
-                switch (index) {
-                    case 0:
-                        if(itemStack == R.id.navigation_home) {
-                            break;
-                        } else {
-                            // 이전 페이지의 view 들을 캐싱한다.
-                            cacheView(itemStack);
-                            itemStack = R.id.navigation_home;
-                            // toolbar 바꾸기
-                            changeToolbar(itemStack);
-                            // viewList 를 다시 세팅
-                            setViewList(itemStack);
-                            // container 에 담기 ( 그리기 )
-                            drawingView();
-                            break;
+        bottomNavigationView.setOnBottomNavigationItemClickListener(index -> {
+            switch (index) {
+                case 0:
+                    if(itemStack == R.id.navigation_home) {
+                        break;
+                    } else {
+                        itemStack = R.id.navigation_home;
+                        // toolbar 바꾸기
+                        changeToolbar(itemStack);
+                        // container 에 담기 ( 그리기 )
+                        drawingView(home_view_container);
+                        break;
+                    }
+                case 1:
+                    if(itemStack == R.id.navigation_groups) {
+                        break;
+                    } else {
+                        itemStack = R.id.navigation_groups;
+                        changeToolbar(itemStack);
+
+                        try {
+                            drawingView(g.get());
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    case 1:
-                        if(itemStack == R.id.navigation_groups) {
-                            break;
-                        } else {
-                            cacheView(itemStack);
-                            itemStack = R.id.navigation_groups;
-                            changeToolbar(itemStack);
-                            setViewList(itemStack);
-                            drawingView();
-                            break;
+
+                        break;
+                    }
+                case 2:
+                    if(itemStack == R.id.navigation_discover) {
+                        break;
+                    } else {
+                        itemStack = R.id.navigation_discover;
+                        changeToolbar(itemStack);
+
+                        try {
+                            drawingView(d.get());
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    case 2:
-                        if(itemStack == R.id.navigation_discover) {
-                            break;
-                        } else {
-                            cacheView(itemStack);
-                            itemStack = R.id.navigation_discover;
-                            changeToolbar(itemStack);
-                            setViewList(itemStack);
-                            drawingView();
-                            break;
-                        }
-                    case 3:
-                        if(itemStack == R.id.navigation_your_classes) {
-                            break;
-                        } else {
-                            cacheView(itemStack);
-                            itemStack = R.id.navigation_your_classes;
-                            changeToolbar(itemStack);
-                            setViewList(itemStack);
-                            drawingView();
-                            break;
-                        }
-                    case 4:
-                        if(itemStack == R.id.navigation_me) {
-                            break;
-                        } else {
-                            cacheView(itemStack);
-                            itemStack = R.id.navigation_me;
-                            changeToolbar(itemStack);
-                            setViewList(itemStack);
-                            drawingView();
-                            break;
-                        }
-                }
+
+                        break;
+                    }
+                case 3:
+                    if(itemStack == R.id.navigation_your_classes) {
+                        break;
+                    } else {
+                        itemStack = R.id.navigation_your_classes;
+                        changeToolbar(itemStack);
+                        drawingView(your_classes_view_container);
+                        break;
+                    }
+                case 4:
+                    if(itemStack == R.id.navigation_me) {
+                        break;
+                    } else {
+                        itemStack = R.id.navigation_me;
+                        changeToolbar(itemStack);
+                        drawingView(me_view_container);
+                        break;
+                    }
             }
         });
     }
 
     @Override
     public void close() {
-        container.removeViewAt(0);
-        // TODO list 에서도 제거
+        home_view_container.removeViewAt(0);
     }
 
     @Override
@@ -304,15 +381,28 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         startActivity(intent);
     }
 
-
-    // ------------------------------------------------------------------------------------------
-    // view 를 추가하는 메소드
-    private void addViewAt(View view, int position) {
-        container.addView(view, position, layoutParams);
+    @Override
+    public void signOut() {
+        if(t != null) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
+                // TODO 데이터 변경만 notify...
+                startActivity(new Intent(MainActivity.this, SplashActivity.class));
+                finish();
+                t = null;
+            });
+        } else
+            return;
     }
+
+
+    // 안쓰는 ------------------------------------------------------------------------------------------
+    // view 를 추가하는 메소드
+//    private void addViewAt(View view, int position) {
+//        container.addView(view, position, layoutParams);
+//    }
 
     // view 를 제거하는 메소드
-    private void removeViewAt(int position) {
-        container.removeViewAt(position);
-    }
+//    private void removeViewAt(int position) {
+//        container.removeViewAt(position);
+//    }
 }

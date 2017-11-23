@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
@@ -29,9 +30,12 @@ public class ViewFactory {
     RecyclerView recyclerView;
     InteractionInterface interactionInterface;
 
-    // 5개의 thread 를 가지고 있는 thread pool
-    public ExecutorService executor = Executors.newFixedThreadPool(5);
-    public ViewFactory(Context context) {
+    // TODO nThreads 를 정하는 합리적인 로직이 있어야한다.
+    public ExecutorService executor = Executors.newCachedThreadPool();
+
+    // Singleton
+    private static ViewFactory v;
+    private ViewFactory(Context context) {
         // context
         this.context = context;
         // inflater
@@ -39,6 +43,19 @@ public class ViewFactory {
         // interface for interaction
         if(context instanceof InteractionInterface)
             interactionInterface = (InteractionInterface) context;
+    }
+
+    public static ViewFactory getInstance(Context context) {
+        if(v == null) {
+            v = new ViewFactory(context);
+        }
+
+        return v;
+    }
+
+    public LinearLayout getViewContainer() {
+        LinearLayout view_container = (LinearLayout) inflater.inflate(R.layout.container, null);
+        return view_container;
     }
 
     public View getWelcomeView() {
@@ -158,20 +175,26 @@ public class ViewFactory {
         }
     }
 
-    public View getMeView() {
+    public View getMeView(String name) {
         Future<View> f = executor.submit(
                 () -> {
                     // main thread 에서 굳이 해주지 않아도 된다
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView)view.findViewById(R.id.me_name)).setText("My name");
+                    ((TextView)view.findViewById(R.id.me_name)).setText(name);
                     ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
 
                     // followers, following <<< onClick setting...
                     ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
                     ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
 
+                    view.findViewById(R.id.me_button).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            interactionInterface.signOut();
+                        }
+                    });
                     // main thread 영역 ------------------------------------------------------------
                     // rounding image setting
 //                    if(context instanceof MainActivity) {
@@ -221,6 +244,9 @@ public class ViewFactory {
 
         // see all activity 이동
         void seeAll(String title);
+
+        // sign out
+        void signOut();
     }
 
     // 안쓰는 ====================================================================
