@@ -48,6 +48,16 @@ dependencies {
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
     // toggle image button
     implementation 'net.colindodd:toggleimagebutton:1.2'
+
+    // google login
+    implementation 'com.google.android.gms:play-services-auth:11.6.0'
+
+    // rx android
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
+
+    // rx binding
+    implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

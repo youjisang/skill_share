@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.OnlineClassActivity;
 
 /**
  * Created by quf93 on 2017-11-17.
@@ -30,12 +32,16 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
-        // OnlineClass class = data.get(position);
+        // OnlineClass oc = data.get(position);
 
         // holder.textViewTitle.setText(/* title */);
         // holder.textViewAuthor.setText(/* tutor */);
         // holder.textViewTime.setText(/* String type time */);
         // Glide.with(context).load(/* Uri */).into(holder.imageView);
+        // holder.id = oc.id;
+
+        // for test
+        holder.id = "ajd3$0pj#d2i3";
     }
 
     @Override
@@ -49,6 +55,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         ImageView imageView;
         TextView textViewTime, textViewTitle, textViewTutor;
 
+        String id;
+
         public GeneralViewHolder(View v) {
             super(v);
             recyclerViewItemGroup = v.findViewById(R.id.recycler_view_item_general);
@@ -58,11 +66,11 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             textViewTutor = v.findViewById(R.id.text_view_author);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
-            recyclerViewItemGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO click 시 해당 클래스 화면으로 이동 처리
-                }
+            recyclerViewItemGroup.setOnClickListener(view -> {
+                // TODO click 시 해당 클래스 화면으로 이동 처리
+                Intent intent = new Intent(context, OnlineClassActivity.class);
+                intent.putExtra("title", textViewTitle.getText().toString());
+                context.startActivity(intent);
             });
         }
     }
