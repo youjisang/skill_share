@@ -26,7 +26,7 @@
         <activity android:name=".activity.SeeAllActivity" />
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.OnlineClassActivity"></activity>
+        <activity android:name=".activity.ClassesActivity"></activity>
     </application>
 
 </manifest>
