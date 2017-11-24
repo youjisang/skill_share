@@ -43,7 +43,7 @@ public class AboutFragment extends Fragment {
     }
 
     private void initView() {
-        projectStudentNum = view.findViewById(R.id.projectStudentNum);
+        projectStudentNum = view.findViewById(R.id.student_count_project);
         seeAllTextView1 = view.findViewById(R.id.seeAllTextView1);
         percentageNum = view.findViewById(R.id.percentageNum);
         seeAllTextView2 = view.findViewById(R.id.seeAllTextView2);

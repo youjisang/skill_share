@@ -92,9 +92,9 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     }
 
     private void setTabLayout() {
-        tabLayout.addTab(tabLayout.newTab().setText("LessonsFragment"));
-        tabLayout.addTab(tabLayout.newTab().setText("AboutFragment"));
-        tabLayout.addTab(tabLayout.newTab().setText("DiscussionModel"));
+        tabLayout.addTab(tabLayout.newTab().setText("Lessons"));
+        tabLayout.addTab(tabLayout.newTab().setText("About"));
+        tabLayout.addTab(tabLayout.newTab().setText("Discussion"));
     }
 
     private void setTabPager() {

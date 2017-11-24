@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/SkillShare.iml" filepath="$PROJECT_DIR$/SkillShare.iml" />
       <module fileurl="file://C:\workspaces\Study\Android\skill_share\SkillShare.iml" filepath="C:\workspaces\Study\Android\skill_share\SkillShare.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/skill_share.iml" filepath="$PROJECT_DIR$/skill_share.iml" />
+      <module fileurl="file://C:\Users\quf93\Desktop\SkillShare\SkillShare\skill_share.iml" filepath="C:\Users\quf93\Desktop\SkillShare\SkillShare\skill_share.iml" />
     </modules>
   </component>
 </project>

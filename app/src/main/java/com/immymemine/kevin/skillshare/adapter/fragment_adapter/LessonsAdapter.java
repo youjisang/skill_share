@@ -9,29 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.sampleModel.LessonsModel;
-
-
-import java.util.List;
 
 /**
  * Created by JisangYou on 2017-11-22.
  */
 
 public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> {
-    List<LessonsModel> lessonsData;
-    Context context;
 
-    public LessonsAdapter(List<LessonsModel> lessonsData, Context context) {
-        this.lessonsData = lessonsData;
+    Context context;
+    public LessonsAdapter(Context context) {
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lessons_item, parent, false);
-
+        View view = LayoutInflater.from(context).inflate(R.layout.lessons_item, parent, false);
         return new Holder(view);
     }
 
@@ -42,7 +34,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
 
     @Override
     public int getItemCount() {
-        return lessonsData.size();
+        return 5;
     }
 
     public class Holder extends RecyclerView.ViewHolder {

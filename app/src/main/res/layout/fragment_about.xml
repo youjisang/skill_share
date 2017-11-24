@@ -3,51 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:fadeScrollbars="true"
     tools:context="com.immymemine.kevin.skillshare.fragment.AboutFragment">
 
-    <android.support.constraint.ConstraintLayout
-
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linear1"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/projectStudentNum"
+                android:id="@+id/student_count_project"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_marginLeft="8dp"
                 android:text="561"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/studentProject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_weight="15"
-                android:text="student Project"
-                app:layout_constraintStart_toEndOf="@+id/projectStudentNum"
+                android:layout_marginLeft="56dp"
+                android:text="Student Project"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/student_count_project"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/seeAllTextView1"
+                android:id="@+id/see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="See All" />
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:text="See All"
+                android:textColor="@color/IcActive"
+                android:textSize="24sp" />
 
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/linear2"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -56,73 +64,89 @@
 
 
             <ImageView
-                android:id="@+id/projectImageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@mipmap/ic_launcher" />
-
-            <ImageView
                 android:id="@+id/projectImageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher" />
 
             <ImageView
-                android:id="@+id/projectImageView3"
+                android:id="@+id/projectImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher" />
-        </LinearLayout>
 
+            <ImageView
+                android:id="@+id/projectImageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/warning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Tip: Project briefs, class resources, and materials can be found at skillshare.com"
-             />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-
-        <LinearLayout
-            android:id="@+id/linear3"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="188dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#c8d9d9d9" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/percentageNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="99"
+                android:layout_marginLeft="8dp"
+                android:text="99%"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/warning" />
-
-            <TextView
-                android:id="@+id/per"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-                android:text="%"
-                app:layout_constraintStart_toEndOf="@+id/percentageNum"
                 app:layout_constraintTop_toBottomOf="@+id/warning" />
 
             <TextView
                 android:id="@+id/review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="56dp"
                 android:layout_weight="15"
                 android:text="Positive Reviews"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/percentageNum"
                 app:layout_constraintTop_toBottomOf="@+id/warning" />
 
@@ -130,352 +154,248 @@
                 android:id="@+id/seeAllTextView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
                 android:text="See All"
+                android:textColor="@color/IcActive"
+                android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@+id/studentProject"
                 app:layout_constraintTop_toBottomOf="@+id/warning" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/app_icon" />
 
-        <LinearLayout
-            android:id="@+id/linear4"
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="80dp"
+                android:src="@drawable/app_icon" />
+
+            <TextView
+                android:id="@+id/text_view_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="12dp"
+                android:maxLines="2"
+                android:text="Wonderful class. If found many useful things I didn't know. Thank you!"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/text_view_review2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="140dp"
+                android:layout_marginRight="12dp"
+                android:maxLines="2"
+                android:text="Olena Baluta"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear3">
+            android:background="#c8d9d9d9" />
 
-            <ImageView
-                android:id="@+id/positiveImageView1"
-                android:layout_width="33dp"
-                android:layout_height="33dp"
-                android:src="@mipmap/ic_launcher"
-                tools:layout_editor_absoluteX="44dp" />
-
-            <TextView
-                android:id="@+id/reviewTextView"
-                android:layout_width="264dp"
-                android:layout_height="32dp"
-                android:text="outstanding course"
-                tools:layout_editor_absoluteX="85dp"
-                tools:layout_editor_absoluteY="491dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear5"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear4">
-
-            <ImageView
-                android:id="@+id/positiveImageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:src="@mipmap/ic_launcher"
-                tools:layout_editor_absoluteX="56dp"
-                tools:layout_editor_absoluteY="531dp" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/reviewAuthorTextView"
-                android:layout_width="105dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-
-                android:layout_marginTop="4dp"
-                android:text="md Rakib Hasan"
-                app:layout_constraintBottom_toBottomOf="@+id/positiveImageView2"
-                app:layout_constraintStart_toEndOf="@+id/positiveImageView2"
-                app:layout_constraintTop_toTopOf="@+id/positiveImageView2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear5">
-
-            <TextView
-                android:id="@+id/classStudentNum"
+                android:id="@+id/student_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:text="6.9k"
+                android:layout_marginLeft="8dp"
+                android:text="170"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/positiveImageView2" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/students"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_weight="15"
+                android:layout_marginLeft="56dp"
                 android:text="Students"
-                app:layout_constraintBottom_toBottomOf="@+id/classStudentNum"
-                app:layout_constraintStart_toEndOf="@+id/classStudentNum"
-                app:layout_constraintTop_toTopOf="@+id/classStudentNum"
-                app:layout_constraintVertical_bias="1.0" />
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/student_count_project"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/seeAllTextView3"
+                android:id="@+id/seeAllTextView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
                 android:text="See All"
-                app:layout_constraintBottom_toBottomOf="@+id/students"
-                app:layout_constraintStart_toEndOf="@+id/students"
-                app:layout_constraintTop_toTopOf="@+id/students"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textColor="@color/IcActive"
+                android:textSize="24sp" />
 
-        </LinearLayout>
-
+        </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/linear7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <ImageView
+                android:id="@+id/iv_st1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st5"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st6"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st7"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st8"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st9"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/iv_st10"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+        </LinearLayout>
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear6">
-
-            <ImageView
-                android:id="@+id/studentImage1"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage2"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage3"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage4"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage5"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage6"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage7"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage8"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage9"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-            <ImageView
-                android:id="@+id/studentImage10"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@android:drawable/sym_def_app_icon" />
-
-
-        </LinearLayout>
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#c8d9d9d9" />
 
         <LinearLayout
-            android:id="@+id/linear8"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear7">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/related"
-                android:layout_width="match_parent"
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="Related Classes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.025"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linear7" />
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/student_count_project"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linear9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear8">
-
-            <ImageView
-                android:id="@+id/relatedImageView1"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <LinearLayout
-                android:id="@+id/linear9_1"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
 
-                <TextView
-                    android:id="@+id/relatedContentNameTextView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Logo Design"
-                    android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/AuthorTextView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Aaron"
-                    android:textSize="20dp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher" />
 
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear9">
-
-            <ImageView
-                android:id="@+id/relatedImageView2"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <LinearLayout
-                android:id="@+id/linear10_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/relatedContentNameTextView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Customizing"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/AuthorTextView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autoSizeMaxTextSize="20dp"
-                    android:text="Aeron"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear10">
-
-            <ImageView
-                android:id="@+id/relatedImageView3"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <LinearLayout
-                android:id="@+id/linear11_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/relatedContentNameTextView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autoSizeMaxTextSize="20dp"
-                    android:text="Learn"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/AuthorTextView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:autoSizeMaxTextSize="20dp"
-                    android:text="Jason"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
 </ScrollView>

@@ -62,7 +62,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         public GeneralViewHolder(View v) {
             super(v);
             recyclerViewItemGroup = v.findViewById(R.id.recycler_view_item_general);
-            imageView = v.findViewById(R.id.imageView);
+            imageView = v.findViewById(R.id.tutor_profile_image);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
             textViewTutor = v.findViewById(R.id.text_view_author);
