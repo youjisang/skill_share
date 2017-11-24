@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Bottom Navigation Bar Color-->
+    <color name="BottomNaviBackground">#ffffff</color>
+    <color name="IcActive">#eca442</color>
+    <color name="IcInactive">#797979</color>
+    <color name="IcDisabled">#bdbdbd</color>
+    <color name="BottomNaviNotiBackground">#F63D2B</color>
 </resources>

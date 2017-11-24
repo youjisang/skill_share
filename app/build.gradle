@@ -43,6 +43,8 @@ dependencies {
 
     // bottom navigation view
     implementation 'com.github.armcha:LuseenBottomNavigation:1.8.2'
+    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
 
     // toggle button
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
