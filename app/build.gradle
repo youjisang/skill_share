@@ -60,6 +60,9 @@ dependencies {
 
     // rx binding
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
+
+    // exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

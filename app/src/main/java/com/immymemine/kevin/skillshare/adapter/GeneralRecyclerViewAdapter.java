@@ -10,15 +10,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.immymemine.kevin.skillshare.activity.ClassesActivity;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.OnlineClassActivity;
 
 /**
- * Created by quf93 on 2017-11-17.
+ *
+ *  Created by quf93 on 2017-11-17.
  */
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
     // data 가 바뀔 일이 거의 없다 <<< 관리자가 바꿔주기 때문에
+    // 바꾼 상태
     Context context;
     public GeneralRecyclerViewAdapter(Context context) {
         this.context = context;
@@ -67,9 +69,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             recyclerViewItemGroup.setOnClickListener(view -> {
-                // TODO click 시 해당 클래스 화면으로 이동 처리
-                Intent intent = new Intent(context, OnlineClassActivity.class);
-                intent.putExtra("title", textViewTitle.getText().toString());
+                Intent intent = new Intent(context, ClassesActivity.class);
+                intent.putExtra("title", textViewTitle.getText().toString()); // data for identification
                 context.startActivity(intent);
             });
         }
