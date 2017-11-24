@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
+import com.immymemine.kevin.skillshare.activity.ProjectActivity;
+import com.immymemine.kevin.skillshare.adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.sampleModel.DiscussionModel;
 
@@ -34,17 +38,24 @@ public class DiscussionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_discussions, container, false);
-        discussionsRecyclerView = view.findViewById(R.id.discussionsRecyclerView);
-        dummydata();
-        adapter = new DiscussionsAdapter(discussionData,getContext());
-        discussionsRecyclerView.setAdapter(adapter);
-        discussionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        initView();
+
+        initRecycler();
+
+
         return view;
     }
 
-    public void dummydata(){
-        discussionData.add(new DiscussionModel(1,"","","","","",1));
-        discussionData.add(new DiscussionModel(1,"","","","","",1));
-        discussionData.add(new DiscussionModel(1,"","","","","",1));
+    private void initView() {
+
+        discussionsRecyclerView = view.findViewById(R.id.discussionsRecyclerView);
+
+    }
+
+    private void initRecycler() {
+        adapter = new DiscussionsAdapter(discussionData, getContext());
+        discussionsRecyclerView.setAdapter(adapter);
+        discussionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }

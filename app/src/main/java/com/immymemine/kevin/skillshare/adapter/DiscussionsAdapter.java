@@ -46,7 +46,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     @Override
     public int getItemCount() {
 
-        return discussionsData.size();
+        return 3;
     }
 
     public class Holder extends RecyclerView.ViewHolder {

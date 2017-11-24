@@ -34,19 +34,26 @@ public class LessonsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lessons, container, false);
-        lessonsRecyclerView = view.findViewById(R.id.lessonsRecyclerView);
+        initView();
         dummydata();
+        initRecycler();
+        return view;
+    }
+
+    private void initView() {
+        lessonsRecyclerView = view.findViewById(R.id.lessonsRecyclerView);
+    }
+
+    private void initRecycler() {
         adapter = new LessonsAdapter(lessonsData, getContext());
         lessonsRecyclerView.setAdapter(adapter);
         lessonsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        return view;
     }
 
 
     public void dummydata() {
-        lessonsData.add(new LessonsModel("","","",1));
-        lessonsData.add(new LessonsModel("","","",1));
-        lessonsData.add(new LessonsModel("","","",1));
-
+        lessonsData.add(new LessonsModel("", "", "", ""));
+        lessonsData.add(new LessonsModel("", "", "", ""));
+        lessonsData.add(new LessonsModel("", "", "", ""));
     }
 }
