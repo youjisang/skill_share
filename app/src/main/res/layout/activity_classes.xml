@@ -18,16 +18,48 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/background_dark"
-            app:use_controller="true"
             app:controller_layout_id="@layout/custom_control"/>
 
         <ImageButton
             android:id="@+id/start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:background="@drawable/circle_button"
             android:src="@drawable/exo_controls_play" />
+
+        <ImageButton
+            android:id="@+id/button_share2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:tint="@android:color/background_light"
+            app:srcCompat="@android:drawable/ic_menu_share" />
+
+        <ImageButton
+            android:id="@+id/button_back2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/transparent"
+            android:onClick="back"
+            android:tint="@android:color/background_light"
+            app:srcCompat="?android:attr/actionModeCloseDrawable" />
+
+        <ImageButton
+            android:id="@+id/button_subscribe2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:tint="@android:color/background_light"
+            app:srcCompat="@android:drawable/ic_lock_lock" />
 
     </FrameLayout>
 

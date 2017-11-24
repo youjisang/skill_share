@@ -30,7 +30,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -82,8 +81,13 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         start_button = findViewById(R.id.start_button);
         start_button.setOnClickListener(
                 v -> {
-                player.setPlayWhenReady(true);
-                start_button.setVisibility(View.GONE);
+                    player.setPlayWhenReady(true);
+                    start_button.setVisibility(View.GONE);
+                    findViewById(R.id.button_share2).setVisibility(View.GONE);
+                    findViewById(R.id.button_back2).setVisibility(View.GONE);
+                    findViewById(R.id.button_subscribe2).setVisibility(View.GONE);
+                    simpleExoPlayerView.setUseController(true); //Set media controller
+                    simpleExoPlayerView.showController();
         });
     }
 
@@ -134,7 +138,6 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     private SimpleExoPlayerView simpleExoPlayerView; // view
     private SimpleExoPlayer player; // player
 
-    private PlaybackControlView playbackControlView;
     private void initiatePlayer() {
         // =========================================================================================
 
@@ -142,7 +145,7 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         simpleExoPlayerView = new SimpleExoPlayerView(this);
         simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
         simpleExoPlayerView.requestFocus(); // ( ? )
-        simpleExoPlayerView.setUseController(true); //Set media controller
+        simpleExoPlayerView.setUseController(false); //Set media controller
 
         // Create a default TrackSelector <<< 화질 선택 ( ? )
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
