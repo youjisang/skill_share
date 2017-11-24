@@ -6,20 +6,20 @@ package com.immymemine.kevin.skillshare.sampleModel;
 
 public class DiscussionModel {
 
-    public int profile;
+    public String profile;
     public String userName;
     public String content;
     public String reply;
     public String date;
     public String likeNum;
-    public int heart;
+    public String heart;
 
 
     private DiscussionModel() {
 
     }
 
-    public DiscussionModel(int profile, String userName, String content, String reply, String date, String likeNum, int heart) {
+    public DiscussionModel(String profile, String userName, String content, String reply, String date, String likeNum, String heart) {
         this.profile = profile;
         this.userName = userName;
         this.content = content;

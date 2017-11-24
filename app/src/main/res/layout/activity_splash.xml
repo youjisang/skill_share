@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.immymemine.kevin.skillshare.activity.view.activity.SplashActivity">
+    tools:context="com.immymemine.kevin.skillshare.activity.SplashActivity">
 
     <ImageView
         android:id="@+id/splash_image"
@@ -26,7 +26,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -59,7 +59,7 @@
         app:cardCornerRadius="8dp">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/students"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

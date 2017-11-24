@@ -42,7 +42,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
 
     @Override
     public int getItemCount() {
-        return lessonsData.size();
+        return 3;
     }
 
     public class Holder extends RecyclerView.ViewHolder {
