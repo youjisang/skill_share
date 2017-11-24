@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,6 +30,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -49,6 +51,7 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     // views
     ViewPager tabPager;
     TabLayout tabLayout;
+    ImageButton start_button;
 
     // fragments
     AboutFragment aboutfragment;
@@ -76,6 +79,12 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     private void initiateView() {
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
+        start_button = findViewById(R.id.start_button);
+        start_button.setOnClickListener(
+                v -> {
+                player.setPlayWhenReady(true);
+                start_button.setVisibility(View.GONE);
+        });
     }
 
     private void setTabLayout() {
@@ -125,6 +134,7 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     private SimpleExoPlayerView simpleExoPlayerView; // view
     private SimpleExoPlayer player; // player
 
+    private PlaybackControlView playbackControlView;
     private void initiatePlayer() {
         // =========================================================================================
 
@@ -134,7 +144,7 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         simpleExoPlayerView.requestFocus(); // ( ? )
         simpleExoPlayerView.setUseController(true); //Set media controller
 
-        // Create a default TrackSelector
+        // Create a default TrackSelector <<< 화질 선택 ( ? )
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
@@ -153,20 +163,22 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         // I. ADJUST HERE:
         // CHOOSE CONTENT: LiveStream / SdCard
 
-        // LIVE STREAM SOURCE: * Livestream links may be out of date so find any m3u8 files online and replace:
+        // LIVE STREAM
 
         // Uri mp4VideoUri =Uri.parse("http://81.7.13.162/hls/ss1/index.m3u8"); //random 720p source
         Uri mp4VideoUri =Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8"); //Radnom 540p indian channel
         // Uri mp4VideoUri =Uri.parse("FIND A WORKING LINK ABD PLUg INTO HERE"); //PLUG INTO HERE<------------------------------------------
 
 
-        //VIDEO FROM SD CARD: (2 steps. set up file and path, then change videoSource to get the file)
-        //String urimp4 = "path/FileName.mp4"; //upload file to device and add path/name.mp4
-        //Uri mp4VideoUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
+        //FROM SD CARD: (2 steps. set up file and path, then change videoSource to get the file)
+        // String urimp4 = "path/FileName.mp4"; //upload file to device and add path/name.mp4
+        // Uri mp4VideoUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
         // =========================================================================================
 
         // =========================================================================================
-        //Measures bandwidth during playback. Can be null if not required.
+        // 재생 중 available bandwidth 를 추정해서 제공
+        // >>> bandwidth 에 따라 smooth 하게 보여지는 정도가 결정된다
+        //     bandwidth 가 크면 클수록 화질이 좋아진다
         DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
         //Produces DataSource instances through which media data is loaded.
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
@@ -180,7 +192,9 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         //FOR SD CARD SOURCE:
         //        MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
 
-        //FOR LIVESTREAM LINK:
+        // FOR LIVESTREAM LINK:
+        // ExoPlayer 는 쪼개져있는 segments 들을 MediaSource 형태로 받아온다
+        // MediaSource 를 세팅하고 player 에 넘겨준다
         MediaSource videoSource = new HlsMediaSource(mp4VideoUri, dataSourceFactory, 1, null, null);
         final LoopingMediaSource loopingSource = new LoopingMediaSource(videoSource);
 
@@ -231,7 +245,7 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
             }
         });
 
-        player.setPlayWhenReady(true); //run file/link when ready to play.
+        player.setPlayWhenReady(false); //run file/link when ready to play.
         player.setVideoDebugListener(this); //for listening to resolution change and  outputing the resolution
     }
 
