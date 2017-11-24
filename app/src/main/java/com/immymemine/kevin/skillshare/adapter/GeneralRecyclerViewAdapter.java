@@ -69,18 +69,9 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             recyclerViewItemGroup.setOnClickListener(view -> {
-                // TODO click 시 해당 클래스 화면으로 이동 처리
-                /*
-                Intent intent = new Intent(context, OnlineClassActivity.class);
-                intent.putExtra("title", textViewTitle.getText().toString());
-                context.startActivity(intent);
-                */
-
-                // 이 지점에서 클래스 액티비티로 이동함!
                 Intent intent = new Intent(context, ClassesActivity.class);
-                intent.putExtra("title", textViewTitle.getText().toString());
+                intent.putExtra("title", textViewTitle.getText().toString()); // data for identification
                 context.startActivity(intent);
-
             });
         }
     }

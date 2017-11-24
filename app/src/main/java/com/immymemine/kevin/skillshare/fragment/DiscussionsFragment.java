@@ -25,18 +25,14 @@ import java.util.List;
  */
 public class DiscussionsFragment extends Fragment {
 
-
     private RecyclerView discussionsRecyclerView;
     private View view;
     private DiscussionsAdapter adapter;
     private List<DiscussionModel> discussionData = new ArrayList<>();
 
-
-
     public DiscussionsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,10 +58,4 @@ public class DiscussionsFragment extends Fragment {
         discussionsRecyclerView.setAdapter(adapter);
         discussionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
-
-    private void clickListener(){
-    }
-
-
-
 }

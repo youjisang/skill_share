@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.immymemine.kevin.skillshare.adapter.LessonsAdapter;
+import com.immymemine.kevin.skillshare.adapter.fragment_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.sampleModel.LessonsModel;
 
