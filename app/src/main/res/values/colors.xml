@@ -10,4 +10,7 @@
     <color name="IcInactive">#797979</color>
     <color name="IcDisabled">#bdbdbd</color>
     <color name="BottomNaviNotiBackground">#F63D2B</color>
+
+    <!-- Icon Background Color -->
+    <color name="ic_launcher_background">#ECA442</color>
 </resources>
