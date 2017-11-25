@@ -42,10 +42,10 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
 
     // bottom navigation view
-    implementation 'com.github.armcha:LuseenBottomNavigation:1.8.2'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 
+    // TODO toggle 버튼 정리...
     // toggle button
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
     // toggle image button
@@ -61,7 +61,7 @@ dependencies {
     // rx binding
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
 
-    // exoplayer
+    // exo player
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
 }
 

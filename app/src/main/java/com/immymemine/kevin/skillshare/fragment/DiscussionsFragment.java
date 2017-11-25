@@ -43,7 +43,7 @@ public class DiscussionsFragment extends Fragment {
     }
 
     private void initView() {
-        discussionsRecyclerView = view.findViewById(R.id.discussionsRecyclerView);
+        discussionsRecyclerView = view.findViewById(R.id.recycler_view_discussion);
     }
 
     private void initRecycler() {

@@ -23,7 +23,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.lessons_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_lessons, parent, false);
         return new Holder(view);
     }
 
