@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Glide.with(this)
                 .load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal)
                 .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.placeholderOf(R.drawable.design)) // if( image == null ) setting default 이미지
                 .into(video_thumbnail);
         your_classes_view_container.addView(view);
 
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             Glide.with(this)
                     .load(t.getPhoto())
                     .apply(RequestOptions.circleCropTransform())
+                    .apply(RequestOptions.placeholderOf(R.drawable.design))
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
         } else {
             meView = viewFactory.getMeView("My Name");
