@@ -117,19 +117,25 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         tabPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
 
+    // share button 클릭 리스너
     public void share(View view) {
-        // share button 클릭시
+
     }
 
+    // back button 클릭 리스너
     public void back(View view) {
-        // back button 클릭시
+
         finish();
     }
 
+    // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
-        // subscribe 버튼 클릭시
-    }
 
+    }
+    public void student_profile(View view) {
+        int id = view.getId();
+
+    }
     // Exo Player -----------------------------------------------------------------------
     // video play step : 1. networking  2. buffering  3. extraction  4. decoding  5. rendering
 

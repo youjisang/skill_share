@@ -3,11 +3,12 @@ package com.immymemine.kevin.skillshare.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -23,10 +24,13 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         // glide gif
-        Glide.with(this).load(R.raw.splash).into((ImageView) findViewById(R.id.splash_image));
+        // gif 프레임 추출 > 프레임 사이즈 최적화 > 프레임 저장
+        Glide.with(this)
+                .load(R.raw.splash)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)) // decoded resource 를 Disk Cache 저장소에 저장해둔다
+                .into((ImageView) findViewById(R.id.splash_image));
         // button get_started
-        CardView get_started = findViewById(R.id.get_started);
-        get_started.setOnClickListener(v -> {
+        findViewById(R.id.get_started).setOnClickListener(v -> {
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
             // TODO Sign up page
             new Thread() {
@@ -52,6 +56,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        // sign_in activity 로 갔다가 다시 돌아왔을 때
+        // progress bar >>> GONE
         findViewById(R.id.progressBar).setVisibility(View.GONE);
         super.onResume();
     }
