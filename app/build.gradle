@@ -64,6 +64,9 @@ dependencies {
 
     // exo player
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
+
+    // retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

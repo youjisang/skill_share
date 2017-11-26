@@ -1,11 +1,23 @@
 package com.immymemine.kevin.skillshare.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +26,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
@@ -22,10 +38,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.AccountTemp;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -106,6 +123,13 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        registerReceiver();
+
+        if(checkPermission())
+            startRegisterService();
+        else
+            requestPermission();
     }
 
     @Override
@@ -403,6 +427,67 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         });
     }
 
+    // Broad Cast Receiver
+    private void registerReceiver() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConstantUtil.REGISTRATION);
+        intentFilter.addAction(ConstantUtil.RECEIVED);
+        localBroadcastManager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().equals(ConstantUtil.RECEIVED)) {
+                    // TODO UI 변경 작업을 해주면 된다
+                    String result = intent.getStringExtra("result");
+                    String message = intent.getStringExtra("message");
+                } else if(intent.getAction().equals(ConstantUtil.REGISTRATION)) {
+
+                }
+            }
+        }, intentFilter);
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE);
+        return (result == PackageManager.PERMISSION_GRANTED) ? true : false;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, ConstantUtil.PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case ConstantUtil.PERMISSION_REQUEST_CODE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    startRegisterService();
+                else
+                    Toast.makeText(this, "", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    private void startRegisterService() {
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        intent.putExtra("DEVICE_ID",getDeviceId());
+        intent.putExtra("DEVICE_NAME",getDeviceName());
+        startService(intent);
+    }
+
+    @SuppressLint("MissingPermission")
+    private String getDeviceId() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        return telephonyManager.getDeviceId();
+    }
+
+    private String getDeviceName() {
+        String deviceName = Build.MODEL;
+        String deviceMan = Build.MANUFACTURER;
+        return  deviceMan + " " +deviceName;
+    }
+
+    // Interaction Listener
     @Override
     public void close() {
         home_view_container.removeViewAt(0);
@@ -419,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void seeAll(String title) {
         Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
         // title >> int
-        // Const
+        // ConstantUtil
         intent.putExtra("Type", title);
         startActivity(intent);
     }
@@ -436,15 +521,4 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         } else
             return;
     }
-
-    // 안쓰는 ------------------------------------------------------------------------------------------
-    // view 를 추가하는 메소드
-//    private void addViewAt(View view, int position) {
-//        container.addView(view, position, layoutParams);
-//    }
-
-    // view 를 제거하는 메소드
-//    private void removeViewAt(int position) {
-//        container.removeViewAt(position);
-//    }
 }

@@ -29,6 +29,7 @@ public class SplashActivity extends AppCompatActivity {
                 .load(R.raw.splash)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)) // decoded resource 를 Disk Cache 저장소에 저장해둔다
                 .into((ImageView) findViewById(R.id.splash_image));
+
         // button get_started
         findViewById(R.id.get_started).setOnClickListener(v -> {
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
