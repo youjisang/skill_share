@@ -7,35 +7,32 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Surface;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
@@ -45,7 +42,7 @@ import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassesActivity extends AppCompatActivity implements VideoRendererEventListener{
+public class ClassesActivity extends AppCompatActivity {
 
     // views
     ViewPager tabPager;
@@ -82,10 +79,14 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         start_button.setOnClickListener(
                 v -> {
                     player.setPlayWhenReady(true);
+
+                    // code refactoring...
                     start_button.setVisibility(View.GONE);
                     findViewById(R.id.button_share2).setVisibility(View.GONE);
                     findViewById(R.id.button_back2).setVisibility(View.GONE);
                     findViewById(R.id.button_subscribe2).setVisibility(View.GONE);
+
+                    // controller
                     simpleExoPlayerView.setUseController(true); //Set media controller
                     simpleExoPlayerView.showController();
         });
@@ -124,7 +125,6 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
 
     // back button 클릭 리스너
     public void back(View view) {
-
         finish();
     }
 
@@ -139,13 +139,22 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
     // Exo Player -----------------------------------------------------------------------
     // video play step : 1. networking  2. buffering  3. extraction  4. decoding  5. rendering
 
-    private static final String TAG = "ClassesActivity";
+    private static final String TAG = "Player on classes_activity";
+    private static final String URL = "http://yt-dash-mse-test.commondatastorage.googleapis.com/media/oops-20120802-manifest.mpd";
 
+    private String userAgent;
     private SimpleExoPlayerView simpleExoPlayerView; // view
     private SimpleExoPlayer player; // player
+    private DefaultTrackSelector trackSelector;
+    private DataSource.Factory mediaDataSourceFactory;
+    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+
+    MediaSource mediaSource;
+
+    long resumePosition;
 
     private void initiatePlayer() {
-        // =========================================================================================
+        userAgent = Util.getUserAgent(this, "Skill Share");
 
         // view
         simpleExoPlayerView = new SimpleExoPlayerView(this);
@@ -153,143 +162,123 @@ public class ClassesActivity extends AppCompatActivity implements VideoRendererE
         simpleExoPlayerView.requestFocus(); // ( ? )
         simpleExoPlayerView.setUseController(false); //Set media controller
 
-        // Create a default TrackSelector <<< 화질 선택 ( ? )
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        // renders [ 4, 5 ]
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this, null);
 
-        // Create the player
-        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+        // track selector [ 5 ]
+        TrackSelection.Factory adaptiveTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+        trackSelector = new DefaultTrackSelector(adaptiveTrackSelectionFactory);
 
-        // Bind the player to the view.
+        player = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+        player.addListener(new PlayerEventListener());
+
+        // binding
         simpleExoPlayerView.setPlayer(player);
+        player.setPlayWhenReady(false);
 
-        // Create a default LoadControl
-        // LoadControl loadControl = new DefaultLoadControl();
-        // =========================================================================================
+        // dash
+        // data source factory
+        mediaDataSourceFactory = buildDataSourceFactory(true);
 
-        // =========================================================================================
-        // I. ADJUST HERE:
-        // CHOOSE CONTENT: LiveStream / SdCard
+        // [ 1, 2, 3 ( ? ) ]
+        mediaSource = buildMediaSource(Uri.parse(URL));
 
-        // LIVE STREAM
+        if(resumePosition > 0)
+            player.seekTo(resumePosition);
+        player.prepare(mediaSource);
+    }
 
-        // Uri mp4VideoUri =Uri.parse("http://81.7.13.162/hls/ss1/index.m3u8"); //random 720p source
-        Uri mp4VideoUri =Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8"); //Radnom 540p indian channel
-        // Uri mp4VideoUri =Uri.parse("FIND A WORKING LINK ABD PLUg INTO HERE"); //PLUG INTO HERE<------------------------------------------
+    private MediaSource buildMediaSource(Uri uri) {
+        @C.ContentType int type = Util.inferContentType(uri);
+        switch (type) {
+            case C.TYPE_DASH:
+                return new DashMediaSource(uri, new DefaultDataSourceFactory(this, null, new DefaultHttpDataSourceFactory(userAgent, null)),
+                        new DefaultDashChunkSource.Factory(mediaDataSourceFactory), null, null);
+                default:
+                    throw new IllegalStateException("Unsupported Type : " + type);
+        }
+    }
 
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+    }
 
-        //FROM SD CARD: (2 steps. set up file and path, then change videoSource to get the file)
-        // String urimp4 = "path/FileName.mp4"; //upload file to device and add path/name.mp4
-        // Uri mp4VideoUri = Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+urimp4);
-        // =========================================================================================
+    private DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultDataSourceFactory(this, bandwidthMeter,
+                buildHttpDataSourceFactory(bandwidthMeter));
+    }
 
-        // =========================================================================================
-        // 재생 중 available bandwidth 를 추정해서 제공
-        // >>> bandwidth 에 따라 smooth 하게 보여지는 정도가 결정된다
-        //     bandwidth 가 크면 클수록 화질이 좋아진다
-        DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();
-        //Produces DataSource instances through which media data is loaded.
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
-        //Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        // =========================================================================================
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        return new DefaultHttpDataSourceFactory(userAgent, bandwidthMeter);
+    }
 
-        // II. ADJUST HERE:
+    private void saveResumePosition() {
+        // TODO save video list index
+        Log.d("window index", player.getCurrentWindowIndex() + "");
+        resumePosition = player.getContentPosition();
+        resumePosition = (resumePosition > 0) ? resumePosition : 0;
+    }
 
-        //This is the MediaSource representing the media to be played:
-        //FOR SD CARD SOURCE:
-        //        MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri, dataSourceFactory, extractorsFactory, null, null);
-
-        // FOR LIVESTREAM LINK:
-        // ExoPlayer 는 쪼개져있는 segments 들을 MediaSource 형태로 받아온다
-        // MediaSource 를 세팅하고 player 에 넘겨준다
-        MediaSource videoSource = new HlsMediaSource(mp4VideoUri, dataSourceFactory, 1, null, null);
-        final LoopingMediaSource loopingSource = new LoopingMediaSource(videoSource);
-
-        // Prepare the player with the source.
-        player.prepare(loopingSource);
-        player.addListener(new Player.EventListener() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest) {
-                Log.v(TAG, "Listener-onTimelineChanged...");
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-                Log.v(TAG, "Listener-onTracksChanged...");
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-                Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
-            }
-
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Log.v(TAG, "Listener-onPlayerStateChanged..." + playbackState);
-            }
-
-            @Override
-            public void onRepeatModeChanged(int repeatMode) {
-                Log.v(TAG, "Listener-onRepeatModeChanged...");
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                Log.v(TAG, "Listener-onPlayerError...");
-                player.stop();
-                player.prepare(loopingSource);
-                player.setPlayWhenReady(true);
-            }
-
-            @Override
-            public void onPositionDiscontinuity() {
-                Log.v(TAG, "Listener-onPositionDiscontinuity...");
-            }
-
-            @Override
-            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-                Log.v(TAG, "Listener-onPlaybackParametersChanged...");
-            }
-        });
-
-        player.setPlayWhenReady(false); //run file/link when ready to play.
-        player.setVideoDebugListener(this); //for listening to resolution change and  outputing the resolution
+    private void releasePlayer() {
+        if(player != null) {
+            saveResumePosition();
+            player.release();
+            player = null;
+            trackSelector = null;
+        }
     }
 
     @Override
-    public void onVideoEnabled(DecoderCounters counters) {
-
+    protected void onStop() {
+        releasePlayer();
+        super.onStop();
     }
 
-    @Override
-    public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+    private class PlayerEventListener implements Player.EventListener {
+        private static final String TAG = "skill share player";
 
-    }
+        @Override
+        public void onTimelineChanged(Timeline timeline, Object manifest) {
+            Log.v(TAG, "Listener-onTimelineChanged...");
+        }
 
-    @Override
-    public void onVideoInputFormatChanged(Format format) {
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            Log.v(TAG, "Listener-onTracksChanged...");
+        }
 
-    }
+        @Override
+        public void onLoadingChanged(boolean isLoading) {
+            Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
+        }
 
-    @Override
-    public void onDroppedFrames(int count, long elapsedMs) {
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            Log.v(TAG, "Listener-onPlayerStateChanged..." + playbackState);
+        }
 
-    }
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+            Log.v(TAG, "Listener-onRepeatModeChanged...");
+        }
 
-    @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        Log.v(TAG, "onVideoSizeChanged ["  + " width: " + width + " height: " + height + "]");
-    }
+        @Override
+        public void onPlayerError(ExoPlaybackException error) {
+            Log.v(TAG, "Listener-onPlayerError...");
+            player.stop();
+            player.prepare(mediaSource);
+            player.setPlayWhenReady(true);
+        }
 
-    @Override
-    public void onRenderedFirstFrame(Surface surface) {
+        @Override
+        public void onPositionDiscontinuity() {
+            Log.v(TAG, "Listener-onPositionDiscontinuity...");
+        }
 
-    }
-
-    @Override
-    public void onVideoDisabled(DecoderCounters counters) {
-
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+            Log.v(TAG, "Listener-onPlaybackParametersChanged...");
+        }
     }
 }

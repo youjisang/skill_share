@@ -51,8 +51,9 @@ dependencies {
     // toggle image button
     implementation 'net.colindodd:toggleimagebutton:1.2'
 
-    // google login
-    implementation 'com.google.android.gms:play-services-auth:11.6.0'
+    // google api
+    implementation 'com.google.android.gms:play-services-auth:11.6.0' // google login
+    implementation "com.google.android.gms:play-services-gcm:11.6.0" // google cloud messaging
 
     // rx android
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
