@@ -19,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by quf93 on 2017-11-26.
@@ -27,8 +28,7 @@ import retrofit2.Retrofit;
 public class RegistrationIntentService extends IntentService {
 
     private final String TAG = "InstanceIDService";
-    private final String SENDER_ID = getString(R.string.gcm_defaultSenderId);
-    private final String URL = "http://~"; // TODO
+    private final String URL = "http://localhost/8079/";
 
     public RegistrationIntentService() {
         super("RegistrationIntentService");
@@ -42,8 +42,8 @@ public class RegistrationIntentService extends IntentService {
         try {
             // token 값 생성
             InstanceID instanceID = InstanceID.getInstance(this);
-            String registrationId = instanceID.getToken(SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-
+            String registrationId = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            Log.d("registrationId", registrationId);
             // 서버 통신
             registerDevice(deviceId, deviceName, registrationId);
         } catch (Exception e ) {
@@ -61,7 +61,7 @@ public class RegistrationIntentService extends IntentService {
         // retrofit initiate
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
-                // .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         // bind interface

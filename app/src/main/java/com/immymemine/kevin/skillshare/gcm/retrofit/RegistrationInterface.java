@@ -9,6 +9,6 @@ import retrofit2.http.POST;
  */
 
 public interface RegistrationInterface {
-    @POST("devices")
+    @POST("register")
     Call<ResponseBody> registerDevice(@Body RequestBody body);
 }

@@ -9,7 +9,6 @@ public class ResponseBody {
     private String message;
 
     public String getResult() {
-
         return result;
     }
 
