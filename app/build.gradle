@@ -42,17 +42,18 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
 
     // bottom navigation view
-    implementation 'com.github.armcha:LuseenBottomNavigation:1.8.2'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 
+    // TODO toggle 버튼 정리...
     // toggle button
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
     // toggle image button
     implementation 'net.colindodd:toggleimagebutton:1.2'
 
-    // google login
-    implementation 'com.google.android.gms:play-services-auth:11.6.0'
+    // google api
+    implementation 'com.google.android.gms:play-services-auth:11.6.0' // google login
+    implementation "com.google.android.gms:play-services-gcm:11.6.0" // google cloud messaging
 
     // rx android
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -61,8 +62,11 @@ dependencies {
     // rx binding
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
 
-    // exoplayer
+    // exo player
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
+
+    // retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

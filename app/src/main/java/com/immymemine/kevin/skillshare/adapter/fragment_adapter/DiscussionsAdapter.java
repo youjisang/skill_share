@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.sampleModel.DiscussionModel;
-
+import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import java.util.List;
 
@@ -31,39 +30,30 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.discussions_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_discussions, parent, false);
 
         return new Holder(view);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-
-
         // 일단 생략
     }
 
     @Override
     public int getItemCount() {
-
-        return discussionsData.size();
+        return 5;
     }
 
     public class Holder extends RecyclerView.ViewHolder {
 
-        ImageView profileImageView, replyImageView, heartImageView;
-        TextView userNameTextView, contentTextView, dateTextView, likeNumTextView;
+        ExpandableTextView expandableTextView;
 
-        public Holder(View itemView) {
-            super(itemView);
-            profileImageView = itemView.findViewById(R.id.profileImageView);
-            userNameTextView = itemView.findViewById(R.id.userNameTextView);
-            contentTextView = itemView.findViewById(R.id.contentTextView);
-            heartImageView = itemView.findViewById(R.id.heartImageView);
-            replyImageView = itemView.findViewById(R.id.replyImageView);
-            dateTextView = itemView.findViewById(R.id.dateTextView);
-            likeNumTextView = itemView.findViewById(R.id.likeNumTextView);
-
+        public Holder(View v) {
+            super(v);
+            expandableTextView = v.findViewById(R.id.expandable_text_view);
+            expandableTextView.setTrimLength(5);
+            expandableTextView.setText(v.getContext().getText(R.string.test), TextView.BufferType.NORMAL);
         }
     }
 }

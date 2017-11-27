@@ -28,7 +28,7 @@ public class ProjectSeeAllAdapter extends RecyclerView.Adapter<ProjectSeeAllAdap
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.projects_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_projects, parent, false);
 
         return new Holder(view);
     }
