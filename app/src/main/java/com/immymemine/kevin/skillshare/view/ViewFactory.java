@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.fragment_adapter.MainRecyclerViewAdapter;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -137,6 +138,31 @@ public class ViewFactory {
 
     public View getGroupView(String title) {
         Future<View> f = executor.submit(new GroupViewFactory(title));
+
+        try {
+            return f.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class DiscoverViewFactory implements Callable<View> {
+
+        @Override
+        public View call() throws Exception {
+            View view = inflater.inflate(R.layout.discover_view, null);
+
+            recyclerView = view.findViewById(R.id.recycler_view_discover);
+            recyclerView.setAdapter(new MainRecyclerViewAdapter());
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
+            return view;
+        }
+    }
+
+    public View getDiscoverView() {
+        Future<View> f = executor.submit(new DiscoverViewFactory());
 
         try {
             return f.get();

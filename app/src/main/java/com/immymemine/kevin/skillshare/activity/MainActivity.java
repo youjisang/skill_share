@@ -18,7 +18,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -216,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         d = executor.submit(
                 () -> {
+                    discover_view_container.addView(viewFactory.getDiscoverView());
                     discover_view_container.addView(viewFactory.getGeneralView(getString(R.string.trending_classes)));
                     discover_view_container.addView(viewFactory.getGeneralView(getString(R.string.popular_classes)));
                     return discover_view_container;
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void drawingView(LinearLayout view_container) {
-        Log.e("here", view_container.toString());
+
         // remove previous view
         scrollView.removeAllViewsInLayout();
         scrollView.requestLayout();

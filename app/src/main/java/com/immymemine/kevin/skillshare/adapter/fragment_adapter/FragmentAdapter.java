@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter;
+package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
