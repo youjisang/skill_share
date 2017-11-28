@@ -49,7 +49,7 @@ public class SkillShareGcmListenerService extends GcmListenerService {
             notificationBuilder = new Notification.Builder(this,"default")
                     .setSmallIcon(R.drawable.noti_icon)
                     .setContentTitle("TEST_TITLE")
-                    .setContentText("TEST_CONTENT")
+                    .setContentText(message)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);
@@ -57,7 +57,7 @@ public class SkillShareGcmListenerService extends GcmListenerService {
             notificationBuilder = new Notification.Builder(this)
                     .setSmallIcon(R.drawable.noti_icon)
                     .setContentTitle("TEST_TITLE")
-                    .setContentText("TEST_CONTENT")
+                    .setContentText(message)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);

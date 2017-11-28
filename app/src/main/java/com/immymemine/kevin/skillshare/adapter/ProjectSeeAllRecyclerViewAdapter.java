@@ -17,11 +17,11 @@ import java.util.List;
  * Created by JisangYou on 2017-11-24.
  */
 
-public class ProjectSeeAllAdapter extends RecyclerView.Adapter<ProjectSeeAllAdapter.Holder> {
+public class ProjectSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<ProjectSeeAllRecyclerViewAdapter.Holder> {
     List<ProjectSeeAllModel> seeAllProjectData;
     Context context;
 
-    public ProjectSeeAllAdapter(List<ProjectSeeAllModel> seeAllProjectData, Context context) {
+    public ProjectSeeAllRecyclerViewAdapter(List<ProjectSeeAllModel> seeAllProjectData, Context context) {
         this.seeAllProjectData = seeAllProjectData;
         this.context = context;
     }

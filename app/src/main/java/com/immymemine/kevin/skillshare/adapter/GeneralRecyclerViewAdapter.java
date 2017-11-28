@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.immymemine.kevin.skillshare.activity.ClassesActivity;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.ClassesActivity;
 
 /**
  *
@@ -53,7 +52,6 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     }
 
     class GeneralViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout recyclerViewItemGroup;
         ImageView imageView;
         TextView textViewTime, textViewTitle, textViewTutor;
 
@@ -61,14 +59,13 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
         public GeneralViewHolder(View v) {
             super(v);
-            recyclerViewItemGroup = v.findViewById(R.id.recycler_view_item_general);
             imageView = v.findViewById(R.id.tutor_profile_image);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
             textViewTutor = v.findViewById(R.id.text_view_author);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
-            recyclerViewItemGroup.setOnClickListener(view -> {
+            v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassesActivity.class);
                 intent.putExtra("title", textViewTitle.getText().toString()); // data for identification
                 context.startActivity(intent);

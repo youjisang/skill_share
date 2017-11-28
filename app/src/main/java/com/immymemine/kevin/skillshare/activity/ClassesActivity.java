@@ -34,7 +34,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.FragmentAdapter;
+import com.immymemine.kevin.skillshare.adapter.fragment_adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
@@ -281,4 +281,6 @@ public class ClassesActivity extends AppCompatActivity {
             Log.v(TAG, "Listener-onPlaybackParametersChanged...");
         }
     }
+
+
 }

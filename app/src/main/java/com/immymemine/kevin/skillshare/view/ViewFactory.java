@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.fragment_adapter.MainRecyclerViewAdapter;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -20,8 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- *  Main Activity 에서 사용하는 View Factory
- *  Created by quf93 on 2017-11-18.
+ * Main Activity 에서 사용하는 View Factory
+ * Created by quf93 on 2017-11-18.
  */
 
 public class ViewFactory {
@@ -35,18 +37,19 @@ public class ViewFactory {
 
     // Singleton
     private static ViewFactory v;
+
     private ViewFactory(Context context) {
         // context
         this.context = context;
         // inflater
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // interface for interaction
-        if(context instanceof InteractionInterface)
+        if (context instanceof InteractionInterface)
             interactionInterface = (InteractionInterface) context;
     }
 
     public static ViewFactory getInstance(Context context) {
-        if(v == null) {
+        if (v == null) {
             v = new ViewFactory(context);
         }
 
@@ -92,12 +95,13 @@ public class ViewFactory {
             recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
-            ((TextView)view.findViewById(R.id.text_view_title)).setText(title);
+            ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
             Button see_all_button = view.findViewById(R.id.button_see_all);
             see_all_button.setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
+
             });
             return view;
         }
@@ -115,6 +119,7 @@ public class ViewFactory {
 
     class GroupViewFactory implements Callable<View> {
         String title;
+
         public GroupViewFactory(String title) {
             this.title = title;
         }
@@ -137,6 +142,31 @@ public class ViewFactory {
 
     public View getGroupView(String title) {
         Future<View> f = executor.submit(new GroupViewFactory(title));
+
+        try {
+            return f.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    class DiscoverViewFactory implements Callable<View> {
+
+        @Override
+        public View call() throws Exception {
+            View view = inflater.inflate(R.layout.discover_view, null);
+
+            recyclerView = view.findViewById(R.id.recycler_view_discover);
+            recyclerView.setAdapter(new MainRecyclerViewAdapter());
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
+            return view;
+        }
+    }
+
+    public View getDiscoverView() {
+        Future<View> f = executor.submit(new DiscoverViewFactory());
 
         try {
             return f.get();
@@ -182,12 +212,12 @@ public class ViewFactory {
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView)view.findViewById(R.id.me_name)).setText(name);
-                    ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
+                    ((TextView) view.findViewById(R.id.me_name)).setText(name);
+                    ((TextView) view.findViewById(R.id.me_nickname)).setText("@nickname");
 
                     // followers, following <<< onClick setting...
-                    ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
-                    ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
+                    ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
+                    ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
 
                     view.findViewById(R.id.me_button).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -235,7 +265,7 @@ public class ViewFactory {
         }
     }
 
-    public interface InteractionInterface{
+    public interface InteractionInterface {
         // welcome view 닫기
         void close();
 
@@ -252,11 +282,12 @@ public class ViewFactory {
     // 안쓰는 ====================================================================
     class ToolbarFactory implements Runnable {
         Toolbar toolbar_with_back_button;
+
         @Override
         public void run() {
             toolbar_with_back_button = (Toolbar) inflater.inflate(R.layout.toolbar_with_back_button, null);
             toolbar_with_back_button.setOnMenuItemClickListener(item -> {
-                if(item.getItemId() == R.id.toolbar_button_back) {
+                if (item.getItemId() == R.id.toolbar_button_back) {
                     interactionInterface.close();
                 }
                 return false;
