@@ -33,7 +33,8 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_about, container, false);
-
+        // 초기 위치
+        view.findViewById(R.id.scroll_view).scrollTo(0,0);
 //        initView();
 //        clickListener();
 
