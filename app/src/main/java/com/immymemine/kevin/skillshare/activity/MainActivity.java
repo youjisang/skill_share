@@ -59,8 +59,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
     LinearLayout.LayoutParams layoutParams;
+
     // attach view container to scroll view
     ScrollView scrollView;
+
+    // bottom navigation view
+    AHBottomNavigation bottomNavigation;
 
     // temp account 객체
     AccountTemp t = null;
@@ -98,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             );
         } else {
             home_view_container.addView(viewFactory.getWelcomeView());
-
         }
 
         initView();
@@ -239,8 +242,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             meView = viewFactory.getMeView(t.getName());
             Glide.with(this)
                     .load(t.getPhoto())
+                    .apply(RequestOptions.placeholderOf(R.drawable.design)) // 이미지가 없을 때
                     .apply(RequestOptions.circleCropTransform())
-                    .apply(RequestOptions.placeholderOf(R.drawable.skill_design))
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
         } else {
             meView = viewFactory.getMeView("My Name");
@@ -292,21 +295,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // 네비게이션바
     private void setBottomNavigation() {
-        AHBottomNavigation bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        // Create items (R.string.TITLE, R.drawable.ICON_IMG, R.color.NAVIGATION_BAR_BACKGROUND_COLOR)
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.title_home, R.drawable.ic_home, R.color.BottomNaviBackground);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.groups, R.drawable.ic_group, R.color.BottomNaviBackground);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.discover, R.drawable.ic_discover, R.color.BottomNaviBackground);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.your_classes, R.drawable.ic_list, R.color.BottomNaviBackground);
-        AHBottomNavigationItem item5 = new AHBottomNavigationItem(R.string.me, R.drawable.ic_profile, R.color.BottomNaviBackground);
-
-        // Add items
-        bottomNavigation.addItem(item1);
-        bottomNavigation.addItem(item2);
-        bottomNavigation.addItem(item3);
-        bottomNavigation.addItem(item4);
-        bottomNavigation.addItem(item5);
+        // Add items <<< created items (R.string.TITLE, R.drawable.ICON_IMG, R.color.NAVIGATION_BAR_BACKGROUND_COLOR)
+        bottomNavigation.addItem(new AHBottomNavigationItem(R.string.title_home, R.drawable.ic_home, R.color.BottomNaviBackground));
+        bottomNavigation.addItem(new AHBottomNavigationItem(R.string.groups, R.drawable.ic_group, R.color.BottomNaviBackground));
+        bottomNavigation.addItem(new AHBottomNavigationItem(R.string.discover, R.drawable.ic_discover, R.color.BottomNaviBackground));
+        bottomNavigation.addItem(new AHBottomNavigationItem(R.string.your_classes, R.drawable.ic_list, R.color.BottomNaviBackground));
+        bottomNavigation.addItem(new AHBottomNavigationItem(R.string.me, R.drawable.ic_profile, R.color.BottomNaviBackground));
 
         // Set Navigation Icon & Background Colors
         bottomNavigation.setColoredModeColors(getResources().getColor(R.color.IcActive), getResources().getColor(R.color.IcInactive));
@@ -315,7 +311,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // Change colors
         bottomNavigation.setAccentColor(getResources().getColor(R.color.IcActive));
         bottomNavigation.setInactiveColor(getResources().getColor(R.color.IcInactive));
-        bottomNavigation.setItemDisableColor(getResources().getColor(R.color.IcDisabled));
 
         // Force to tint the drawable (useful for font with icon for example)
         bottomNavigation.setForceTint(true);
@@ -335,8 +330,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // Customize notification (title, background, typeface)
         bottomNavigation.setNotificationBackgroundColor(getResources().getColor(R.color.BottomNaviNotiBackground));
 
-        // Add or remove notification for each item
-        bottomNavigation.setNotification("3", 1);
         // OR
         /*AHNotification notification = new AHNotification.Builder()
                 .setText("4")
@@ -438,9 +431,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             @Override
             public void onReceive(Context context, Intent intent) {
                 if(intent.getAction().equals(ConstantUtil.RECEIVED)) {
-                    // TODO UI 변경 작업을 해주면 된다
-                    String result = intent.getStringExtra("result");
-                    String message = intent.getStringExtra("message");
+                    // notification 받으면 bottom navigation view 에 noti 달기
+                    bottomNavigation.setNotification(" ",1);
                 } else if(intent.getAction().equals(ConstantUtil.REGISTRATION)) {
 
                 }
@@ -514,7 +506,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void signOut() {
         if(t != null) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
-                // TODO 데이터 변경만 notify...
+                // TODO me page 변경 >>> sign in / sign up
                 startActivity(new Intent(MainActivity.this, SplashActivity.class));
                 finish();
                 t = null;

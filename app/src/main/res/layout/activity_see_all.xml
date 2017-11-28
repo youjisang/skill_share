@@ -51,5 +51,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar3"
-        tools:listitem="@layout/recycler_view_item_see_all" />
+        tools:listitem="@layout/recycler_view_item_see_all" >
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>
