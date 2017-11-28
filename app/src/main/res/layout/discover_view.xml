@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/design" />
+            app:srcCompat="@drawable/skill_design" />
 
         <TextView
             android:layout_width="wrap_content"

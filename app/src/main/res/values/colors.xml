@@ -16,4 +16,7 @@
 
     <!-- ProgressBar Color -->
     <color name="ProgressBarColor">#eca442</color>
+
+    <!-- Background Color -->
+    <color name="white">#FFFFFF</color>
 </resources>
