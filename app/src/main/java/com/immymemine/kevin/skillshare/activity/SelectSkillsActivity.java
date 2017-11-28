@@ -38,6 +38,10 @@ public class SelectSkillsActivity extends Activity {
 
     }
 
+    // TODO layout 변경
+    // TODO 버튼 연동
+    // TODO startactivityforresult >>> 선택된 skills 넘기기
+    // TODO main > select skills activity 넘어올 때 기존에 선택된 skills 는 선택되어 있도록 처리
     private void setToggleButton(int i_toggle, int toggle) {
         final ToggleImageButton tib = findViewById(i_toggle);
         ((CustomToggleButton)findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

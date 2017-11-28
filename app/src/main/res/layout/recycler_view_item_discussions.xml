@@ -17,7 +17,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/design" />
+            android:src="@drawable/skill_design" />
 
         <TextView
             android:layout_width="wrap_content"

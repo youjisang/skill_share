@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             // 완료 되면 호출 ∇
             refreshLayout.setRefreshing(false);
         });
+        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
     }
 
     private void setContainer() {
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Glide.with(this)
                 .load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal)
                 .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.placeholderOf(R.drawable.design)) // if( image == null ) setting default 이미지
+                .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
                 .into(video_thumbnail);
         your_classes_view_container.addView(view);
 
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         } else {
             meView = viewFactory.getMeView("My Name");
             Glide.with(this)
-                    .load(R.drawable.design)
+                    .load(R.drawable.skill_design)
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
         }
