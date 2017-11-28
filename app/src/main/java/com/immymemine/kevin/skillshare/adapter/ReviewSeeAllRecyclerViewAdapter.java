@@ -17,26 +17,26 @@ import java.util.List;
  * Created by JisangYou on 2017-11-24.
  */
 
-public class ReviewSeeAllAdapter extends RecyclerView.Adapter<ReviewSeeAllAdapter.Holder>  {
+public class ReviewSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<ReviewSeeAllRecyclerViewAdapter.Holder>  {
 
     List<ReviewSeeAllModel> seeAllReviewData;
     Context context;
 
-    public ReviewSeeAllAdapter(List<ReviewSeeAllModel> seeAllReviewData, Context context) {
+    public ReviewSeeAllRecyclerViewAdapter(List<ReviewSeeAllModel> seeAllReviewData, Context context) {
         this.seeAllReviewData = seeAllReviewData;
         this.context = context;
     }
 
 
     @Override
-    public ReviewSeeAllAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reviews_item, parent, false);
+    public ReviewSeeAllRecyclerViewAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_reviews, parent, false);
 
         return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(ReviewSeeAllAdapter.Holder holder, int position) {
+    public void onBindViewHolder(ReviewSeeAllRecyclerViewAdapter.Holder holder, int position) {
 
     }
 

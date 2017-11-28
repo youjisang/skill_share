@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.immymemine.kevin.skillshare.R;
 
-import com.immymemine.kevin.skillshare.adapter.ReviewSeeAllAdapter;
+import com.immymemine.kevin.skillshare.adapter.ReviewSeeAllRecyclerViewAdapter;
 
 import com.immymemine.kevin.skillshare.sampleModel.ReviewSeeAllModel;
 
@@ -17,7 +17,7 @@ public class ReviewActivity extends AppCompatActivity {
 
     ArrayList<ReviewSeeAllModel> reviewSeeAlldata;
     RecyclerView seeAllReviewRecyclerView;
-    ReviewSeeAllAdapter reviewSeeAllAdapter;
+    ReviewSeeAllRecyclerViewAdapter reviewSeeAllRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,8 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void initRecycler() {
         seeAllReviewRecyclerView.setHasFixedSize(true);
-        reviewSeeAllAdapter = new ReviewSeeAllAdapter(reviewSeeAlldata, this);
+        reviewSeeAllRecyclerViewAdapter = new ReviewSeeAllRecyclerViewAdapter(reviewSeeAlldata, this);
         seeAllReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        seeAllReviewRecyclerView.setAdapter(reviewSeeAllAdapter);
+        seeAllReviewRecyclerView.setAdapter(reviewSeeAllRecyclerViewAdapter);
     }
 }

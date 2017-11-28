@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="240dp"
+    android:background="@android:color/background_light"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/image_view_featured_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/design" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/IcActive"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingStart="8dp"
+        android:text="Featured Class"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="28dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Create a Desktop Calendar/Wallpaper using a Pattern"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_view_tutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="Mel Armstrong"
+        android:textColor="@color/IcInactive"
+        android:textSize="18sp" />
+</FrameLayout>

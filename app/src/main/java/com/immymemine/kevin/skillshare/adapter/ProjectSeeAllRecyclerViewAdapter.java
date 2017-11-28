@@ -17,18 +17,18 @@ import java.util.List;
  * Created by JisangYou on 2017-11-24.
  */
 
-public class ProjectSeeAllAdapter extends RecyclerView.Adapter<ProjectSeeAllAdapter.Holder> {
+public class ProjectSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<ProjectSeeAllRecyclerViewAdapter.Holder> {
     List<ProjectSeeAllModel> seeAllProjectData;
     Context context;
 
-    public ProjectSeeAllAdapter(List<ProjectSeeAllModel> seeAllProjectData, Context context) {
+    public ProjectSeeAllRecyclerViewAdapter(List<ProjectSeeAllModel> seeAllProjectData, Context context) {
         this.seeAllProjectData = seeAllProjectData;
         this.context = context;
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.projects_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_projects, parent, false);
 
         return new Holder(view);
     }

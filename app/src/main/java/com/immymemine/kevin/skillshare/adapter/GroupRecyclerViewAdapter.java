@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
@@ -44,17 +43,15 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     }
 
     class GroupViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout recyclerViewItemGroup;
         ImageView imageView;
         TextView textViewCount, textViewGroup;
 
         public GroupViewHolder(View view) {
             super(view);
-            recyclerViewItemGroup = view.findViewById(R.id.recycler_view_item_group);
             imageView = view.findViewById(R.id.tutor_profile_image);
             textViewCount = view.findViewById(R.id.text_view_count);
             textViewGroup = view.findViewById(R.id.text_view_group);
-            recyclerViewItemGroup.setOnClickListener(v -> {
+            view.setOnClickListener(v -> {
                 // TODO if (그룹원이 아니면) 그룹 가입 else 밑에 edittext 창이 나와야 함
             });
         }
