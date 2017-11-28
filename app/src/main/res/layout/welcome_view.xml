@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#cccccc"
-    tools:context=".activity.view.activity.MainActivity">
+    tools:context=".activity.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="Sign up to access thousands of classes taught by expert practitioners"
@@ -43,7 +44,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="136dp"
-        android:background="?attr/colorAccent"
+        android:background="@color/IcActive"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:text="sign up"
