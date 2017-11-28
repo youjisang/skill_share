@@ -10,7 +10,7 @@
         android:id="@+id/splash_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3c000000"
+        android:foreground="#99000000"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -86,6 +86,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTint="@color/ProgressBarColor"
         android:visibility="gone" />
 </FrameLayout>

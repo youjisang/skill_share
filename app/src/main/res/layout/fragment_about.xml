@@ -57,7 +57,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/design" />
+                android:src="@drawable/skill_design" />
 
             <ImageView
                 android:id="@+id/projectImageView"
@@ -70,7 +70,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/design" />
+                android:src="@drawable/skill_design" />
 
             <ImageView
                 android:id="@+id/projectImageView1"
@@ -83,7 +83,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:src="@drawable/design" />
+                android:src="@drawable/skill_design" />
 
         </LinearLayout>
 
@@ -342,7 +342,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/design" />
+                    android:src="@drawable/skill_design" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -383,7 +383,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/design" />
+                    android:src="@drawable/skill_design" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -424,7 +424,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/design" />
+                    android:src="@drawable/skill_design" />
 
                 <TextView
                     android:id="@+id/textView4"

@@ -13,4 +13,7 @@
 
     <!-- Icon Background Color -->
     <color name="ic_launcher_background">#ECA442</color>
+
+    <!-- ProgressBar Color -->
+    <color name="ProgressBarColor">#eca442</color>
 </resources>
