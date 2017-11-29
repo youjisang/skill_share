@@ -34,11 +34,20 @@ public class SelectSkillsActivity extends Activity {
     }
 
     private void initiateView() {
+        setToggleButton(R.id.i_toggle_design, R.id.toggle_design);
         setToggleButton(R.id.i_toggle_photography, R.id.toggle_photography);
-
+        setToggleButton(R.id.i_toggle_business, R.id.toggle_business);
+        setToggleButton(R.id.i_toggle_technology, R.id.toggle_technology);
+        setToggleButton(R.id.i_toggle_crafts, R.id.toggle_crafts);
+        setToggleButton(R.id.i_toggle_culinary, R.id.toggle_culinary);
+        setToggleButton(R.id.i_toggle_film, R.id.toggle_film);
+        setToggleButton(R.id.i_toggle_fashion, R.id.toggle_fashion);
+        setToggleButton(R.id.i_toggle_music, R.id.toggle_music);
+        setToggleButton(R.id.i_toggle_lifestyle, R.id.toggle_lifestyle);
+        setToggleButton(R.id.i_toggle_gaming, R.id.toggle_gaming);
+        setToggleButton(R.id.i_toggle_teaching, R.id.toggle_teaching);
     }
 
-    // TODO layout 변경
     // TODO 버튼 연동
     // TODO startactivityforresult >>> 선택된 skills 넘기기
     // TODO main > select skills activity 넘어올 때 기존에 선택된 skills 는 선택되어 있도록 처리

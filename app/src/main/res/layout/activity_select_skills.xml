@@ -31,7 +31,6 @@
                 android:textOff="@string/design"
                 android:textOn="@string/design"
                 android:textSize="18sp"
-
                 app:borderWidth="0dp"
                 app:checkedColor="#ae54ffe5"
                 app:radius="0dp"
@@ -89,7 +88,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:foreground="#de111111"
+                android:foreground="#99000000"
                 android:scaleType="centerCrop"
                 android:src="@drawable/skill_photography" />
         </FrameLayout>
