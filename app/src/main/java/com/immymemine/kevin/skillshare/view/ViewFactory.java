@@ -65,7 +65,7 @@ public class ViewFactory {
         Future<View> f = executor.submit(() -> {
             View view = inflater.inflate(R.layout.welcome_view, null);
             view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
-
+            view.findViewById(R.id.button_sign_up).setOnClickListener(v -> interactionInterface.signUp());
             return view;
         });
 
@@ -264,6 +264,8 @@ public class ViewFactory {
     public interface InteractionInterface{
         // welcome view 닫기
         void close();
+
+        void signUp();
 
         // select activity 로 이동
         void select();

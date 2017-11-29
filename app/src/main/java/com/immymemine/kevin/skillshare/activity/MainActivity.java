@@ -514,4 +514,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         } else
             return;
     }
+
+    @Override
+    public void signUp() {
+        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+    }
 }

@@ -32,9 +32,10 @@
             android:id="@+id/toolbar_close_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="8dp"
             android:background="@android:color/transparent"
-            android:tint="@android:color/darker_gray"
+            android:tint="@color/cardview_dark_background"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
             tools:layout_editor_absoluteX="387dp"
             tools:layout_editor_absoluteY="16dp" />

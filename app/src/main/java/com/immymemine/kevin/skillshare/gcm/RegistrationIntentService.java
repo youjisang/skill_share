@@ -11,8 +11,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.gcm.retrofit.RegistrationInterface;
-import com.immymemine.kevin.skillshare.gcm.retrofit.RequestBody;
-import com.immymemine.kevin.skillshare.gcm.retrofit.ResponseBody;
+import com.immymemine.kevin.skillshare.gcm.retrofit.RegistrationRequestBody;
+import com.immymemine.kevin.skillshare.gcm.retrofit.RegistrationResponseBody;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import retrofit2.Call;
@@ -28,7 +28,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegistrationIntentService extends IntentService {
 
     private final String TAG = "InstanceIDService";
-    private final String URL = "http://localhost/8079/";
 
     public RegistrationIntentService() {
         super("RegistrationIntentService");
@@ -53,14 +52,14 @@ public class RegistrationIntentService extends IntentService {
 
     private void registerDevice(String deviceId, String deviceName, String registrationId) {
         // request body 세팅
-        RequestBody requestBody = new RequestBody();
-        requestBody.setDeviceId(deviceId);
-        requestBody.setDeviceName(deviceName);
-        requestBody.setRegistrationId(registrationId);
+        RegistrationRequestBody registrationRequestBody = new RegistrationRequestBody();
+        registrationRequestBody.setDeviceId(deviceId);
+        registrationRequestBody.setDeviceName(deviceName);
+        registrationRequestBody.setRegistrationId(registrationId);
 
         // retrofit initiate
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
+                .baseUrl(ConstantUtil.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -68,22 +67,22 @@ public class RegistrationIntentService extends IntentService {
         RegistrationInterface registration = retrofit.create(RegistrationInterface.class);
 
         // post
-        Call<ResponseBody> c = registration.registerDevice(requestBody);
-        c.enqueue(new Callback<ResponseBody>() {
+        Call<RegistrationResponseBody> c = registration.registerDevice(registrationRequestBody);
+        c.enqueue(new Callback<RegistrationResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ResponseBody responseBody = response.body();
+            public void onResponse(Call<RegistrationResponseBody> call, Response<RegistrationResponseBody> response) {
+                RegistrationResponseBody registrationResponseBody = response.body();
 
                 Intent intent = new Intent(ConstantUtil.REGISTRATION);
-                intent.putExtra("result", responseBody.getResult());
-                intent.putExtra("message", responseBody.getMessage());
+                intent.putExtra("result", registrationResponseBody.getResult());
+                intent.putExtra("message", registrationResponseBody.getMessage());
 
                 // 등록되어 있는 local broadcast 에 등록 결과 및 메시지를 방송으로 던져준다
                 LocalBroadcastManager.getInstance(RegistrationIntentService.this).sendBroadcast(intent);
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<RegistrationResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
