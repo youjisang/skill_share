@@ -13,6 +13,7 @@
         android:layout_marginTop="8dp">
 
         <ImageView
+            android:id="@+id/image_view_profileAuthor"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
@@ -20,6 +21,7 @@
             android:src="@drawable/skill_design" />
 
         <TextView
+            android:id="@+id/text_view_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -47,14 +49,14 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/iamge_button_heart"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             app:srcCompat="@android:drawable/btn_star" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/image_button_reply"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
@@ -63,7 +65,7 @@
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/text_view_monthAgo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -73,14 +75,14 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/imageView10"
+            android:id="@+id/image_view_heart2"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             app:srcCompat="@android:drawable/btn_star" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/text_view_heartNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

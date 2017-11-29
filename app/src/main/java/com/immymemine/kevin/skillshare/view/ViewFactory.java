@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- *  Main Activity 에서 사용하는 View Factory
- *  Created by quf93 on 2017-11-18.
+ * Main Activity 에서 사용하는 View Factory
+ * Created by quf93 on 2017-11-18.
  */
 
 public class ViewFactory {
@@ -36,18 +37,19 @@ public class ViewFactory {
 
     // Singleton
     private static ViewFactory v;
+
     private ViewFactory(Context context) {
         // context
         this.context = context;
         // inflater
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // interface for interaction
-        if(context instanceof InteractionInterface)
+        if (context instanceof InteractionInterface)
             interactionInterface = (InteractionInterface) context;
     }
 
     public static ViewFactory getInstance(Context context) {
-        if(v == null) {
+        if (v == null) {
             v = new ViewFactory(context);
         }
 
@@ -65,7 +67,7 @@ public class ViewFactory {
         Future<View> f = executor.submit(() -> {
             View view = inflater.inflate(R.layout.welcome_view, null);
             view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
-
+            view.findViewById(R.id.button_sign_up).setOnClickListener(v -> interactionInterface.signUp());
             return view;
         });
 
@@ -93,13 +95,16 @@ public class ViewFactory {
             recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
-            ((TextView)view.findViewById(R.id.text_view_title)).setText(title);
+            ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
             Button see_all_button = view.findViewById(R.id.button_see_all);
             see_all_button.setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
+
             });
+
+
             return view;
         }
     }
@@ -116,6 +121,7 @@ public class ViewFactory {
 
     class GroupViewFactory implements Callable<View> {
         String title;
+
         public GroupViewFactory(String title) {
             this.title = title;
         }
@@ -208,12 +214,12 @@ public class ViewFactory {
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView)view.findViewById(R.id.me_name)).setText(name);
-                    ((TextView)view.findViewById(R.id.me_nickname)).setText("@nickname");
+                    ((TextView) view.findViewById(R.id.me_name)).setText(name);
+                    ((TextView) view.findViewById(R.id.me_nickname)).setText("@nickname");
 
                     // followers, following <<< onClick setting...
-                    ((TextView)view.findViewById(R.id.me_followers)).setText(/*number + */1+" Followers");
-                    ((TextView)view.findViewById(R.id.me_following)).setText("Following "+/*number + */2);
+                    ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
+                    ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
 
                     view.findViewById(R.id.me_button).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -261,9 +267,11 @@ public class ViewFactory {
         }
     }
 
-    public interface InteractionInterface{
+    public interface InteractionInterface {
         // welcome view 닫기
         void close();
+
+        void signUp();
 
         // select activity 로 이동
         void select();
@@ -278,11 +286,12 @@ public class ViewFactory {
     // 안쓰는 ====================================================================
     class ToolbarFactory implements Runnable {
         Toolbar toolbar_with_back_button;
+
         @Override
         public void run() {
             toolbar_with_back_button = (Toolbar) inflater.inflate(R.layout.toolbar_with_back_button, null);
             toolbar_with_back_button.setOnMenuItemClickListener(item -> {
-                if(item.getItemId() == R.id.toolbar_button_back) {
+                if (item.getItemId() == R.id.toolbar_button_back) {
                     interactionInterface.close();
                 }
                 return false;

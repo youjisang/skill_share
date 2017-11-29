@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="안쓰는 겁니다"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         tools:layout_editor_absoluteX="16dp"

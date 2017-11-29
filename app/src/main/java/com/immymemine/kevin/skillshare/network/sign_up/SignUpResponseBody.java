@@ -1,10 +1,10 @@
-package com.immymemine.kevin.skillshare.gcm.retrofit;
+package com.immymemine.kevin.skillshare.network.sign_up;
 
 /**
- * Created by quf93 on 2017-11-26.
+ * Created by quf93 on 2017-11-29.
  */
 
-public class ResponseBody {
+public class SignUpResponseBody {
     private String result;
     private String message;
 

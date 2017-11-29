@@ -4,7 +4,7 @@ package com.immymemine.kevin.skillshare.gcm.retrofit;
  * Created by quf93 on 2017-11-26.
  */
 
-public class RequestBody {
+public class RegistrationRequestBody {
     private String deviceName;
     private String deviceId;
     private String registrationId;
