@@ -35,7 +35,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.37"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/image_view_profileAuthor"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -50,11 +50,11 @@
         android:textColor="@color/IcInactive"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/image_view_profileAuthor"
         app:layout_constraintTop_toBottomOf="@+id/text_view_title5" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/image_view_profileAuthor"
         android:layout_width="120dp"
         android:layout_height="80dp"
         android:layout_marginLeft="8dp"
@@ -78,7 +78,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/image_view_duration"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
@@ -88,7 +88,7 @@
             android:tint="@color/cardview_dark_background" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/text_view_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -98,7 +98,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/image_view_thumUp"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
@@ -108,7 +108,7 @@
             android:src="@drawable/plus" />
 
         <TextView
-            android:id="@+id/thumbUpTextView"
+            android:id="@+id/text_view_thumbUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -119,7 +119,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/iamge_view_attendanceStudents"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
@@ -130,7 +130,7 @@
             android:tint="@color/cardview_dark_background" />
 
         <TextView
-            android:id="@+id/attendanceStudents"
+            android:id="@+id/text_view_attendanceStudents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

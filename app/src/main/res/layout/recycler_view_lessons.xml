@@ -14,7 +14,7 @@
         android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/orderNumTextView"
+            android:id="@+id/text_view_orderNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -25,7 +25,7 @@
             android:textSize="24sp" />
 
         <ImageView
-            android:id="@+id/videoImageView"
+            android:id="@+id/image_view_video"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -42,7 +42,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/contentNameTextView"
+                android:id="@+id/text_view_contentName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -51,7 +51,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/durationTextView"
+                android:id="@+id/text_view_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3:40"
@@ -60,7 +60,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/image_view_download"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"

@@ -19,6 +19,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
+                android:id="@+id/text_view_studentProjectNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -27,7 +28,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/see_all"
+                android:id="@+id/text_view_seeAll1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -47,7 +48,7 @@
 
 
             <ImageView
-                android:id="@+id/projectImageView2"
+                android:id="@+id/image_view_project1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -60,7 +61,7 @@
                 android:src="@drawable/skill_design" />
 
             <ImageView
-                android:id="@+id/projectImageView"
+                android:id="@+id/image_view_project2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -73,7 +74,7 @@
                 android:src="@drawable/skill_design" />
 
             <ImageView
-                android:id="@+id/projectImageView1"
+                android:id="@+id/image_view_project3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -88,7 +89,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/warning"
+            android:id="@+id/text_view_warning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -126,7 +127,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/seeAllTextView2"
+                android:id="@+id/text_view_seeAll2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -136,7 +137,7 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/image_view_thumbUp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
@@ -144,7 +145,7 @@
                 android:src="@drawable/app_icon" />
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/image_view_reviewProfile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="bottom"
@@ -196,6 +197,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
+                android:id="@+id/text_view_studentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -204,7 +206,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/seeAllTextView1"
+                android:id="@+id/text_view_seeAll3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -336,6 +338,7 @@
 
 
                 <ImageView
+                    android:id="@+id/image_view_relatedClass1"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -345,6 +348,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
+                    android:id="@+id/text_view_relatedContent1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -356,6 +360,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/text_view_relatedAuthor1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -377,6 +382,7 @@
 
 
                 <ImageView
+                    android:id="@+id/image_view_relatedClass2"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -386,6 +392,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
+                    android:id="@+id/text_view_relatedContent2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -397,6 +404,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/text_view_relatedAuthor2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -418,6 +426,7 @@
 
 
                 <ImageView
+                    android:id="@+id/image_view_relatedClass3"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -427,7 +436,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/text_view_relatedContent3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -439,7 +448,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/text_view_relatedAuthor3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"

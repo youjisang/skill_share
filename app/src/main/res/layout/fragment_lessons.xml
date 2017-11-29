@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/ContentsTextView"
+            android:id="@+id/text_view_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -36,7 +36,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/image_view_time"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -46,7 +46,7 @@
                 android:tint="@color/cardview_dark_background" />
 
             <TextView
-                android:id="@+id/timeTextView"
+                android:id="@+id/text_view_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -56,7 +56,7 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/image_view_thumbUp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -66,7 +66,7 @@
                 android:src="@drawable/plus" />
 
             <TextView
-                android:id="@+id/thumbUpTextView"
+                android:id="@+id/text_view_thumbUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -77,7 +77,7 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/image_view_attendanceStudent"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -88,7 +88,7 @@
                 android:tint="@color/cardview_dark_background" />
 
             <TextView
-                android:id="@+id/attendanceStudents"
+                android:id="@+id/text_view_attendanceStudent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -118,7 +118,7 @@
             android:paddingTop="8dp">
 
             <Button
-                android:id="@+id/FollowButton"
+                android:id="@+id/button_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -128,44 +128,44 @@
                 android:background="@drawable/corner_rounded_button"
                 android:text="+ Follow"
                 android:textColor="@color/IcActive"
-                app:layout_constraintBottom_toBottomOf="@+id/tutor_profile_image"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutorProfile"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tutor_profile_image" />
+                app:layout_constraintTop_toTopOf="@+id/image_view_tutorProfile" />
 
             <TextView
-                android:id="@+id/authorTextView"
+                android:id="@+id/text_view_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/FollowButton"
+                android:layout_alignTop="@+id/button_follow"
                 android:layout_marginLeft="11dp"
                 android:layout_marginStart="11dp"
-                android:layout_toEndOf="@+id/tutor_profile_image"
-                android:layout_toRightOf="@+id/tutor_profile_image"
+                android:layout_toEndOf="@+id/image_view_tutorProfile"
+                android:layout_toRightOf="@+id/image_view_tutorProfile"
                 android:text="Mel Armstrong"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tutor_profile_image"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutorProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.065"
-                app:layout_constraintStart_toEndOf="@+id/tutor_profile_image"
-                app:layout_constraintTop_toTopOf="@+id/tutor_profile_image" />
+                app:layout_constraintStart_toEndOf="@+id/image_view_tutorProfile"
+                app:layout_constraintTop_toTopOf="@+id/image_view_tutorProfile" />
 
             <TextView
-                android:id="@+id/followersTextView"
+                android:id="@+id/text_view_followers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/authorTextView"
-                android:layout_alignStart="@+id/authorTextView"
-                android:layout_below="@+id/authorTextView"
+                android:layout_alignLeft="@+id/text_view_author"
+                android:layout_alignStart="@+id/text_view_author"
+                android:layout_below="@+id/text_view_author"
                 android:text="621 Follower"
                 android:textColor="@color/IcInactive"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.261"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/text_view_author" />
 
             <ImageView
-                android:id="@+id/tutor_profile_image"
+                android:id="@+id/image_view_tutorProfile"
                 android:layout_width="57dp"
                 android:layout_height="51dp"
                 android:layout_alignParentLeft="true"
@@ -192,14 +192,14 @@
             android:background="#c8d9d9d9" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/lessonsRecyclerView"
+            android:id="@+id/recycler_view_lessons"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/followersTextView"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_followers"
             tools:listitem="@layout/recycler_view_lessons" />
 
     </LinearLayout>

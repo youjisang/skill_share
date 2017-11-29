@@ -14,7 +14,7 @@
         android:src="@drawable/skill_design" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/text_view_featuredClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/IcActive"

@@ -38,15 +38,15 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView orderNumTextView, contentNameTextView, durationTextView;
-        ImageView videoImageView;
+        TextView text_view_orderNum, text_view_contentName, text_view_duration;
+        ImageView image_view_video;
 
         public Holder(View itemView) {
             super(itemView);
-            orderNumTextView = itemView.findViewById(R.id.orderNumTextView);
-            contentNameTextView = itemView.findViewById(R.id.contentNameTextView);
-            durationTextView = itemView.findViewById(R.id.durationTextView);
-            videoImageView = itemView.findViewById(R.id.videoImageView);
+            text_view_orderNum = itemView.findViewById(R.id.text_view_orderNum);
+            text_view_contentName = itemView.findViewById(R.id.text_view_contentName);
+            text_view_duration = itemView.findViewById(R.id.text_view_duration);
+            image_view_video = itemView.findViewById(R.id.image_view_video);
 
         }
     }
