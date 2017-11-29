@@ -15,13 +15,13 @@
             android:layout_height="50dp">
 
             <ImageView
-                android:id="@+id/tutor_profile_image"
+                android:id="@+id/image_view_tutorProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
 
             <TextView
-                android:id="@+id/reviewContentsNameTextView"
+                android:id="@+id/text_view_reviewContentsName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Outstanding Course" />
@@ -34,13 +34,13 @@
             android:paddingLeft="30dp">
 
             <ImageView
-                android:id="@+id/reviewProfileImageView"
+                android:id="@+id/image_view_reviewProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
 
             <TextView
-                android:id="@+id/reviewAuthorTextView"
+                android:id="@+id/text_view_reviewAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Md Rakib Hasan" />

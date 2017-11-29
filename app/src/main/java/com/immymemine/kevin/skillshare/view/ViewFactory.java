@@ -103,6 +103,8 @@ public class ViewFactory {
                 interactionInterface.seeAll(title);
 
             });
+
+
             return view;
         }
     }

@@ -47,15 +47,15 @@ public class ReviewSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Review
 
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView reviewContentsNameTextView,reviewAuthorTextView;
-        ImageView reviewProfileImageView;
+        TextView text_view_reviewContentsName,text_view_reviewAuthor;
+        ImageView image_view_reviewProfile;
         public Holder(View itemView) {
             super(itemView);
 
 
-            reviewContentsNameTextView = itemView.findViewById(R.id.reviewContentsNameTextView);
-            reviewAuthorTextView = itemView.findViewById(R.id.reviewAuthorTextView);
-            reviewProfileImageView = itemView.findViewById(R.id.reviewProfileImageView);
+            text_view_reviewContentsName = itemView.findViewById(R.id.text_view_reviewContentsName);
+            text_view_reviewAuthor = itemView.findViewById(R.id.text_view_reviewAuthor);
+            image_view_reviewProfile = itemView.findViewById(R.id.image_view_reviewProfile);
 
 
         }

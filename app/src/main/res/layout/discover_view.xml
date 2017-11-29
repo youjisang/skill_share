@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/design" />
+            app:srcCompat="@drawable/skill_design" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -127,39 +127,39 @@
         android:paddingTop="8dp">
 
         <TextView
-            android:id="@+id/authorTextView"
+            android:id="@+id/text_view_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/FollowButton"
+            android:layout_alignTop="@+id/button_follow"
             android:layout_marginLeft="11dp"
             android:layout_marginStart="11dp"
-            android:layout_toEndOf="@+id/tutor_profile_image"
-            android:layout_toRightOf="@+id/tutor_profile_image"
+            android:layout_toEndOf="@+id/image_view_tutorProfile"
+            android:layout_toRightOf="@+id/image_view_tutorProfile"
             android:text="Mel Armstrong"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tutor_profile_image"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_tutorProfile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.065"
-            app:layout_constraintStart_toEndOf="@+id/tutor_profile_image"
-            app:layout_constraintTop_toTopOf="@+id/tutor_profile_image" />
+            app:layout_constraintStart_toEndOf="@+id/image_view_tutorProfile"
+            app:layout_constraintTop_toTopOf="@+id/image_view_tutorProfile" />
 
         <TextView
-            android:id="@+id/followersTextView"
+            android:id="@+id/text_view_followers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/authorTextView"
-            android:layout_alignStart="@+id/authorTextView"
-            android:layout_below="@+id/authorTextView"
+            android:layout_alignLeft="@+id/text_view_author"
+            android:layout_alignStart="@+id/text_view_author"
+            android:layout_below="@+id/text_view_author"
             android:text="621 Follower"
             android:textColor="@color/IcInactive"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.261"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/text_view_author" />
 
         <ImageView
-            android:id="@+id/tutor_profile_image"
+            android:id="@+id/image_view_tutorProfile"
             android:layout_width="57dp"
             android:layout_height="51dp"
             android:layout_alignParentLeft="true"

@@ -47,13 +47,13 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     public class Holder extends RecyclerView.ViewHolder {
 
-        ExpandableTextView expandableTextView;
+        ExpandableTextView expandable_text_view;
 
         public Holder(View v) {
             super(v);
-            expandableTextView = v.findViewById(R.id.expandable_text_view);
-            expandableTextView.setTrimLength(5);
-            expandableTextView.setText(v.getContext().getText(R.string.test), TextView.BufferType.NORMAL);
+            expandable_text_view = v.findViewById(R.id.expandable_text_view);
+            expandable_text_view.setTrimLength(5);
+            expandable_text_view.setText(v.getContext().getText(R.string.test), TextView.BufferType.NORMAL);
         }
     }
 }

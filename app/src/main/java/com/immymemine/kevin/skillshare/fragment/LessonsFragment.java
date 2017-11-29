@@ -41,9 +41,9 @@ public class LessonsFragment extends Fragment {
     }
 
     private void initView() {
-        lessonsRecyclerView = view.findViewById(R.id.lessonsRecyclerView);
-        tutor_profile_image = view.findViewById(R.id.tutor_profile_image);
-        Glide.with(view).load(R.drawable.design).apply(RequestOptions.circleCropTransform()).into(tutor_profile_image);
+        lessonsRecyclerView = view.findViewById(R.id.recycler_view_lessons);
+        tutor_profile_image = view.findViewById(R.id.image_view_tutorProfile);
+        Glide.with(view).load(R.drawable.skill_design).apply(RequestOptions.circleCropTransform()).into(tutor_profile_image);
     }
 
     private void initRecycler() {
