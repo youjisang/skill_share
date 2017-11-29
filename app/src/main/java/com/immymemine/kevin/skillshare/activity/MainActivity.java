@@ -242,7 +242,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             meView = viewFactory.getMeView(t.getName());
             Glide.with(this)
                     .load(t.getPhoto())
+
                     .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // 이미지가 없을 때
+
+                    .apply(RequestOptions.placeholderOf(R.drawable.skill_gaming)) // 이미지가 없을 때
+
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
         } else {

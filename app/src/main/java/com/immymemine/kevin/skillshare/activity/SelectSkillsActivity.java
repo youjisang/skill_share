@@ -2,7 +2,6 @@ package com.immymemine.kevin.skillshare.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
@@ -22,13 +21,10 @@ public class SelectSkillsActivity extends Activity {
 
         // 뒤로가기 버튼
         ImageButton close_button = findViewById(R.id.toolbar_close_button);
-        close_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 선택한 skills 의 정보를 넘겨줘야한다
-                // start activity for result >>> reply
-                finish();
-            }
+        close_button.setOnClickListener(view -> {
+            // 선택한 skills 의 정보를 넘겨줘야한다
+            // start activity for result >>> reply
+            finish();
         });
 
         initiateView();

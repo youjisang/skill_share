@@ -35,6 +35,8 @@ public class LessonsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lessons, container, false);
+        // 초기 위치
+        view.findViewById(R.id.scroll_view_lesson).scrollTo(0,0);
         initView();
         initRecycler();
         return view;
