@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_home_black_24dp"
+        android:src="@android:drawable/btn_dialog"
         tools:layout_editor_absoluteX="387dp"
         tools:layout_editor_absoluteY="16dp" />
 
