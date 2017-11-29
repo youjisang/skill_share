@@ -28,7 +28,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/text_view_seeAll1"
+                android:id="@+id/text_view_project_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -117,7 +117,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/review"
+                android:id="@+id/text_view_reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -127,7 +127,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/text_view_seeAll2"
+                android:id="@+id/text_view_review_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -137,7 +137,7 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/image_view_thumbUp"
+                android:id="@+id/image_view_thumb"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
@@ -145,7 +145,7 @@
                 android:src="@drawable/app_icon" />
 
             <ImageView
-                android:id="@+id/image_view_reviewProfile"
+                android:id="@+id/image_view_review_profile"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="bottom"
@@ -166,7 +166,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/text_view_review2"
+                android:id="@+id/text_view_reviewer_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -197,7 +197,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/text_view_studentNum"
+                android:id="@+id/text_view_student_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -206,7 +206,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/text_view_seeAll3"
+                android:id="@+id/text_view_student_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -226,23 +226,14 @@
             android:paddingRight="8dp">
 
             <ImageView
-                android:id="@+id/iv_st1"
+                android:id="@+id/image_view_student1"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st2"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/iv_st3"
+                android:id="@+id/image_view_student2"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -251,7 +242,7 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st4"
+                android:id="@+id/image_view_student3"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -260,7 +251,7 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st5"
+                android:id="@+id/image_view_student4"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -269,7 +260,7 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st6"
+                android:id="@+id/image_view_student5"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -278,7 +269,7 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st7"
+                android:id="@+id/image_view_student6"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -287,7 +278,7 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st8"
+                android:id="@+id/image_view_student7"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="2dp"
@@ -296,7 +287,16 @@
                 android:src="@mipmap/app_icon" />
 
             <ImageView
-                android:id="@+id/iv_st9"
+                android:id="@+id/image_view_student8"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:src="@mipmap/app_icon" />
+
+            <ImageView
+                android:id="@+id/image_view_student9"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
@@ -312,11 +312,6 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="#c8d9d9d9" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView9"
@@ -338,7 +333,7 @@
 
 
                 <ImageView
-                    android:id="@+id/image_view_relatedClass1"
+                    android:id="@+id/image_view_related_class1"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -348,7 +343,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedContent1"
+                    android:id="@+id/text_view_related_title1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -360,7 +355,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedAuthor1"
+                    android:id="@+id/text_view_related_tutor1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -382,7 +377,7 @@
 
 
                 <ImageView
-                    android:id="@+id/image_view_relatedClass2"
+                    android:id="@+id/image_view_related_class2"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -392,7 +387,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedContent2"
+                    android:id="@+id/text_view_related_title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -404,7 +399,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedAuthor2"
+                    android:id="@+id/text_view_related_tutor2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -426,7 +421,7 @@
 
 
                 <ImageView
-                    android:id="@+id/image_view_relatedClass3"
+                    android:id="@+id/image_view_related_class3"
                     android:layout_width="120dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -436,7 +431,7 @@
                     android:src="@drawable/skill_design" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedContent3"
+                    android:id="@+id/text_view_related_title3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -448,7 +443,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/text_view_relatedAuthor3"
+                    android:id="@+id/text_view_related_tutor3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -460,8 +455,6 @@
                     android:textSize="18sp" />
 
             </FrameLayout>
-
-        </LinearLayout>
 
 
     </LinearLayout>

@@ -59,7 +59,7 @@ public class RegistrationIntentService extends IntentService {
 
         // retrofit initiate
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ConstantUtil.URL)
+                .baseUrl(ConstantUtil.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

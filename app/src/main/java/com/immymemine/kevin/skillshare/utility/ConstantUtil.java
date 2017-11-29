@@ -16,5 +16,5 @@ public class ConstantUtil {
     public static final String SIGN_UP_FAILURE = "sign_up failure";
 
     // URL
-    public static final String URL = "http://localhost/8079/";
+    public static final String BASE_URL = "http://localhost/8079/";
 }

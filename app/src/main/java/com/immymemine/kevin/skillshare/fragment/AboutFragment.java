@@ -1,105 +1,86 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.ProjectActivity;
-import com.immymemine.kevin.skillshare.activity.ReviewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AboutFragment extends Fragment {
 
-    private View view;
-    private TextView projectStudentNum, seeAllTextView1, percentageNum, seeAllTextView2, reviewTextView, reviewAuthorTextView, classStudentNum, seeAllTextView3, relatedContentNameTextView1, AuthorTextView1, relatedContentNameTextView2, AuthorTextView2, relatedContentNameTextView3, AuthorTextView3;
-    private ImageView projectImageView1, projectImageView2, projectImageView3, positiveImageView1, positiveImageView2, studentImage1, studentImage2, studentImage3, studentImage4, studentImage5, studentImage6, studentImage7, studentImage8, studentImage9, studentImage10, relatedImageView1, relatedImageView2, relatedImageView3;
+    ScrollView scrollView;
+    // project
+    TextView textViewStudentProjectNum, textViewProjectSeeAll;
+    ImageView imageViewProject1, imageViewProject2, imageViewProject3;
+    // review
+    TextView textViewReviews, textViewReviewSeeAll, textViewReview, textViewReviewerName;
+    ImageView imageViewThumb, imageViewReviewProfile;
+    // student
+    TextView textViewStudentNum, textViewStudentSeeAll;
+    ImageView imageViewStudent1, imageViewStudent2, imageViewStudent3, imageViewStudent4, imageViewStudent5,
+            imageViewStudent6, imageViewStudent7, imageViewStudent8, imageViewStudent9;
+    // related class
+    ImageView imageViewRelatedClass1, imageViewRelatedClass2, imageViewRelatedClass3;
+    TextView textViewRelatedTitle1, textViewRelatedTutor1, textViewRelatedTitle2, textViewRelatedTutor2, textViewRelatedTitle3, textViewRelatedTutor3;
 
     public AboutFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        view = inflater.inflate(R.layout.fragment_about, container, false);
-        // 초기 위치
-        view.findViewById(R.id.scroll_view).scrollTo(0,0);
-//        initView();
-//        clickListener();
-
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        initiateView(view);
         return view;
-
-
     }
 
-//    private void initView() {
-//        projectStudentNum = view.findViewById(R.id.student_count_project);
-//        seeAllTextView1 = view.findViewById(R.id.seeAllTextView1);
-//        percentageNum = view.findViewById(R.id.percentageNum);
-//        seeAllTextView2 = view.findViewById(R.id.seeAllTextView2);
-//        reviewTextView = view.findViewById(R.id.reviewTextView);
-//        reviewAuthorTextView = view.findViewById(R.id.reviewAuthorTextView);
-//        classStudentNum = view.findViewById(R.id.classStudentNum);
-//        seeAllTextView3 = view.findViewById(R.id.seeAllTextView3);
-//        relatedContentNameTextView1 = view.findViewById(R.id.relatedContentNameTextView1);
-//        AuthorTextView1 = view.findViewById(R.id.AuthorTextView1);
-//        relatedContentNameTextView2 = view.findViewById(R.id.relatedContentNameTextView2);
-//        AuthorTextView2 = view.findViewById(R.id.AuthorTextView2);
-//        relatedContentNameTextView3 = view.findViewById(R.id.relatedContentNameTextView3);
-//        AuthorTextView3 = view.findViewById(R.id.AuthorTextView3);
-//        projectImageView1 = view.findViewById(R.id.projectImageView1);
-//        projectImageView2 = view.findViewById(R.id.projectImageView2);
-//        projectImageView3 = view.findViewById(R.id.projectImageView3);
-//        positiveImageView1 = view.findViewById(R.id.positiveImageView1);
-//        positiveImageView2 = view.findViewById(R.id.positiveImageView2);
-//        studentImage1 = view.findViewById(R.id.studentImage1);
-//        studentImage2 = view.findViewById(R.id.studentImage2);
-//        studentImage3 = view.findViewById(R.id.studentImage3);
-//        studentImage4 = view.findViewById(R.id.studentImage4);
-//        studentImage5 = view.findViewById(R.id.studentImage5);
-//        studentImage6 = view.findViewById(R.id.studentImage6);
-//        studentImage7 = view.findViewById(R.id.studentImage7);
-//        studentImage8 = view.findViewById(R.id.studentImage8);
-//        studentImage9 = view.findViewById(R.id.studentImage9);
-//        studentImage10 = view.findViewById(R.id.studentImage10);
-//        relatedImageView1 = view.findViewById(R.id.relatedImageView1);
-//        relatedImageView2 = view.findViewById(R.id.relatedImageView2);
-//        relatedImageView3 = view.findViewById(R.id.relatedImageView3);
-//    }
-
-    private void clickListener() {
-        seeAllTextView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(getActivity(), ProjectActivity.class);
-                startActivity(intent1);
-            }
-        });
-        seeAllTextView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getActivity(), ReviewActivity.class);
-                startActivity(intent2);
-
-            }
-        });
-        seeAllTextView3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+    private void initiateView(View view) {
+        // scroll view
+        scrollView = view.findViewById(R.id.scroll_view);
+        // project
+        textViewStudentProjectNum = view.findViewById(R.id.text_view_studentProjectNum);
+        textViewProjectSeeAll = view.findViewById(R.id.text_view_project_see_all);
+        imageViewProject1 = view.findViewById(R.id.image_view_project1);
+        imageViewProject2 = view.findViewById(R.id.image_view_project2);
+        imageViewProject3 = view.findViewById(R.id.image_view_project3);
+        // review
+        textViewReview = view.findViewById(R.id.text_view_review);
+        textViewReviewSeeAll = view.findViewById(R.id.text_view_review_see_all);
+        imageViewThumb = view.findViewById(R.id.image_view_thumb);
+        imageViewReviewProfile = view.findViewById(R.id.image_view_review_profile);
+        textViewReviews = view.findViewById(R.id.text_view_reviews);
+        textViewReviewerName = view.findViewById(R.id.text_view_reviewer_name);
+        // student
+        textViewStudentNum = view.findViewById(R.id.text_view_student_num);
+        textViewStudentSeeAll = view.findViewById(R.id.text_view_student_see_all);
+        imageViewStudent1 = view.findViewById(R.id.image_view_student1);
+        imageViewStudent2 = view.findViewById(R.id.image_view_student2);
+        imageViewStudent3 = view.findViewById(R.id.image_view_student3);
+        imageViewStudent4 = view.findViewById(R.id.image_view_student4);
+        imageViewStudent5 = view.findViewById(R.id.image_view_student5);
+        imageViewStudent6 = view.findViewById(R.id.image_view_student6);
+        imageViewStudent7 = view.findViewById(R.id.image_view_student7);
+        imageViewStudent8 = view.findViewById(R.id.image_view_student8);
+        imageViewStudent9 = view.findViewById(R.id.image_view_student9);
+        // related class
+        imageViewRelatedClass1 = view.findViewById(R.id.image_view_related_class1);
+        textViewRelatedTitle1 = view.findViewById(R.id.text_view_related_title1);
+        textViewRelatedTutor1 = view.findViewById(R.id.text_view_related_tutor1);
+        imageViewRelatedClass2 = view.findViewById(R.id.image_view_related_class2);
+        textViewRelatedTitle2 = view.findViewById(R.id.text_view_related_title2);
+        textViewRelatedTutor2 = view.findViewById(R.id.text_view_related_tutor2);
+        imageViewRelatedClass3 = view.findViewById(R.id.image_view_related_class3);
+        textViewRelatedTitle3 = view.findViewById(R.id.text_view_related_title3);
+        textViewRelatedTutor3 = view.findViewById(R.id.text_view_related_tutor3);
     }
-
 }
