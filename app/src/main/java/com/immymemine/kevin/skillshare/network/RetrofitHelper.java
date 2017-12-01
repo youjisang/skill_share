@@ -1,5 +1,11 @@
 package com.immymemine.kevin.skillshare.network;
 
+import com.immymemine.kevin.skillshare.network.interceptor.AuthenticationInterceptor;
+import com.immymemine.kevin.skillshare.network.interceptor.LoggingInterceptor;
+import com.immymemine.kevin.skillshare.utility.ValidationUtil;
+
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -10,24 +16,39 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitHelper {
+    public static final String BASE_URL = "http://10.0.2.2:8079/";
 
-    private OkHttpClient createOkHttpClient() {
-        return new OkHttpClient.Builder()
-//                .addInterceptor(new LoggingInterceptor())
-//                .addNetworkInterceptor(new NetworkCacheInterceptor())
-//                .cache(buildAndGetCacheDirecory())
-//                .connectTimeout(30, TimeUnit.SECONDS)
-//                .writeTimeout(30, TimeUnit.SECONDS)
-//                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
+    // OkHttpClient
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .addInterceptor(new LoggingInterceptor())
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS);
+
+    // Retrofit Builder
+    private static Retrofit.Builder builder =new Retrofit.Builder()
+                                                         .baseUrl(BASE_URL)
+                                                         .addConverterFactory(GsonConverterFactory.create())
+                                                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+    // Retrofit
+    private static Retrofit retrofit = builder.build();
+
+    public static <T> T createApi(Class<T> service){
+        return createApi(service, null);
     }
 
-    private Retrofit createRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl("http://localhost/8079/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(createOkHttpClient())
-                .build();
+    public static <T> T createApi(Class<T> service, String authToken) {
+        if(!ValidationUtil.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if(!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(service);
     }
 }

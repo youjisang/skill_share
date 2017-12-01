@@ -7,33 +7,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.network.user.SignInResponse;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends AppCompatActivity{
-    // Complete (1) Google login 연동
-    // Complete (2) validation check util
-    // TODO (3) login 처리
     // TODO (4) 비밀번호 찾기 >>> EMAIL... 비밀번호 찾는
 
     // for google sign_in
     GoogleSignInClient mGoogleSignInClient;
 
-    ImageButton toolbarCloseButton;
-    SignInButton googleSignIn;
+    // view
     EditText editTextEmail, editTextPassword;
     Button buttonSignIn, buttonForgotPw;
 
@@ -44,20 +44,17 @@ public class SignInActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         initiateView();
-        setGoogleSignIn();
-
         setReactEditText();
+        setGoogleSignIn();
     }
 
     private void initiateView() {
         // back / close 버튼
-        toolbarCloseButton = findViewById(R.id.toolbar_close_button);
-        findViewById(R.id.toolbar_close_button).setOnClickListener( v -> {
-            finish();
-        });
+        findViewById(R.id.toolbar_close_button).setOnClickListener( v ->
+            finish()
+        );
 
         // google login 버튼
-        googleSignIn = findViewById(R.id.google_sign_in);
         findViewById(R.id.google_sign_in).setOnClickListener( v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -69,8 +66,17 @@ public class SignInActivity extends AppCompatActivity{
 
         // email password 조건 충족하면 enabled >> 색 바뀜
         buttonSignIn = findViewById(R.id.button_sign_in);
+        buttonSignIn.setOnClickListener(v -> {
+            // String authToken = Credentials.basic(editTextEmail.getText().toString(), editTextPassword.getText().toString());
+            RetrofitHelper
+                    .createApi(UserService.class)
+                    .signIn(editTextEmail.getText().toString(), editTextPassword.getText().toString())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleResponse, this::handleError);
+        });
 
-        // 비밀번호 찾기 >>> move Activity 실제 서비스에서는 web view 를 보여준다.
+        // 비밀번호 찾기 >>> move Activity or web view , 실제 서비스에서는 web view 를 보여준다.
         buttonForgotPw = findViewById(R.id.button_forgot_pw);
     }
 
@@ -103,16 +109,15 @@ public class SignInActivity extends AppCompatActivity{
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if(account != null) {
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                // 로그인이 성공하면 Splash Activity 와 SignIn Activity 를 종료시켜준다.
+                intent.setAction(ConstantUtil.SIGN_IN_BY_GOOGLE);
+                // 로그인이 성공하면 기존 Activity Stack 에 있는 Activities 종료
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-            } else {
-                Toast.makeText(this, "Account null error", Toast.LENGTH_LONG).show();
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("TAG", "signInResult:failed code=" + e.getStatusCode());
+            Log.w("TAG", e.getMessage());
         }
     }
 
@@ -134,5 +139,22 @@ public class SignInActivity extends AppCompatActivity{
                     }
                 }
         );
+    }
+
+    private void handleResponse(SignInResponse response) {
+        if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
+            intent.putExtra("USER_ID", response.getUserId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
+            startActivity(intent);
+        } else {
+            Toast.makeText(SignInActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleError(Throwable error) {
+        Toast.makeText(SignInActivity.this, "error : " + error.toString(), Toast.LENGTH_LONG).show();
+        Log.d("SignInActivity", error.toString());
     }
 }

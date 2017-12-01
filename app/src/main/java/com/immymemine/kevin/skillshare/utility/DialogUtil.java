@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 
 public class DialogUtil {
     // TODO custom dialog
-    public static void showAlertDialog(Context context, String title, String message){
+    private void showAlertDialog(Context context, String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);

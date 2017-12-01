@@ -8,17 +8,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.network.sign_up.SignUpInterface;
-import com.immymemine.kevin.skillshare.network.sign_up.SignUpRequestBody;
-import com.immymemine.kevin.skillshare.network.sign_up.SignUpResponseBody;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
+import com.immymemine.kevin.skillshare.network.user.SignUpResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SignUpActivity extends AppCompatActivity {
     Button googleSignUp;
@@ -46,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         findViewById(R.id.button_sign_up).setOnClickListener(
                 v -> {
+                    // progress bar
                     String email = editTextEmailAddress.getText().toString();
                     String password = editTextPassword.getText().toString();
                     String first_name =  editTextFirstName.getText().toString();
@@ -57,7 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
                     } else if ( ValidationUtil.isEmpty(first_name) || ValidationUtil.isEmpty(last_name) ) {
                         // 이름을 입력해주세요
                     } else {
-
                         // request body setting
                         SignUpRequestBody signUpRequestBody = new SignUpRequestBody();
                         signUpRequestBody.setEmail(email);
@@ -65,35 +63,32 @@ public class SignUpActivity extends AppCompatActivity {
                         signUpRequestBody.setName(first_name+" "+last_name);
 
                         // retrofit
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(ConstantUtil.BASE_URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
+                        UserService userService = RetrofitHelper.createApi(UserService.class);
 
-                        SignUpInterface signUpInterface = retrofit.create(SignUpInterface.class);
-                        Call<SignUpResponseBody> call = signUpInterface.signUpUser(signUpRequestBody);
-                        call.enqueue(new Callback<SignUpResponseBody>() {
-                            @Override
-                            public void onResponse(Call<SignUpResponseBody> call, Response<SignUpResponseBody> response) {
-                                SignUpResponseBody signUpResponseBody = response.body();
-                                if( "failure".equals(signUpResponseBody.getResult()) ) {
-                                    Toast.makeText(SignUpActivity.this, signUpResponseBody.getMessage(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //
-                                    intent.setAction(ConstantUtil.SIGN_UP_SUCCESS); // 회원 가입 성공 Action >>> Main 에서 처리 ( follow skills 띄우기 )
-                                    startActivity(intent);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<SignUpResponseBody> call, Throwable t) {
-                                Toast.makeText(SignUpActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        userService.signUp(signUpRequestBody)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(this::handleResponse, this::handleError);
                     }
                 }
         );
+    }
 
+    private void handleResponse(SignUpResponse response) {
+        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
+            intent.setAction(ConstantUtil.SIGN_UP_SUCCESS); // 회원 가입 성공 Action >>> Main 에서 처리 ( follow skills 띄우기 )
+            startActivity(intent);
+        } else {
+            if(response.getMessage().equals(ConstantUtil.ALREADY_EXISTED_EMAIL)) {
+                // 경고 메시지 보여주기 <<< 중복된 이메일 있다 바꿔라
+            }
+            Toast.makeText(SignUpActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleError(Throwable error) {
+        Toast.makeText(SignUpActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

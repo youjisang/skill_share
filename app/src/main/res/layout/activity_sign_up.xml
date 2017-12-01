@@ -33,12 +33,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:background="@android:color/transparent"
-            android:tint="@color/cardview_dark_background"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="@color/IcActive"
+            app:srcCompat="?android:attr/actionModeCloseDrawable"
             tools:layout_editor_absoluteX="387dp"
             tools:layout_editor_absoluteY="16dp" />
 
     </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/google_sign_up"
