@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             startRegisterService();
         else
             requestPermission();
+
     }
 
     @Override
@@ -411,6 +413,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
                         try {
                             drawingView(me_view_container);
+                            /*
+                            * 카테고리도 같이 그려줘야 함.
+                            * */
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

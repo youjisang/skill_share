@@ -1,18 +1,26 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
+
+import java.util.ArrayList;
 
 import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 
 public class SelectSkillsActivity extends Activity {
+
+    Intent intent;
+    ArrayList toggleArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +53,32 @@ public class SelectSkillsActivity extends Activity {
         setToggleButton(R.id.i_toggle_teaching, R.id.toggle_teaching);
     }
 
+    private void throwingToMeSkillView() {
+
+    }
+
     // TODO 버튼 연동
     // TODO startactivityforresult >>> 선택된 skills 넘기기
     // TODO main > select skills activity 넘어올 때 기존에 선택된 skills 는 선택되어 있도록 처리
     private void setToggleButton(int i_toggle, int toggle) {
         final ToggleImageButton tib = this.findViewById(i_toggle);
-
-        ((CustomToggleButton)findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        toggleArray = new ArrayList();
+        ((CustomToggleButton) findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
+                if (b) {
                     tib.setChecked(true);
+                    if (tib.isChecked())
+                        Log.e("tib checked", "checked true==========================" + tib.toString());
+
+                    toggleArray.add(tib);
+                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
 
                 } else {
                     tib.setChecked(false);
 
+                    toggleArray.remove(tib);
+                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
                 }
             }
         });

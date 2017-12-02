@@ -17,4 +17,19 @@ public class ConstantUtil {
 
     // URL
     public static final String BASE_URL = "http://localhost/8079/";
+
+    // selectSkill
+
+    public static final String DESIGN = "Design";
+    public static final String PHOTOGRAPHY = "Photography";
+    public static final String BUSINESS = "Business";
+    public static final String TECHNOLOGY = "Technology";
+    public static final String CRAFTS = "Crafts";
+    public static final String CULINARY = "Culinary";
+    public static final String FILM = "Film";
+    public static final String FASHION = "Fashion";
+    public static final String MUSIC = "Music";
+    public static final String LIFESTYLE = "Lifestyle";
+    public static final String GAMING = "Gaming";
+    public static final String TEACHING = "Teaching";
 }
