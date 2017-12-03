@@ -1,7 +1,6 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -101,7 +100,6 @@ public class ViewFactory {
             see_all_button.setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
-
             });
 
 

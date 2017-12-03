@@ -1,6 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
-import android.content.Context;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.sampleModel.DiscussionModel;
+import com.immymemine.kevin.skillshare.model.online_class.Discussion;
+import com.immymemine.kevin.skillshare.utility.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import java.util.List;
@@ -18,20 +19,24 @@ import java.util.List;
  */
 
 public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.Holder> {
-    List<DiscussionModel> discussionsData;
-    Context context;
 
-    public DiscussionsAdapter(List<DiscussionModel> discussionsData, Context context) {
-        this.discussionsData = discussionsData;
-        this.context = context;
+    List<Discussion> discussions;
+    public DiscussionsAdapter(List<Discussion> discussions) {
+        this.discussions = discussions;
     }
 
+    public void updateData(List<Discussion> discussions) {
+        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+
+        this.discussions.clear();
+        this.discussions.addAll(discussions);
+        result.dispatchUpdatesTo(this);
+    }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_discussions, parent, false);
-
         return new Holder(view);
     }
 
@@ -42,7 +47,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     @Override
     public int getItemCount() {
-        return 5;
+        return discussions.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder {

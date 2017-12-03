@@ -42,7 +42,7 @@ import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassesActivity extends AppCompatActivity {
+public class ClassActivity extends AppCompatActivity {
 
     // views
     ViewPager tabPager;
@@ -54,12 +54,13 @@ public class ClassesActivity extends AppCompatActivity {
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
+    String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classes);
+        setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
-
+        id = getIntent().getStringExtra("_id");
         // 2. model object 에 담아주고
 
         // 3. view 에서 model object 를 사용
@@ -101,9 +102,15 @@ public class ClassesActivity extends AppCompatActivity {
     private void setTabPager() {
         List<Fragment> fragmentList = new ArrayList<>();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("_id", id);
+
         aboutfragment = new AboutFragment();
+        aboutfragment.setArguments(bundle);
         discussionsfragment = new DiscussionsFragment();
+        discussionsfragment.setArguments(bundle);
         lessonsfragment = new LessonsFragment();
+        lessonsfragment.setArguments(bundle);
 
         fragmentList.add(lessonsfragment);
         fragmentList.add(aboutfragment);
@@ -125,6 +132,7 @@ public class ClassesActivity extends AppCompatActivity {
 
     // back button 클릭 리스너
     public void back(View view) {
+        // video 상태 저장
         finish();
     }
 

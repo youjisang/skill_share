@@ -49,7 +49,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/iamge_button_heart"
+            android:id="@+id/iamge_button_like"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
@@ -65,7 +65,7 @@
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <TextView
-            android:id="@+id/text_view_monthAgo"
+            android:id="@+id/text_view_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -75,14 +75,14 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/image_view_heart2"
+            android:id="@+id/image_view_like"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             app:srcCompat="@android:drawable/btn_star" />
 
         <TextView
-            android:id="@+id/text_view_heartNum"
+            android:id="@+id/text_view_like_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
