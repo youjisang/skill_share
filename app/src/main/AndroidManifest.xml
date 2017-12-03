@@ -29,7 +29,7 @@
         <activity android:name=".activity.SeeAllActivity" />
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.ClassesActivity"
+        <activity android:name=".activity.ClassActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.ReviewActivity" />
         <activity android:name=".activity.ProjectActivity" />

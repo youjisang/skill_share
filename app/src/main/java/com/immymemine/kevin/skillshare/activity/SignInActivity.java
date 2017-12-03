@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,7 +38,7 @@ public class SignInActivity extends AppCompatActivity{
     // view
     EditText editTextEmail, editTextPassword;
     Button buttonSignIn, buttonForgotPw;
-
+    TextView warning_email, warning_password;
     private static final int RC_SIGN_IN = 239;
 
     @Override
@@ -60,20 +62,35 @@ public class SignInActivity extends AppCompatActivity{
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
-        // Validity check
+        // to Validity check
         editTextEmail = findViewById(R.id.edit_text_email);
         editTextPassword = findViewById(R.id.edit_text_password);
 
+        // warning
+        warning_email = findViewById(R.id.text_view_warning_email);
+        warning_password = findViewById(R.id.text_view_warning_password);
         // email password 조건 충족하면 enabled >> 색 바뀜
         buttonSignIn = findViewById(R.id.button_sign_in);
         buttonSignIn.setOnClickListener(v -> {
             // String authToken = Credentials.basic(editTextEmail.getText().toString(), editTextPassword.getText().toString());
-            RetrofitHelper
-                    .createApi(UserService.class)
-                    .signIn(editTextEmail.getText().toString(), editTextPassword.getText().toString())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleResponse, this::handleError);
+            String email = editTextEmail.getText().toString();
+            String password = editTextPassword.getText().toString();
+            if(ValidationUtil.isValidEmailAddress(email)) {
+                warning_email.setVisibility(View.INVISIBLE);
+                if(ValidationUtil.isValidPassword(password)) {
+                    RetrofitHelper
+                            .createApi(UserService.class)
+                            .signIn(editTextEmail.getText().toString(), editTextPassword.getText().toString())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::handleResponse, this::handleError);
+                } else {
+                    warning_password.setVisibility(View.VISIBLE);
+                }
+            } else {
+                warning_email.setVisibility(View.VISIBLE);
+                warning_password.setVisibility(View.INVISIBLE);
+            }
         });
 
         // 비밀번호 찾기 >>> move Activity or web view , 실제 서비스에서는 web view 를 보여준다.
@@ -131,10 +148,8 @@ public class SignInActivity extends AppCompatActivity{
         .subscribe(
                 (validity) -> {
                     if(validity) {
-                        buttonSignIn.setEnabled(true);
                         buttonSignIn.setTextColor(Color.BLACK);
                     } else {
-                        buttonSignIn.setEnabled(false);
                         buttonSignIn.setTextColor(Color.LTGRAY);
                     }
                 }
@@ -145,6 +160,7 @@ public class SignInActivity extends AppCompatActivity{
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
+            Log.d("========", response.getUserId());
             intent.putExtra("USER_ID", response.getUserId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             startActivity(intent);

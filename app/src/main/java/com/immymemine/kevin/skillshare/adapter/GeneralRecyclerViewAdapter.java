@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.ClassesActivity;
+import com.immymemine.kevin.skillshare.activity.ClassActivity;
 
 /**
  *
@@ -33,7 +33,6 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
-        // OnlineClass oc = data.get(position);
 
         // holder.textViewTitle.setText(/* title */);
         // holder.textViewAuthor.setText(/* tutor */);
@@ -66,8 +65,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {
-                Intent intent = new Intent(context, ClassesActivity.class);
-                intent.putExtra("title", textViewTitle.getText().toString()); // data for identification
+                Intent intent = new Intent(context, ClassActivity.class);
+                intent.putExtra("_id", id); // data for identification
                 context.startActivity(intent);
             });
         }

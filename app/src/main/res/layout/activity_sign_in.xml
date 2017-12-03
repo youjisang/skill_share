@@ -84,50 +84,59 @@
             android:background="@android:color/darker_gray" />
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout_email"
+    <EditText
+        android:id="@+id/edit_text_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="32dp"
+        android:background="@drawable/edit_text_border"
+        android:ems="10"
+        android:hint="@string/email_address"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="8dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/IcInactive"
+        android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/edit_text_email"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="10"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="8dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/cardview_dark_background"
-            android:textSize="18sp" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout_password"
+    <TextView
+        android:id="@+id/text_view_warning_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        android:layout_marginRight="16dp"
+        android:gravity="right|center_vertical"
+        android:text="wrong email address"
+        android:textColor="@color/BottomNaviNotiBackground"
+        android:visibility="invisible" />
 
-        <EditText
-            android:id="@+id/edit_text_password"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/edit_text_border"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingLeft="8dp"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/cardview_dark_background"
-            android:textSize="18sp" />
-    </android.support.design.widget.TextInputLayout>
+    <EditText
+        android:id="@+id/edit_text_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_border"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:paddingLeft="8dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/IcInactive"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_view_warning_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="right|center_vertical"
+        android:text="password should be more than 8 words"
+        android:textColor="@color/BottomNaviNotiBackground"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/button_sign_in"
@@ -135,9 +144,10 @@
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/edit_text_border"
         android:drawableTint="@android:color/transparent"
-        android:enabled="false"
+        android:enabled="true"
         android:foregroundTint="@android:color/transparent"
         android:text="@string/sign_in"
         android:textColor="@color/IcDisabled" />
