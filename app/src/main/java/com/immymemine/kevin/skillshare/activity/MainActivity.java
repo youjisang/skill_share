@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,11 +34,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
-import com.immymemine.kevin.skillshare.model.AccountTemp;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
-    LinearLayout.LayoutParams layoutParams;
 
     // attach view container to scroll view
     ScrollView scrollView;
@@ -67,53 +63,59 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // bottom navigation view
     AHBottomNavigation bottomNavigation;
 
-    // temp account 객체
-    AccountTemp t = null;
-
     // google sign in / out
     GoogleApiClient mGoogleApiClient;
-
+    GoogleSignInAccount account;
+    // user
+    String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // view
+        initiateView(); // initiate view
+        setBottomNavigation(); // navigation view setting
 
-        // navigation view setting
-        setBottomNavigation();
+        viewFactory = ViewFactory.getInstance(this); // view 생성을 담당할 view factory
+        executor = viewFactory.executor; // Thread pool
 
-        // view 생성을 담당할 view factory
-        viewFactory = ViewFactory.getInstance(this);
-        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        home_view_container = viewFactory.getViewContainer(); // view container
 
-        // Thread pool
-        executor = viewFactory.executor;
+        // 로그인 상태 확인
+        Intent intent = getIntent();
 
-        // view container
-        home_view_container = viewFactory.getViewContainer();
+        if (intent.getAction() != null) {
+            switch (intent.getAction()) {
+                case ConstantUtil.SIGN_IN_SUCCESS:
+                    userId = intent.getStringExtra("USER_ID");
+                    break;
+                case ConstantUtil.SIGN_IN_BY_GOOGLE:
+                    account = GoogleSignIn.getLastSignedInAccount(this);
+//                    String email = intent.getStringExtra("email");
+//                    String password = intent.getStringExtra("password");
+//                    String pictureUrl = intent.getStringExtra("pictureUrl");
+                    break;
+                case ConstantUtil.SIGN_UP_SUCCESS:
+                    startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
 
-        // sign in 상태 확인
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+                    break;
+                case ConstantUtil.SIGN_UP_BY_GOOGLE:
+                    startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
+                    account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(account != null) {
-            t = new AccountTemp(
-                    account.getDisplayName(), // name
-                    account.getEmail(), // email
-                    account.getId(), // id
-                    account.getPhotoUrl() // photo uri
-            );
+                    break;
+            }
         } else {
             home_view_container.addView(viewFactory.getWelcomeView());
         }
 
-        initView();
-
         // 기본 view 추가
-        Future<Boolean> f = viewFactory.executor.submit(
+        Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
                     home_view_container.addView(viewFactory.getGeneralView(getString(R.string.feature_on_skillShare)));
                     home_view_container.addView(viewFactory.getGeneralView(getString(R.string.trending_now)));
                     home_view_container.addView(viewFactory.getGeneralView(getString(R.string.best_this_month)));
-                    return true;
+                    return home_view_container;
                 }
         );
 
@@ -121,15 +123,15 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // 최초 view 그리기
         try {
-            if(f.get())
-                drawingView(home_view_container);
+            drawingView(f.get());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // BroadCast Receiver 등록
         registerReceiver();
 
-        if(checkPermission())
+        if (checkPermission())
             startRegisterService();
         else
             requestPermission();
@@ -139,22 +141,22 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     @Override
     protected void onStart() {
         // 사용자 로그인 되어 있으면
-        if(t != null) {
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-            // google api client connection
-            mGoogleApiClient.connect();
-        }
+//        if (t != null) {
+//            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+//                    GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                    .requestEmail()
+//                    .build();
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                    .build();
+//            // google api client connection
+//            mGoogleApiClient.connect();
+//        }
 
         super.onStart();
     }
 
-    private void initView() {
+    private void initiateView() {
         toolbar = findViewById(R.id.toolbar);
         toolbar_title = findViewById(R.id.toolbar_title);
         toolbar_left_button = findViewById(R.id.toolbar_button_l);
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
-        refreshLayout.setOnRefreshListener( () -> {
+        refreshLayout.setOnRefreshListener(() -> {
             // 데이터 변화 감지
 
             // 다른 부분이 있으면 view 를 추가하거나 삭제
@@ -191,17 +193,17 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         Future<Boolean> f = executor.submit(
                 () -> {
-                        // view container 만들기
-                        group_view_container = viewFactory.getViewContainer();
-                        discover_view_container = viewFactory.getViewContainer();
-                        your_classes_view_container = viewFactory.getViewContainer();
-                        me_view_container = viewFactory.getViewContainer();
-                        return true;
+                    // view container 만들기
+                    group_view_container = viewFactory.getViewContainer();
+                    discover_view_container = viewFactory.getViewContainer();
+                    your_classes_view_container = viewFactory.getViewContainer();
+                    me_view_container = viewFactory.getViewContainer();
+                    return true;
                 }
         );
 
         try {
-            if(f.get())
+            if (f.get())
                 setViews();
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     Future<LinearLayout> g, d;
+
     private void setViews() {
         g = executor.submit(
                 () -> {
@@ -240,20 +243,20 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         View meView;
-        if (t != null) {
-            meView = viewFactory.getMeView(t.getName());
-            Glide.with(this)
-                    .load(t.getPhoto())
-                    .apply(RequestOptions.placeholderOf(R.drawable.skill_gaming)) // 이미지가 없을 때
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(((ImageView) meView.findViewById(R.id.me_image)));
-        } else {
+//        if (t != null) {
+//            meView = viewFactory.getMeView(t.getName());
+//            Glide.with(this)
+//                    .load(t.getPhoto())
+//                    .apply(RequestOptions.placeholderOf(R.drawable.skill_gaming)) // 이미지가 없을 때
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .into(((ImageView) meView.findViewById(R.id.me_image)));
+//        } else {
             meView = viewFactory.getMeView("My Name");
             Glide.with(this)
                     .load(R.drawable.skill_design)
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
-        }
+//        }
         me_view_container.addView(meView);
         me_view_container.addView(viewFactory.getMeSkillView());
     }
@@ -270,27 +273,27 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     private void changeToolbar(int id) {
         // to do on main thread
-        if(id == R.id.navigation_home) {
+        if (id == R.id.navigation_home) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Home");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if(id == R.id.navigation_groups) {
+        } else if (id == R.id.navigation_groups) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Groups");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if(id == R.id.navigation_discover) {
+        } else if (id == R.id.navigation_discover) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Discover");
             toolbar_left_button.setVisibility(View.VISIBLE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if(id == R.id.navigation_your_classes) {
+        } else if (id == R.id.navigation_your_classes) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Your Classes");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);
-        } else if(id == R.id.navigation_me) {
+        } else if (id == R.id.navigation_me) {
             toolbar.setVisibility(View.GONE);
         }
     }
@@ -331,28 +334,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // Customize notification (title, background, typeface)
         bottomNavigation.setNotificationBackgroundColor(getResources().getColor(R.color.BottomNaviNotiBackground));
-
-        // OR
-        /*AHNotification notification = new AHNotification.Builder()
-                .setText("4")
-                .setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.BottomNaviNotiBackground))
-                .setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white))
-                .build();
-        bottomNavigation.setNotification(notification, 1);*/
-
-        // Set listeners
-        /*bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                // Do something cool here...
-                return true;
-            }
-        });
-        bottomNavigation.setOnNavigationPositionListener(new AHBottomNavigation.OnNavigationPositionListener() {
-            @Override public void onPositionChange(int y) {
-                // Manage the new y position
-            }
-        });*/
 
         bottomNavigation.setOnTabSelectedListener((int position, boolean wasSelected) -> {
             switch (position) {
@@ -436,11 +417,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         localBroadcastManager.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().equals(ConstantUtil.RECEIVED)) {
+                if (intent.getAction().equals(ConstantUtil.RECEIVED)) {
                     // notification 받으면 bottom navigation view 에 noti 달기
-                    bottomNavigation.setNotification(" ",1);
-                } else if(intent.getAction().equals(ConstantUtil.REGISTRATION)) {
-
+                    bottomNavigation.setNotification(" ", 1);
+                } else if (intent.getAction().equals(ConstantUtil.REGISTRATION)) {
+                    // registration 기록 남겨놔야할까?
                 }
             }
         }, intentFilter);
@@ -459,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case ConstantUtil.PERMISSION_REQUEST_CODE:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     startRegisterService();
                 else
                     Toast.makeText(this, "", Toast.LENGTH_LONG).show();
@@ -469,8 +450,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     private void startRegisterService() {
         Intent intent = new Intent(this, RegistrationIntentService.class);
-        intent.putExtra("DEVICE_ID",getDeviceId());
-        intent.putExtra("DEVICE_NAME",getDeviceName());
+        intent.putExtra("USER_ID", userId);
+        intent.putExtra("DEVICE_ID", getDeviceId());
+        intent.putExtra("DEVICE_NAME", getDeviceName());
         startService(intent);
     }
 
@@ -510,15 +492,15 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     @Override
     public void signOut() {
-        if(t != null) {
+//        if(t != null) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
                 // TODO me page 변경 >>> sign in / sign up
                 startActivity(new Intent(MainActivity.this, SplashActivity.class));
                 finish();
-                t = null;
+//                t = null;
             });
-        } else
-            return;
+//        } else
+//            return;
     }
 
     @Override
