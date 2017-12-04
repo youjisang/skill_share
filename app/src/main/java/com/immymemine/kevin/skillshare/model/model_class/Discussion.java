@@ -1,11 +1,11 @@
-package com.immymemine.kevin.skillshare.model.online_class;
+package com.immymemine.kevin.skillshare.model.model_class;
 
 /**
  * Created by quf93 on 2017-12-02.
  */
 
 public class Discussion {
-    private String id;
+    private String _id;
     private String name;
     private String pictureUrl;
     private String content;
@@ -13,12 +13,12 @@ public class Discussion {
     private int like;
     private ReDiscussion[] reDiscussions;
 
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public void setName(String name) {

@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.network.api;
 
-import com.immymemine.kevin.skillshare.model.online_class.Discussion;
+import com.immymemine.kevin.skillshare.model.model_class.Discussion;
+import com.immymemine.kevin.skillshare.model.model_class.Lessons;
 
 import java.util.List;
 
@@ -15,8 +16,11 @@ import retrofit2.http.Path;
  */
 
 public interface ClassService {
-    @GET("class/{_id}")
-    Observable<List<Discussion>> getDiscussions(@Path("_id") String id);
+    @GET("class/lessons/{id}")
+    Observable<Lessons> getLessons(@Path("id") String id);
+
+    @GET("class/discussions/{id}")
+    Observable<List<Discussion>> getDiscussions(@Path("id") String id);
 
     @POST("class/addDiscussion")
     Observable<List<Discussion>> addDiscussion(@Body Discussion discussion);

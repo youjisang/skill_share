@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
+package com.immymemine.kevin.skillshare.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.immymemine.kevin.skillshare.R;
  * Created by quf93 on 2017-11-27.
  */
 
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.MainHolder> {
+public class DiscoverRecyclerViewAdapter extends RecyclerView.Adapter<DiscoverRecyclerViewAdapter.MainHolder> {
 
     @Override
     public MainHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,7 +39,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             super(v);
             imageViewFeaturedClass = v.findViewById(R.id.image_view_featured_class);
             textViewTitle = v.findViewById(R.id.text_view_title);
-            textViewTutor = v.findViewById(R.id.text_view_tutor);
+            textViewTutor = v.findViewById(R.id.text_view_profile);
 
             v.setOnClickListener(view -> {
 

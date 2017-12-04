@@ -24,4 +24,6 @@ public class ConstantUtil {
     public static final String SIGN_IN_BY_GOOGLE = "sign-in by google";
 
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
+
+    public static final int NO_DATA = -9;
 }

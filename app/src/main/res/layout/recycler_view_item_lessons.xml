@@ -14,7 +14,7 @@
         android:paddingBottom="16dp">
 
         <TextView
-            android:id="@+id/text_view_orderNum"
+            android:id="@+id/text_view_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -42,7 +42,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_view_contentName"
+                android:id="@+id/text_view_video_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
