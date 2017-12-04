@@ -25,5 +25,5 @@ public class ConstantUtil {
 
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 
-    public static final int NO_DATA = -9;
+    public static final int NO_ITEM = -9;
 }

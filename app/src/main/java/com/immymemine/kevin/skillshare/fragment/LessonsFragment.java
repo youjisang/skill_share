@@ -50,7 +50,7 @@ public class LessonsFragment extends Fragment {
         recyclerViewLessons.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         initiateView(view);
-        
+
         RetrofitHelper.createApi(ClassService.class)
                 .getLessons(getArguments().getString("_id"))
                 .subscribeOn(Schedulers.io())

@@ -23,7 +23,7 @@ import java.util.List;
  * Created by JisangYou on 2017-11-22.
  */
 
-public class DiscussionsAdapter extends RecyclerView.Adapter {
+public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.Holder> {
     Context context;
     List<Discussion> discussions;
 
@@ -46,42 +46,38 @@ public class DiscussionsAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         size = discussions.size();
         if(size == 0) {
-            return ConstantUtil.NO_DATA;
+            return ConstantUtil.NO_ITEM;
         } else
             return super.getItemViewType(position);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
-        if(viewType == ConstantUtil.NO_DATA) {
+        if(viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
-            return new NoItemHolder(view);
-        } else {
+        else
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_discussions, parent, false);
-            return new Holder(view);
-        }
 
-
+        return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(Holder holder, int position) {
         if(size != 0) {
             Discussion discussion = discussions.get(position);
-            Holder h = (Holder) holder; // 형 변환
             // identifier
-            h.id = discussion.get_id();
+            holder.id = discussion.get_id();
             // profile
-            Glide.with(context).load(discussion.getPictureUrl()).into(h.imageViewProfile);
-            h.textViewProfile.setText(discussion.getName());
+            Glide.with(context).load(discussion.getPictureUrl()).into(holder.imageViewProfile);
+            holder.textViewProfile.setText(discussion.getName());
             // content
-            h.expandableTextView.setText(context.getText(R.string.test), TextView.BufferType.NORMAL);
+            holder.expandableTextView.setText(context.getText(R.string.test), TextView.BufferType.NORMAL);
             // time
-            h.textViewTime.setText(discussion.getTime());
+            holder.textViewTime.setText(discussion.getTime());
             // like
-            h.textViewLikeCount.setText(discussion.getLike() + "");
+            holder.textViewLikeCount.setText(discussion.getLike() + "");
         }
     }
 
@@ -109,25 +105,20 @@ public class DiscussionsAdapter extends RecyclerView.Adapter {
 
         public Holder(View v) {
             super(v);
-            // profile
-            imageViewProfile = v.findViewById(R.id.image_view_profile);
-            textViewProfile = v.findViewById(R.id.text_view_profile);
-            // content
-            expandableTextView = v.findViewById(R.id.expandable_text_view);
-            expandableTextView.setTrimLength(5); // 5줄 이상 작성시 expandable 기능
-            // info / reply
-            imageButtonReply = v.findViewById(R.id.image_button_reply);
-            textViewTime = v.findViewById(R.id.text_view_time);
-            // like
-            iamgeButtonLike = v.findViewById(R.id.iamge_button_like);
-            textViewLikeCount = v.findViewById(R.id.text_view_like_count);
-        }
-    }
-
-    public class NoItemHolder extends RecyclerView.ViewHolder {
-
-        public NoItemHolder(View itemView) {
-            super(itemView);
+            if(size != 0) {
+                // profile
+                imageViewProfile = v.findViewById(R.id.image_view_profile);
+                textViewProfile = v.findViewById(R.id.text_view_profile);
+                // content
+                expandableTextView = v.findViewById(R.id.expandable_text_view);
+                expandableTextView.setTrimLength(5); // 5줄 이상 작성시 expandable 기능
+                // info / reply
+                imageButtonReply = v.findViewById(R.id.image_button_reply);
+                textViewTime = v.findViewById(R.id.text_view_time);
+                // like
+                iamgeButtonLike = v.findViewById(R.id.iamge_button_like);
+                textViewLikeCount = v.findViewById(R.id.text_view_like_count);
+            }
         }
     }
 }
