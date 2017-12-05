@@ -1,16 +1,16 @@
-package com.immymemine.kevin.skillshare.model.class1;
+package com.immymemine.kevin.skillshare.model.online_Class;
 
 /**
  * Created by JisangYou on 2017-11-30.
  */
 
-public class Class
+public class OnlineClass
 {
     private String subscriberCount;
 
     private Discussion discussion;
 
-    private String classId;
+    private String type;
 
     private String feedback;
 
@@ -52,14 +52,14 @@ public class Class
         this.discussion = discussion;
     }
 
-    public String getClassId ()
+    public String getType ()
     {
-        return classId;
+        return type;
     }
 
-    public void setClassId (String classId)
+    public void setType (String type)
     {
-        this.classId = classId;
+        this.type = type;
     }
 
     public String getFeedback ()
@@ -165,6 +165,6 @@ public class Class
     @Override
     public String toString()
     {
-        return "ClassPojo [subscriberCount = "+subscriberCount+", discussion = "+discussion+", classId = "+classId+", feedback = "+feedback+", project = "+project+", relatedClass = "+relatedClass+", title = "+title+", category = "+category+", totalDuration = "+totalDuration+", tutor = "+tutor+", subscriber = "+subscriber+", video = "+video+", review = "+review+"]";
+        return "ClassPojo [subscriberCount = "+subscriberCount+", discussion = "+discussion+", type = "+type+", feedback = "+feedback+", project = "+project+", relatedClass = "+relatedClass+", title = "+title+", category = "+category+", totalDuration = "+totalDuration+", tutor = "+tutor+", subscriber = "+subscriber+", video = "+video+", review = "+review+"]";
     }
 }

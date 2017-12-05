@@ -58,10 +58,10 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
         public GeneralViewHolder(View v) {
             super(v);
-            imageView = v.findViewById(R.id.image_view_tutorProfile);
+            imageView = v.findViewById(R.id.image_view_tutor);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
-            textViewTutor = v.findViewById(R.id.text_view_author);
+            textViewTutor = v.findViewById(R.id.text_view_profile);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {

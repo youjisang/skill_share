@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_view_contents"
+            android:id="@+id/text_view_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -36,7 +36,6 @@
 
 
             <ImageView
-                android:id="@+id/image_view_time"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -56,7 +55,6 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/image_view_thumbUp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -66,7 +64,7 @@
                 android:src="@drawable/plus" />
 
             <TextView
-                android:id="@+id/text_view_thumbUp"
+                android:id="@+id/text_view_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -77,7 +75,6 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/image_view_attendanceStudent"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
@@ -88,7 +85,7 @@
                 android:tint="@color/cardview_dark_background" />
 
             <TextView
-                android:id="@+id/text_view_attendanceStudent"
+                android:id="@+id/text_view_subscriber_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -101,7 +98,6 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
@@ -128,44 +124,44 @@
                 android:background="@drawable/corner_rounded_button"
                 android:text="+ Follow"
                 android:textColor="@color/IcActive"
-                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutorProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutor"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image_view_tutorProfile" />
+                app:layout_constraintTop_toTopOf="@+id/image_view_tutor" />
 
             <TextView
-                android:id="@+id/text_view_author"
+                android:id="@+id/text_view_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/button_follow"
                 android:layout_marginLeft="11dp"
                 android:layout_marginStart="11dp"
-                android:layout_toEndOf="@+id/image_view_tutorProfile"
-                android:layout_toRightOf="@+id/image_view_tutorProfile"
+                android:layout_toEndOf="@+id/image_view_tutor"
+                android:layout_toRightOf="@+id/image_view_tutor"
                 android:text="Mel Armstrong"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutorProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_tutor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.065"
-                app:layout_constraintStart_toEndOf="@+id/image_view_tutorProfile"
-                app:layout_constraintTop_toTopOf="@+id/image_view_tutorProfile" />
+                app:layout_constraintStart_toEndOf="@+id/image_view_tutor"
+                app:layout_constraintTop_toTopOf="@+id/image_view_tutor" />
 
             <TextView
-                android:id="@+id/text_view_followers"
+                android:id="@+id/text_view_followers_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/text_view_author"
-                android:layout_alignStart="@+id/text_view_author"
-                android:layout_below="@+id/text_view_author"
+                android:layout_alignLeft="@+id/text_view_profile"
+                android:layout_alignStart="@+id/text_view_profile"
+                android:layout_below="@+id/text_view_profile"
                 android:text="621 Follower"
                 android:textColor="@color/IcInactive"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.261"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_author" />
+                app:layout_constraintTop_toBottomOf="@+id/text_view_profile" />
 
             <ImageView
-                android:id="@+id/image_view_tutorProfile"
+                android:id="@+id/image_view_tutor"
                 android:layout_width="57dp"
                 android:layout_height="51dp"
                 android:layout_alignParentLeft="true"
@@ -181,7 +177,6 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
@@ -199,8 +194,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_followers"
-            tools:listitem="@layout/recycler_view_lessons" />
+            app:layout_constraintTop_toBottomOf="@+id/text_view_followers_count"
+            tools:listitem="@layout/recycler_view_item_lessons" />
 
     </LinearLayout>
 

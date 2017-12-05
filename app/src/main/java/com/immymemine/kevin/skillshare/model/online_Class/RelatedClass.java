@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.model.class1;
+package com.immymemine.kevin.skillshare.model.online_Class;
 
 /**
  * Created by JisangYou on 2017-11-30.
@@ -9,8 +9,6 @@ public class RelatedClass
     private String title;
 
     private String thumbnail;
-
-    private String classId;
 
     private String tutor;
 
@@ -34,16 +32,6 @@ public class RelatedClass
         this.thumbnail = thumbnail;
     }
 
-    public String getClassId ()
-    {
-        return classId;
-    }
-
-    public void setClassId (String classId)
-    {
-        this.classId = classId;
-    }
-
     public String getTutor ()
     {
         return tutor;
@@ -57,6 +45,6 @@ public class RelatedClass
     @Override
     public String toString()
     {
-        return "ClassPojo [title = "+title+", thumbnail = "+thumbnail+", classId = "+classId+", tutor = "+tutor+"]";
+        return "ClassPojo [title = "+title+", thumbnail = "+thumbnail+", tutor = "+tutor+"]";
     }
 }

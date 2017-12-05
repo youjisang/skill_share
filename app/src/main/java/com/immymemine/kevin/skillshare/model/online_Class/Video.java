@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.model.class1;
+package com.immymemine.kevin.skillshare.model.online_Class;
 
 /**
  * Created by JisangYou on 2017-11-30.
@@ -13,8 +13,6 @@ public class Video
     private String videoUrl;
 
     private String videoTitle;
-
-    private String videoId;
 
     private String videoThumbnail;
 
@@ -58,16 +56,6 @@ public class Video
         this.videoTitle = videoTitle;
     }
 
-    public String getVideoId ()
-    {
-        return videoId;
-    }
-
-    public void setVideoId (String videoId)
-    {
-        this.videoId = videoId;
-    }
-
     public String getVideoThumbnail ()
     {
         return videoThumbnail;
@@ -81,6 +69,6 @@ public class Video
     @Override
     public String toString()
     {
-        return "ClassPojo [duration = "+duration+", order = "+order+", videoUrl = "+videoUrl+", videoTitle = "+videoTitle+", videoId = "+videoId+", videoThumbnail = "+videoThumbnail+"]";
+        return "ClassPojo [duration = "+duration+", order = "+order+", videoUrl = "+videoUrl+", videoTitle = "+videoTitle+", videoThumbnail = "+videoThumbnail+"]";
     }
 }

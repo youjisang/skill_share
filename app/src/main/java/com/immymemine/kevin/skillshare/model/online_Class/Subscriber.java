@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.model.class1;
+package com.immymemine.kevin.skillshare.model.online_Class;
 
 /**
  * Created by JisangYou on 2017-11-30.
@@ -11,8 +11,6 @@ public class Subscriber
     private String order;
 
     private String name;
-
-    private String userId;
 
     private String url;
 
@@ -46,16 +44,6 @@ public class Subscriber
         this.name = name;
     }
 
-    public String getUserId ()
-    {
-        return userId;
-    }
-
-    public void setUserId (String userId)
-    {
-        this.userId = userId;
-    }
-
     public String getUrl ()
     {
         return url;
@@ -69,6 +57,6 @@ public class Subscriber
     @Override
     public String toString()
     {
-        return "ClassPojo [recentTime = "+recentTime+", order = "+order+", name = "+name+", userId = "+userId+", url = "+url+"]";
+        return "ClassPojo [recentTime = "+recentTime+", order = "+order+", name = "+name+", url = "+url+"]";
     }
 }

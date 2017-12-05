@@ -28,19 +28,22 @@ public class ConstantUtil {
 
     // selectSkill
 
-    public static final String DESIGN = "Design";
-    public static final String PHOTOGRAPHY = "Photography";
-    public static final String BUSINESS = "Business";
-    public static final String TECHNOLOGY = "Technology";
-    public static final String CRAFTS = "Crafts";
-    public static final String CULINARY = "Culinary";
-    public static final String FILM = "Film";
-    public static final String FASHION = "Fashion";
-    public static final String MUSIC = "Music";
-    public static final String LIFESTYLE = "Lifestyle";
-    public static final String GAMING = "Gaming";
-    public static final String TEACHING = "Teaching";
+    public static final int DESIGN = 100;
+    public static final int PHOTOGRAPHY = 101;
+    public static final int BUSINESS = 102;
+    public static final int TECHNOLOGY = 103;
+    public static final int CRAFTS = 104;
+    public static final int CULINARY = 105;
+    public static final int FILM = 106;
+    public static final int FASHION = 107;
+    public static final int MUSIC = 108;
+    public static final int LIFESTYLE = 109;
+    public static final int GAMING = 110;
+    public static final int TEACHING = 111;
 
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
+
+
+    public static final int NO_ITEM = -9;
 
 }

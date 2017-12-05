@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.MainRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -158,7 +158,7 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.discover_view, null);
 
             recyclerView = view.findViewById(R.id.recycler_view_discover);
-            recyclerView.setAdapter(new MainRecyclerViewAdapter());
+            recyclerView.setAdapter(new DiscoverRecyclerViewAdapter());
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
             return view;

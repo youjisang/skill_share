@@ -14,7 +14,7 @@
         android:layout_weight="6">
 
         <ImageView
-            android:id="@+id/image_view_tutorProfile"
+            android:id="@+id/image_view_tutor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="false"
@@ -51,7 +51,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/text_view_author"
+        android:id="@+id/text_view_profile"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

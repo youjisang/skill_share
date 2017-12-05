@@ -28,7 +28,23 @@ public class User
 
     private String email;
 
-    private String userId;
+    public SubscribeClass[] getSubscribeClass() {
+        return subscribeClass;
+    }
+
+    public void setSubscribeClass(SubscribeClass[] subscribeClass) {
+        this.subscribeClass = subscribeClass;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    private String _id;
 
     private String name;
 
@@ -136,16 +152,6 @@ public class User
         this.email = email;
     }
 
-    public String getUserId ()
-    {
-        return userId;
-    }
-
-    public void setUserId (String userId)
-    {
-        this.userId = userId;
-    }
-
     public String getName ()
     {
         return name;
@@ -179,6 +185,6 @@ public class User
     @Override
     public String toString()
     {
-        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", pictureUrl = "+pictureUrl+", email = "+email+", userId = "+userId+", name = "+name+", followingSkills = "+followingSkills+", group = "+group+"]";
+        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", pictureUrl = "+pictureUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", group = "+group+"]";
     }
 }

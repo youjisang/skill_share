@@ -15,7 +15,7 @@
             android:layout_height="50dp">
 
             <ImageView
-                android:id="@+id/image_view_tutorProfile"
+                android:id="@+id/image_view_tutor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />

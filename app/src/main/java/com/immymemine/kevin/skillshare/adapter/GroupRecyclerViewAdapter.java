@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 /**
  * Created by quf93 on 2017-11-18.
@@ -21,9 +22,26 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         this.context = context;
     }
 
+    int size;
+    @Override
+    public int getItemViewType(int position) {
+        // size = data.size();
+        size = 0;
+        if(size == 0)
+            return ConstantUtil.NO_ITEM;
+        else
+            return super.getItemViewType(position);
+    }
+
     @Override
     public GroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_group, parent, false);
+        View view;
+
+        if(viewType == ConstantUtil.NO_ITEM)
+            view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_group, parent, false);
+        else
+            view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_group, parent, false);
+
         return new GroupViewHolder(view);
     }
 
@@ -48,12 +66,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
         public GroupViewHolder(View view) {
             super(view);
-            imageView = view.findViewById(R.id.image_view_tutorProfile);
-            textViewCount = view.findViewById(R.id.text_view_count);
-            textViewGroup = view.findViewById(R.id.text_view_group);
-            view.setOnClickListener(v -> {
-                // TODO if (그룹원이 아니면) 그룹 가입 else 밑에 edittext 창이 나와야 함
-            });
+            if(size != 0) {
+                imageView = view.findViewById(R.id.image_view_tutor);
+                textViewCount = view.findViewById(R.id.text_view_count);
+                textViewGroup = view.findViewById(R.id.text_view_group);
+                view.setOnClickListener(v -> {
+                    // TODO if (그룹원이 아니면) 그룹 가입 else 밑에 edittext 창이 나와야 함
+                });
+            }
         }
     }
 }
