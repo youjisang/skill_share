@@ -11,6 +11,19 @@ public class Class {
     String tutorName;
     String duration;
 
+    // for testing
+    public Class(String _id,
+            String title,
+            String pictureUrl,
+            String tutorName,
+            String duration) {
+        this._id = _id;
+        this.title = title;
+        this.pictureUrl = pictureUrl;
+        this.tutorName = tutorName;
+        this.duration = duration;
+    }
+
     public String get_id() {
         return _id;
     }

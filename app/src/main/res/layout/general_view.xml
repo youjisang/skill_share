@@ -29,9 +29,9 @@
         android:id="@+id/general_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="56dp"
         android:orientation="horizontal"
-        tools:listitem="@layout/recycler_view_item_general" >
+        tools:listitem="@layout/recycler_view_item_general">
 
     </android.support.v7.widget.RecyclerView>
 

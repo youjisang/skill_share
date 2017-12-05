@@ -42,6 +42,7 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -141,6 +142,18 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
+
+        // test ====================================================================
+        Map<String, List<Class>> data = new HashMap<>();
+        List<Class> classData = new ArrayList<>();
+        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern","http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
+                "Sorin Constantin", "24");
+        classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);
+        data.put("Feature on Skillshare", classData);
+        data.put("Best this month", classData);
+        data.put("Test test", classData);
+        handleResponse(data);
+        // test ====================================================================
 
         setContainer();
 
@@ -434,7 +447,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     } else {
                         changeToolbar(R.id.navigation_your_classes);
                         drawingView(your_classes_view_container);
-
                         return true;
                     }
                 case 4:
