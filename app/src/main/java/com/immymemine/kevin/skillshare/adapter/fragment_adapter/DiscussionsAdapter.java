@@ -47,7 +47,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         size = discussions.size();
         if(size == 0) {
             return ConstantUtil.NO_ITEM;
-        } else
+        }
+        else
             return super.getItemViewType(position);
     }
 

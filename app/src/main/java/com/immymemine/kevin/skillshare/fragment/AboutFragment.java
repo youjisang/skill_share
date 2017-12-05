@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +44,9 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         initiateView(view);
+        seeAllclick();
         return view;
+
     }
 
     private void initiateView(View view) {
@@ -50,12 +55,14 @@ public class AboutFragment extends Fragment {
         // project
         textViewStudentProjectNum = view.findViewById(R.id.text_view_studentProjectNum);
         textViewProjectSeeAll = view.findViewById(R.id.text_view_project_see_all);
+
         imageViewProject1 = view.findViewById(R.id.image_view_project1);
         imageViewProject2 = view.findViewById(R.id.image_view_project2);
         imageViewProject3 = view.findViewById(R.id.image_view_project3);
         // review
         textViewReview = view.findViewById(R.id.text_view_review);
         textViewReviewSeeAll = view.findViewById(R.id.text_view_review_see_all);
+
         imageViewThumb = view.findViewById(R.id.image_view_thumb);
         imageViewReviewProfile = view.findViewById(R.id.image_view_review_profile);
         textViewReviews = view.findViewById(R.id.text_view_reviews);
@@ -63,6 +70,7 @@ public class AboutFragment extends Fragment {
         // student
         textViewStudentNum = view.findViewById(R.id.text_view_student_num);
         textViewStudentSeeAll = view.findViewById(R.id.text_view_student_see_all);
+
         imageViewStudent1 = view.findViewById(R.id.image_view_student1);
         imageViewStudent2 = view.findViewById(R.id.image_view_student2);
         imageViewStudent3 = view.findViewById(R.id.image_view_student3);
@@ -82,5 +90,33 @@ public class AboutFragment extends Fragment {
         imageViewRelatedClass3 = view.findViewById(R.id.image_view_related_class3);
         textViewRelatedTitle3 = view.findViewById(R.id.text_view_related_title3);
         textViewRelatedTutor3 = view.findViewById(R.id.text_view_related_tutor3);
+    }
+
+    private void seeAllclick() {
+
+        textViewProjectSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.PROJECT_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
+        textViewStudentSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.STUDENT_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
+        textViewReviewSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.REVIEW_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 }
