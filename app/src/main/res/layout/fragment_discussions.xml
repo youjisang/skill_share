@@ -32,6 +32,7 @@
 
 
     <LinearLayout
+        android:id="@+id/layout_frame_discussion"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
