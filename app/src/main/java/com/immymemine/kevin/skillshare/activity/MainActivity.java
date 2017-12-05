@@ -30,7 +30,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // google sign in / out
     GoogleApiClient mGoogleApiClient;
     GoogleSignInAccount account;
+
     // user
     String userId;
+    boolean isSignIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Intent intent = getIntent();
 
         if (intent.getAction() != null) {
+            isSignIn = true;
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
                     userId = intent.getStringExtra("USER_ID");
@@ -103,8 +105,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     account = GoogleSignIn.getLastSignedInAccount(this);
 
                     break;
+                case "SIGN_OUT":
+                    isSignIn = false;
+                    home_view_container.addView(viewFactory.getWelcomeView());
+                    bottomNavigation.setCurrentItem(4);
+                    break;
             }
         } else {
+            isSignIn = false;
             home_view_container.addView(viewFactory.getWelcomeView());
         }
 
@@ -165,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
         refreshLayout.setOnRefreshListener(() -> {
-            // 데이터 변화 감지
+            // 데이터 변화 감지 ( ? )
 
             // 다른 부분이 있으면 view 를 추가하거나 삭제
 
@@ -209,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     Future<LinearLayout> g, d;
-
     private void setViews() {
         g = executor.submit(
                 () -> {
@@ -241,7 +248,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         View meView;
-//        if (t != null) {
+        if(isSignIn) {
+            //        if (t != null) {
 //            meView = viewFactory.getMeView(t.getName());
 //            Glide.with(this)
 //                    .load(t.getPhoto())
@@ -255,18 +263,29 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
 //        }
-        me_view_container.addView(meView);
-        me_view_container.addView(viewFactory.getMeSkillView());
+            me_view_container.addView(meView);
+            me_view_container.addView(viewFactory.getMeSkillView());
+        } else {
+            notSignedInMeView = viewFactory.getNotSignedInMeView();
+        }
     }
-
+    View notSignedInMeView;
     private void drawingView(LinearLayout view_container) {
-
         // remove previous view
         scrollView.removeAllViewsInLayout();
         scrollView.requestLayout();
 
         // add selected view
         scrollView.addView(view_container);
+    }
+
+    private void drawingView(View view) {
+        // remove previous view
+        scrollView.removeAllViewsInLayout();
+        scrollView.requestLayout();
+
+        // add selected view
+        scrollView.addView(view);
     }
 
     private void changeToolbar(int id) {
@@ -292,7 +311,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);
         } else if (id == R.id.navigation_me) {
-            toolbar.setVisibility(View.GONE);
+            if(isSignIn)
+                toolbar.setVisibility(View.GONE);
+            else {
+                toolbar.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Me");
+                toolbar_left_button.setVisibility(View.GONE);
+                toolbar_right_button.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -376,12 +402,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_your_classes);
+                        drawingView(your_classes_view_container);
 
-                        try {
-                            drawingView(your_classes_view_container);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                         return true;
                     }
                 case 4:
@@ -389,12 +411,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_me);
-
-                        try {
+                        if(isSignIn)
                             drawingView(me_view_container);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        else
+                            drawingView(notSignedInMeView);
                         return true;
                     }
             }
@@ -480,21 +500,26 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
         // title >> int
         // ConstantUtil
-        intent.putExtra("Type", title);
+        intent.putExtra("TYPE", title);
         startActivity(intent);
     }
 
     @Override
     public void signOut() {
-//        if(t != null) {
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
-                // TODO me page 변경 >>> sign in / sign up
-                startActivity(new Intent(MainActivity.this, SplashActivity.class));
-                finish();
-//                t = null;
-            });
-//        } else
-//            return;
+//        if(isSignIn) {
+//            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
+//                // TODO me page 변경 >>> sign in / sign up
+//                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//                intent.setAction("SIGN_OUT");
+//                startActivity(intent);
+//                finish();
+//            });
+//        }
+
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.setAction("SIGN_OUT");
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/background_light"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/image_view_related_class"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/skill_design" />
+
+    <TextView
+        android:id="@+id/text_view_related_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="132dp"
+        android:layout_marginRight="8dp"
+        android:maxLines="2"
+        android:text="Illustrator CC MasterClass - #1 Foundations"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_view_related_tutor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="132dp"
+        android:layout_marginRight="8dp"
+        android:maxLines="1"
+        android:text="Martin Perhiniak"
+        android:textColor="@color/IcInactive"
+        android:textSize="18sp" />
+</FrameLayout>

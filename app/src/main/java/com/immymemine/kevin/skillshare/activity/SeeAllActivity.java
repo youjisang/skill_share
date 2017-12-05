@@ -12,7 +12,7 @@ public class SeeAllActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_see_all);
-        type = getIntent().getStringExtra("Type");
+        type = getIntent().getStringExtra("TYPE");
         ((TextView)findViewById(R.id.toolbar_title)).setText(type);
         findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
 

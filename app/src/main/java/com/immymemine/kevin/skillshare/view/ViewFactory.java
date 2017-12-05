@@ -219,12 +219,8 @@ public class ViewFactory {
                     ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
                     ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
 
-                    view.findViewById(R.id.me_button).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            interactionInterface.signOut();
-                        }
-                    });
+                    view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
+
                     // main thread 영역 ------------------------------------------------------------
                     // rounding image setting
 //                    if(context instanceof MainActivity) {
@@ -253,6 +249,22 @@ public class ViewFactory {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
+                    return view;
+                }
+        );
+
+        try {
+            return f.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public View getNotSignedInMeView() {
+        Future<View> f = executor.submit(
+                () -> {
+                    View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
                     return view;
                 }
         );
