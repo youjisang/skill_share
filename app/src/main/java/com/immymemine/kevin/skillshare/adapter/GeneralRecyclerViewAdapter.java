@@ -9,8 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ClassActivity;
+import com.immymemine.kevin.skillshare.model.home.Class;
+
+import java.util.List;
 
 /**
  *
@@ -21,8 +25,11 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     // data 가 바뀔 일이 거의 없다 <<< 관리자가 바꿔주기 때문에
     // 바꾼 상태
     Context context;
-    public GeneralRecyclerViewAdapter(Context context) {
+    List<Class> classes;
+
+    public GeneralRecyclerViewAdapter(Context context, List<Class> classes) {
         this.context = context;
+        this.classes = classes;
     }
 
     @Override
@@ -33,20 +40,20 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
     @Override
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
+        if(classes != null) {
+            Class mClass = classes.get(position);
 
-        // holder.textViewTitle.setText(/* title */);
-        // holder.textViewAuthor.setText(/* tutor */);
-        // holder.textViewTime.setText(/* String type time */);
-        // Glide.with(context).load(/* Uri */).into(holder.imageView);
-        // holder.id = oc.id;
-
-        // for test
-        holder.id = "ajd3$0pj#d2i3";
+            holder.id = mClass.get_id();
+            holder.textViewTitle.setText(mClass.getTitle());
+            holder.textViewTutor.setText(mClass.getTutorName());
+            holder.textViewTime.setText(mClass.getDuration() + "m");
+            Glide.with(context).load(mClass.getPictureUrl()).into(holder.imageView);
+        }
     }
 
     @Override
     public int getItemCount() {
-        // return data.size();
+        // return classes.size();
         return 5;
     }
 

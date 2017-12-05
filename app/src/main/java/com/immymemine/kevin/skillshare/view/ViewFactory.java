@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.home.Class;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -81,9 +83,10 @@ public class ViewFactory {
 
     class GeneralViewFactory implements Callable<View> {
         String title;
-
-        public GeneralViewFactory(String title) {
+        List<Class> classes;
+        public GeneralViewFactory(String title, List<Class> classes) {
             this.title = title;
+            this.classes = classes;
         }
 
         @Override
@@ -91,7 +94,7 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(/* data input */ context));
+            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
@@ -107,14 +110,18 @@ public class ViewFactory {
         }
     }
 
-    public View getGeneralView(String title) {
-        Future<View> f = executor.submit(new GeneralViewFactory(title));
+    public View getGeneralView(String title, List<Class> classes) {
+        Future<View> f = executor.submit(new GeneralViewFactory(title, classes));
         try {
             return f.get();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public View getGeneralView(String title) {
+        return getGeneralView(title, null);
     }
 
     class GroupViewFactory implements Callable<View> {

@@ -35,11 +35,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
+import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.HomeService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
 
@@ -68,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // user
     String userId;
     boolean isSignIn;
+
+    // user followed skills
+    List<Integer> followSkills = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,26 +126,23 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         } else {
             isSignIn = false;
             home_view_container.addView(viewFactory.getWelcomeView());
+
+            // user follow skills 를 배열로 담아서 Query 로 보낸다
+            followSkills.add(ConstantUtil.FEATURE_ON_SKILLSHARE);
+            followSkills.add(ConstantUtil.TRENDING_NOW);
+            followSkills.add(ConstantUtil.BEST_THIS_MONTH);
         }
 
-        // 기본 view 추가
-        Future<LinearLayout> f = viewFactory.executor.submit(
-                () -> {
-                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.feature_on_skillShare)));
-                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.trending_now)));
-                    home_view_container.addView(viewFactory.getGeneralView(getString(R.string.best_this_month)));
-                    return home_view_container;
-                }
-        );
+        // TODO Progress Bar
+
+        // follow skills 에 해당되는 카테고리들을 받아온다.
+        RetrofitHelper.createApi(HomeService.class)
+                .getHomeClasses(followSkills)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResponse, this::handleError);
 
         setContainer();
-
-        // 최초 view 그리기
-        try {
-            drawingView(f.get());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         // BroadCast Receiver 등록
         registerReceiver();
@@ -142,6 +151,29 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             startRegisterService();
         else
             requestPermission();
+    }
+
+    private void handleResponse(Map<String, List<Class>> classes) {
+        // 기본 view 추가
+        Future<LinearLayout> f = viewFactory.executor.submit(
+                () -> {
+                    for(String key : classes.keySet())
+                        home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)));
+
+                    return home_view_container;
+                }
+        );
+
+        // 최초 view 그리기
+        try {
+            drawingView(f.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleError(Throwable error) {
+
     }
 
     @Override
@@ -389,7 +421,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_discover);
-
                         try {
                             drawingView(d.get());
                         } catch (Exception e) {
