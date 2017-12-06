@@ -32,7 +32,7 @@
 
             <LinearLayout
                 android:layout_width="80dp"
-                android:layout_height="60px"
+                android:layout_height="30dp"
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="65dp"
                 android:background="#de000000"
@@ -42,11 +42,11 @@
 
                 <ImageButton
                     android:id="@+id/image_button_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:src="@android:drawable/star_on" />
+                    android:src="@drawable/image_heart" />
 
                 <TextView
                     android:id="@+id/text_view_like_count"
@@ -67,6 +67,7 @@
                 android:layout_gravity="bottom|left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/black" />
+
 
             <TextView
                 android:id="@+id/text_view_title2"

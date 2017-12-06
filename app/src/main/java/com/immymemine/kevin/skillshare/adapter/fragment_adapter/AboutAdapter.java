@@ -55,23 +55,17 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Log.i("Test", "student");
                 resId = R.layout.recycler_view_item_see_all_students;
                 break;
+            // 메인화면 see all 추후 위치 수정 필요
+            case ConstantUtil.CLASS_ITEM:
+                Log.i("Test", "class");
+                resId = R.layout.recycler_view_item_see_all_classes;
+                break;
             default:
                 Log.i("Test", "default");
                 return null;
         }
         view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
         return new Holder(view);
-
-
-        /*if (viewType == ConstantUtil.NO_ITEM)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
-        else if (viewType == ConstantUtil.PROJECT_ITEM)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_see_all_projects, parent, false);
-        else if (viewType == ConstantUtil.REVIEW_ITEM)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_see_all_reviews, parent, false);
-        else if (viewType == ConstantUtil.STUDENT_ITEM)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_see_all_students, parent, false);
-        return new Holder(view);*/
     }
 
     @Override
@@ -107,6 +101,18 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView textViewReviewJob;
         ImageView imageViewReviewProfile;
 
+        // Main Class See All
+        TextView textViewTitle5;
+        TextView textViewTutor3;
+
+        ImageView imageViewDuration;
+        TextView textViewDuration;
+        ImageView imageViewThumbUp ;
+        TextView textViewThumbUp;
+
+        ImageView imageViewAttendanceStudents;
+        TextView textViewAttendanceStudents;
+
         public Holder(View v) {
             super(v);
             if (customViewType == ConstantUtil.PROJECT_ITEM) {
@@ -132,6 +138,22 @@ public class AboutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 textViewReviewJob = v.findViewById(R.id.text_view_review_job);
                 // like
                 imageViewLike = v.findViewById(R.id.image_view_like);
+            }
+            // 메인화면 see all 추후 위치 수정 필요
+            else if (customViewType == ConstantUtil.CLASS_ITEM) {
+                // title
+                textViewTitle5 = v.findViewById(R.id.text_view_title5);
+                textViewTutor3 = v.findViewById(R.id.text_view_tutor3);
+                // profile
+                imageViewProfile = v.findViewById(R.id.image_view_profile);
+                // imformation
+                imageViewDuration = v.findViewById(R.id.image_view_duration);
+                textViewDuration = v.findViewById(R.id.text_view_duration);
+                imageViewThumbUp = v.findViewById(R.id.image_view_thumUp);
+                textViewThumbUp = v.findViewById(R.id.text_view_thumbUp);
+                // students
+                imageViewAttendanceStudents = v.findViewById(R.id.image_view_attendanceStudents);
+                textViewAttendanceStudents = v.findViewById(R.id.text_view_attendanceStudents);
             }
         }
     }
