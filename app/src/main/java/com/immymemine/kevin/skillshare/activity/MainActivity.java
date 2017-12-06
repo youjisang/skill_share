@@ -51,6 +51,7 @@ import java.util.concurrent.Future;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
 
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // user followed skills
     List<Integer> followSkills = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,17 +146,24 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
 
+
+
         // test ====================================================================
-        Map<String, List<Class>> data = new HashMap<>();
-        List<Class> classData = new ArrayList<>();
-        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern","http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
-                "Sorin Constantin", "24");
-        classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);
-        data.put("Feature on Skillshare", classData);
-        data.put("Best this month", classData);
-        data.put("Test test", classData);
-        handleResponse(data);
+//        Map<String, List<Class>> data = new HashMap<>();
+//        List<Class> classData = new ArrayList<>();
+//        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
+//                "Sorin Constantin", "24");
+//        classData.add(c);
+//        classData.add(c);
+//        classData.add(c);
+//        classData.add(c);
+//        classData.add(c);
+//        data.put("Feature on Skillshare", classData);
+//        data.put("Best this month", classData);
+//        data.put("Test test", classData);
+//        handleResponse(data);
         // test ====================================================================
+
 
         setContainer();
 
@@ -171,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 기본 view 추가
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
-                    for(String key : classes.keySet())
+                    for (String key : classes.keySet())
                         home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)));
 
                     return home_view_container;
@@ -263,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     Future<LinearLayout> g, d;
+
     private void setViews() {
         g = executor.submit(
                 () -> {
@@ -294,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         View meView;
-        if(isSignIn) {
+        if (isSignIn) {
             //        if (t != null) {
 //            meView = viewFactory.getMeView(t.getName());
 //            Glide.with(this)
@@ -315,7 +325,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             notSignedInMeView = viewFactory.getNotSignedInMeView();
         }
     }
+
     View notSignedInMeView;
+
     private void drawingView(LinearLayout view_container) {
         // remove previous view
         scrollView.removeAllViewsInLayout();
@@ -357,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);
         } else if (id == R.id.navigation_me) {
-            if(isSignIn)
+            if (isSignIn)
                 toolbar.setVisibility(View.GONE);
             else {
                 toolbar.setVisibility(View.VISIBLE);
@@ -455,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_me);
-                        if(isSignIn)
+                        if (isSignIn)
                             drawingView(me_view_container);
                         else
                             drawingView(notSignedInMeView);
@@ -523,7 +535,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     private String getDeviceName() {
         String deviceName = Build.MODEL;
         String deviceMan = Build.MANUFACTURER;
-        return  deviceMan + " " +deviceName;
+        return deviceMan + " " + deviceName;
     }
 
     // Interaction Listener
