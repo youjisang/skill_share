@@ -38,3 +38,9 @@ public class DiffCallback<T> extends DiffUtil.Callback {
         return false;
     }
 }
+
+/* TODO 지상
+이부분 연구 필요. 일종의 모듈화인가?
+<T>제네릭 및 해당 메서드 연구
+
+ */

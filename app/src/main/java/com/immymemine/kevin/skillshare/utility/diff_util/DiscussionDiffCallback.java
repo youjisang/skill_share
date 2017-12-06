@@ -28,3 +28,8 @@ public class DiscussionDiffCallback extends DiffCallback<Discussion> {
                 oldItem.getReDiscussions().length == newItem.getReDiscussions().length;
     }
 }
+
+/* TODO 지상
+이부분은 데이터를 최신화하기 위한 로직.
+
+ */

@@ -118,6 +118,12 @@ public class ClassActivity extends AppCompatActivity {
 
         tabPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragmentList));
     }
+    /* TODO
+        GeneralRecylerViewAdapter에서 아이템 클릭 이벤트로 넘어온 클래스 _id키 값을
+        bundle로 각 프래그먼트로 넘겨줌
+        프래그먼트마다 서버에서 그때 그때 데이터를 받아온다.
+
+     */
 
     // 탭 레이아웃과 뷰페이저를 연결한다.
     private void connectTabAndPager() {
@@ -142,6 +148,11 @@ public class ClassActivity extends AppCompatActivity {
     }
     public void student_profile(View view) {
         int id = view.getId();
+        /* TODO 지상
+        view.getId()
+          이부분의 의미?
+
+         */
 
     }
     // Exo Player -----------------------------------------------------------------------
@@ -228,6 +239,7 @@ public class ClassActivity extends AppCompatActivity {
         resumePosition = (resumePosition > 0) ? resumePosition : 0;
     }
 
+
     private void releasePlayer() {
         if(player != null) {
             saveResumePosition();
@@ -236,12 +248,19 @@ public class ClassActivity extends AppCompatActivity {
             trackSelector = null;
         }
     }
+    /* TODO 지상
+       player객체가 null이 아니면 현재 상태를 저장하고, 저장된 것을 release
+       뒤에 객체들을 왜또 null 시키는 건지는 공부필요
+    */
 
     @Override
     protected void onStop() {
         releasePlayer();
         super.onStop();
     }
+    /* TODO 지상
+       생명주기상으로 onStop은 꺼진 상태를 말하는 거 같은데 왜 releasePlayer?
+    */
 
     private class PlayerEventListener implements Player.EventListener {
         private static final String TAG = "skill share player";

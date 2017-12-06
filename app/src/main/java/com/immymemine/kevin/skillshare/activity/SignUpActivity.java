@@ -83,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             if(response.getMessage().equals(ConstantUtil.ALREADY_EXISTED_EMAIL)) {
                 // 경고 메시지 보여주기 <<< 중복된 이메일 있다 바꿔라
+
             }
             Toast.makeText(SignUpActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -92,3 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(SignUpActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
     }
 }
+                /* TODO 지상
+                    다이얼로그유틸틸 이부분에서 많이 사용할 이 있음.
+                 */

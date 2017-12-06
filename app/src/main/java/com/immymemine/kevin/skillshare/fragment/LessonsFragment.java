@@ -41,6 +41,9 @@ public class LessonsFragment extends Fragment {
     public LessonsFragment() {
         // Required empty public constructor
     }
+    /* TODO 지상
+    프래그먼트에서는 빈 생성자가 필수라고 함. 없으면 튕길 수 있음.
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +64,11 @@ public class LessonsFragment extends Fragment {
 
         return view;
     }
+    /* TODO 지상
+       getLenssons레트로핏 인터페이스에서 액티비티로 전달 받은 아이디를 참조해 데이터를 불러온다.
+       성공적으로 불러왔으면 handelResponse로 전달함.
+       실패했으면 handleError로 전달함.
+     */
 
     private void handleResponse(Lessons lessons) {
 
@@ -82,6 +90,12 @@ public class LessonsFragment extends Fragment {
 
         // TODO hide progress bar
     }
+    /* TODO 지상
+
+        Tutor tutor = lessons.getTutor()
+        -> Tutor 객체를 lessons의 tutor로 정의함
+         ☆ 개인적으로 그동안 헷갈렸던 부분
+     */
 
     private void handleError(Throwable error) {
 

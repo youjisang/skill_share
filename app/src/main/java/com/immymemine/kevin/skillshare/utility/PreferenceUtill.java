@@ -13,6 +13,12 @@ import java.util.Set;
 
 public class PreferenceUtill {
 
+    /* TODO 지상
+     이 유틸은 자동로그인, 셀렉트 선택시 나갔다 들어올경우, 동영상 보다가 전화가 올경우나 앱을 나갔다가 경우 등
+     서버에서 굳이 디비를 받아올 필요가 없는 작은 데이터들을 저장하기 위한 것
+     아래 코드는 작업중....ㅜ
+     */
+
     private static final String filename = "skillshareSharedPreference";
 
     private static SharedPreferences getPreference(Context context){

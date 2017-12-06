@@ -81,6 +81,11 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
                 Intent intent = new Intent(context, ClassActivity.class);
                 intent.putExtra("_id", id); // data for identification
                 context.startActivity(intent);
+
+                /* TODO 지상
+                 클릭한 클래스의 고유의 id값을 프래그먼트가 있는 ClassActivity로 넘겼을때,
+                  해당 id값에 포함된 데이터들을 선별적으로 프래그먼트에 넣는다.
+                 */
             });
         }
     }

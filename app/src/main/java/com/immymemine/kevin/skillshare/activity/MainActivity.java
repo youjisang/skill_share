@@ -147,22 +147,27 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 .subscribe(this::handleResponse, this::handleError);
 
 
+        // test ====================================================================
+        Map<String, List<Class>> data = new HashMap<>();
+        List<Class> classData = new ArrayList<>();
+        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
+                "Sorin Constantin", "24");
+        classData.add(c);
+        classData.add(c);
+        classData.add(c);
+        classData.add(c);
+        classData.add(c);
+        data.put("Feature on Skillshare", classData);
+        data.put("Best this month", classData);
+        data.put("Test test", classData);
+        handleResponse(data);
+        //test ====================================================================
 
-        // test ====================================================================
-//        Map<String, List<Class>> data = new HashMap<>();
-//        List<Class> classData = new ArrayList<>();
-//        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
-//                "Sorin Constantin", "24");
-//        classData.add(c);
-//        classData.add(c);
-//        classData.add(c);
-//        classData.add(c);
-//        classData.add(c);
-//        data.put("Feature on Skillshare", classData);
-//        data.put("Best this month", classData);
-//        data.put("Test test", classData);
-//        handleResponse(data);
-        // test ====================================================================
+        /* TODO ☆ 지상
+        이 부분에서 모델링 관점에서 좀 헷갈렸음
+        home이라는 것을 따로 노드 서버에서 모델링을 해줘야하는 건지 아니면
+        다른 내가 모르는 방법이 있는 건지!?
+         */
 
 
         setContainer();
@@ -270,6 +275,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             e.printStackTrace();
         }
     }
+    /* TODO 지상
+       네비게이션 목록에 있는 컨테이너를 만드는 로직이고, 만약 컨테이너가 다 만들어졌으면 setView메서드 호출 ▽
+     */
 
     Future<LinearLayout> g, d;
 
@@ -321,6 +329,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //        }
             me_view_container.addView(meView);
             me_view_container.addView(viewFactory.getMeSkillView());
+            /* TODO 지상
+                리스트로 받은 데이터를 getMeSkillView에 생성자로 넣는 방법도 있지 않을까?
+             */
         } else {
             notSignedInMeView = viewFactory.getNotSignedInMeView();
         }
@@ -345,6 +356,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // add selected view
         scrollView.addView(view);
     }
+
+    /*TODO 지상
+     콘테이너와 뷰들이 이 함수에 들어와 생성.
+     */
 
     private void changeToolbar(int id) {
         // to do on main thread
@@ -548,6 +563,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void select() {
         // 선택된 카테고리들을 받아와서 그려줘야 함
         // startActivityForResult();
+
+        /* TODO 지상
+        SelectSkillsActivity에서 보낸 인텐트 데이터를 main에서 리스트로 받아서 처리하는건데 startActivityForResult가 필요할까?
+
+        */
         startActivity(new Intent(MainActivity.this, SelectSkillsActivity.class));
     }
 
@@ -558,6 +578,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // ConstantUtil
         intent.putExtra("TYPE", title);
         startActivity(intent);
+        /* TODO 지상
+            title이라 함은 type, 즉 Recommneded For You 라고 이해
+            모델링에서 클래스 하나하나 마다 title이라는 변수가 있어서 조금 헷갈릳듯함
+         */
     }
 
     @Override
@@ -576,6 +600,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         intent.setAction("SIGN_OUT");
         startActivity(intent);
         finish();
+
+        /* TODO 지상
+            Intent를 메인에서 메인으로 주는데 이는 로그아웃시 이슈?
+            이 부분 이해가 필요함.
+         */
     }
 
     @Override

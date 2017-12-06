@@ -56,6 +56,9 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
             itemView.findViewById(R.id.image_view_download).setOnClickListener(view -> {
 
             });
+            /* TODO 지상
+                해당아이템 로컬로 다운로드
+             */
         }
     }
 }

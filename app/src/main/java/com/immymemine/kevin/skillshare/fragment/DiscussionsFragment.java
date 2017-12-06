@@ -60,6 +60,7 @@ public class DiscussionsFragment extends Fragment {
         return view;
     }
 
+
     public void addDiscussion() {
         String input = editText.getText().toString();
         if( !ValidationUtil.isEmpty(input) ) {
@@ -75,6 +76,10 @@ public class DiscussionsFragment extends Fragment {
                     .subscribe(this::handleResponse, this::handleError);
         }
     }
+    /* TODO 지상
+        이 부분이 로그인 이슈?
+        로그인이 되어있으면, 작성을 할 수 있다는 의미?
+     */
 
     private void handleResponse(List<Discussion> discussions) {
         int count = discussions.size();
@@ -98,6 +103,10 @@ public class DiscussionsFragment extends Fragment {
 
         // TODO hide progress bar
     }
+    /* TODO 지상
+        discussion.size가 0일때와 아닐때를 구분해서 처리한 부분.
+        -> adapter로 이동
+     */
 
     private void handleError(Throwable error) {
         // wifi connection retry page

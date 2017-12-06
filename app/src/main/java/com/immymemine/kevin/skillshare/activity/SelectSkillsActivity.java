@@ -32,6 +32,23 @@ public class SelectSkillsActivity extends Activity {
         close_button.setOnClickListener(view -> {
             // 선택한 skills 의 정보를 넘겨줘야한다
             // start activity for result >>> reply
+
+            /*TODO 지상
+
+            뒤로 가기 버튼을 클릭 했을 시에
+            intent = new intent(SelectSkillsActivity.this, MainActivity.class)
+            toggleArray -> 를 MainActivity에 intent로 넘긴다.
+            intent.putExtra("selectSkill", toggleArray);
+            startActivity(intent);
+
+            이런식으로 보내면, MainActivity에 보낸다.
+            viewFactory와 같은 레이아웃 매니저가 있기 때문에, Main에다가만 보내면 보낸 데이터를
+            GeneralViewFactory와 GetMeSkillView에 적용할 수 있을 것 같음.
+
+
+            */
+
+
             finish();
         });
 
@@ -53,9 +70,6 @@ public class SelectSkillsActivity extends Activity {
         setToggleButton(R.id.i_toggle_teaching, R.id.toggle_teaching);
     }
 
-    private void throwingToMeSkillView() {
-
-    }
 
     // TODO 버튼 연동
     // TODO startactivityforresult >>> 선택된 skills 넘기기
@@ -70,15 +84,18 @@ public class SelectSkillsActivity extends Activity {
                     tib.setChecked(true);
                     if (tib.isChecked())
                         Log.e("tib checked", "checked true==========================" + tib.toString());
-
+                    /*
+                    선택 되었을 때는 다음과 같은 로직으로 toggleArray에서 추가함.
                     toggleArray.add(tib);
                     Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
-
+                    */
                 } else {
                     tib.setChecked(false);
-
+                    /*
+                    선택이 되지 않았을 때는 다음과 같은 로직으로 toggleArray에서 삭제함.
                     toggleArray.remove(tib);
                     Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
+                    */
                 }
             }
         });
