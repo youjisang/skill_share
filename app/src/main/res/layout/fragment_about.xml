@@ -19,11 +19,11 @@
             android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/text_view_studentProjectNum"
+                android:id="@+id/text_view_project_student_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="561 Student Project"
+                android:text="561 Subscriber Project"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
@@ -117,7 +117,7 @@
             android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/text_view_reviews"
+                android:id="@+id/text_view_review_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -197,16 +197,16 @@
             android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/text_view_student_num"
+                android:id="@+id/text_view_subscriber_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="170 Students"
+                android:text="170 Subscribers"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/text_view_student_see_all"
+                android:id="@+id/text_view_subscriber_see_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -217,91 +217,14 @@
 
         </FrameLayout>
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_subscribers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp">
+            tools:listitem="@layout/recycler_view_item_subscribers">
 
-            <ImageView
-                android:id="@+id/image_view_student1"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student2"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student4"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student5"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student6"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student7"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student8"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_student9"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:src="@mipmap/app_icon" />
-        </LinearLayout>
+        </android.support.v7.widget.RecyclerView>
 
         <View
             android:layout_width="match_parent"
@@ -313,7 +236,7 @@
             android:layout_marginTop="8dp"
             android:background="#c8d9d9d9" />
 
-            <TextView
+        <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -324,137 +247,11 @@
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp">
-
-
-                <ImageView
-                    android:id="@+id/image_view_related_class1"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/skill_design" />
-
-                <TextView
-                    android:id="@+id/text_view_related_title1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="2"
-                    android:text="Illustrator CC MasterClass - #2 Vector Objects"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/text_view_related_tutor1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:text="Martin Perhiniak"
-                    android:textColor="@color/IcInactive"
-                    android:textSize="18sp" />
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp">
-
-
-                <ImageView
-                    android:id="@+id/image_view_related_class2"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/skill_design" />
-
-                <TextView
-                    android:id="@+id/text_view_related_title2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="2"
-                    android:text="Illustrator CC MasterClass - #1 Foundations"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/text_view_related_tutor2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:text="Martin Perhiniak"
-                    android:textColor="@color/IcInactive"
-                    android:textSize="18sp" />
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp">
-
-
-                <ImageView
-                    android:id="@+id/image_view_related_class3"
-                    android:layout_width="120dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/skill_design" />
-
-                <TextView
-                    android:id="@+id/text_view_related_title3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="2"
-                    android:text="Illustrator CC MasterClass - #4 Drawing Techniques"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/text_view_related_tutor3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="132dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:text="Martin Perhiniak"
-                    android:textColor="@color/IcInactive"
-                    android:textSize="18sp" />
-
-            </FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_related_class"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/recycler_view_item_related_class" />
 
 
     </LinearLayout>

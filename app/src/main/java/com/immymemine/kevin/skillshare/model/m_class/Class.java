@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.model.model_class;
+package com.immymemine.kevin.skillshare.model.m_class;
 
 import java.util.List;
 
@@ -9,4 +9,6 @@ import java.util.List;
 public class Class {
     String _id;
     List<Discussion> discussions;
+    Lessons lessons;
+    About about;
 }

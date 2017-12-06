@@ -1,6 +1,6 @@
 package com.immymemine.kevin.skillshare.utility.diff_util;
 
-import com.immymemine.kevin.skillshare.model.model_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 
 import java.util.List;
 

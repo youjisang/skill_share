@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.model_class.Video;
+import com.immymemine.kevin.skillshare.model.m_class.Video;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
     public class Holder extends RecyclerView.ViewHolder {
 
         TextView textViewOrder, textViewVideoTitle, textViewDuration;
-        ImageView imageViewVideo, imageViewDownload;
+        ImageView imageViewVideo;
 
         public Holder(View itemView) {
             super(itemView);
@@ -53,7 +53,9 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
             imageViewVideo = itemView.findViewById(R.id.image_view_video);
             textViewVideoTitle = itemView.findViewById(R.id.text_view_video_title);
             textViewDuration = itemView.findViewById(R.id.text_view_duration);
-            imageViewDownload = itemView.findViewById(R.id.image_view_download);
+            itemView.findViewById(R.id.image_view_download).setOnClickListener(view -> {
+
+            });
         }
     }
 }

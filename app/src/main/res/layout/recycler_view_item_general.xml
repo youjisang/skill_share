@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/recycler_view_item_general"
     android:layout_width="300dp"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     android:background="@android:color/background_light"
     android:orientation="vertical"
     android:padding="8dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6">
+        android:layout_height="176dp"
+        android:background="@color/IcActive">
 
         <ImageView
             android:id="@+id/image_view_tutor"
@@ -19,8 +19,6 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
-            android:paddingBottom="36dp"
-            android:paddingTop="36dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_background" />
 
@@ -40,10 +38,9 @@
     <TextView
         android:id="@+id/text_view_title"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="2"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Create a Desktop Calendar/Wallpaper using a Pattern"
@@ -53,9 +50,7 @@
     <TextView
         android:id="@+id/text_view_profile"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:text="Sorin Constantin"
         android:textColor="?attr/colorButtonNormal"
         android:textSize="18sp" />

@@ -47,6 +47,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public void onBindViewHolder(GroupViewHolder holder, int position) {
+        if(size != 0) {
+            // setting
+        }
         // Group group = data.get(position);
 
         // holder.textViewGroup.setText(/* Group title ex) Graphic Designers */);
@@ -56,8 +59,12 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public int getItemCount() {
-        // return data.size();
-        return 5;
+
+        if(size == 0)
+            return 1;
+        else
+            // return data.size();
+            return 5;
     }
 
     class GroupViewHolder extends RecyclerView.ViewHolder {

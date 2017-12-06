@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.model_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.diff_util.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
@@ -73,6 +73,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             Glide.with(context).load(discussion.getPictureUrl()).into(holder.imageViewProfile);
             holder.textViewProfile.setText(discussion.getName());
             // content
+            // holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
             holder.expandableTextView.setText(context.getText(R.string.test), TextView.BufferType.NORMAL);
             // time
             holder.textViewTime.setText(discussion.getTime());
