@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.LessonsAdapter;
-import com.immymemine.kevin.skillshare.model.model_class.Lessons;
-import com.immymemine.kevin.skillshare.model.model_class.Tutor;
+import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 

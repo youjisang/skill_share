@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
-import com.immymemine.kevin.skillshare.model.model_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
@@ -32,6 +32,7 @@ public class DiscussionsFragment extends Fragment {
     RecyclerView recyclerViewDiscussion;
     DiscussionsAdapter adapter;
 
+    EditText editText;
     public DiscussionsFragment() {
         // Required empty public constructor
     }
@@ -46,6 +47,11 @@ public class DiscussionsFragment extends Fragment {
 
         textViewDiscussion = view.findViewById(R.id.text_view_discussion);
 
+        editText = view.findViewById(R.id.editText);
+        view.findViewById(R.id.button_send).setOnClickListener( v ->
+            addDiscussion()
+        );
+
         RetrofitHelper.createApi(ClassService.class)
                 .getDiscussions(getArguments().getString("_id"))
                 .subscribeOn(Schedulers.io())
@@ -57,12 +63,11 @@ public class DiscussionsFragment extends Fragment {
         return view;
     }
 
-    public void addDiscussion(View view) {
-        EditText editText = view.findViewById(R.id.editText);
+    public void addDiscussion() {
         String input = editText.getText().toString();
         if( !ValidationUtil.isEmpty(input) ) {
             editText.setText("");
-            // discussion 세팅
+            // TODO discussion 세팅
             Discussion discussion = new Discussion();
 
             // add discussion 통신

@@ -31,4 +31,8 @@ public class ConstantUtil {
     public static final int PROJECT_ITEM = -7;
     public static final int STUDENT_ITEM = -6;
     public static final int REVIEW_ITEM = -5;
+
+    public static final int FEATURE_ON_SKILLSHARE = 1001;
+    public static final int TRENDING_NOW = 1014;
+    public static final int BEST_THIS_MONTH = 1015;
 }

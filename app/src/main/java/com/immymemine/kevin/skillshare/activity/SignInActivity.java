@@ -80,7 +80,7 @@ public class SignInActivity extends AppCompatActivity{
                 if(ValidationUtil.isValidPassword(password)) {
                     RetrofitHelper
                             .createApi(UserService.class)
-                            .signIn(editTextEmail.getText().toString(), editTextPassword.getText().toString())
+                            .signIn(email, password)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleResponse, this::handleError);
@@ -160,7 +160,6 @@ public class SignInActivity extends AppCompatActivity{
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
-            Log.d("========", response.getUserId());
             intent.putExtra("USER_ID", response.getUserId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             startActivity(intent);
@@ -171,6 +170,5 @@ public class SignInActivity extends AppCompatActivity{
 
     private void handleError(Throwable error) {
         Toast.makeText(SignInActivity.this, "error : " + error.toString(), Toast.LENGTH_LONG).show();
-        Log.d("SignInActivity", error.toString());
     }
 }
