@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Video;
 
@@ -21,9 +23,13 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
 
     Context context;
     List<Video> videos;
-    public LessonsAdapter(Context context, List<Video> videos) {
+    public LessonsAdapter(Context context) {
         this.context = context;
+    }
+
+    public void update(List<Video> videos) {
         this.videos = videos;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -34,15 +40,30 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
+        if(videos != null) {
+            Video video = videos.get(position);
 
+            holder.textViewOrder.setText(video.getOrder()+".");
+            Glide.with(context)
+                    .load(video.getThumbnailUrl())
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(holder.imageViewVideo);
+            holder.textViewVideoTitle.setText(video.getTitle());
+            holder.textViewDuration.setText(video.getDuration());
+            holder.id = video.get_id();
+        }
     }
 
     @Override
     public int getItemCount() {
+        if(videos == null)
+            return 0;
         return videos.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+
+        String id;
 
         TextView textViewOrder, textViewVideoTitle, textViewDuration;
         ImageView imageViewVideo;

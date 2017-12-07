@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.RelatedClass;
+
+import java.util.List;
 
 /**
  * Created by quf93 on 2017-12-05.
@@ -19,10 +23,15 @@ import com.immymemine.kevin.skillshare.model.m_class.RelatedClass;
 public class RelatedClassAdapter extends RecyclerView.Adapter<RelatedClassAdapter.RelatedClassHolder> {
 
     Context context;
-    RelatedClass[] relatedClasses;
-    public RelatedClassAdapter(Context context, RelatedClass[] relatedClasses) {
+    List<RelatedClass> relatedClasses;
+
+    public RelatedClassAdapter(Context context) {
         this.context = context;
+    }
+
+    public void update(List<RelatedClass> relatedClasses) {
         this.relatedClasses = relatedClasses;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -34,11 +43,14 @@ public class RelatedClassAdapter extends RecyclerView.Adapter<RelatedClassAdapte
     @Override
     public void onBindViewHolder(RelatedClassHolder holder, int position) {
         if(relatedClasses != null) {
-            RelatedClass relatedClass = relatedClasses[position];
+            RelatedClass relatedClass = relatedClasses.get(position);
             holder.id = relatedClass.get_id();
             holder.textViewRelatedTitle.setText(relatedClass.getTitle());
             holder.textViewRelatedTutorName.setText(relatedClass.getTutorName());
-            Glide.with(context).load(relatedClass.getThumbnailUrl()).into(holder.imageViewRelatedClass);
+            Glide.with(context)
+                    .load(Uri.parse(relatedClass.getThumbnailUrl()))
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(holder.imageViewRelatedClass);
         }
     }
 

@@ -16,7 +16,7 @@ public class DiscussionDiffCallback extends DiffCallback<Discussion> {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldData.get(oldItemPosition).get_id().equals(newData.get(newItemPosition).get_id());
+        return oldData.get(oldItemPosition).getContent().equals(newData.get(newItemPosition).getContent());
     }
 
     @Override
@@ -24,7 +24,7 @@ public class DiscussionDiffCallback extends DiffCallback<Discussion> {
         Discussion oldItem = oldData.get(oldItemPosition);
         Discussion newItem = newData.get(newItemPosition);
 
-        return oldItem.getLike() == newItem.getLike() &&
-                oldItem.getReDiscussions().length == newItem.getReDiscussions().length;
+        return oldItem.getLike() == newItem.getLike();
+//                oldItem.getReDiscussions().length == newItem.getReDiscussions().length;
     }
 }
