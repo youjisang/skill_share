@@ -108,4 +108,16 @@ public class SelectSkillsActivity extends Activity {
 
     }
 
+    @Override
+    protected void onPause() {
+        //상태 저장 shared
+        // db
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        // 다시 들어올때
+        super.onResume();
+    }
 }

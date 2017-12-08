@@ -1,7 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
-import com.immymemine.kevin.skillshare.utility.diff_util.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import java.util.List;
@@ -24,49 +23,42 @@ import java.util.List;
  */
 
 public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.Holder> {
+
     Context context;
     List<Discussion> discussions;
 
-    int size;
-
-    public DiscussionsAdapter(Context context, List<Discussion> discussions) {
+    public DiscussionsAdapter(Context context) {
         this.context = context;
+    }
+
+    public void initiateData(List<Discussion> discussions) {
         this.discussions = discussions;
+        notifyDataSetChanged();
     }
 
     public void updateData(List<Discussion> discussions) {
-        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+//        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
+//        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
 
-        this.discussions.clear();
-        this.discussions.addAll(discussions);
-        result.dispatchUpdatesTo(this);
+//        this.discussions.clear();
+//        this.discussions.addAll(discussions);
+        this.discussions = discussions;
+        notifyDataSetChanged();
+//        result.dispatchUpdatesTo(this);
     }
-
-    /* TODO 지상
-        댓글이나 글을 작성할 수 있으므로, 최신화하는 처리 로직.
-        calculateDiff?
-     */
 
     @Override
     public int getItemViewType(int position) {
-        size = discussions.size();
-        if (size == 0) {
+        if(discussions == null)
             return ConstantUtil.NO_ITEM;
-        } else
-            return super.getItemViewType(position);
+        return super.getItemViewType(position);
     }
-     /* TODO 지상
-       seeAll부분 처리와는 다름.
-       seeall은 클릭 이벤트가 일어났을시 인텐트로 콘스탄트유틸값을 전달해 처리했으나 이 부분은 size로 처리
-       애초에 이슈가 다름. getItemViewType은 리싸이클러뷰만의 somethig?!
-     */
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
-        if (viewType == ConstantUtil.NO_ITEM)
+        if(viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
         else
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_discussions, parent, false);
@@ -76,18 +68,18 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        if (size != 0) {
+        if(discussions != null) {
             Discussion discussion = discussions.get(position);
             // identifier
-            holder.id = discussion.get_id();
+            if(discussion.get_id() != null)
+                holder.id = discussion.get_id();
             // profile
-            Glide.with(context).load(discussion.getPictureUrl()).into(holder.imageViewProfile);
+            Glide.with(context).load(discussion.getPictureUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.imageViewProfile);
             holder.textViewProfile.setText(discussion.getName());
             // content
-
-            // holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
-            holder.expandableTextView.setText(context.getText(R.string.test), TextView.BufferType.NORMAL);
-
+            holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
             // time
             holder.textViewTime.setText(discussion.getTime());
             // like
@@ -95,18 +87,16 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         }
     }
 
-    /* TODO 지상
-       expandableTextView 쓰는 방법.
-     */
     @Override
     public int getItemCount() {
-        if (size == 0)
+        if(discussions==null)
             return 1;
         else
-            return size;
+            return discussions.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+        // id
         String id;
         // profile
         ImageView imageViewProfile;
@@ -122,8 +112,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
         public Holder(View v) {
             super(v);
-            if (size != 0) {
+            if(discussions != null) {
                 // profile
+                v.findViewById(R.id.frame_layout_profile).setOnClickListener(view -> {
+                    // profile activity 이동
+                });
                 imageViewProfile = v.findViewById(R.id.image_view_profile);
                 textViewProfile = v.findViewById(R.id.text_view_profile);
                 // content

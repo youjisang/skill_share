@@ -50,7 +50,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
             holder.textViewTime.setText(mClass.getDuration() + "m");
-            Glide.with(context).load(Uri.parse(mClass.getPictureUrl()))
+            holder.uri = mClass.getPictureUrl();
+            Glide.with(context).load(Uri.parse(holder.uri))
                     .apply(RequestOptions.centerCropTransform())
                     .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE))
                     .into(holder.imageView);
@@ -59,8 +60,10 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
     @Override
     public int getItemCount() {
-        return classes.size();
-//        return 5;
+        if(classes != null)
+            return classes.size();
+        else
+            return 5;
     }
 
     class GeneralViewHolder extends RecyclerView.ViewHolder {
@@ -68,9 +71,10 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         TextView textViewTime, textViewTitle, textViewTutor;
 
         String id;
-
+        String uri;
         public GeneralViewHolder(View v) {
             super(v);
+
             imageView = v.findViewById(R.id.image_view_tutor);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
@@ -80,6 +84,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassActivity.class);
                 intent.putExtra("_id", id); // data for identification
+                intent.putExtra("URI", uri);
+                // TODO Glide cache 된 파일을 Class Activity 로 넘어갔을 때 바로 사용하도록... 똑같은 url 이면 로딩을 하지 않는지 체크
                 context.startActivity(intent);
 
                 /* TODO 지상

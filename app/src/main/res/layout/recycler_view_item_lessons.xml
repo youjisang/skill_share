@@ -1,81 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:id="@+id/text_view_order"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/white"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:text="1."
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/text_view_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:text="1."
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+    <ImageView
+        android:id="@+id/image_view_video"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/text_view_order"
+        android:scaleType="centerCrop"
+        app:srcCompat="@mipmap/ic_launcher" />
 
-        <ImageView
-            android:id="@+id/image_view_video"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="16dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@mipmap/ic_launcher" />
+    <TextView
+        android:id="@+id/text_view_video_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@+id/image_view_download"
+        android:layout_toRightOf="@+id/image_view_video"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Illustrator CC MasterClass - #1 Foundations"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/text_view_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_video_title"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/image_view_video"
+        android:text="3:40"
+        android:textColor="@color/IcInactive"
+        android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/text_view_video_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="skill-share video"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/text_view_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3:40"
-                android:textColor="@color/IcInactive" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/image_view_download"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="24dp"
-            android:tint="@color/IcInactive"
-            app:srcCompat="@android:drawable/stat_sys_download" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/image_view_download"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="28dp"
+        android:tint="@color/IcInactive"
+        app:srcCompat="@android:drawable/stat_sys_download" />
 
     <View
-    android:id="@+id/view"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_gravity="bottom"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="8dp"
-    android:background="#c8d9d9d9" />
-</FrameLayout>
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/image_view_video"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#c8d9d9d9" />
+</RelativeLayout>

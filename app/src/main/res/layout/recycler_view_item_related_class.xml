@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/background_light"
@@ -21,9 +21,13 @@
         android:id="@+id/text_view_related_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_gravity="right"
-        android:layout_marginLeft="132dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/image_view_related_class"
+        android:layout_toRightOf="@+id/image_view_related_class"
+        android:ellipsize="end"
         android:maxLines="2"
         android:text="Illustrator CC MasterClass - #1 Foundations"
         android:textColor="@android:color/black"
@@ -33,11 +37,13 @@
         android:id="@+id/text_view_related_tutor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_view_related_title"
+        android:layout_alignStart="@+id/text_view_related_title"
+        android:layout_below="@+id/text_view_related_title"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="132dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:maxLines="1"
         android:text="Martin Perhiniak"
         android:textColor="@color/IcInactive"
         android:textSize="18sp" />
-</FrameLayout>
+</RelativeLayout>

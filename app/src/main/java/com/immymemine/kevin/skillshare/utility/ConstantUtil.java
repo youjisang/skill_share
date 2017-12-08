@@ -22,6 +22,8 @@ public class ConstantUtil {
     // Sign in
     public static final String SIGN_IN_SUCCESS = "sign-in success";
     public static final String SIGN_IN_BY_GOOGLE = "sign-in by google";
+    // Sign out
+    public static final String SIGN_OUT = "sign-out";
 
     // URL
     public static final String BASE_URL = "http://localhost/8079/";

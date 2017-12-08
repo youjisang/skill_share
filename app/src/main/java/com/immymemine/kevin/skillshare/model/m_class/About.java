@@ -1,27 +1,21 @@
 package com.immymemine.kevin.skillshare.model.m_class;
 
+import java.util.List;
+
 /**
  * Created by quf93 on 2017-12-04.
  */
 
 public class About {
     String projectSubscriberCount;
-    Project[] projects;
+    List<Project> projects;
 
     Review review;
     Subscriber subscriber;
-    RelatedClass[] relatedClasses;
+    List<RelatedClass> relatedClasses;
 
     public String getProjectSubscriberCount() {
         return projectSubscriberCount;
-    }
-
-    public Project[] getProjects() {
-        return projects;
-    }
-
-    public void setProjects(Project[] projects) {
-        this.projects = projects;
     }
 
     public Review getReview() {
@@ -40,11 +34,23 @@ public class About {
         this.subscriber = subscriber;
     }
 
-    public RelatedClass[] getRelatedClasses() {
+    public void setProjectSubscriberCount(String projectSubscriberCount) {
+        this.projectSubscriberCount = projectSubscriberCount;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<RelatedClass> getRelatedClasses() {
         return relatedClasses;
     }
 
-    public void setRelatedClasses(RelatedClass[] relatedClasses) {
+    public void setRelatedClasses(List<RelatedClass> relatedClasses) {
         this.relatedClasses = relatedClasses;
     }
 }

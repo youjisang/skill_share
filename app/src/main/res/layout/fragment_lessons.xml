@@ -124,6 +124,7 @@
                 android:background="@drawable/corner_rounded_button"
                 android:text="+ Follow"
                 android:textColor="@color/IcActive"
+                android:onClick="followedAndFollowing"
                 app:layout_constraintBottom_toBottomOf="@+id/image_view_tutor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image_view_tutor" />

@@ -11,6 +11,16 @@ public class Review {
     String reviewerName;
     String pictureUrl;
 
+    public Review(String reviewPercent,
+            String content,
+            String reviewerName,
+            String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+        this.content = content;
+        this.reviewerName = reviewerName;
+        this.reviewPercent = reviewPercent;
+    }
+
     public String getReviewPercent() {
         return reviewPercent;
     }

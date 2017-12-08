@@ -10,6 +10,17 @@ public class RelatedClass {
     String title;
     String tutorName;
 
+    // for test
+    public RelatedClass(String _id,
+            String thumbnailUrl,
+            String title,
+            String tutorName) {
+        this._id = _id;
+        this.thumbnailUrl = thumbnailUrl;
+        this.title = title;
+        this.tutorName = tutorName;
+    }
+
     public String get_id() {
         return _id;
     }
