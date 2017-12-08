@@ -1,18 +1,26 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
+
+import java.util.ArrayList;
 
 import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 
 public class SelectSkillsActivity extends Activity {
+
+    Intent intent;
+    ArrayList toggleArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,23 @@ public class SelectSkillsActivity extends Activity {
         close_button.setOnClickListener(view -> {
             // 선택한 skills 의 정보를 넘겨줘야한다
             // start activity for result >>> reply
+
+            /*TODO 지상
+
+            뒤로 가기 버튼을 클릭 했을 시에
+            intent = new intent(SelectSkillsActivity.this, MainActivity.class)
+            toggleArray -> 를 MainActivity에 intent로 넘긴다.
+            intent.putExtra("selectSkill", toggleArray);
+            startActivity(intent);
+
+            이런식으로 보내면, MainActivity에 보낸다.
+            viewFactory와 같은 레이아웃 매니저가 있기 때문에, Main에다가만 보내면 보낸 데이터를
+            GeneralViewFactory와 GetMeSkillView에 적용할 수 있을 것 같음.
+
+
+            */
+
+
             finish();
         });
 
@@ -45,21 +70,32 @@ public class SelectSkillsActivity extends Activity {
         setToggleButton(R.id.i_toggle_teaching, R.id.toggle_teaching);
     }
 
+
     // TODO 버튼 연동
     // TODO startactivityforresult >>> 선택된 skills 넘기기
     // TODO main > select skills activity 넘어올 때 기존에 선택된 skills 는 선택되어 있도록 처리
     private void setToggleButton(int i_toggle, int toggle) {
         final ToggleImageButton tib = this.findViewById(i_toggle);
-
-        ((CustomToggleButton)findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        toggleArray = new ArrayList();
+        ((CustomToggleButton) findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
+                if (b) {
                     tib.setChecked(true);
-
+                    if (tib.isChecked())
+                        Log.e("tib checked", "checked true==========================" + tib.toString());
+                    /*
+                    선택 되었을 때는 다음과 같은 로직으로 toggleArray에서 추가함.
+                    toggleArray.add(tib);
+                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
+                    */
                 } else {
                     tib.setChecked(false);
-
+                    /*
+                    선택이 되지 않았을 때는 다음과 같은 로직으로 toggleArray에서 삭제함.
+                    toggleArray.remove(tib);
+                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
+                    */
                 }
             }
         });

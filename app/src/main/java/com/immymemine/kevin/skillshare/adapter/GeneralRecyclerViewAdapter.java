@@ -87,6 +87,11 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
                 intent.putExtra("URI", uri);
                 // TODO Glide cache 된 파일을 Class Activity 로 넘어갔을 때 바로 사용하도록... 똑같은 url 이면 로딩을 하지 않는지 체크
                 context.startActivity(intent);
+
+                /* TODO 지상
+                 클릭한 클래스의 고유의 id값을 프래그먼트가 있는 ClassActivity로 넘겼을때,
+                  해당 id값에 포함된 데이터들을 선별적으로 프래그먼트에 넣는다.
+                 */
             });
         }
     }

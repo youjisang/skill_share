@@ -27,6 +27,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     Context context;
     List<Discussion> discussions;
 
+
     public DiscussionsAdapter(Context context) {
         this.context = context;
     }
@@ -47,6 +48,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 //        result.dispatchUpdatesTo(this);
     }
 
+    /* TODO 지상
+        댓글이나 글을 작성할 수 있으므로, 최신화하는 처리 로직.
+        calculateDiff?
+     */
+
     @Override
     public int getItemViewType(int position) {
         if(discussions == null)
@@ -55,12 +61,17 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         else
             return super.getItemViewType(position);
     }
+     /* TODO 지상
+       seeAll부분 처리와는 다름.
+       seeall은 클릭 이벤트가 일어났을시 인텐트로 콘스탄트유틸값을 전달해 처리했으나 이 부분은 size로 처리
+       애초에 이슈가 다름. getItemViewType은 리싸이클러뷰만의 somethig?!
+     */
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
 
-        if(viewType == ConstantUtil.NO_ITEM)
+        if (viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
         else
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_discussions, parent, false);
@@ -89,6 +100,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         }
     }
 
+    /* TODO 지상
+       expandableTextView 쓰는 방법.
+     */
     @Override
     public int getItemCount() {
         if(discussions==null)
@@ -114,6 +128,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
         public Holder(View v) {
             super(v);
+          
             if(discussions != null) {
                 // profile
                 v.findViewById(R.id.frame_layout_profile).setOnClickListener(view -> {

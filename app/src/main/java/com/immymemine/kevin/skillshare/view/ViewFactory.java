@@ -110,6 +110,12 @@ public class ViewFactory {
         }
     }
 
+    /* TODO 지상
+    ExecutorService, collable -작업 완료 후 리턴값이 있음, future-Future 객체는 작업이 완료될때까지 기다렸다가 최종 결과를 얻는데 사용
+    일단 유연하고 효과적인 비동기 작업을 위해 사용한다고 이해.
+    쓰레드 그룹과 쓰레드 풀 차이?
+     */
+
     public View getGeneralView(String title, List<Class> classes) {
         Future<View> f = executor.submit(new GeneralViewFactory(title, classes));
         try {
@@ -251,11 +257,15 @@ public class ViewFactory {
     }
 
     public View getMeSkillView() {
+
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
+                     /* TODO 지상
+                     여기서 생성자로 받아서 for문 돌려서 addView해주는 방법도 있지 않을까?
+                     */
                     return view;
                 }
         );

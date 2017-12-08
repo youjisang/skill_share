@@ -25,6 +25,24 @@ public class ConstantUtil {
     // Sign out
     public static final String SIGN_OUT = "sign-out";
 
+    // URL
+    public static final String BASE_URL = "http://localhost/8079/";
+
+    // selectSkill
+
+    public static final String DESIGN = "Design";
+    public static final String PHOTOGRAPHY = "PhotoGraphy";
+    public static final String BUSINESS = "Business";
+    public static final String TECHNOLOGY = "Technology";
+    public static final String CRAFTS = "Crafts";
+    public static final String CULINARY = "Culinary";
+    public static final String FILM = "Film";
+    public static final String FASHION = "Fashion";
+    public static final String MUSIC = "Music";
+    public static final String LIFESTYLE = "LifeStyle";
+    public static final String GAMING = "Gaming";
+    public static final String TEACHING = "Teaching";
+
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 
     // see all item
@@ -34,7 +52,11 @@ public class ConstantUtil {
     public static final int STUDENT_ITEM = -6;
     public static final int REVIEW_ITEM = -5;
 
+
+
+
     public static final int FEATURE_ON_SKILLSHARE = 1001;
     public static final int TRENDING_NOW = 1014;
     public static final int BEST_THIS_MONTH = 1015;
+
 }
