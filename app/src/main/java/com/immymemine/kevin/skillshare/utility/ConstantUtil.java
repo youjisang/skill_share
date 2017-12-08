@@ -22,6 +22,8 @@ public class ConstantUtil {
     // Sign in
     public static final String SIGN_IN_SUCCESS = "sign-in success";
     public static final String SIGN_IN_BY_GOOGLE = "sign-in by google";
+    // Sign out
+    public static final String SIGN_OUT = "sign-out";
 
     // URL
     public static final String BASE_URL = "http://localhost/8079/";
@@ -43,8 +45,12 @@ public class ConstantUtil {
 
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 
-
+    // see all item
     public static final int NO_ITEM = -9;
+    public static final int CLASS_ITEM = -8;
+    public static final int PROJECT_ITEM = -7;
+    public static final int STUDENT_ITEM = -6;
+    public static final int REVIEW_ITEM = -5;
 
 
 

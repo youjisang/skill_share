@@ -10,10 +10,6 @@ import android.view.ViewGroup;
 
 public class SeeAllRecyclerViewAdapter extends RecyclerView.Adapter<SeeAllRecyclerViewAdapter.SeeAllHolder> {
 
-    public SeeAllRecyclerViewAdapter() {
-
-    }
-
     @Override
     public SeeAllHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;

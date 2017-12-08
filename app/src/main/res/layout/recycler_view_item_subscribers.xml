@@ -2,8 +2,10 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/image_view_subscriber"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
     app:srcCompat="@mipmap/app_icon">
 
 </ImageView>

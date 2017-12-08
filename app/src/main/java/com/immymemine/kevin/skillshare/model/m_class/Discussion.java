@@ -5,48 +5,39 @@ package com.immymemine.kevin.skillshare.model.m_class;
  */
 
 public class Discussion {
-    private String _id;
-    private String name;
-    private String pictureUrl;
-    private String content;
-    private String time;
-    private int like;
-    private ReDiscussion[] reDiscussions;
+    // TODO teacher 여부를 확인해야 함
+    // TODO data 를 가져오는 순서가 중요함
+    // TODO time 과 rediscussions 처리해야함
+    String _id;
+    String name;
+    String pictureUrl;
+    String content;
+    String time;
+    int like;
+    ReDiscussion[] reDiscussions;
+
+    // for test
+    public Discussion(String _id,
+            String name,
+            String pictureUrl,
+            String content,
+            String time,
+            int like,
+            ReDiscussion[] reDiscussions) {
+        this._id = _id;
+        this.name = name;
+        this.pictureUrl = pictureUrl;
+        this.content = content;
+        this.time = time;
+        this.like = like;
+        this.reDiscussions = reDiscussions;
+    }
 
     public String get_id() {
         return _id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public void setLike(int like) {
-        this.like = like;
-    }
-
-    public void setReDiscussions(ReDiscussion[] reDiscussions) {
-        this.reDiscussions = reDiscussions;
-    }
-
     public String getName() {
-
         return name;
     }
 

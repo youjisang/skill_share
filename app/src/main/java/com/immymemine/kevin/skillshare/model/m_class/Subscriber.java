@@ -6,13 +6,26 @@ package com.immymemine.kevin.skillshare.model.m_class;
 
 public class Subscriber {
     String subscriberNumber;
-    String[] pictureUrl;
+    String[] pictureUrls;
+    String[] ids;
+
+    // for test
+    public Subscriber(String subscriberNumber,
+            String[] pictureUrls, String[] ids) {
+        this.subscriberNumber = subscriberNumber;
+        this.pictureUrls = pictureUrls;
+        this.ids = ids;
+    }
 
     public String getSubscriberNumber() {
         return subscriberNumber;
     }
 
-    public String[] getPictureUrl() {
-        return pictureUrl;
+    public String[] getIds() {
+        return ids;
+    }
+
+    public String[] getPictureUrls() {
+        return pictureUrls;
     }
 }

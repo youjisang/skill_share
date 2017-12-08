@@ -43,7 +43,7 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     account = GoogleSignIn.getLastSignedInAccount(this);
 
                     break;
-                case "SIGN_OUT":
+                case ConstantUtil.SIGN_OUT:
                     isSignIn = false;
                     home_view_container.addView(viewFactory.getWelcomeView());
                     bottomNavigation.setCurrentItem(4);
@@ -148,18 +148,16 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         // test ====================================================================
-        Map<String, List<Class>> data = new HashMap<>();
+        Map<String, List<Class>> data = new LinkedHashMap<>();
         List<Class> classData = new ArrayList<>();
         Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
                 "Sorin Constantin", "24");
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
+        classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);
+        // [ fix ] LinkedHashMap <<< 순서가 보장된 Map
+        // TODO 순서를 보장해주고 DATA 를 가져와야 한다. <<< Node
         data.put("Feature on Skillshare", classData);
         data.put("Best this month", classData);
-        data.put("Test test", classData);
+        data.put("Test", classData);
         handleResponse(data);
         //test ====================================================================
 
@@ -185,8 +183,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 기본 view 추가
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
-                    for (String key : classes.keySet())
-                        home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)));
+                    int i = home_view_container.getChildCount();
+                    for(String key : classes.keySet()) {
+                        Log.d("JUWON LEE", key);
+                        home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)), i);
+                        i++;
+                    }
 
                     return home_view_container;
                 }
@@ -597,7 +599,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //        }
 
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
-        intent.setAction("SIGN_OUT");
+        intent.setAction(ConstantUtil.SIGN_OUT);
         startActivity(intent);
         finish();
 
