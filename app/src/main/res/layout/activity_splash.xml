@@ -17,11 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="72dp"
         android:text="SKILLSHARE"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/white"
-        android:textSize="36sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <TextView
@@ -43,16 +43,16 @@
         android:layout_marginTop="105dp"
         android:text="Bite-sized classes customized for you."
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/get_started"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="68dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="96dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:backgroundTint="@color/MainButton"
 
         app:cardCornerRadius="8dp">
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="48dp"
         android:text="Already have an account? Sign In"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
@@ -86,5 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminateTint="@color/ProgressBarColor"
-        android:visibility="gone" />
+        android:visibility="invisible" />
+
 </FrameLayout>

@@ -8,6 +8,10 @@ public class Project {
     String _id;
     String pictureUrl;
 
+    public Project(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     public String get_id() {
         return _id;
     }

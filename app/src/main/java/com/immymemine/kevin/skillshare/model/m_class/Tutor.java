@@ -10,6 +10,17 @@ public class Tutor {
     String followers;
     String pictureUrl;
 
+    // for test
+    public Tutor(String _id,
+            String name,
+            String followers,
+            String pictureUrl) {
+        this._id = _id;
+        this.name = name;
+        this.followers = followers;
+        this.pictureUrl = pictureUrl;
+    }
+
     public String get_id() {
         return _id;
     }

@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,6 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -54,13 +59,15 @@ public class ClassActivity extends AppCompatActivity {
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
-    String id;
+    String id, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
-        id = getIntent().getStringExtra("_id");
+        Intent intent = getIntent();
+        id = intent.getStringExtra("_id");
+        url = intent.getStringExtra("URI");
         // 2. model object 에 담아주고
 
         // 3. view 에서 model object 를 사용
@@ -77,6 +84,7 @@ public class ClassActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
         start_button = findViewById(R.id.start_button);
+
         start_button.setOnClickListener(
                 v -> {
                     player.setPlayWhenReady(true);
@@ -168,7 +176,14 @@ public class ClassActivity extends AppCompatActivity {
         simpleExoPlayerView = new SimpleExoPlayerView(this);
         simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
         simpleExoPlayerView.requestFocus(); // ( ? )
+        Glide.with(this).asBitmap().load(Uri.parse(url)).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                simpleExoPlayerView.setDefaultArtwork(resource);
+            }
+        });
         simpleExoPlayerView.setUseController(false); //Set media controller
+        simpleExoPlayerView.hideController();
 
         // renders [ 4, 5 ]
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this, null);
