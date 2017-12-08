@@ -19,5 +19,7 @@ public interface HomeService {
     @GET("/class/home")
     Observable<Map<String, List<Class>>> getHomeClasses(@Query("types") List<Integer> types);
 
+//    @GET("/class/type/:type")
+//    Observable<Map<String, List<Class>>> getHomeClasses(@Path("type") List<Integer> types);
 
 }

@@ -33,6 +33,10 @@ public class SelectSkillsActivity extends Activity {
             // 선택한 skills 의 정보를 넘겨줘야한다
             // start activity for result >>> reply
 
+            intent = new Intent(SelectSkillsActivity.this, MainActivity.class);
+            intent.putExtra("toggleArray",toggleArray);
+            startActivity(intent);
+
             /*TODO 지상
 
             뒤로 가기 버튼을 클릭 했을 시에
@@ -82,20 +86,22 @@ public class SelectSkillsActivity extends Activity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     tib.setChecked(true);
-                    if (tib.isChecked())
+
                         Log.e("tib checked", "checked true==========================" + tib.toString());
-                    /*
-                    선택 되었을 때는 다음과 같은 로직으로 toggleArray에서 추가함.
-                    toggleArray.add(tib);
+
+                    //TODO 지상
+                    // 선택 되었을 때는 다음과 같은 로직으로 toggleArray에서 추가함.
+                    toggleArray.add(tib.toString());
                     Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
-                    */
+
                 } else {
                     tib.setChecked(false);
-                    /*
-                    선택이 되지 않았을 때는 다음과 같은 로직으로 toggleArray에서 삭제함.
-                    toggleArray.remove(tib);
+
+                    //TODO 지상
+                    //선택이 되지 않았을 때는 다음과 같은 로직으로 toggleArray에서 삭제함.
+                    toggleArray.remove(tib.toString());
                     Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
-                    */
+
                 }
             }
         });

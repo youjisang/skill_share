@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.GetMeViewRecylerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
@@ -33,6 +36,10 @@ public class ViewFactory {
     RecyclerView recyclerView;
     InteractionInterface interactionInterface;
 
+    //test-----------------------
+    RecyclerView skillRecyclerView;
+    //---------------------------
+
     // TODO nThreads 를 정하는 합리적인 로직이 있어야한다.
     public ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -49,6 +56,13 @@ public class ViewFactory {
             interactionInterface = (InteractionInterface) context;
     }
 
+   /* TODO 지상
+    시스템 자원을 인플레이터에 설정
+     if (context instanceof InteractionInterface)
+            interactionInterface = (InteractionInterface) context
+            이부분 의미?
+    */
+
     public static ViewFactory getInstance(Context context) {
         if (v == null) {
             v = new ViewFactory(context);
@@ -56,11 +70,17 @@ public class ViewFactory {
 
         return v;
     }
+    /* TODO 지상
+       싱글톤 방식
+    */
 
     public LinearLayout getViewContainer() {
         LinearLayout view_container = (LinearLayout) inflater.inflate(R.layout.container, null);
         return view_container;
     }
+    /* TODO 지상
+        뷰 컨테이너를 생성자로 세팅해줌으로써, 초기 메인에 뷰 컨테이너만 생성한다.
+     */
 
     public View getWelcomeView() {
         // 하나의 Thread 를 Thread pool 에서 가져와서 Callable 객체를 던져서 Thread 를 실행시킨다.
@@ -80,6 +100,9 @@ public class ViewFactory {
             return null;
         }
     }
+         /* TODO 지상
+        뷰 컨테이너를 생성자로 세팅해줌으로써, 초기 메인에 뷰 컨테이너만 생성한다.
+         */
 
     class GeneralViewFactory implements Callable<View> {
         String title;
@@ -88,6 +111,10 @@ public class ViewFactory {
             this.title = title;
             this.classes = classes;
         }
+        /* TODO 지상
+        Runnable과 Collable차이는 작업 완료후 리턴값이 있느냐 없느냐.
+        여기서는 리턴값으로 view를 리턴한다.
+         */
 
         @Override
         public View call() throws Exception {
@@ -111,7 +138,7 @@ public class ViewFactory {
     }
 
     /* TODO 지상
-    ExecutorService, collable -작업 완료 후 리턴값이 있음, future-Future 객체는 작업이 완료될때까지 기다렸다가 최종 결과를 얻는데 사용
+    ExecutorService- 쓰레드 풀, collable -작업 완료 후 리턴값이 있음, future-Future 객체는 작업이 완료될때까지 기다렸다가 최종 결과를 얻는데 사용
     일단 유연하고 효과적인 비동기 작업을 위해 사용한다고 이해.
     쓰레드 그룹과 쓰레드 풀 차이?
      */
@@ -125,6 +152,12 @@ public class ViewFactory {
             return null;
         }
     }
+
+    /* TODO 지상
+    - execute()는 작업 처리 결과를 받지 못하지만, submit()은 작업 처리 결과를 Future 타입으로 리턴합니다.
+   - execute()는 작업 처리 중 예외가 발생하면 스레드가 종료되고 해당 스레드는 스레드 풀에서 제거되고, 스레드 풀은 다른 작업 처리를 위해 새로운 스레드를 생성합니다.
+   - submit()은 작업 처리 중 예외가 발생하면 스레드는 종료되지 않고 다음 작업을 위해 재사용 됩니다.
+     */
 
     public View getGeneralView(String title) {
         return getGeneralView(title, null);
@@ -218,7 +251,7 @@ public class ViewFactory {
         }
     }
 
-    public View getMeView(String name) {
+    public View getMeView(String name,List<String> skilldata) {
         Future<View> f = executor.submit(
                 () -> {
                     // main thread 에서 굳이 해주지 않아도 된다
@@ -232,6 +265,15 @@ public class ViewFactory {
                     ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
                     ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
 
+                    // TODO test
+
+                    skillRecyclerView =  view.findViewById(R.id.recycler_vIew_selectSkill);
+                    skillRecyclerView.setAdapter(new GetMeViewRecylerViewAdapter(context,skilldata));
+                    FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+                    layoutManager.setFlexWrap(FlexWrap.WRAP);
+                    skillRecyclerView.setLayoutManager(layoutManager);
+
+                    //---------------------------------------------------------
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
 
                     // main thread 영역 ------------------------------------------------------------

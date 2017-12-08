@@ -102,6 +102,8 @@ public class AboutFragment extends Fragment {
 
     }
 
+
+
     private void initiateView(View view) {
         // scroll view
         scrollView = view.findViewById(R.id.scroll_view);

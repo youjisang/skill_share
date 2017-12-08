@@ -1,7 +1,9 @@
 package com.immymemine.kevin.skillshare.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -134,6 +136,14 @@ public class ClassActivity extends AppCompatActivity {
     // share button 클릭 리스너
     public void share(View view) {
 
+       Intent shareIntent = new Intent(Intent.ACTION_SEND);
+       shareIntent.setType("text/plain");
+       startActivity(Intent.createChooser(shareIntent,"skillShare"));
+
+       /* TODO 지상
+       공유하기 추가
+        */
+
     }
 
     // back button 클릭 리스너
@@ -144,6 +154,7 @@ public class ClassActivity extends AppCompatActivity {
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
+
 
     }
     public void student_profile(View view) {

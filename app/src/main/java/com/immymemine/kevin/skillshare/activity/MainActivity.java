@@ -34,9 +34,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
@@ -276,7 +278,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         }
     }
     /* TODO 지상
-       네비게이션 목록에 있는 컨테이너를 만드는 로직이고, 만약 컨테이너가 다 만들어졌으면 setView메서드 호출 ▽
+       네비게이션 목록에 있는 컨테이너를 만드는 로직이고 return true가 setView메서드 호출 ▽
+       setViews 메소드는 group_view_container에 각 뷰들을 세팅함.
      */
 
     Future<LinearLayout> g, d;
@@ -321,7 +324,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //                    .apply(RequestOptions.circleCropTransform())
 //                    .into(((ImageView) meView.findViewById(R.id.me_image)));
 //        } else {
-            meView = viewFactory.getMeView("My Name");
+
+            //TODO 지상 테스트-----------------------------------------------------
+           List<String> skilldata = (ArrayList<String>) getIntent().getSerializableExtra("toggleArray");
+            //-------------------------------------------------------------------
+            meView = viewFactory.getMeView("My Name",skilldata);
             Glide.with(this)
                     .load(R.drawable.skill_design)
                     .apply(RequestOptions.circleCropTransform())
@@ -329,9 +336,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //        }
             me_view_container.addView(meView);
             me_view_container.addView(viewFactory.getMeSkillView());
-            /* TODO 지상
-                리스트로 받은 데이터를 getMeSkillView에 생성자로 넣는 방법도 있지 않을까?
-             */
+
+
         } else {
             notSignedInMeView = viewFactory.getNotSignedInMeView();
         }

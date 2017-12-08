@@ -8,15 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
+
 import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -28,8 +32,9 @@ public class DiscussionsFragment extends Fragment {
     TextView textViewDiscussion;
     RecyclerView recyclerViewDiscussion;
     DiscussionsAdapter adapter;
-
     EditText editText;
+
+
     public DiscussionsFragment() {
         // Required empty public constructor
     }
@@ -39,15 +44,27 @@ public class DiscussionsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discussions, container, false);
 
-        recyclerViewDiscussion = view.findViewById(R.id.recycler_view_discussion);
-        recyclerViewDiscussion.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        initiateView(view);
+        initRecycler(view);
+        sendEventListener(view);
+        networking();
 
+        return view;
+
+    }
+
+    private void initiateView(View view) {
         textViewDiscussion = view.findViewById(R.id.text_view_discussion);
-
+        recyclerViewDiscussion = view.findViewById(R.id.recycler_view_discussion);
         editText = view.findViewById(R.id.editText);
-        view.findViewById(R.id.button_send).setOnClickListener( v ->
-                addDiscussion()
-        );
+    }
+
+    private void initRecycler(View view) {
+
+        recyclerViewDiscussion.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
+
+    private void networking() {
 
         RetrofitHelper.createApi(ClassService.class)
                 .getDiscussions(getArguments().getString("_id"))
@@ -56,14 +73,23 @@ public class DiscussionsFragment extends Fragment {
                 .subscribe(this::handleResponse, this::handleError);
 
         // TODO progress bar
+    }
 
-        return view;
+    private void sendEventListener(View view) {
+        view.findViewById(R.id.button_send).setOnClickListener(v ->
+                addDiscussion()
+        );
+        /*TODO 지상
+
+            댓글에 대한 댓글구조는 익스펜더블 리싸이클러뷰?
+
+         */
     }
 
 
     public void addDiscussion() {
         String input = editText.getText().toString();
-        if( !ValidationUtil.isEmpty(input) ) {
+        if (!ValidationUtil.isEmpty(input)) {
             editText.setText("");
             // TODO discussion 세팅
             Discussion discussion = new Discussion();
@@ -76,22 +102,19 @@ public class DiscussionsFragment extends Fragment {
                     .subscribe(this::handleResponse, this::handleError);
         }
     }
-    /* TODO 지상
-        이 부분이 로그인 이슈?
-        로그인이 되어있으면, 작성을 할 수 있다는 의미?
-     */
+
 
     private void handleResponse(List<Discussion> discussions) {
         int count = discussions.size();
         // discussion 없으면
-        if(count == 0) {
-            if(adapter == null) {
+        if (count == 0) {
+            if (adapter == null) {
                 adapter = new DiscussionsAdapter(getActivity(), discussions);
                 recyclerViewDiscussion.setAdapter(adapter);
             }
             textViewDiscussion.setVisibility(View.GONE);
         } else {
-            if(adapter == null) {
+            if (adapter == null) {
                 adapter = new DiscussionsAdapter(getActivity(), discussions);
                 recyclerViewDiscussion.setAdapter(adapter);
             } else {

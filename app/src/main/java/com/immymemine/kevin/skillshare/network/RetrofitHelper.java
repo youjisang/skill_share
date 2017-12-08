@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitHelper {
-    public static final String BASE_URL = "http://10.0.2.2:8079/";
+    public static final String BASE_URL = "http://192.168.1.76:8079/";
 
     // OkHttpClient
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
@@ -40,7 +40,7 @@ public class RetrofitHelper {
     /* TODO ☆ 지상
     이 부분 모듈화 활용을 이해를 우선적으로.
     Retrofit 및 rxjava 활용해 앱 전체에 필요한 데이터 뿌려주는 연습
-
+    제네릭
     okhttp의 활용용도는 로그 찍기 및 쓰기 시간아웃 등등 그러나 그렇게까지 중요한 이슈는 아닌것 같기도.
     밑에부분은 로그인 이슈 같음. interceptors 개념 파악 필요.
      */

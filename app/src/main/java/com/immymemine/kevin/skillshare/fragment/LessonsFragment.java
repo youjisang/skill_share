@@ -101,6 +101,8 @@ public class LessonsFragment extends Fragment {
 
     }
 
+
+
     private void initiateView(View v) {
         // class 정보
         textViewTitle = v.findViewById(R.id.text_view_title);

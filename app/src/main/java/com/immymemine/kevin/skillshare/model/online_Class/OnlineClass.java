@@ -4,167 +4,141 @@ package com.immymemine.kevin.skillshare.model.online_Class;
  * Created by JisangYou on 2017-11-30.
  */
 
-public class OnlineClass
-{
-    private String subscriberCount;
+public class OnlineClass {
 
-    private Discussion discussion;
+        private String subscriberCount;
 
-    private String type;
+        private Discussion discussion;
 
-    private String feedback;
+        private String type;
 
-    private Project project;
+        private String feedback;
 
-    private RelatedClass relatedClass;
+        private Project project;
 
-    private String title;
+        private RelatedClass relatedClass;
 
-    private String[] category;
+        private String title;
 
-    private String totalDuration;
+        private String[] category;
 
-    private Tutor tutor;
+        private String totalDuration;
 
-    private Subscriber subscriber;
+        private Tutor tutor;
 
-    private Video video;
+        private Subscriber subscriber;
 
-    private Review review;
+        private Video video;
 
-    public String getSubscriberCount ()
-    {
-        return subscriberCount;
-    }
+        private Review review;
 
-    public void setSubscriberCount (String subscriberCount)
-    {
-        this.subscriberCount = subscriberCount;
-    }
+        public String getSubscriberCount() {
+            return subscriberCount;
+        }
 
-    public Discussion getDiscussion ()
-    {
-        return discussion;
-    }
+        public void setSubscriberCount(String subscriberCount) {
+            this.subscriberCount = subscriberCount;
+        }
 
-    public void setDiscussion (Discussion discussion)
-    {
-        this.discussion = discussion;
-    }
+        public Discussion getDiscussion() {
+            return discussion;
+        }
 
-    public String getType ()
-    {
-        return type;
-    }
+        public void setDiscussion(Discussion discussion) {
+            this.discussion = discussion;
+        }
 
-    public void setType (String type)
-    {
-        this.type = type;
-    }
+        public String getType() {
+            return type;
+        }
 
-    public String getFeedback ()
-    {
-        return feedback;
-    }
+        public void setType(String type) {
+            this.type = type;
+        }
 
-    public void setFeedback (String feedback)
-    {
-        this.feedback = feedback;
-    }
+        public String getFeedback() {
+            return feedback;
+        }
 
-    public Project getProject ()
-    {
-        return project;
-    }
+        public void setFeedback(String feedback) {
+            this.feedback = feedback;
+        }
 
-    public void setProject (Project project)
-    {
-        this.project = project;
-    }
+        public Project getProject() {
+            return project;
+        }
 
-    public RelatedClass getRelatedClass ()
-    {
-        return relatedClass;
-    }
+        public void setProject(Project project) {
+            this.project = project;
+        }
 
-    public void setRelatedClass (RelatedClass relatedClass)
-    {
-        this.relatedClass = relatedClass;
-    }
+        public RelatedClass getRelatedClass() {
+            return relatedClass;
+        }
 
-    public String getTitle ()
-    {
-        return title;
-    }
+        public void setRelatedClass(RelatedClass relatedClass) {
+            this.relatedClass = relatedClass;
+        }
 
-    public void setTitle (String title)
-    {
-        this.title = title;
-    }
+        public String getTitle() {
+            return title;
+        }
 
-    public String[] getCategory ()
-    {
-        return category;
-    }
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-    public void setCategory (String[] category)
-    {
-        this.category = category;
-    }
+        public String[] getCategory() {
+            return category;
+        }
 
-    public String getTotalDuration ()
-    {
-        return totalDuration;
-    }
+        public void setCategory(String[] category) {
+            this.category = category;
+        }
 
-    public void setTotalDuration (String totalDuration)
-    {
-        this.totalDuration = totalDuration;
-    }
+        public String getTotalDuration() {
+            return totalDuration;
+        }
 
-    public Tutor getTutor ()
-    {
-        return tutor;
-    }
+        public void setTotalDuration(String totalDuration) {
+            this.totalDuration = totalDuration;
+        }
 
-    public void setTutor (Tutor tutor)
-    {
-        this.tutor = tutor;
-    }
+        public Tutor getTutor() {
+            return tutor;
+        }
 
-    public Subscriber getSubscriber ()
-    {
-        return subscriber;
-    }
+        public void setTutor(Tutor tutor) {
+            this.tutor = tutor;
+        }
 
-    public void setSubscriber (Subscriber subscriber)
-    {
-        this.subscriber = subscriber;
-    }
+        public Subscriber getSubscriber() {
+            return subscriber;
+        }
 
-    public Video getVideo ()
-    {
-        return video;
-    }
+        public void setSubscriber(Subscriber subscriber) {
+            this.subscriber = subscriber;
+        }
 
-    public void setVideo (Video video)
-    {
-        this.video = video;
-    }
+        public Video getVideo() {
+            return video;
+        }
 
-    public Review getReview ()
-    {
-        return review;
-    }
+        public void setVideo(Video video) {
+            this.video = video;
+        }
 
-    public void setReview (Review review)
-    {
-        this.review = review;
-    }
+        public Review getReview() {
+            return review;
+        }
 
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [subscriberCount = "+subscriberCount+", discussion = "+discussion+", type = "+type+", feedback = "+feedback+", project = "+project+", relatedClass = "+relatedClass+", title = "+title+", category = "+category+", totalDuration = "+totalDuration+", tutor = "+tutor+", subscriber = "+subscriber+", video = "+video+", review = "+review+"]";
-    }
+        public void setReview(Review review) {
+            this.review = review;
+        }
+
+        @Override
+        public String toString() {
+            return "ClassPojo [subscriberCount = " + subscriberCount + ", discussion = " + discussion + ", type = " + type + ", feedback = " + feedback + ", project = " + project + ", relatedClass = " + relatedClass + ", title = " + title + ", category = " + category + ", totalDuration = " + totalDuration + ", tutor = " + tutor + ", subscriber = " + subscriber + ", video = " + video + ", review = " + review + "]";
+        }
+
 }
