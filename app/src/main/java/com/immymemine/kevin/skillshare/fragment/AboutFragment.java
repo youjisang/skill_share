@@ -59,6 +59,8 @@ public class AboutFragment extends Fragment {
     RelatedClassAdapter relatedClassAdapter;
     // about ( test data )
     About about;
+
+    Context context;
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -68,7 +70,7 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         initiateView(view);
-        seeAllclick();
+        setSeeAllOnClickListener();
 
         RetrofitHelper.createApi(ClassService.class)
                 .getAbout(getArguments().getString("_id"))
@@ -76,7 +78,7 @@ public class AboutFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
         // empty constructor >>> recycler view 초기화
-        Context context  = getActivity();
+        context = getActivity();
 
         projectAdapter = new ProjectAdapter(context);
         recyclerViewProject.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -132,8 +134,6 @@ public class AboutFragment extends Fragment {
     }
 
     private void handleResponse(About about) {
-        // context
-        Context context = getActivity();
         // project
         List<Project> projects = about.getProjects();
         //textViewProjectCount.setText(about.getProjectSubscriberCount() + " Subscriber Project");
@@ -191,31 +191,23 @@ public class AboutFragment extends Fragment {
         recyclerViewRelatedClass = view.findViewById(R.id.recycler_view_related_class);
     }
 
-    private void seeAllclick() {
+    private void setSeeAllOnClickListener() {
+        textViewProjectSeeAll.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
+            getActivity().startActivity(intent);
+        });
 
-        textViewProjectSeeAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-                intent.putExtra("seeall", ConstantUtil.PROJECT_ITEM);
-                getActivity().startActivity(intent);
-            }
+        textViewSubscriberSeeAll.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.SUBSCRIBER_ITEM);
+            getActivity().startActivity(intent);
         });
-        textViewStudentSeeAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-                intent.putExtra("seeall", ConstantUtil.STUDENT_ITEM);
-                getActivity().startActivity(intent);
-            }
-        });
-        textViewReviewSeeAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-                intent.putExtra("seeall", ConstantUtil.REVIEW_ITEM);
-                getActivity().startActivity(intent);
-            }
+
+        textViewReviewSeeAll.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.REVIEW_ITEM);
+            getActivity().startActivity(intent);
         });
     }
 }

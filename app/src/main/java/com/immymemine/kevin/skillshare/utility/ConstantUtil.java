@@ -29,7 +29,6 @@ public class ConstantUtil {
     public static final String BASE_URL = "http://localhost/8079/";
 
     // selectSkill
-
     public static final String DESIGN = "Design";
     public static final String PHOTOGRAPHY = "PhotoGraphy";
     public static final String BUSINESS = "Business";
@@ -46,14 +45,12 @@ public class ConstantUtil {
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 
     // see all item
+    public static final String SEE_ALL_FLAG = "See All";
     public static final int NO_ITEM = -9;
     public static final int CLASS_ITEM = -8;
     public static final int PROJECT_ITEM = -7;
-    public static final int STUDENT_ITEM = -6;
+    public static final int SUBSCRIBER_ITEM = -6;
     public static final int REVIEW_ITEM = -5;
-
-
-
 
     public static final int FEATURE_ON_SKILLSHARE = 1001;
     public static final int TRENDING_NOW = 1014;

@@ -5,17 +5,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.AboutAdapter;
+import com.immymemine.kevin.skillshare.adapter.SeeAllRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
-import static java.security.AccessController.getContext;
+import java.util.List;
 
-public class SeeAllActivity extends AppCompatActivity {
+public class SeeAllActivity<T> extends AppCompatActivity {
     int type;
-    AboutAdapter aboutAdapter;
+    SeeAllRecyclerViewAdapter seeAllRecyclerViewAdapter;
     RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +30,37 @@ public class SeeAllActivity extends AppCompatActivity {
 
         // 1. 인텐트 받아옴
         Intent intent = getIntent();
-        type=intent.getIntExtra("seeall",1);
-        Log.e("getintent","intent value"+type);
+        type = intent.getIntExtra(ConstantUtil.SEE_ALL_FLAG,1);
 
         // 2. 인텐트에서 받아온 구분 값을 어댑터 설정
-        setRecyclerView();
+
     }
 
-    private void setRecyclerView() {
-        aboutAdapter = new AboutAdapter(this,type);
-        recyclerView.setAdapter(aboutAdapter);
+    List<T> data;
+    private void networking() {
+        //retrofit...
+
+    }
+
+    private void setRecyclerView(List<T> data) {
+        seeAllRecyclerViewAdapter = new SeeAllRecyclerViewAdapter(this, type);
+        recyclerView.setAdapter(seeAllRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initview(){
-        ((TextView)findViewById(R.id.toolbar_title)).setText(type+"");
+    private void initview() {
+        int stringId = 0;
+        switch (type) {
+            case ConstantUtil.PROJECT_ITEM:
+                stringId = R.string.project;
+                break;
+            case ConstantUtil.CLASS_ITEM:
+                break;
+        }
+
+        if(stringId != 0)
+            ((TextView)findViewById(R.id.toolbar_title)).setText(getString(stringId));
+
         findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
         recyclerView = findViewById(R.id.recycler_view_seeAll);
     }

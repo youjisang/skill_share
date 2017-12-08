@@ -27,7 +27,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     Context context;
     List<Discussion> discussions;
 
-
     public DiscussionsAdapter(Context context) {
         this.context = context;
     }
@@ -57,7 +56,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public int getItemViewType(int position) {
         if(discussions == null)
             return ConstantUtil.NO_ITEM;
-        }
         else
             return super.getItemViewType(position);
     }

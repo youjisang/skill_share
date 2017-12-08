@@ -269,9 +269,21 @@ public class ClassActivity extends AppCompatActivity {
     */
 
     @Override
+    protected void onStart() {
+        player.setPlayWhenReady(true);
+        super.onStart();
+    }
+
+    @Override
     protected void onStop() {
-        releasePlayer();
+        player.setPlayWhenReady(false);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        releasePlayer();
+        super.onDestroy();
     }
     /* TODO 지상
        생명주기상으로 onStop은 꺼진 상태를 말하는 거 같은데 왜 releasePlayer?
