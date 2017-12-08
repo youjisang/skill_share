@@ -20,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <TextView
         android:id="@+id/text_view_title5"
         android:layout_width="0dp"
@@ -119,7 +120,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/iamge_view_attendanceStudents"
+            android:id="@+id/image_view_attendanceStudents"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"

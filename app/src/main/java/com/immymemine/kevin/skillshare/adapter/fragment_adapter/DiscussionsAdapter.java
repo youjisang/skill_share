@@ -51,7 +51,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public int getItemViewType(int position) {
         if(discussions == null)
             return ConstantUtil.NO_ITEM;
-        return super.getItemViewType(position);
+        }
+        else
+            return super.getItemViewType(position);
     }
 
     @Override

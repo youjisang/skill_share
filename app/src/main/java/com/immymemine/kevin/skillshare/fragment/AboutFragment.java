@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
+import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.ProjectAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.RelatedClassAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.SubscribersAdapter;
@@ -65,6 +68,7 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         initiateView(view);
+        seeAllclick();
 
         RetrofitHelper.createApi(ClassService.class)
                 .getAbout(getArguments().getString("_id"))
@@ -124,6 +128,7 @@ public class AboutFragment extends Fragment {
         // test ==========================================
 
         return view;
+
     }
 
     private void handleResponse(About about) {
@@ -184,5 +189,33 @@ public class AboutFragment extends Fragment {
         recyclerViewSubscribers = view.findViewById(R.id.recycler_view_subscribers);
         // related class
         recyclerViewRelatedClass = view.findViewById(R.id.recycler_view_related_class);
+    }
+
+    private void seeAllclick() {
+
+        textViewProjectSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.PROJECT_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
+        textViewStudentSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.STUDENT_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
+        textViewReviewSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SeeAllActivity.class);
+                intent.putExtra("seeall", ConstantUtil.REVIEW_ITEM);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 }
