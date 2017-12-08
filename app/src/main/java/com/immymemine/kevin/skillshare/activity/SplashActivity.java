@@ -33,9 +33,11 @@ public class SplashActivity extends AppCompatActivity {
         // button get_started
         findViewById(R.id.get_started).setOnClickListener(v -> {
             findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-            // TODO Sign up page
             new Thread() {
                 public void run() {
+                    // data 가져오기
+                    // RetrofitHelper.createApi()... 끝나면 넘어가기
+
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     finish();
                 }
@@ -44,14 +46,8 @@ public class SplashActivity extends AppCompatActivity {
 
         // textview sign_in
         findViewById(R.id.text_view_sign_in).setOnClickListener(v -> {
-            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
             // Sign in page
-            new Thread() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this, SignInActivity.class));
-                }
-            }.start();
+            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
         });
     }
 
@@ -59,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         // sign_in activity 로 갔다가 다시 돌아왔을 때
         // progress bar >>> GONE
-        findViewById(R.id.progressBar).setVisibility(View.GONE);
+        findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
         super.onResume();
     }
 }

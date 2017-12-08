@@ -99,7 +99,7 @@ public class DiscussionsFragment extends Fragment {
         String input = editText.getText().toString();
         if( !ValidationUtil.isEmpty(input) ) {
             editText.setText("");
-            // TODO discussion 세팅
+
             Discussion discussion = new Discussion(null,
                     "Olivia",
                     "http://news20.busan.com/content/image/2017/09/11/20170911000004_0.jpg",
@@ -149,7 +149,6 @@ public class DiscussionsFragment extends Fragment {
             if(textViewDiscussion.getVisibility() == View.VISIBLE) {
                 adapter.updateData(discussions);
                 textViewDiscussion.setText(discussions.size() + " Discussions");
-                recyclerViewDiscussion.invalidate();
             } else {
                 Collections.reverse(discussions);
                 adapter.initiateData(discussions);
