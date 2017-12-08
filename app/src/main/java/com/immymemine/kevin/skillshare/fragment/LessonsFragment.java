@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,9 +33,10 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LessonsFragment extends Fragment {
+public class LessonsFragment extends Fragment implements LessonsAdapter.FragmentAndRecyclerViewInteractionInterface {
 
     // view
+    ScrollView scrollView;
     TextView textViewTitle, textViewTime, textViewReview, textViewSubscriberCount;
     Button buttonFollow;
     TextView textViewTutor, textViewFollowersCount;
@@ -43,6 +45,7 @@ public class LessonsFragment extends Fragment {
     // RecyclerView / adapter
     RecyclerView recyclerViewLessons;
     LessonsAdapter adapter;
+    LinearLayoutManager layoutManager;
 
     // context
     Context context;
@@ -117,6 +120,7 @@ public class LessonsFragment extends Fragment {
     }
 
     private void initiateView(View v) {
+        scrollView = v.findViewById(R.id.scroll_view_lesson);
         // class 정보
         textViewTitle = v.findViewById(R.id.text_view_title);
         textViewTime = v.findViewById(R.id.text_view_time);
@@ -133,9 +137,16 @@ public class LessonsFragment extends Fragment {
 
         // lessons recycler view
         recyclerViewLessons = v.findViewById(R.id.recycler_view_lessons);
-        adapter = new LessonsAdapter(context);
-        recyclerViewLessons.setLayoutManager(new LinearLayoutManager(context));
+        recyclerViewLessons.setNestedScrollingEnabled(false);
+
+        adapter = new LessonsAdapter(context, this);
+        layoutManager = new LinearLayoutManager(context);
+        recyclerViewLessons.setLayoutManager(layoutManager);
         recyclerViewLessons.setAdapter(adapter);
     }
 
+    @Override
+    public void focus(int position, int height) {
+        scrollView.scrollTo(0, height * position);
+    }
 }
