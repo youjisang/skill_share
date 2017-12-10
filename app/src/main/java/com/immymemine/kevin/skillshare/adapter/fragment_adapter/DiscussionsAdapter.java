@@ -13,8 +13,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
+
+import net.colindodd.toggleimagebutton.ToggleImageButton;
 
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         notifyDataSetChanged();
     }
 
+    // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
 //        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
 //        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
@@ -95,6 +99,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             holder.textViewTime.setText(discussion.getTime());
             // like
             holder.textViewLikeCount.setText(discussion.getLike() + "");
+            // reply
+            if( discussion.getReplies() != null )
+                holder.setReply(discussion.getReplies());
         }
     }
 
@@ -121,7 +128,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ImageButton imageButtonReply;
         TextView textViewTime;
         // like
-        ImageButton iamgeButtonLike;
+        ToggleImageButton imageButtonLike;
         TextView textViewLikeCount;
 
         public Holder(View v) {
@@ -129,20 +136,68 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
           
             if(discussions != null) {
                 // profile
-                v.findViewById(R.id.frame_layout_profile).setOnClickListener(view -> {
+                imageViewProfile = v.findViewById(R.id.image_view_profile);
+                imageViewProfile.setOnClickListener(view -> {
                     // profile activity 이동
                 });
-                imageViewProfile = v.findViewById(R.id.image_view_profile);
                 textViewProfile = v.findViewById(R.id.text_view_profile);
+                textViewProfile.setOnClickListener(view -> {
+                    // profile activity 이동
+                });
                 // content
                 expandableTextView = v.findViewById(R.id.expandable_text_view);
-                expandableTextView.setTrimLength(5); // 5줄 이상 작성시 expandable 기능
+                expandableTextView.setTrimLength(8);
                 // info / reply
                 imageButtonReply = v.findViewById(R.id.image_button_reply);
                 textViewTime = v.findViewById(R.id.text_view_time);
                 // like
-                iamgeButtonLike = v.findViewById(R.id.iamge_button_like);
+                imageButtonLike = v.findViewById(R.id.image_button_like);
+                imageButtonLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if(isChecked)
+                        textViewLikeCount.setText( (Integer.parseInt(textViewLikeCount.getText().toString()) + 1) + "");
+                    else
+                        textViewLikeCount.setText( (Integer.parseInt(textViewLikeCount.getText().toString()) - 1) + "");
+                });
                 textViewLikeCount = v.findViewById(R.id.text_view_like_count);
+                // reply
+                textViewReplies = v.findViewById(R.id.text_view_replies);
+                imageViewReplyProfile = v.findViewById(R.id.image_view_reply_profile);
+                textViewReplyProfile = v.findViewById(R.id.text_view_reply_profile);
+                expandableTextViewReply = v.findViewById(R.id.expandable_text_view_reply);
+                textViewTimeReply = v.findViewById(R.id.text_view_time_reply);
+            }
+        }
+
+        TextView textViewReplies, textViewReplyProfile, textViewTimeReply;
+        ImageView imageViewReplyProfile;
+        ExpandableTextView expandableTextViewReply;
+
+        public void setReply(List<Reply> replies) {
+            if(replies == null || replies.size() == 0) {
+                // nothing to do
+            } else {
+                textViewReplyProfile.setVisibility(View.VISIBLE);
+                textViewTimeReply.setVisibility(View.VISIBLE);
+                imageViewReplyProfile.setVisibility(View.VISIBLE);
+                expandableTextViewReply.setVisibility(View.VISIBLE);
+
+                int size = replies.size();
+                if( size > 1 ) {
+                    textViewReplies.setText("See all " + replies.size() + " replies");
+                    textViewReplies.setVisibility(View.VISIBLE);
+                    textViewReplies.setOnClickListener(view -> {
+                        // replies activity 로 이동
+                    });
+                }
+
+                Reply reply = replies.get(size-1);
+                textViewReplyProfile.setText(reply.getName());
+                textViewTimeReply.setText(reply.getTime());
+                Glide.with(context).load(reply.getPictureUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewReplyProfile);
+                expandableTextViewReply.setTrimLength(4);
+                expandableTextViewReply.setText(reply.getContent(), TextView.BufferType.NORMAL);
             }
         }
     }

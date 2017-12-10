@@ -43,6 +43,7 @@ import com.immymemine.kevin.skillshare.adapter.fragment_adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ClassActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         Bundle bundle = new Bundle();
-        bundle.putString("_id", id);
+        bundle.putString(ConstantUtil.ID_FLAG, id);
 
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);
@@ -159,7 +160,6 @@ public class ClassActivity extends AppCompatActivity {
         /* TODO 지상
         view.getId()
           이부분의 의미?
-
          */
 
     }
@@ -263,21 +263,11 @@ public class ClassActivity extends AppCompatActivity {
             trackSelector = null;
         }
     }
-    /* TODO 지상
-       player객체가 null이 아니면 현재 상태를 저장하고, 저장된 것을 release
-       뒤에 객체들을 왜또 null 시키는 건지는 공부필요
-    */
 
     @Override
-    protected void onStart() {
-        player.setPlayWhenReady(true);
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
+    protected void onPause() {
         player.setPlayWhenReady(false);
-        super.onStop();
+        super.onPause();
     }
 
     @Override
@@ -285,9 +275,6 @@ public class ClassActivity extends AppCompatActivity {
         releasePlayer();
         super.onDestroy();
     }
-    /* TODO 지상
-       생명주기상으로 onStop은 꺼진 상태를 말하는 거 같은데 왜 releasePlayer?
-    */
 
     private class PlayerEventListener implements Player.EventListener {
         private static final String TAG = "skill share player";

@@ -1,10 +1,10 @@
-package com.immymemine.kevin.skillshare.network.user;
+package com.immymemine.kevin.skillshare.network;
 
 /**
- * Created by quf93 on 2017-11-29.
+ * Created by quf93 on 2017-12-08.
  */
 
-public class SignUpResponse {
+public class Response {
     private String result;
     private String message;
 

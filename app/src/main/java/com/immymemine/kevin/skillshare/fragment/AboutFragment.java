@@ -1,8 +1,8 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,17 +18,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.ProjectAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.RelatedClassAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.SubscribersAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Project;
 import com.immymemine.kevin.skillshare.model.m_class.RelatedClass;
-import com.immymemine.kevin.skillshare.model.m_class.Review;
-import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
+import com.immymemine.kevin.skillshare.model.m_class.Reviews;
+import com.immymemine.kevin.skillshare.model.m_class.Subscribers;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +61,8 @@ public class AboutFragment extends Fragment {
     About about;
 
     Context context;
+    // class id
+    String id;
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -71,9 +73,9 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
         initiateView(view);
         setSeeAllOnClickListener();
-
+        id = getArguments().getString(ConstantUtil.ID_FLAG);
         RetrofitHelper.createApi(ClassService.class)
-                .getAbout(getArguments().getString("_id"))
+                .getAbout(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
@@ -102,8 +104,8 @@ public class AboutFragment extends Fragment {
 
         about.setProjects(projects);
         // review
-        Review review = new Review("99%", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800");
-        about.setReview(review);
+        Reviews reviews = new Reviews("99%", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800");
+        about.setReviews(reviews);
         // subscriber
         String[] pictureUrls = {
                 "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2",
@@ -117,7 +119,7 @@ public class AboutFragment extends Fragment {
                 "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH92438362_w300_h300.jpg",
                 "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2"
         };
-        Subscriber subscriber = new Subscriber("10",pictureUrls, pictureUrls);
+        Subscribers subscriber = new Subscribers("10",pictureUrls, pictureUrls);
         about.setSubscriber(subscriber);
         // related class
         List<RelatedClass> relatedClasses = new ArrayList<>();
@@ -141,16 +143,16 @@ public class AboutFragment extends Fragment {
         projectAdapter.update(projects); // <<< data 전달 & notifyDataSetChanged
 
         // review
-        Review review = about.getReview();
-        textViewReviewPercent.setText(review.getReviewPercent()+" Positive Reviews");
-        textViewReview.setText(review.getContent());
-        textViewReviewerName.setText(review.getReviewerName());
-        Glide.with(context).load(review.getPictureUrl())
+        Reviews reviews = about.getReviews();
+        textViewReviewPercent.setText(reviews.getReviewPercent()+" Positive Reviews");
+        textViewReview.setText(reviews.getContent());
+        textViewReviewerName.setText(reviews.getReviewerName());
+        Glide.with(context).load(reviews.getPictureUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageViewReviewProfile);
 
         // subscriber
-        Subscriber subscriber = about.getSubscriber();
+        Subscribers subscriber = about.getSubscriber();
         int count = Integer.parseInt(subscriber.getSubscriberNumber());
         if(count != 0) {
             textViewSubscriberNum.setVisibility(View.VISIBLE);
@@ -195,19 +197,26 @@ public class AboutFragment extends Fragment {
         textViewProjectSeeAll.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
-            getActivity().startActivity(intent);
+            intent.putExtra(ConstantUtil.ID_FLAG, id);
+            intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, "Subscriber Projects");
+            context.startActivity(intent);
         });
 
         textViewSubscriberSeeAll.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.SUBSCRIBER_ITEM);
-            getActivity().startActivity(intent);
+            intent.putExtra(ConstantUtil.ID_FLAG, id);
+            intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, textViewSubscriberNum.getText().toString());
+            context.startActivity(intent);
         });
 
         textViewReviewSeeAll.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.REVIEW_ITEM);
-            getActivity().startActivity(intent);
+            intent.putExtra(ConstantUtil.ID_FLAG, id);
+            intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, "Class Reviews");
+            intent.putExtra("REVIEW_PERCENT", textViewReviewPercent.getText().toString());
+            context.startActivity(intent);
         });
     }
 }

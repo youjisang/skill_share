@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
@@ -21,6 +24,7 @@ import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -28,13 +32,13 @@ import io.reactivex.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class DiscussionsFragment extends Fragment {
-
+    // view
     TextView textViewDiscussion;
     RecyclerView recyclerViewDiscussion;
     DiscussionsAdapter adapter;
 
     EditText editText;
-
+    LinearLayout linearLayoutDiscussion;
     Context context;
 
     List<Discussion> discussions;
@@ -52,6 +56,9 @@ public class DiscussionsFragment extends Fragment {
         adapter = new DiscussionsAdapter(getActivity());
         recyclerViewDiscussion.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewDiscussion.setAdapter(adapter);
+
+        linearLayoutDiscussion = view.findViewById(R.id.linear_layout_discussion);
+        setOnScrollChangedListener();
 
         textViewDiscussion = view.findViewById(R.id.text_view_discussion);
 
@@ -78,8 +85,21 @@ public class DiscussionsFragment extends Fragment {
                 "도대체 앱 디자인은 어떻게 하는거죠?","1 days ago",0,null));
         discussions.add(new Discussion(null, "Kevin Lee", "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg",
                 "안녕하세요. 반갑습니다.","16 hours ago",1,null));
+        List<Reply> replies = new ArrayList<>();
+        replies.add(new Reply(
+                "Kevin Lee",
+                "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg",
+                "Actually this is test comment.",
+                "2 minutes ago"
+        ));
+        replies.add(new Reply(
+                "Kevin Lee",
+                "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg",
+                "I agree with you. I hope you will be okay!",
+                "3 minutes ago"
+        ));
         discussions.add(new Discussion(null, "Jane", "https://pbs.twimg.com/profile_images/908706663519051776/84pGO2Zl.jpg",
-                "Hello guys. Pleased to meet you.","14 minutes ago",7,null));
+                "Hello guys. Pleased to meet you.","14 minutes ago",7,replies));
 
         handleResponse(discussions);
         // test =================================================================
@@ -97,7 +117,7 @@ public class DiscussionsFragment extends Fragment {
                     "Olivia",
                     "http://news20.busan.com/content/image/2017/09/11/20170911000004_0.jpg",
                     input,
-                    "10 minutes ago",
+                    "now",
                     2,
                     null
                     );
@@ -145,5 +165,25 @@ public class DiscussionsFragment extends Fragment {
 
     private void handleError(Throwable error) {
         // wifi connection retry page
+    }
+
+    private void setOnScrollChangedListener() {
+        recyclerViewDiscussion.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 && linearLayoutDiscussion.isShown()) {
+                    linearLayoutDiscussion.setVisibility(View.GONE);
+                    textViewDiscussion.setVisibility(View.GONE);
+                } else if (dy < 0) {
+                    linearLayoutDiscussion.setVisibility(View.VISIBLE);
+                    textViewDiscussion.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
     }
 }

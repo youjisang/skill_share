@@ -51,7 +51,6 @@ import java.util.concurrent.Future;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
 
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     boolean isSignIn;
 
     // user followed skills
-    List<Integer> followSkills = new ArrayList<>();
+    List<String> followSkills = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             home_view_container.addView(viewFactory.getWelcomeView());
 
             // user follow skills 를 배열로 담아서 Query 로 보낸다
-            followSkills.add(ConstantUtil.FEATURE_ON_SKILLSHARE);
+            followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
             followSkills.add(ConstantUtil.TRENDING_NOW);
             followSkills.add(ConstantUtil.BEST_THIS_MONTH);
         }

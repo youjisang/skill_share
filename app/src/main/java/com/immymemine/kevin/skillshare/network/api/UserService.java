@@ -1,9 +1,9 @@
 package com.immymemine.kevin.skillshare.network.api;
 
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignInResponse;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
-import com.immymemine.kevin.skillshare.network.user.SignUpResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -18,7 +18,7 @@ import retrofit2.http.Query;
 
 public interface UserService {
     @POST("user/sign-up")
-    Observable<SignUpResponse> signUp(@Body SignUpRequestBody body);
+    Observable<Response> signUp(@Body SignUpRequestBody body);
 
     @GET("user/sign-in")
     Observable<SignInResponse> signIn(@Query("email") String email, @Query("password") String password);
