@@ -203,7 +203,7 @@ public class AboutFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-        textViewStudentSeeAll.setOnClickListener(new View.OnClickListener() {
+        textViewSubscriberSeeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SeeAllActivity.class);

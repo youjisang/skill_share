@@ -1,11 +1,14 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -24,6 +28,7 @@ import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.m_class.Video;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
     // view
     ScrollView scrollView;
     TextView textViewTitle, textViewTime, textViewReview, textViewSubscriberCount;
-    Button buttonFollow;
+    ToggleButton buttonFollow;
     TextView textViewTutor, textViewFollowersCount;
     ImageView imageViewTutor;
 
@@ -50,6 +55,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
 
     // context
     Context context;
+
 
     public LessonsFragment() {
         // Required empty public constructor
@@ -63,7 +69,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         View view = inflater.inflate(R.layout.fragment_lessons, container, false);
         context = getActivity();
         initiateView(view);
-
+        followedAndFollowing();
 
         RetrofitHelper.createApi(ClassService.class)
                 .getLessons(getArguments().getString("_id"))
@@ -136,8 +142,31 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
 
     }
 
-    public void followedAndFollowing(View view) {
+    public void followedAndFollowing() {
 
+
+        buttonFollow.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (buttonFollow.isChecked()) {
+                      buttonFollow.setTextColor(getResources().getColor(R.color.white));
+
+                    /* TODO 지상
+                    로직 작성
+                     */
+
+
+                }else
+                    buttonFollow.setTextColor(getResources().getColor(R.color.IcActive));
+
+                /* TODO 지상
+                    로직 작성
+                */
+
+
+            }
+        });
     }
 
 

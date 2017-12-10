@@ -265,7 +265,7 @@ public class ViewFactory {
                     ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
                     ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
 
-                    // TODO test
+                    // TODO 지상 test
 
                     skillRecyclerView =  view.findViewById(R.id.recycler_vIew_selectSkill);
                     skillRecyclerView.setAdapter(new GetMeViewRecylerViewAdapter(context,skilldata));

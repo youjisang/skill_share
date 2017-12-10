@@ -114,7 +114,7 @@
             android:paddingBottom="8dp"
             android:paddingTop="8dp">
 
-            <Button
+            <ToggleButton
                 android:id="@+id/button_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
@@ -122,13 +122,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/corner_rounded_button"
-                android:text="+ Follow"
+                android:background="@drawable/select_button"
                 android:textColor="@color/IcActive"
-                android:onClick="followedAndFollowing"
+                android:textOff="+ Follow"
+                android:textOn="Following"
                 app:layout_constraintBottom_toBottomOf="@+id/image_view_tutor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image_view_tutor" />
+
 
             <TextView
                 android:id="@+id/text_view_profile"
@@ -174,6 +175,7 @@
                 app:layout_constraintHorizontal_bias="0.025"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
+
 
         </RelativeLayout>
 

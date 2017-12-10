@@ -354,7 +354,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         } else {
-            notSignedInMeView = viewFactory.getNotSignedInMeView();
+//            notSignedInMeView = viewFactory.getNotSignedInMeView();
+
         }
     }
 

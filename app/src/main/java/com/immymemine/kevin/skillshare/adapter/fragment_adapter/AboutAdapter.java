@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.model_class.About;
+
+import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
+
 
 /**
  * Created by super on 2017-12-05.

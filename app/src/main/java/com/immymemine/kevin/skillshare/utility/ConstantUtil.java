@@ -53,10 +53,13 @@ public class ConstantUtil {
     public static final int REVIEW_ITEM = -5;
 
 
-
-
     public static final int FEATURE_ON_SKILLSHARE = 1001;
     public static final int TRENDING_NOW = 1014;
     public static final int BEST_THIS_MONTH = 1015;
+
+    //follower and following button
+    public static final int BEFORE_FOLLOWING = 97;
+    public static final int AFTER_FOLLOWING = 98;
+
 
 }
