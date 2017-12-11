@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
@@ -19,6 +21,7 @@ import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,11 +54,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 //        result.dispatchUpdatesTo(this);
     }
 
-    /* TODO 지상
-        댓글이나 글을 작성할 수 있으므로, 최신화하는 처리 로직.
-        calculateDiff?
-     */
-
     @Override
     public int getItemViewType(int position) {
         if(discussions == null)
@@ -63,15 +61,10 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         else
             return super.getItemViewType(position);
     }
-     /* TODO 지상
-       seeAll부분 처리와는 다름.
-       seeall은 클릭 이벤트가 일어났을시 인텐트로 콘스탄트유틸값을 전달해 처리했으나 이 부분은 size로 처리
-       애초에 이슈가 다름. getItemViewType은 리싸이클러뷰만의 somethig?!
-     */
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
 
         if (viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
@@ -89,7 +82,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             if(discussion.get_id() != null)
                 holder.id = discussion.get_id();
             // profile
-            Glide.with(context).load(discussion.getPictureUrl())
+            holder.pictureUrl = discussion.getPictureUrl();
+            Glide.with(context).load(holder.pictureUrl)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewProfile);
             holder.textViewProfile.setText(discussion.getName());
@@ -131,9 +125,10 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ToggleImageButton imageButtonLike;
         TextView textViewLikeCount;
 
+        String pictureUrl;
+
         public Holder(View v) {
             super(v);
-          
             if(discussions != null) {
                 // profile
                 imageViewProfile = v.findViewById(R.id.image_view_profile);
@@ -149,6 +144,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 expandableTextView.setTrimLength(8);
                 // info / reply
                 imageButtonReply = v.findViewById(R.id.image_button_reply);
+                imageButtonReply.setOnClickListener(view -> {
+
+                });
                 textViewTime = v.findViewById(R.id.text_view_time);
                 // like
                 imageButtonLike = v.findViewById(R.id.image_button_like);
@@ -173,9 +171,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ExpandableTextView expandableTextViewReply;
 
         public void setReply(List<Reply> replies) {
-            if(replies == null || replies.size() == 0) {
-                // nothing to do
-            } else {
+            if(replies != null && replies.size() != 0) {
                 textViewReplyProfile.setVisibility(View.VISIBLE);
                 textViewTimeReply.setVisibility(View.VISIBLE);
                 imageViewReplyProfile.setVisibility(View.VISIBLE);
@@ -186,7 +182,18 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                     textViewReplies.setText("See all " + replies.size() + " replies");
                     textViewReplies.setVisibility(View.VISIBLE);
                     textViewReplies.setOnClickListener(view -> {
-                        // replies activity 로 이동
+                        Intent intent = new Intent(context, SeeAllActivity.class);
+                        intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
+                        intent.putExtra(ConstantUtil.ID_FLAG, id);
+                        intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
+                        replies.add(0, new Reply(
+                                textViewProfile.getText().toString(),
+                                pictureUrl,
+                                expandableTextView.getText().toString(),
+                                textViewTime.getText().toString()
+                        ));
+                        intent.putParcelableArrayListExtra("TEST", (ArrayList) replies);
+                        context.startActivity(intent);
                     });
                 }
 

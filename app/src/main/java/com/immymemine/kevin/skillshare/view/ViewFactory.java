@@ -84,6 +84,7 @@ public class ViewFactory {
     class GeneralViewFactory implements Callable<View> {
         String title;
         List<Class> classes;
+
         public GeneralViewFactory(String title, List<Class> classes) {
             this.title = title;
             this.classes = classes;

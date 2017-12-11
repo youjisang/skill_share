@@ -158,10 +158,6 @@ public class DiscussionsFragment extends Fragment {
 
         // TODO hide progress bar
     }
-    /* TODO 지상
-        discussion.size가 0일때와 아닐때를 구분해서 처리한 부분.
-        -> adapter로 이동
-     */
 
     private void handleError(Throwable error) {
         // wifi connection retry page

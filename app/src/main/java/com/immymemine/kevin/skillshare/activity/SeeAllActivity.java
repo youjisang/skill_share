@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.adapter.see_all_adapter.DiscussionSeeAllRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.see_all_adapter.ProjectSeeAllRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.see_all_adapter.ReviewSeeAllRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.see_all_adapter.SubscriberSeeAllRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.see_all.Project;
 import com.immymemine.kevin.skillshare.model.see_all.Review;
 import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
@@ -38,11 +39,20 @@ public class SeeAllActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_see_all);
+
+
 
         // 1. 인텐트 받아옴
         intent = getIntent();
         String type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
+
+        if(type.equals(ConstantUtil.REVIEW_ITEM))
+            setContentView(R.layout.activity_see_all_review);
+        else if(type.equals(ConstantUtil.DISCUSSION_ITEM))
+            setContentView(R.layout.activity_see_all_discussion);
+        else
+            setContentView(R.layout.activity_see_all);
+
         String id = intent.getStringExtra("ID");
         String title = intent.getStringExtra(ConstantUtil.TOOLBAR_TITLE_FLAG);
 
@@ -57,6 +67,12 @@ public class SeeAllActivity extends AppCompatActivity {
         //retrofit...
         switch (type) {
             case ConstantUtil.CLASS_ITEM:
+
+                break;
+            case ConstantUtil.DISCUSSION_ITEM:
+                List<Reply> replyList = new ArrayList<>();
+                replyList = (ArrayList) intent.getParcelableArrayListExtra("TEST");
+                recyclerView.setAdapter(new DiscussionSeeAllRecyclerViewAdapter(this, replyList));
                 break;
             case ConstantUtil.PROJECT_ITEM:
                 service.getSeeAllProject(id)
@@ -97,9 +113,6 @@ public class SeeAllActivity extends AppCompatActivity {
                 recyclerView.setAdapter(new ProjectSeeAllRecyclerViewAdapter(this, projects));
                 break;
             case ConstantUtil.REVIEW_ITEM:
-                // setting visible
-                findViewById(R.id.linear_layout_reviews).setVisibility(View.VISIBLE);
-                textViewTestimonials.setVisibility(View.VISIBLE);
                 // setting data
                 textViewReviewPercent.setText(intent.getStringExtra("REVIEW_PERCENT"));
                 // TODO 좋아요 / 싫어요 개수 받아와서 뿌려주기

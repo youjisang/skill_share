@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ClassActivity;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassActivity.class);
-                intent.putExtra("_id", id); // data for identification
+                intent.putExtra(ConstantUtil.ID_FLAG, id); // data for identification
                 intent.putExtra("URI", uri);
                 // TODO Glide cache 된 파일을 Class Activity 로 넘어갔을 때 바로 사용하도록... 똑같은 url 이면 로딩을 하지 않는지 체크
                 context.startActivity(intent);

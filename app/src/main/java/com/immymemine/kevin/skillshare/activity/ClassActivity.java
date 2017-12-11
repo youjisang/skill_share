@@ -23,10 +23,15 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -67,7 +72,7 @@ public class ClassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
-        id = intent.getStringExtra("_id");
+        id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra("URI");
         // 2. model object 에 담아주고
 
@@ -226,11 +231,19 @@ public class ClassActivity extends AppCompatActivity {
     private MediaSource buildMediaSource(Uri uri) {
         @C.ContentType int type = Util.inferContentType(uri);
         switch (type) {
+            case C.TYPE_SS:
+                return new SsMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), null, null);
             case C.TYPE_DASH:
                 return new DashMediaSource(uri, new DefaultDataSourceFactory(this, null, new DefaultHttpDataSourceFactory(userAgent, null)),
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), null, null);
-                default:
-                    throw new IllegalStateException("Unsupported Type : " + type);
+            case C.TYPE_HLS:
+                return new HlsMediaSource(uri, mediaDataSourceFactory, null, null);
+            case C.TYPE_OTHER:
+                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                        null, null);
+            default:
+                throw new IllegalStateException("Unsupported Type : " + type);
         }
     }
 
