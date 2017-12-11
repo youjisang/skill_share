@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.network.device;
+package com.immymemine.kevin.skillshare.network.gcm;
 
 /**
  * Created by quf93 on 2017-11-26.

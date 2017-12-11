@@ -10,8 +10,8 @@ import com.google.android.gms.iid.InstanceID;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
-import com.immymemine.kevin.skillshare.network.api.DeviceService;
-import com.immymemine.kevin.skillshare.network.device.RegisterRequestBody;
+import com.immymemine.kevin.skillshare.network.api.GCMService;
+import com.immymemine.kevin.skillshare.network.gcm.RegisterRequestBody;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -55,7 +55,7 @@ public class RegistrationIntentService extends IntentService {
         requestBody.setRegistrationId(registrationId);
 
         // retrofit
-        DeviceService deviceService = RetrofitHelper.createApi(DeviceService.class);
+        GCMService deviceService = RetrofitHelper.createApi(GCMService.class);
 
         // post
         deviceService.register(requestBody)
