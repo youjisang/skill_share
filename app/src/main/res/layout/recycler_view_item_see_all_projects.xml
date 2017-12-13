@@ -46,7 +46,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/image_heart" />
+                    android:checked="false"
+                    />
 
                 <TextView
                     android:id="@+id/text_view_like_count"

@@ -20,11 +20,14 @@
 
     <ImageButton
         android:id="@+id/toolbar_close_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_gravity="left"
         android:background="@android:color/transparent"
-        android:src="@android:drawable/btn_dialog"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_close"
+        android:tint="@color/CommonButton"
+        tools:ignore="NewApi"
         tools:layout_editor_absoluteX="387dp"
         tools:layout_editor_absoluteY="16dp" />
 

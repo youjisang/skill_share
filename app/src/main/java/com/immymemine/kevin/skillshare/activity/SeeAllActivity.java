@@ -9,9 +9,14 @@ import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.SeeAllRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SeeAllActivity<T> extends AppCompatActivity {
     int type;
@@ -37,10 +42,6 @@ public class SeeAllActivity<T> extends AppCompatActivity {
     }
 
     List<T> data;
-    private void networking() {
-        //retrofit...
-
-    }
 
     private void setRecyclerView(List<T> data) {
         seeAllRecyclerViewAdapter = new SeeAllRecyclerViewAdapter(this, type);
@@ -54,7 +55,14 @@ public class SeeAllActivity<T> extends AppCompatActivity {
             case ConstantUtil.PROJECT_ITEM:
                 stringId = R.string.project;
                 break;
+            case ConstantUtil.REVIEW_ITEM:
+                stringId = R.string.review;
+                break;
+            case ConstantUtil.SUBSCRIBER_ITEM:
+                stringId = R.string.subscriber;
+                break;
             case ConstantUtil.CLASS_ITEM:
+                stringId = R.string.classes;
                 break;
         }
 
@@ -63,5 +71,9 @@ public class SeeAllActivity<T> extends AppCompatActivity {
 
         findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
         recyclerView = findViewById(R.id.recycler_view_seeAll);
+    }
+
+    private void handleError(Throwable error) {
+        // wifi connection retry page
     }
 }
