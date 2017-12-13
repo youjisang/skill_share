@@ -25,6 +25,11 @@ public class DiscussionDiffCallback extends DiffCallback<Discussion> {
         List<Reply> oldReplies = oldData.get(oldItemPosition).getReplies();
         List<Reply> newReplies = newData.get(newItemPosition).getReplies();
 
-        return oldReplies.size() == newReplies.size();
+        if(oldReplies == null && newReplies == null)
+            return true;
+        else if(oldReplies == null && newReplies != null)
+            return false;
+        else
+            return oldReplies.size() == newReplies.size();
     }
 }

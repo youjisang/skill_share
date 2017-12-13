@@ -36,7 +36,6 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -150,17 +149,17 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         // test ====================================================================
-        Map<String, List<Class>> data = new LinkedHashMap<>();
-        List<Class> classData = new ArrayList<>();
-        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg",
-                "Sorin Constantin", "24");
-        classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);
-        // [ fix ] LinkedHashMap <<< 순서가 보장된 Map
-        // TODO 순서를 보장해주고 DATA 를 가져와야 한다. <<< Node
-        data.put("Feature on Skillshare", classData);
-        data.put("Best this month", classData);
-        data.put("Test", classData);
-        handleResponse(data);
+//        Map<String, List<Class>> data = new LinkedHashMap<>();
+//        List<Class> classData = new ArrayList<>();
+//        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg",
+//                "Sorin Constantin", "24");
+//        classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);   classData.add(c);
+//        // [ fix ] LinkedHashMap <<< 순서가 보장된 Map
+//        // TODO 순서를 보장해주고 DATA 를 가져와야 한다. <<< Node
+//        data.put("Feature on Skillshare", classData);
+//        data.put("Best this month", classData);
+//        data.put("Test", classData);
+//        handleResponse(data);
         //test ====================================================================
 
         setContainer();

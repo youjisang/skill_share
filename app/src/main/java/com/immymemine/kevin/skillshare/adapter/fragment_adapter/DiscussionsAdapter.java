@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,13 +56,14 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
         DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
-//        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
 
 //        this.discussions.clear();
 //        this.discussions.addAll(discussions);
-        this.discussions = discussions;
-        notifyDataSetChanged();
-//        result.dispatchUpdatesTo(this);
+        result.dispatchUpdatesTo(this);
+
+//        this.discussions = discussions;
+//        notifyDataSetChanged();
     }
 
     @Override
@@ -110,9 +112,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         }
     }
 
-    /* TODO 지상
-       expandableTextView 쓰는 방법.
-     */
     @Override
     public int getItemCount() {
         if(discussions==null)

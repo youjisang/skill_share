@@ -51,7 +51,7 @@ public class ConstantUtil {
     public static final String REVIEW_ITEM = "See All Review";
     public static final String DISCUSSION_ITEM = "Discussion";
 
-    public static final String FEATURED_ON_SKILLSHARE = "Featured On Skillshare";
+    public static final String FEATURED_ON_SKILLSHARE = "featured_on_skillshare";
     public static final String TRENDING_NOW = "Trending Now";
     public static final String BEST_THIS_MONTH = "Best This Month";
 
