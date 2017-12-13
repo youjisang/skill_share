@@ -4,17 +4,17 @@ package com.immymemine.kevin.skillshare.model.m_class;
  * Created by quf93 on 2017-12-05.
  */
 
-public class Review {
+public class Reviews {
 
     String reviewPercent;
     String content;
     String reviewerName;
     String pictureUrl;
 
-    public Review(String reviewPercent,
-            String content,
-            String reviewerName,
-            String pictureUrl) {
+    public Reviews(String reviewPercent,
+                   String content,
+                   String reviewerName,
+                   String pictureUrl) {
         this.pictureUrl = pictureUrl;
         this.content = content;
         this.reviewerName = reviewerName;

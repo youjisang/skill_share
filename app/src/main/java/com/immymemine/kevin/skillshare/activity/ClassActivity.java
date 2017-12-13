@@ -1,7 +1,6 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,9 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -23,10 +19,15 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -43,6 +44,7 @@ import com.immymemine.kevin.skillshare.adapter.fragment_adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +68,8 @@ public class ClassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
-        id = intent.getStringExtra("_id");
-        url = intent.getStringExtra("URI");
+        id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
+        url = intent.getStringExtra("URL");
         // 2. model object 에 담아주고
 
         // 3. view 에서 model object 를 사용
@@ -111,7 +113,7 @@ public class ClassActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         Bundle bundle = new Bundle();
-        bundle.putString("_id", id);
+        bundle.putString(ConstantUtil.ID_FLAG, id);
 
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);
@@ -126,12 +128,6 @@ public class ClassActivity extends AppCompatActivity {
 
         tabPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragmentList));
     }
-    /* TODO
-        GeneralRecylerViewAdapter에서 아이템 클릭 이벤트로 넘어온 클래스 _id키 값을
-        bundle로 각 프래그먼트로 넘겨줌
-        프래그먼트마다 서버에서 그때 그때 데이터를 받아온다.
-
-     */
 
     // 탭 레이아웃과 뷰페이저를 연결한다.
     private void connectTabAndPager() {
@@ -154,13 +150,8 @@ public class ClassActivity extends AppCompatActivity {
     public void subscribe(View view) {
 
     }
-    public void student_profile(View view) {
-        int id = view.getId();
-        /* TODO 지상
-        view.getId()
-          이부분의 의미?
 
-         */
+    public void student_profile(View view) {
 
     }
     // Exo Player -----------------------------------------------------------------------
@@ -187,12 +178,7 @@ public class ClassActivity extends AppCompatActivity {
         simpleExoPlayerView = new SimpleExoPlayerView(this);
         simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
         simpleExoPlayerView.requestFocus(); // ( ? )
-        Glide.with(this).asBitmap().load(Uri.parse(url)).into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                simpleExoPlayerView.setDefaultArtwork(resource);
-            }
-        });
+        simpleExoPlayerView.setUseArtwork(true);
         simpleExoPlayerView.setUseController(false); //Set media controller
         simpleExoPlayerView.hideController();
 
@@ -226,11 +212,19 @@ public class ClassActivity extends AppCompatActivity {
     private MediaSource buildMediaSource(Uri uri) {
         @C.ContentType int type = Util.inferContentType(uri);
         switch (type) {
+            case C.TYPE_SS:
+                return new SsMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), null, null);
             case C.TYPE_DASH:
                 return new DashMediaSource(uri, new DefaultDataSourceFactory(this, null, new DefaultHttpDataSourceFactory(userAgent, null)),
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), null, null);
-                default:
-                    throw new IllegalStateException("Unsupported Type : " + type);
+            case C.TYPE_HLS:
+                return new HlsMediaSource(uri, mediaDataSourceFactory, null, null);
+            case C.TYPE_OTHER:
+                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                        null, null);
+            default:
+                throw new IllegalStateException("Unsupported Type : " + type);
         }
     }
 
@@ -263,21 +257,11 @@ public class ClassActivity extends AppCompatActivity {
             trackSelector = null;
         }
     }
-    /* TODO 지상
-       player객체가 null이 아니면 현재 상태를 저장하고, 저장된 것을 release
-       뒤에 객체들을 왜또 null 시키는 건지는 공부필요
-    */
 
     @Override
-    protected void onStart() {
-        player.setPlayWhenReady(true);
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
+    protected void onPause() {
         player.setPlayWhenReady(false);
-        super.onStop();
+        super.onPause();
     }
 
     @Override
@@ -285,9 +269,6 @@ public class ClassActivity extends AppCompatActivity {
         releasePlayer();
         super.onDestroy();
     }
-    /* TODO 지상
-       생명주기상으로 onStop은 꺼진 상태를 말하는 거 같은데 왜 releasePlayer?
-    */
 
     private class PlayerEventListener implements Player.EventListener {
         private static final String TAG = "skill share player";

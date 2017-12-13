@@ -3,6 +3,7 @@ package com.immymemine.kevin.skillshare.network.api;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.network.Response;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface ClassService {
 
     @POST("class/addDiscussion")
     Observable<List<Discussion>> addDiscussion(@Body Discussion discussion);
+
+    @POST("class/like")
+    Observable<Response> like();
 }

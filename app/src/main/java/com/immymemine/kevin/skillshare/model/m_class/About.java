@@ -10,27 +10,27 @@ public class About {
     String projectSubscriberCount;
     List<Project> projects;
 
-    Review review;
-    Subscriber subscriber;
+    Reviews reviews;
+    Subscribers subscriber;
     List<RelatedClass> relatedClasses;
 
     public String getProjectSubscriberCount() {
         return projectSubscriberCount;
     }
 
-    public Review getReview() {
-        return review;
+    public Reviews getReviews() {
+        return reviews;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setReviews(Reviews reviews) {
+        this.reviews = reviews;
     }
 
-    public Subscriber getSubscriber() {
+    public Subscribers getSubscriber() {
         return subscriber;
     }
 
-    public void setSubscriber(Subscriber subscriber) {
+    public void setSubscriber(Subscribers subscriber) {
         this.subscriber = subscriber;
     }
 

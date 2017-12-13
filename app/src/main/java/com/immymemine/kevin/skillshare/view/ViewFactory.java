@@ -84,6 +84,7 @@ public class ViewFactory {
     class GeneralViewFactory implements Callable<View> {
         String title;
         List<Class> classes;
+
         public GeneralViewFactory(String title, List<Class> classes) {
             this.title = title;
             this.classes = classes;
@@ -94,7 +95,10 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
+            if(classes == null)
+                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
+            else
+                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
@@ -109,12 +113,6 @@ public class ViewFactory {
             return view;
         }
     }
-
-    /* TODO 지상
-    ExecutorService, collable -작업 완료 후 리턴값이 있음, future-Future 객체는 작업이 완료될때까지 기다렸다가 최종 결과를 얻는데 사용
-    일단 유연하고 효과적인 비동기 작업을 위해 사용한다고 이해.
-    쓰레드 그룹과 쓰레드 풀 차이?
-     */
 
     public View getGeneralView(String title, List<Class> classes) {
         Future<View> f = executor.submit(new GeneralViewFactory(title, classes));
@@ -169,7 +167,6 @@ public class ViewFactory {
         @Override
         public View call() throws Exception {
             View view = inflater.inflate(R.layout.discover_view, null);
-
             recyclerView = view.findViewById(R.id.recycler_view_discover);
             recyclerView.setAdapter(new DiscoverRecyclerViewAdapter());
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
@@ -263,9 +260,6 @@ public class ViewFactory {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
-                     /* TODO 지상
-                     여기서 생성자로 받아서 for문 돌려서 addView해주는 방법도 있지 않을까?
-                     */
                     return view;
                 }
         );
@@ -282,6 +276,12 @@ public class ViewFactory {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
+                    view.findViewById(R.id.button_sign_up).setOnClickListener(v -> {
+                        interactionInterface.signUp();
+                    });
+                    view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
+                        interactionInterface.signIn();
+                    });
                     return view;
                 }
         );
@@ -298,7 +298,9 @@ public class ViewFactory {
         // welcome view 닫기
         void close();
 
+        // sign up / in page 이동
         void signUp();
+        void signIn();
 
         // select activity 로 이동
         void select();

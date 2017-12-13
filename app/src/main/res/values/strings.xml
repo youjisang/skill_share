@@ -56,6 +56,7 @@
     <string name="policy">By signing up you agree to Skillshare\'s Terms of Service and Privacy Policy</string>
     <string name="sign_up_with_google">Sign Up with Google</string>
 
+    <!-- constant util -->
     <string name="project">Project</string>
     <string name="review">Review</string>
     <string name="subscriber">Subscriber</string>
@@ -64,4 +65,5 @@
     <!-- chatting toolgroupItemstems -->
     <string name="leave_group">Leave Group</string>
     <string name="create_group">Create a New Group</string>
+    <string name="review">Class Reviews</string>
 </resources>

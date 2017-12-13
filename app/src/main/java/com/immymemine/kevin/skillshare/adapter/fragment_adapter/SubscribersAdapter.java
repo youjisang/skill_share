@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
+import com.immymemine.kevin.skillshare.model.m_class.Subscribers;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 /**
@@ -30,7 +30,7 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
         count = 0;
     }
 
-    public void update(Subscriber subscriber, int count) {
+    public void update(Subscribers subscriber, int count) {
         this.pictureUrls = subscriber.getPictureUrls();
         this.ids = subscriber.getIds();
 

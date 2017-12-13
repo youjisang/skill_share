@@ -42,18 +42,23 @@ public class ConstantUtil {
     public static final String GAMING = "Gaming";
     public static final String TEACHING = "Teaching";
 
-    public static final int SELECT_SKILLS_REQUEST_CODE = 44;
+    public static final int NO_ITEM = -9;
 
     // see all item
+    public static final String CLASS_ITEM = "See All Class";
+    public static final String PROJECT_ITEM = "See All Project";
+    public static final String SUBSCRIBER_ITEM = "See All Subscriber";
+    public static final String REVIEW_ITEM = "See All Review";
+    public static final String DISCUSSION_ITEM = "Discussion";
+
+    public static final String FEATURED_ON_SKILLSHARE = "featured_on_skillshare";
+    public static final String TRENDING_NOW = "Trending Now";
+    public static final String BEST_THIS_MONTH = "Best This Month";
+
+    // intent flag
+    public static final String USER_ID_FLAG = "USER_ID";
+    public static final String TOOLBAR_TITLE_FLAG = "TTF";
+    public static final String ID_FLAG = "ID";
     public static final String SEE_ALL_FLAG = "See All";
-    public static final int NO_ITEM = -9;
-    public static final int CLASS_ITEM = -8;
-    public static final int PROJECT_ITEM = -7;
-    public static final int SUBSCRIBER_ITEM = -6;
-    public static final int REVIEW_ITEM = -5;
-
-    public static final int FEATURE_ON_SKILLSHARE = 1001;
-    public static final int TRENDING_NOW = 1014;
-    public static final int BEST_THIS_MONTH = 1015;
-
+    public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 }
