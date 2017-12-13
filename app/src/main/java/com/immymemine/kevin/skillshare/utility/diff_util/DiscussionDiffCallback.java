@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.utility.diff_util;
 
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 
 import java.util.List;
 
@@ -16,20 +17,14 @@ public class DiscussionDiffCallback extends DiffCallback<Discussion> {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldData.get(oldItemPosition).getContent().equals(newData.get(newItemPosition).getContent());
+        return oldData.get(oldItemPosition).get_id().equals(newData.get(newItemPosition).get_id());
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        Discussion oldItem = oldData.get(oldItemPosition);
-        Discussion newItem = newData.get(newItemPosition);
+        List<Reply> oldReplies = oldData.get(oldItemPosition).getReplies();
+        List<Reply> newReplies = newData.get(newItemPosition).getReplies();
 
-        return oldItem.getLike() == newItem.getLike();
-//                oldItem.getReDiscussions().length == newItem.getReDiscussions().length;
+        return oldReplies.size() == newReplies.size();
     }
 }
-
-/* TODO 지상
-이부분은 데이터를 최신화하기 위한 로직.
-
- */

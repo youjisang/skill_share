@@ -6,12 +6,10 @@ package com.immymemine.kevin.skillshare.network.gcm;
 
 public class SendMessageBody {
     String userName;
-    String time;
-    String resId;
+    String userId;
 
-    public SendMessageBody(String userName, String time, String resId) {
+    public SendMessageBody(String userName, String userId) {
         this.userName = userName;
-        this.time = time;
-        this.resId = resId;
+        this.userId = userId;
     }
 }

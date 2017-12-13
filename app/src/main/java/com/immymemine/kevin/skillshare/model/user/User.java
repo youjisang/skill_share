@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.model.user;
 
 import java.security.acl.Group;
+import java.util.List;
 
 /**
  * Created by quf93 on 2017-11-29.
@@ -8,9 +9,9 @@ import java.security.acl.Group;
 
 public class User
 {
-    private SubscribeClass[] subscribeClass;
+    private List<SubscribeClass> subscribeClass;
 
-    private Discussion[] discussion;
+    private List<Discussion> discussion;
 
     private String registrationId;
 
@@ -18,25 +19,17 @@ public class User
 
     private String password;
 
-    private Project[] project;
+    private List<Project> project;
 
-    private Following[] following;
+    private List<Following> following;
 
-    private Followers[] followers;
+    private List<Followers> followers;
 
     private String pictureUrl;
 
     private String email;
 
-    public SubscribeClass[] getSubscribeClass() {
-        return subscribeClass;
-    }
-
-    public void setSubscribeClass(SubscribeClass[] subscribeClass) {
-        this.subscribeClass = subscribeClass;
-    }
-
-    public String get_id() {
+        public String get_id() {
         return _id;
     }
 
@@ -48,29 +41,9 @@ public class User
 
     private String name;
 
-    private String[] followingSkills;
+    private List<String> followingSkills;
 
-    private Group[] group;
-
-    public SubscribeClass[] getSubsribeClass ()
-    {
-        return subscribeClass;
-    }
-
-    public void setSubsribeClass (SubscribeClass[] subscribeClass)
-    {
-        this.subscribeClass = subscribeClass;
-    }
-
-    public Discussion[] getDiscussion ()
-    {
-        return discussion;
-    }
-
-    public void setDiscussion (Discussion[] discussion)
-    {
-        this.discussion = discussion;
-    }
+    private List<Group> group;
 
     public String getRegistrationId ()
     {
@@ -100,36 +73,6 @@ public class User
     public void setPassword (String password)
     {
         this.password = password;
-    }
-
-    public Project[] getProject ()
-    {
-        return project;
-    }
-
-    public void setProject (Project[] project)
-    {
-        this.project = project;
-    }
-
-    public Following[] getFollowing ()
-    {
-        return following;
-    }
-
-    public void setFollowing (Following[] following)
-    {
-        this.following = following;
-    }
-
-    public Followers[] getFollowers ()
-    {
-        return followers;
-    }
-
-    public void setFollowers (Followers[] followers)
-    {
-        this.followers = followers;
     }
 
     public String getPictureUrl ()
@@ -162,23 +105,59 @@ public class User
         this.name = name;
     }
 
-    public String[] getFollowingSkills ()
-    {
+    public List<SubscribeClass> getSubscribeClass() {
+        return subscribeClass;
+    }
+
+    public void setSubscribeClass(List<SubscribeClass> subscribeClass) {
+        this.subscribeClass = subscribeClass;
+    }
+
+    public List<Discussion> getDiscussion() {
+        return discussion;
+    }
+
+    public void setDiscussion(List<Discussion> discussion) {
+        this.discussion = discussion;
+    }
+
+    public List<Project> getProject() {
+        return project;
+    }
+
+    public void setProject(List<Project> project) {
+        this.project = project;
+    }
+
+    public List<Following> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<Following> following) {
+        this.following = following;
+    }
+
+    public List<Followers> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Followers> followers) {
+        this.followers = followers;
+    }
+
+    public List<String> getFollowingSkills() {
         return followingSkills;
     }
 
-    public void setFollowingSkills (String[] followingSkills)
-    {
+    public void setFollowingSkills(List<String> followingSkills) {
         this.followingSkills = followingSkills;
     }
 
-    public Group[] getGroup ()
-    {
+    public List<Group> getGroup() {
         return group;
     }
 
-    public void setGroup (Group[] group)
-    {
+    public void setGroup(List<Group> group) {
         this.group = group;
     }
 

@@ -56,6 +56,7 @@ public class ConstantUtil {
     public static final String BEST_THIS_MONTH = "Best This Month";
 
     // intent flag
+    public static final String USER_ID_FLAG = "USER_ID";
     public static final String TOOLBAR_TITLE_FLAG = "TTF";
     public static final String ID_FLAG = "ID";
     public static final String SEE_ALL_FLAG = "See All";

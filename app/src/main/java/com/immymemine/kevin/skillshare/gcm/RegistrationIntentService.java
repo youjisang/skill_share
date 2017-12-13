@@ -31,8 +31,6 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         String userId = intent.getStringExtra("USER_ID");
-        String deviceId = intent.getStringExtra("DEVICE_ID");
-        String deviceName = intent.getStringExtra("DEVICE_NAME");
 
         try {
             // token 값 생성
@@ -40,18 +38,16 @@ public class RegistrationIntentService extends IntentService {
             String registrationId = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             Log.d(TAG, "Registration ID : " + registrationId);
             // 서버 통신
-            registerDevice(userId, deviceId, deviceName, registrationId);
+            registerDevice(userId, registrationId);
         } catch (Exception e ) {
             Log.e(TAG, e.getMessage());
         }
     }
 
-    private void registerDevice(String userId, String deviceId, String deviceName, String registrationId) {
+    private void registerDevice(String userId, String registrationId) {
         // request body 세팅
         RegisterRequestBody requestBody = new RegisterRequestBody();
         requestBody.setUserId(userId);
-        requestBody.setDeviceId(deviceId);
-        requestBody.setDeviceName(deviceName);
         requestBody.setRegistrationId(registrationId);
 
         // retrofit

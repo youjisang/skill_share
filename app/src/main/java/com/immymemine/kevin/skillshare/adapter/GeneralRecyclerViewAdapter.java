@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ClassActivity;
@@ -26,10 +25,11 @@ import java.util.List;
  */
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
-    // data 가 바뀔 일이 거의 없다 <<< 관리자가 바꿔주기 때문에
-    // 바꾼 상태
     Context context;
     List<Class> classes;
+    public GeneralRecyclerViewAdapter(Context context) {
+        this.context = context;
+    }
 
     public GeneralRecyclerViewAdapter(Context context, List<Class> classes) {
         this.context = context;
@@ -51,10 +51,9 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
             holder.textViewTime.setText(mClass.getDuration() + "m");
-            holder.uri = mClass.getPictureUrl();
-            Glide.with(context).load(Uri.parse(holder.uri))
+            holder.url = mClass.getPictureUrl();
+            Glide.with(context).load(Uri.parse(holder.url))
                     .apply(RequestOptions.centerCropTransform())
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE))
                     .into(holder.imageView);
         }
     }
@@ -63,8 +62,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     public int getItemCount() {
         if(classes != null)
             return classes.size();
-        else
-            return 5;
+        return 5;
     }
 
     class GeneralViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +70,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         TextView textViewTime, textViewTitle, textViewTutor;
 
         String id;
-        String uri;
+        String url;
         public GeneralViewHolder(View v) {
             super(v);
 
@@ -85,14 +83,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassActivity.class);
                 intent.putExtra(ConstantUtil.ID_FLAG, id); // data for identification
-                intent.putExtra("URI", uri);
-                // TODO Glide cache 된 파일을 Class Activity 로 넘어갔을 때 바로 사용하도록... 똑같은 url 이면 로딩을 하지 않는지 체크
+                intent.putExtra("URL", url);
                 context.startActivity(intent);
-
-                /* TODO 지상
-                 클릭한 클래스의 고유의 id값을 프래그먼트가 있는 ClassActivity로 넘겼을때,
-                  해당 id값에 포함된 데이터들을 선별적으로 프래그먼트에 넣는다.
-                 */
             });
         }
     }

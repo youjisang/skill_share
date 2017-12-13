@@ -16,7 +16,7 @@ public class Discussion {
     String content;
     String time; // Time Util 을 만들어서 String 으로 둔갑되어 있는 long 값을 파싱해서 18 minutes ago / 1 year ago ... 와 같이 표시해줘야 한다
     String likeCount;
-    String registrationId;
+    String userId;
     List<Reply> replies;
 
     // for test
@@ -26,7 +26,7 @@ public class Discussion {
             String content,
             String time,
             String likeCount,
-            String registrationId,
+            String userId,
             List<Reply> replies) {
         this._id = _id;
         this.name = name;
@@ -61,8 +61,8 @@ public class Discussion {
         return likeCount;
     }
 
-    public String getRegistrationId() {
-        return registrationId;
+    public String getUserId() {
+        return userId;
     }
 
     public List<Reply> getReplies() {

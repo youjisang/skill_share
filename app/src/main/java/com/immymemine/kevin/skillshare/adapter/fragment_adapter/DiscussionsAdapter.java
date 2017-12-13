@@ -22,6 +22,8 @@ import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.GCMService;
 import com.immymemine.kevin.skillshare.network.gcm.SendMessageBody;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
+import com.immymemine.kevin.skillshare.utility.diff_util.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
@@ -52,7 +54,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
-//        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
+        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
 //        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
 
 //        this.discussions.clear();
@@ -88,7 +90,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             Discussion discussion = discussions.get(position);
             // identifier
             holder.id = discussion.get_id();
-            holder.resId = discussion.getRegistrationId();
+            holder.userId = discussion.getUserId();
 
             // profile
             holder.pictureUrl = discussion.getPictureUrl();
@@ -99,7 +101,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             // content
             holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
             // time
-            holder.textViewTime.setText(discussion.getTime());
+            holder.textViewTime.setText( TimeUtil.calculateTime(discussion.getTime()) );
             // like
             holder.textViewLikeCount.setText(discussion.getLikeCount());
             // reply
@@ -122,7 +124,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public class Holder extends RecyclerView.ViewHolder {
         // id
         String id;
-        String resId;
+        String userId;
 
         // profile
         ImageView imageViewProfile;
@@ -166,7 +168,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) + 1) + "");
                         // if(login) >>> notification message else dialog 띄우기
                         RetrofitHelper.createApi(GCMService.class)
-                                .sendMessage(new SendMessageBody("JUWON LEE", System.currentTimeMillis()+"", resId))
+                                .sendMessage(new SendMessageBody("JUWON LEE", userId))
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
@@ -223,7 +225,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
                 Reply reply = replies.get(size-1);
                 textViewReplyProfile.setText(reply.getName());
-                textViewTimeReply.setText(reply.getTime());
+                textViewTimeReply.setText( TimeUtil.calculateTime(reply.getTime()) );
                 Glide.with(context).load(reply.getPictureUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewReplyProfile);
