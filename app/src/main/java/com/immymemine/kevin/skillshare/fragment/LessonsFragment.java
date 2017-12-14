@@ -1,19 +1,16 @@
 package com.immymemine.kevin.skillshare.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,13 +19,13 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.TutorActivity;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.m_class.Video;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +53,10 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
     // context
     Context context;
 
+    String followers_s;
+
+    int followers_i;
+
 
     public LessonsFragment() {
         // Required empty public constructor
@@ -69,7 +70,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         View view = inflater.inflate(R.layout.fragment_lessons, container, false);
         context = getActivity();
         initiateView(view);
-        followedAndFollowing();
+
 
         RetrofitHelper.createApi(ClassService.class)
                 .getLessons(getArguments().getString("_id"))
@@ -80,6 +81,13 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
 
         // test ==============================================================
         Tutor tutor = new Tutor("Tutor ID", "Yuko Shimizu", "23593", "https://static.skillshare.com/uploads/users/3110168/user-image-medium.jpg?43101635");
+
+        //TODO 자상========================================
+        followers_s = tutor.getFollowers().toString();
+        followers_i = Integer.parseInt(followers_s);
+        followedAndFollowing();
+        clickedTutorProfile();
+        //================================================
 
         List<Video> videos = new ArrayList<>();
         videos.add(new Video("Video ID", "1", "Introduction", "1:08", "http://s3.amazonaws.com/skillshare/uploads/parentClasses/2f4f5efd1d503e7131249c94cf2ed7bc/681a4bd7"));
@@ -131,12 +139,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         adapter.update(lessons.getVideos());
         // TODO hide progress bar
     }
-    /* TODO 지상
 
-        Tutor tutor = lessons.getTutor()
-        -> Tutor 객체를 lessons의 tutor로 정의함
-         ☆ 개인적으로 그동안 헷갈렸던 부분
-     */
 
     private void handleError(Throwable error) {
 
@@ -145,28 +148,35 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
     public void followedAndFollowing() {
 
 
-        buttonFollow.setOnClickListener(new View.OnClickListener() {
-
+        buttonFollow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (buttonFollow.isChecked()) {
-                      buttonFollow.setTextColor(getResources().getColor(R.color.white));
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
 
-                    /* TODO 지상
-                    로직 작성
-                     */
-
-
-                }else
+                    buttonFollow.setTextColor(getResources().getColor(R.color.white));
+                    textViewFollowersCount.setText(followers_i + 1 + "");
+                } else if (!isChecked) {
                     buttonFollow.setTextColor(getResources().getColor(R.color.IcActive));
-
-                /* TODO 지상
-                    로직 작성
-                */
-
+                    textViewFollowersCount.setText(followers_i + "");
+                }
 
             }
         });
+    }
+
+
+    private void clickedTutorProfile() {
+        imageViewTutor.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), TutorActivity.class);
+
+            /* TODO 지상
+            intent.putExtra("follower_num", followers_i);
+           해당 Tutor id도 함께 보낸다.
+           굳이 follower_num도 넘겨줄 필요가 있나??
+             */
+            startActivity(intent);
+        });
+
     }
 
 
@@ -181,7 +191,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         // tutor 정보
         textViewTutor = v.findViewById(R.id.text_view_profile);
         textViewFollowersCount = v.findViewById(R.id.text_view_followers_count);
-        imageViewTutor = v.findViewById(R.id.image_view_tutor);
+        imageViewTutor = v.findViewById(R.id.image_view_group);
 
         // follow 버튼
         buttonFollow = v.findViewById(R.id.button_follow);

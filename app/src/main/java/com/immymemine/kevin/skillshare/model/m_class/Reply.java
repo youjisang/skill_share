@@ -4,11 +4,23 @@ package com.immymemine.kevin.skillshare.model.m_class;
  * Created by quf93 on 2017-12-03.
  */
 
-public class ReDiscussion {
-    private String name;
-    private String pictureUrl;
-    private String content;
-    private String time;
+public class Reply {
+    String name;
+    String pictureUrl;
+    String content;
+    String time;
+
+    // test
+
+    public Reply(String name,
+            String pictureUrl,
+            String content,
+            String time) {
+        this.name = name;
+        this.pictureUrl = pictureUrl;
+        this.content = content;
+        this.time = time;
+    }
 
     public String getName() {
         return name;

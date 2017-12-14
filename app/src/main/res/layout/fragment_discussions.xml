@@ -1,5 +1,3 @@
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +22,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_discussion"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         tools:listitem="@layout/recycler_view_item_discussions">
 
@@ -32,7 +30,9 @@
 
 
     <LinearLayout
-        android:id="@+id/layout_linear_discussion"
+
+        android:id="@+id/linear_layout_discussion"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -55,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:onClick="addDiscussion"
             android:text="Send"
             android:textColor="@color/IcActive"
             android:textSize="16sp" />

@@ -8,10 +8,10 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.network.api.DeviceService;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.DeviceService;
 import com.immymemine.kevin.skillshare.network.device.RegisterRequestBody;
-import com.immymemine.kevin.skillshare.network.device.RegisterResponse;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -64,7 +64,7 @@ public class RegistrationIntentService extends IntentService {
                 .subscribe(this::handleResponse, this::handleError);
     }
 
-    private void handleResponse(RegisterResponse response) {
+    private void handleResponse(Response response) {
         Log.d(TAG, "response : " + response.getResult() + ", " + response.getMessage());
     }
 

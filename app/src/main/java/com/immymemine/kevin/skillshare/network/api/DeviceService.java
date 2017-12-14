@@ -1,7 +1,7 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.device.RegisterRequestBody;
-import com.immymemine.kevin.skillshare.network.device.RegisterResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -13,5 +13,5 @@ import retrofit2.http.POST;
 
 public interface DeviceService {
     @POST("device/register")
-    Observable<RegisterResponse> register(@Body RegisterRequestBody body);
+    Observable<Response> register(@Body RegisterRequestBody body);
 }

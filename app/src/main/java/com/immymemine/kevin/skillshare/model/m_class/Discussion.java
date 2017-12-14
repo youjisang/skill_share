@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.model.m_class;
 
+import java.util.List;
+
 /**
  * Created by quf93 on 2017-12-02.
  */
@@ -14,7 +16,7 @@ public class Discussion {
     String content;
     String time;
     int like;
-    ReDiscussion[] reDiscussions;
+    List<Reply> replies;
 
     // for test
     public Discussion(String _id,
@@ -23,14 +25,14 @@ public class Discussion {
             String content,
             String time,
             int like,
-            ReDiscussion[] reDiscussions) {
+            List<Reply> replies) {
         this._id = _id;
         this.name = name;
         this.pictureUrl = pictureUrl;
         this.content = content;
         this.time = time;
         this.like = like;
-        this.reDiscussions = reDiscussions;
+        this.replies = replies;
     }
 
     public String get_id() {
@@ -57,7 +59,8 @@ public class Discussion {
         return like;
     }
 
-    public ReDiscussion[] getReDiscussions() {
-        return reDiscussions;
+    public List<Reply> getReplies() {
+        return replies;
     }
+
 }

@@ -29,8 +29,9 @@
         <activity android:name=".activity.SeeAllActivity" />
         <activity android:name=".activity.SignInActivity" />
         <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.ClassActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activity.ClassActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ReviewActivity" />
         <activity android:name=".activity.ProjectActivity" />
 
@@ -67,9 +68,12 @@
         <!-- 기기별 token( key ) 등록하는 서비스 -->
         <service
             android:name=".gcm.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
-        <activity android:name=".activity.TutorActivity"></activity>
+        <activity android:name=".activity.TutorActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SavedActivity" />
+        <activity android:name=".activity.GroupActivity"></activity>
     </application>
 
 </manifest>

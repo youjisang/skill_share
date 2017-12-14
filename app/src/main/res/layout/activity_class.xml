@@ -60,6 +60,7 @@
             android:layout_marginRight="40dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
+            android:onClick="subscribe"
             android:tint="@android:color/background_light"
             app:srcCompat="@android:drawable/ic_lock_lock" />
 

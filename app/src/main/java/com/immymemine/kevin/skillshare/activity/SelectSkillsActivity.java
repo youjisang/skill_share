@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ToggleButton;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
@@ -20,7 +19,10 @@ import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 public class SelectSkillsActivity extends Activity {
 
     Intent intent;
-    ArrayList toggleArray;
+    ArrayList<String> toggleArray;
+
+    ToggleImageButton design, photography, business, technology, craft, culinary, film, fashion, music, lifestyle, gaming, teaching;
+    CustomToggleButton design2, photography2, business2, technology2, craft2, culinary2, film2, fashion2, music2, lifestyle2, gaming2, teaching2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,34 +32,48 @@ public class SelectSkillsActivity extends Activity {
         // 뒤로가기 버튼
         ImageButton close_button = findViewById(R.id.toolbar_close_button);
         close_button.setOnClickListener(view -> {
+            intent = new Intent();
+            intent.putExtra("toggleArray",toggleArray);
+            setResult(RESULT_OK, intent);
+            Log.e("RESULT OK!","CHECK RESULT OK"+intent);
             // 선택한 skills 의 정보를 넘겨줘야한다
             // start activity for result >>> reply
 
-            intent = new Intent(SelectSkillsActivity.this, MainActivity.class);
-            intent.putExtra("toggleArray",toggleArray);
-            startActivity(intent);
-
-            /*TODO 지상
-
-            뒤로 가기 버튼을 클릭 했을 시에
-            intent = new intent(SelectSkillsActivity.this, MainActivity.class)
-            toggleArray -> 를 MainActivity에 intent로 넘긴다.
-            intent.putExtra("selectSkill", toggleArray);
-            startActivity(intent);
-
-            이런식으로 보내면, MainActivity에 보낸다.
-            viewFactory와 같은 레이아웃 매니저가 있기 때문에, Main에다가만 보내면 보낸 데이터를
-            GeneralViewFactory와 GetMeSkillView에 적용할 수 있을 것 같음.
-
-
-            */
-
-
-            finish();
+             finish();
         });
-
+        initSetting();
         initiateView();
     }
+
+    private void initSetting() {
+        design = findViewById(R.id.i_toggle_design);
+        design2 = findViewById(R.id.toggle_design);
+        photography = findViewById(R.id.i_toggle_photography);
+        photography2 = findViewById(R.id.toggle_photography);
+        business = findViewById(R.id.i_toggle_business);
+        business2 = findViewById(R.id.toggle_business);
+        technology = findViewById(R.id.i_toggle_technology);
+        technology2 = findViewById(R.id.toggle_technology);
+        craft = findViewById(R.id.i_toggle_crafts);
+        craft2 = findViewById(R.id.toggle_crafts);
+        culinary = findViewById(R.id.i_toggle_culinary);
+        culinary2 = findViewById(R.id.toggle_culinary);
+        film = findViewById(R.id.i_toggle_film);
+        film2 = findViewById(R.id.toggle_film);
+        fashion = findViewById(R.id.i_toggle_fashion);
+        fashion2 = findViewById(R.id.toggle_fashion);
+        music = findViewById(R.id.i_toggle_music);
+        music2 = findViewById(R.id.toggle_music);
+        lifestyle = findViewById(R.id.i_toggle_lifestyle);
+        lifestyle2 = findViewById(R.id.toggle_lifestyle);
+        gaming = findViewById(R.id.i_toggle_gaming);
+        gaming2 = findViewById(R.id.toggle_gaming);
+        teaching = findViewById(R.id.i_toggle_teaching);
+        teaching2 = findViewById(R.id.toggle_teaching);
+
+
+    }
+
 
     private void initiateView() {
         setToggleButton(R.id.i_toggle_design, R.id.toggle_design);
@@ -78,46 +94,101 @@ public class SelectSkillsActivity extends Activity {
     // TODO 버튼 연동
     // TODO startactivityforresult >>> 선택된 skills 넘기기
     // TODO main > select skills activity 넘어올 때 기존에 선택된 skills 는 선택되어 있도록 처리
+
+
     private void setToggleButton(int i_toggle, int toggle) {
+        toggleArray = new ArrayList<String>();
+
         final ToggleImageButton tib = this.findViewById(i_toggle);
-        toggleArray = new ArrayList();
+        final CustomToggleButton tib2 = this.findViewById(toggle);
         ((CustomToggleButton) findViewById(toggle)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     tib.setChecked(true);
-
-                        Log.e("tib checked", "checked true==========================" + tib.toString());
-
-                    //TODO 지상
-                    // 선택 되었을 때는 다음과 같은 로직으로 toggleArray에서 추가함.
-                    toggleArray.add(tib.toString());
-                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
+                    if (tib2 == design2) {
+                        toggleArray.add(ConstantUtil.DESIGN);
+                    }
+                    if (tib2 == photography2) {
+                        toggleArray.add(ConstantUtil.PHOTOGRAPHY);
+                    }
+                    if (tib2 == business2) {
+                        toggleArray.add(ConstantUtil.BUSINESS);
+                    }
+                    if (tib2 == technology2) {
+                        toggleArray.add(ConstantUtil.TECHNOLOGY);
+                    }
+                    if (tib2 == craft2) {
+                        toggleArray.add(ConstantUtil.CRAFTS);
+                    }
+                    if (tib2 == culinary2) {
+                        toggleArray.add(ConstantUtil.CULINARY);
+                    }
+                    if (tib2 == film2) {
+                        toggleArray.add(ConstantUtil.FILM);
+                    }
+                    if (tib2 == fashion2) {
+                        toggleArray.add(ConstantUtil.FASHION);
+                    }
+                    if (tib2 == music2) {
+                        toggleArray.add(ConstantUtil.FASHION);
+                    }
+                    if (tib2 == lifestyle2) {
+                        toggleArray.add(ConstantUtil.LIFESTYLE);
+                    }
+                    if (tib2 == gaming2) {
+                        toggleArray.add(ConstantUtil.GAMING);
+                    }
+                    if (tib2 == teaching2) {
+                        toggleArray.add(ConstantUtil.TEACHING);
+                    }
+                    Log.e("check add", "toggleArray" + toggleArray);
+                    Log.e("check add", "toggleArray" + toggleArray.size());
 
                 } else {
                     tib.setChecked(false);
-
-                    //TODO 지상
-                    //선택이 되지 않았을 때는 다음과 같은 로직으로 toggleArray에서 삭제함.
-                    toggleArray.remove(tib.toString());
-                    Log.e("toggleArray checked", "toggleArray==========================" + toggleArray);
-
+                    if (tib2 == design2) {
+                        toggleArray.remove(ConstantUtil.DESIGN);
+                    }
+                    if (tib2 == photography2) {
+                        toggleArray.remove(ConstantUtil.PHOTOGRAPHY);
+                    }
+                    if (tib2 == business2) {
+                        toggleArray.remove(ConstantUtil.BUSINESS);
+                    }
+                    if (tib2 == technology2) {
+                        toggleArray.remove(ConstantUtil.TECHNOLOGY);
+                    }
+                    if (tib2 == craft2) {
+                        toggleArray.remove(ConstantUtil.CRAFTS);
+                    }
+                    if (tib2 == culinary2) {
+                        toggleArray.remove(ConstantUtil.CULINARY);
+                    }
+                    if (tib2 == film2) {
+                        toggleArray.remove(ConstantUtil.FILM);
+                    }
+                    if (tib2 == fashion2) {
+                        toggleArray.remove(ConstantUtil.FASHION);
+                    }
+                    if (tib2 == music2) {
+                        toggleArray.remove(ConstantUtil.FASHION);
+                    }
+                    if (tib2 == lifestyle2) {
+                        toggleArray.remove(ConstantUtil.LIFESTYLE);
+                    }
+                    if (tib2 == gaming2) {
+                        toggleArray.remove(ConstantUtil.GAMING);
+                    }
+                    if (tib2 == teaching2) {
+                        toggleArray.remove(ConstantUtil.TEACHING);
+                    }
+                    Log.e("check remove", "map!!!" + toggleArray);
+                    Log.e("check remove", "map!!!" + toggleArray.size());
                 }
             }
         });
 
     }
 
-    @Override
-    protected void onPause() {
-        //상태 저장 shared
-        // db
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        // 다시 들어올때
-        super.onResume();
-    }
 }

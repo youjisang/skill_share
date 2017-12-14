@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_home_black_24dp" />
+        app:srcCompat="@drawable/image_download_32dp" />
 
     <TextView
         android:id="@+id/warning"
@@ -38,6 +38,9 @@
         android:textColor="@android:color/black"
         android:textSize="22sp"
         android:textStyle="bold" />
+
+
+
 
     <TextView
         android:id="@+id/textView7"
@@ -85,5 +88,6 @@
         android:background="@color/cardview_shadow_start_color"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/ic_dashboard_black_24dp" />
+
 
 </FrameLayout>

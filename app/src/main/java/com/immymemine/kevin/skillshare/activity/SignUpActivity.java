@@ -8,10 +8,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
-import com.immymemine.kevin.skillshare.network.user.SignUpResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
         );
     }
 
-    private void handleResponse(SignUpResponse response) {
+    private void handleResponse(Response response) {
         if(ConstantUtil.SUCCESS.equals(response.getResult())) {
             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리

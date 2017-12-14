@@ -46,6 +46,7 @@ import com.immymemine.kevin.skillshare.adapter.fragment_adapter.FragmentAdapter;
 import com.immymemine.kevin.skillshare.fragment.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +115,7 @@ public class ClassActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         Bundle bundle = new Bundle();
-        bundle.putString("_id", id);
+        bundle.putString(ConstantUtil.ID_FLAG, id);
 
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);
@@ -164,16 +165,14 @@ public class ClassActivity extends AppCompatActivity {
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
-
+    /*TODO 지상
+     해당 버튼을 클릭하면, POST방식으로 user에 있는 savedClasses에 해당 url을 추가한다.
+     */
 
     }
     public void student_profile(View view) {
         int id = view.getId();
-        /* TODO 지상
-        view.getId()
-          이부분의 의미?
 
-         */
 
     }
     // Exo Player -----------------------------------------------------------------------
@@ -276,19 +275,18 @@ public class ClassActivity extends AppCompatActivity {
             trackSelector = null;
         }
     }
-    /* TODO 지상
-       player객체가 null이 아니면 현재 상태를 저장하고, 저장된 것을 release
-       뒤에 객체들을 왜또 null 시키는 건지는 공부필요
-    */
 
     @Override
-    protected void onStop() {
-        releasePlayer();
-        super.onStop();
+    protected void onPause() {
+        player.setPlayWhenReady(false);
+        super.onPause();
     }
-    /* TODO 지상
-       생명주기상으로 onStop은 꺼진 상태를 말하는 거 같은데 왜 releasePlayer?
-    */
+
+    @Override
+    protected void onDestroy() {
+        releasePlayer();
+        super.onDestroy();
+    }
 
     private class PlayerEventListener implements Player.EventListener {
         private static final String TAG = "skill share player";

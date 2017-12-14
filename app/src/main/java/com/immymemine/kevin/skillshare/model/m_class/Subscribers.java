@@ -4,14 +4,14 @@ package com.immymemine.kevin.skillshare.model.m_class;
  * Created by quf93 on 2017-12-05.
  */
 
-public class Subscriber {
+public class Subscribers {
     String subscriberNumber;
     String[] pictureUrls;
     String[] ids;
 
     // for test
-    public Subscriber(String subscriberNumber,
-            String[] pictureUrls, String[] ids) {
+    public Subscribers(String subscriberNumber,
+                       String[] pictureUrls, String[] ids) {
         this.subscriberNumber = subscriberNumber;
         this.pictureUrls = pictureUrls;
         this.ids = ids;

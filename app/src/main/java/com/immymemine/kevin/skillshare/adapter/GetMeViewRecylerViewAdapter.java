@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import com.immymemine.kevin.skillshare.R;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by JisangYou on 2017-12-07.
@@ -21,23 +21,24 @@ import java.util.List;
 public class GetMeViewRecylerViewAdapter extends RecyclerView.Adapter<GetMeViewRecylerViewAdapter.ViewHolder> {
 
     Context context;
-    List<String> skillsdata;
+    ArrayList<String> skillsdata;
 
-    public GetMeViewRecylerViewAdapter(Context context, List<String> skillsdata) {
+    public GetMeViewRecylerViewAdapter(Context context, ArrayList<String> skillsdata) {
         this.context = context;
         this.skillsdata = skillsdata;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_list_skills, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_list_skills, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.textViewSkill.setText(skillsdata.get(position).toString());
+            holder.textViewSkill.setText(skillsdata.get(position).toString());
+
     }
 
     @Override
@@ -50,6 +51,9 @@ public class GetMeViewRecylerViewAdapter extends RecyclerView.Adapter<GetMeViewR
 
         public ViewHolder(View itemView) {
             super(itemView);
+//            FlexboxLayoutManager.LayoutParams flexboxLayoutParams =
+//                    (FlexboxLayoutManager.LayoutParams) itemView.getLayoutParams();
+//            flexboxLayoutParams.setFlexGrow(1.0f);
             textViewSkill = itemView.findViewById(R.id.text_view_skill);
         }
     }

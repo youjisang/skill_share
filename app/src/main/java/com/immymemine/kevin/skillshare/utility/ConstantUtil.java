@@ -28,10 +28,9 @@ public class ConstantUtil {
     // URL
     public static final String BASE_URL = "http://localhost/8079/";
 
-    // selectSkill
-
+    // SelectSkill
     public static final String DESIGN = "Design";
-    public static final String PHOTOGRAPHY = "PhotoGraphy";
+    public static final String PHOTOGRAPHY = "Photography";
     public static final String BUSINESS = "Business";
     public static final String TECHNOLOGY = "Technology";
     public static final String CRAFTS = "Crafts";
@@ -39,27 +38,35 @@ public class ConstantUtil {
     public static final String FILM = "Film";
     public static final String FASHION = "Fashion";
     public static final String MUSIC = "Music";
-    public static final String LIFESTYLE = "LifeStyle";
+    public static final String LIFESTYLE = "Lifestyle";
     public static final String GAMING = "Gaming";
     public static final String TEACHING = "Teaching";
 
+    public static final int SELECT_SKILLS_REQUEST_CODE2 = 45;
+
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 
-    // see all item
     public static final int NO_ITEM = -9;
-    public static final int CLASS_ITEM = -8;
-    public static final int PROJECT_ITEM = -7;
-    public static final int STUDENT_ITEM = -6;
-    public static final int REVIEW_ITEM = -5;
+    // toolbar title flag
+    public static final String TOOLBAR_TITLE_FLAG = "TTF";
+    public static final String ID_FLAG = "ID";
+    // see all item
+    public static final String SEE_ALL_FLAG = "See All";
+    public static final String CLASS_ITEM = "See All Class";
+    public static final String PROJECT_ITEM = "See All Project";
+    public static final String SUBSCRIBER_ITEM = "See All Subscriber";
+    public static final String REVIEW_ITEM = "See All Review";
 
+    public static final String FEATURED_ON_SKILLSHARE = "Featured On Skillshare";
+    public static final String TRENDING_NOW = "Trending Now";
+    public static final String BEST_THIS_MONTH = "Best This Month";
 
-    public static final int FEATURE_ON_SKILLSHARE = 1001;
-    public static final int TRENDING_NOW = 1014;
-    public static final int BEST_THIS_MONTH = 1015;
+    //Search
+    public static final int FAIL_SEARCH = 293;
 
-    //follower and following button
-    public static final int BEFORE_FOLLOWING = 97;
-    public static final int AFTER_FOLLOWING = 98;
+    //GROUP
+    public static final int ALREADY_JOIN_GROUP = 590;
+    public static final int NOT_JOIN_GROUP = 591;
 
 
 }

@@ -16,4 +16,10 @@ public class DialogUtil {
         builder.setPositiveButton("Ok", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
+
+    public static void searchAlertDialog(Context context,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.show();
+    }
 }
