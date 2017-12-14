@@ -32,8 +32,7 @@
         <activity
             android:name=".activity.ClassActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.ReviewActivity" />
-        <activity android:name=".activity.ProjectActivity" />
+
 
         <!-- gcm receiver -->
         <receiver
@@ -71,9 +70,11 @@
             android:exported="false" />
 
         <activity android:name=".activity.TutorActivity" />
+
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.SavedActivity" />
-        <activity android:name=".activity.GroupActivity"></activity>
+        <activity android:name=".activity.GroupActivity" />
+
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.media.Image;
+
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -27,11 +30,20 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import org.w3c.dom.Text;
 
+
+import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
+import com.immymemine.kevin.skillshare.entity.GroupItem;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class GroupActivity extends AppCompatActivity implements GroupChattingAdapter.OnLoadMoreListener
         , SwipeRefreshLayout.OnRefreshListener {
+
+
 
     private Toolbar toolbar;
     private GroupChattingAdapter mAdapter;
@@ -46,10 +58,13 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     private LinearLayout layout_discussion;
     boolean check = false;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
 
 
         initiateView();
@@ -69,6 +84,16 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
 
         groupItemList = new ArrayList<>();
 
+//        toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        toolbar.inflateMenu(R.menu.chatting_toolbar_menu);
+//
+//        groupItemList = new ArrayList<>();
+//        RecyclerView mRecyclerView =  findViewById(R.id.recycler_view_chatting);
+//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+//        mRecyclerView.setLayoutManager(mLayoutManager);
+//        mAdapter = new GroupChattingAdapter(this);
+//        mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -81,6 +106,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
             }
         });
     }
+
 
 
     //TODO 지상 ----------------------------------------------------
@@ -132,7 +158,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
         groupJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                check = true;
+
                 Intent intent = new Intent();
                 intent.putExtra("position",position);
                 intent.putExtra("groupName", groupTitle_s);
@@ -161,45 +187,17 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     }
 
 
-    //TODO 지상-------------------------------------------------------------
-
-//
-//    public void setRecyclerView() {
-//        LinearLayoutManager linearLayoutManager =
-//                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
-//
-//        RecyclerView recyclerView = findViewById(R.id.recycler_view_chatting);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//
-//        groupItemList = new ArrayList<>();
-//        RecyclerView mRecyclerView = findViewById(R.id.recycler_view_chatting);
-//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new GroupChattingAdapter(this);
-//        mRecyclerView.setAdapter(mAdapter);
-//        swipeRefresh.setOnRefreshListener(this);
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                LinearLayoutManager llManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                if (llManager.findLastCompletelyVisibleItemPosition() == (mAdapter.getItemCount() - 4)) {
-//                    mAdapter.showLoading();
-//                }
-//            }
-//        });
-//    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("GroupActivity_", "onStart");
+        Log.d("GroupActivity_","onStart");
         loadData();
     }
 
     @Override
     public void onRefresh() {
-        Log.d("GroupActivity_", "onRefresh");
+        Log.d("GroupActivity_","onRefresh");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -207,26 +205,26 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
                 loadData();
 
             }
-        }, 2000);
+        },2000);
     }
 
     @SuppressLint("StaticFieldLeak")
     @Override
     public void onLoadMore() {
-        new AsyncTask<Void, Void, List<GroupItem>>() {
+        new AsyncTask<Void,Void,List<GroupItem>>(){
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 mAdapter.showLoading();
             }
 
-            // swipe add item에 대한 코드
+            // swype add item에 대한 코드
             @Override
             protected List<GroupItem> doInBackground(Void... voids) {
                 int start = mAdapter.getItemCount() - 1;
                 int end = start + 10;
                 List<GroupItem> list = new ArrayList<>();
-                if (end < 50) {
+                if (end < 200) {
                     for (int i = start + 1; i <= end; i++) {
                         list.add(new GroupItem("GroupItem " + i));
                     }

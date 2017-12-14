@@ -22,4 +22,5 @@
 
     <!-- Button Color -->
     <color name="MainButton">#eca442</color>
+    <color name="CommonButton">#343536</color>
 </resources>

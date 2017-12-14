@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.activity;
 
 import android.content.Intent;
 
+
 import android.graphics.Bitmap;
 
 import android.net.Uri;
@@ -15,9 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -26,10 +24,15 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -64,14 +67,15 @@ public class ClassActivity extends AppCompatActivity {
     LessonsFragment lessonsfragment;
 
     String id, url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
-        id = intent.getStringExtra("_id");
-        url = intent.getStringExtra("URI");
+        id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
+        url = intent.getStringExtra("URL");
         // 2. model object 에 담아주고
 
         // 3. view 에서 model object 를 사용
@@ -102,7 +106,7 @@ public class ClassActivity extends AppCompatActivity {
                     // controller
                     simpleExoPlayerView.setUseController(true); //Set media controller
                     simpleExoPlayerView.showController();
-        });
+                });
     }
 
     private void setTabLayout() {
@@ -130,12 +134,6 @@ public class ClassActivity extends AppCompatActivity {
 
         tabPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragmentList));
     }
-    /* TODO
-        GeneralRecylerViewAdapter에서 아이템 클릭 이벤트로 넘어온 클래스 _id키 값을
-        bundle로 각 프래그먼트로 넘겨줌
-        프래그먼트마다 서버에서 그때 그때 데이터를 받아온다.
-
-     */
 
     // 탭 레이아웃과 뷰페이저를 연결한다.
     private void connectTabAndPager() {
@@ -146,10 +144,10 @@ public class ClassActivity extends AppCompatActivity {
     // share button 클릭 리스너
     public void share(View view) {
 
-       Intent shareIntent = new Intent(Intent.ACTION_SEND);
-       shareIntent.setType("text/plain");
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
        /*해당 동영상 url 넣는 부분*/
-       startActivity(Intent.createChooser(shareIntent,"skillShare"));
+        startActivity(Intent.createChooser(shareIntent, "skillShare"));
 
        /* TODO 지상 완료
        공유하기 추가
@@ -170,7 +168,9 @@ public class ClassActivity extends AppCompatActivity {
      */
 
     }
+
     public void student_profile(View view) {
+
         int id = view.getId();
 
 
@@ -199,12 +199,7 @@ public class ClassActivity extends AppCompatActivity {
         simpleExoPlayerView = new SimpleExoPlayerView(this);
         simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
         simpleExoPlayerView.requestFocus(); // ( ? )
-        Glide.with(this).asBitmap().load(Uri.parse(url)).into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                simpleExoPlayerView.setDefaultArtwork(resource);
-            }
-        });
+        simpleExoPlayerView.setUseArtwork(true);
         simpleExoPlayerView.setUseController(false); //Set media controller
         simpleExoPlayerView.hideController();
 
@@ -230,7 +225,7 @@ public class ClassActivity extends AppCompatActivity {
         // [ 1, 2, 3 ( ? ) ]
         mediaSource = buildMediaSource(Uri.parse(URL));
 
-        if(resumePosition > 0)
+        if (resumePosition > 0)
             player.seekTo(resumePosition);
         player.prepare(mediaSource);
     }
@@ -238,11 +233,19 @@ public class ClassActivity extends AppCompatActivity {
     private MediaSource buildMediaSource(Uri uri) {
         @C.ContentType int type = Util.inferContentType(uri);
         switch (type) {
+            case C.TYPE_SS:
+                return new SsMediaSource(uri, buildDataSourceFactory(false),
+                        new DefaultSsChunkSource.Factory(mediaDataSourceFactory), null, null);
             case C.TYPE_DASH:
                 return new DashMediaSource(uri, new DefaultDataSourceFactory(this, null, new DefaultHttpDataSourceFactory(userAgent, null)),
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), null, null);
-                default:
-                    throw new IllegalStateException("Unsupported Type : " + type);
+            case C.TYPE_HLS:
+                return new HlsMediaSource(uri, mediaDataSourceFactory, null, null);
+            case C.TYPE_OTHER:
+                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                        null, null);
+            default:
+                throw new IllegalStateException("Unsupported Type : " + type);
         }
     }
 
@@ -268,7 +271,7 @@ public class ClassActivity extends AppCompatActivity {
 
 
     private void releasePlayer() {
-        if(player != null) {
+        if (player != null) {
             saveResumePosition();
             player.release();
             player = null;
@@ -303,7 +306,7 @@ public class ClassActivity extends AppCompatActivity {
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
+            Log.v(TAG, "Listener-onLoadingChanged...isLoading:" + isLoading);
         }
 
         @Override

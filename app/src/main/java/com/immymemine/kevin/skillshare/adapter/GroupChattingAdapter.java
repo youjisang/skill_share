@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter;
 
+
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,11 +18,13 @@ import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by JisangYou on 2017-12-13.
  */
 
-public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+
+public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -31,13 +34,13 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private boolean isMoreLoading = true;
 
-    public interface OnLoadMoreListener{
+    public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
     public GroupChattingAdapter(GroupActivity onLoadMoreListener) {
-        this.onLoadMoreListener=onLoadMoreListener;
-        groupItemList =new ArrayList<>();
+        this.onLoadMoreListener = onLoadMoreListener;
+        groupItemList = new ArrayList<>();
     }
 
     @Override
@@ -46,7 +49,10 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
+
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
         if (viewType == VIEW_ITEM) {
             return new GroupChattingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_chatting, parent, false));
         } else {
@@ -79,19 +85,19 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void addAll(ArrayList<GroupItem> lst){
+    public void addAll(ArrayList<GroupItem> lst) {
         groupItemList.clear();
         groupItemList.addAll(lst);
         notifyDataSetChanged();
     }
 
-    public void addItemMore(List<GroupItem> lst){
+    public void addItemMore(List<GroupItem> lst) {
         int sizeInit = groupItemList.size();
         groupItemList.addAll(lst);
         notifyItemRangeChanged(sizeInit, groupItemList.size());
     }
 
-    public void clear(){
+    public void clear() {
         groupItemList.clear();
         notifyDataSetChanged();
     }
@@ -137,9 +143,13 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     static class ProgressViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar pBar;
+
         public ProgressViewHolder(View v) {
             super(v);
             pBar = (ProgressBar) v.findViewById(R.id.pBar);
         }
     }
+
 }
+
+

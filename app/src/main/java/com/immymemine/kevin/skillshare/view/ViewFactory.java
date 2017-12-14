@@ -119,7 +119,10 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
+            if (classes == null)
+                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
+            else
+                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
@@ -189,7 +192,6 @@ public class ViewFactory {
         Future<View> f = executor.submit(new GroupViewFactory(title, list));
 
 
-
         try {
             return f.get();
         } catch (Exception e) {
@@ -203,7 +205,6 @@ public class ViewFactory {
         @Override
         public View call() throws Exception {
             View view = inflater.inflate(R.layout.discover_view, null);
-
             recyclerView = view.findViewById(R.id.recycler_view_discover);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setAdapter(new DiscoverRecyclerViewAdapter());
@@ -233,8 +234,8 @@ public class ViewFactory {
 //                        interactionInterface.seeAll(id);
 
                         // TODO 지상 클릭 이벤트 수정-------------------------------------------------
-                            Intent intent = new Intent(context, SavedActivity.class);
-                            v.getContext().startActivity(intent);
+                        Intent intent = new Intent(context, SavedActivity.class);
+                        v.getContext().startActivity(intent);
 
                         // ----------------------------------------------------------
                     });
@@ -286,13 +287,38 @@ public class ViewFactory {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
-
                     selectRecyclerView = view.findViewById(R.id.recycler_vIew_selectSkill);
                     FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
                     layoutManager.setFlexDirection(FlexDirection.ROW);
 
                     selectRecyclerView.setLayoutManager(layoutManager);
                     selectRecyclerView.setAdapter(new GetMeViewRecylerViewAdapter(context, selectData));
+
+                    return view;
+                }
+
+        );
+
+        try {
+            return f.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public View getNotSignedInMeView() {
+        Future<View> f = executor.submit(
+                () -> {
+                    View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
+                    view.findViewById(R.id.button_sign_up).setOnClickListener(v -> {
+                        interactionInterface.signUp();
+                    });
+                    view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
+                        interactionInterface.signIn();
+                    });
 
                     return view;
                 }
@@ -306,27 +332,15 @@ public class ViewFactory {
         }
     }
 
-//    public View getNotSignedInMeView() {
-//        Future<View> f = executor.submit(
-//                () -> {
-//                    View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
-//                    return view;
-//                }
-//        );
-//
-//        try {
-//            return f.get();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
     public interface InteractionInterface {
         // welcome view 닫기
         void close();
 
+        // sign up / in page 이동
         void signUp();
+
+        void signIn();
 
         // select activity 로 이동
         void select();

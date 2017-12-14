@@ -23,4 +23,14 @@ public class SavedActivity extends AppCompatActivity {
 
     }
 
+    private void initiateView(){
+        savedRecyclerView = findViewById(R.id.recycler_view_saved);
+
+    }
+
+    private void initRecylcerView(){
+        savedRecyclerView.setHasFixedSize(true);
+
+    }
+
 }

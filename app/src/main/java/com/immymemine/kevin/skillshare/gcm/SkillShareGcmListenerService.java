@@ -47,11 +47,11 @@ public class SkillShareGcmListenerService extends GcmListenerService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationBuilder = new Notification.Builder(this,"default")
+                    .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.noti_icon)
                     .setContentTitle("TEST_TITLE")
                     .setContentText(message)
                     .setAutoCancel(true)
-                    .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);
         } else {
             notificationBuilder = new Notification.Builder(this)

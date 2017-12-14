@@ -1,7 +1,10 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +15,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
+import com.immymemine.kevin.skillshare.network.Response;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.GCMService;
+import com.immymemine.kevin.skillshare.network.gcm.SendMessageBody;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
+import com.immymemine.kevin.skillshare.utility.diff_util.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by JisangYou on 2017-11-22.
@@ -41,15 +55,18 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
-//        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
-//        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
 
 //        this.discussions.clear();
 //        this.discussions.addAll(discussions);
-        this.discussions = discussions;
-        notifyDataSetChanged();
-//        result.dispatchUpdatesTo(this);
+        result.dispatchUpdatesTo(this);
+
+
+//        this.discussions = discussions;
+//        notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -63,7 +80,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
 
         if(viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_no_discussions, parent, false);
@@ -78,19 +95,21 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         if(discussions != null) {
             Discussion discussion = discussions.get(position);
             // identifier
-            if(discussion.get_id() != null)
-                holder.id = discussion.get_id();
+            holder.id = discussion.get_id();
+            holder.userId = discussion.getUserId();
+
             // profile
-            Glide.with(context).load(discussion.getPictureUrl())
+            holder.pictureUrl = discussion.getPictureUrl();
+            Glide.with(context).load(holder.pictureUrl)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewProfile);
             holder.textViewProfile.setText(discussion.getName());
             // content
             holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
             // time
-            holder.textViewTime.setText(discussion.getTime());
+            holder.textViewTime.setText( TimeUtil.calculateTime(discussion.getTime()) );
             // like
-            holder.textViewLikeCount.setText(discussion.getLike() + "");
+            holder.textViewLikeCount.setText(discussion.getLikeCount());
             // reply
             if( discussion.getReplies() != null )
                 holder.setReply(discussion.getReplies());
@@ -108,6 +127,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public class Holder extends RecyclerView.ViewHolder {
         // id
         String id;
+        String userId;
+
         // profile
         ImageView imageViewProfile;
         TextView textViewProfile;
@@ -119,6 +140,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         // like
         ToggleImageButton imageButtonLike;
         TextView textViewLikeCount;
+
+        String pictureUrl;
 
         public Holder(View v) {
             super(v);
@@ -137,14 +160,30 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 expandableTextView.setTrimLength(8);
                 // info / reply
                 imageButtonReply = v.findViewById(R.id.image_button_reply);
+                imageButtonReply.setOnClickListener(view -> {
+
+                });
                 textViewTime = v.findViewById(R.id.text_view_time);
                 // like
                 imageButtonLike = v.findViewById(R.id.image_button_like);
                 imageButtonLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if(isChecked)
-                        textViewLikeCount.setText( (Integer.parseInt(textViewLikeCount.getText().toString()) + 1) + "");
-                    else
-                        textViewLikeCount.setText( (Integer.parseInt(textViewLikeCount.getText().toString()) - 1) + "");
+                    if(isChecked) {
+                        textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) + 1) + "");
+                        // if(login) >>> notification message else dialog 띄우기
+                        RetrofitHelper.createApi(GCMService.class)
+                                .sendMessage(new SendMessageBody("JUWON LEE", userId))
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        (Response response) -> {
+                                            Log.d("JUWON LEE", "result : " + response.getResult() + ", message : " + response.getMessage());
+                                        }, (Throwable error) -> {
+                                            Log.d("JUWON LEE", "error : " + error.getMessage());
+                                        }
+                                );
+                    } else {
+                        textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) - 1) + "");
+                    }
                 });
                 textViewLikeCount = v.findViewById(R.id.text_view_like_count);
                 // reply
@@ -161,9 +200,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ExpandableTextView expandableTextViewReply;
 
         public void setReply(List<Reply> replies) {
-            if(replies == null || replies.size() == 0) {
-                // nothing to do
-            } else {
+            if(replies != null && replies.size() != 0) {
                 textViewReplyProfile.setVisibility(View.VISIBLE);
                 textViewTimeReply.setVisibility(View.VISIBLE);
                 imageViewReplyProfile.setVisibility(View.VISIBLE);
@@ -174,13 +211,24 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                     textViewReplies.setText("See all " + replies.size() + " replies");
                     textViewReplies.setVisibility(View.VISIBLE);
                     textViewReplies.setOnClickListener(view -> {
-                        // replies activity 로 이동
+                        Intent intent = new Intent(context, SeeAllActivity.class);
+                        intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
+                        intent.putExtra(ConstantUtil.ID_FLAG, id);
+                        intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
+                        replies.add(0, new Reply(
+                                textViewProfile.getText().toString(),
+                                pictureUrl,
+                                expandableTextView.getText().toString(),
+                                textViewTime.getText().toString()
+                        ));
+                        intent.putParcelableArrayListExtra("TEST", (ArrayList) replies);
+                        context.startActivity(intent);
                     });
                 }
 
                 Reply reply = replies.get(size-1);
                 textViewReplyProfile.setText(reply.getName());
-                textViewTimeReply.setText(reply.getTime());
+                textViewTimeReply.setText( TimeUtil.calculateTime(reply.getTime()) );
                 Glide.with(context).load(reply.getPictureUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewReplyProfile);

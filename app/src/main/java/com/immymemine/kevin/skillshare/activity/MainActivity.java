@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.activity;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -7,18 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -41,13 +36,16 @@ import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.dummy.dummyDataForGroup;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
+
+import com.immymemine.kevin.skillshare.model.user.User;
+
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
+import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -123,19 +121,32 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
                     userId = intent.getStringExtra("USER_ID");
+                    RetrofitHelper.createApi(UserService.class)
+                            .getUser(userId)
+                            .observeOn(Schedulers.io())
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    (User user) -> {
+                                        followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
+                                        followSkills = user.getFollowingSkills();
+                                        followSkills.add(ConstantUtil.TRENDING_NOW);
+                                        followSkills.add(ConstantUtil.BEST_THIS_MONTH);
+                                    }, (Throwable error) -> {
+
+                                    }
+                            );
                     break;
                 case ConstantUtil.SIGN_IN_BY_GOOGLE:
                     account = GoogleSignIn.getLastSignedInAccount(this);
 
                     break;
                 case ConstantUtil.SIGN_UP_SUCCESS:
+                    userId = intent.getStringExtra("USER_ID");
                     startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
-
                     break;
                 case ConstantUtil.SIGN_UP_BY_GOOGLE:
                     startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
                     account = GoogleSignIn.getLastSignedInAccount(this);
-
                     break;
                 case ConstantUtil.SIGN_OUT:
                     isSignIn = false;
@@ -163,25 +174,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 .subscribe(this::handleResponse, this::handleError);
 
 
-        //====================================================================
-
-        Map<String, List<Class>> data = new LinkedHashMap<>();
-        List<Class> classData = new ArrayList<>();
-        Class c = new Class("id", "Create a Desktop Calendar/Wallpaper using a Pattern", "http://cfile10.uf.tistory.com/image/275C833D577FD5282C26B5",
-                "Sorin Constantin", "24");
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
-        classData.add(c);
-        // [ fix ] LinkedHashMap <<< 순서가 보장된 Map
-        // TODO 순서를 보장해주고 DATA 를 가져와야 한다. <<< Node
-        data.put("Feature on Skillshare", classData);
-        data.put("Best this month", classData);
-        data.put("Test", classData);
-        handleResponse(data);
-        //test ====================================================================
-
         groupDummyDataSetting();
 
         setContainer();// 컨테이너 만드는 method
@@ -189,11 +181,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // BroadCast Receiver 등록
         registerReceiver();
 
-        if (checkPermission())
-            startRegisterService();
-        else
-            requestPermission();
 
+        setContainer();
+
+        // BroadCast Receiver 등록
+        registerReceiver();
+        startRegisterService();
 
     }
 
@@ -202,8 +195,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
                     int i = home_view_container.getChildCount();
+
+
                     for (String key : classes.keySet()) {
-                        Log.d("JUWON LEE", key);
                         home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)), i);
                         i++;
                     }
@@ -221,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void handleError(Throwable error) {
-
+        Log.e("JUWONLEE", error.getMessage());
     }
 
     @Override
@@ -259,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-
                 startActivity(intent);
             }
 
@@ -309,11 +302,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     }
 
-
-    /* TODO 지상
-       네비게이션 목록에 있는 컨테이너를 만드는 로직이고, 만약 컨테이너가 다 만들어졌으면 setView메서드 호출 ▽
-     */
-
     Future<LinearLayout> g, d;
 
     private void setViews() {
@@ -340,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         View view = viewFactory.getYourClassesView();
         ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
         Glide.with(this)
-                .load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal)
+                .load(/*thumbnail*/R.drawable.skill_business)
                 .apply(RequestOptions.centerCropTransform())
                 .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
                 .into(video_thumbnail);
@@ -349,17 +337,21 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         //TODO 지상 여기는 여기는 내 프로필을 처리해주는 부분임. git pull 시 수정 필요
 
         if (isSignIn) {
+
             meView = viewFactory.getMeView();
+
             Glide.with(this)
                     .load(R.drawable.skill_design)
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
             me_view_container.addView(meView);
             me_view_container.addView(viewFactory.getMeSkillView(selectList));
+
+
+        } else {
+            notSignedInMeView = viewFactory.getNotSignedInMeView();
+
         }
-
-
-
 
 
     }
@@ -368,8 +360,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     private void drawingView(LinearLayout view_container) {
         // remove previous view
-        scrollView.removeAllViewsInLayout();
-        scrollView.requestLayout();
+        scrollView.removeAllViews();
 
         // add selected view
         scrollView.addView(view_container);
@@ -383,10 +374,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // add selected view
         scrollView.addView(view);
     }
-
-    /*TODO 지상
-     콘테이너와 뷰들이 이 함수에 들어와 생성.
-     */
 
     private void changeToolbar(int id) {
         // to do on main thread
@@ -544,45 +531,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         }, intentFilter);
     }
 
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE);
-        return (result == PackageManager.PERMISSION_GRANTED) ? true : false;
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, ConstantUtil.PERMISSION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case ConstantUtil.PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    startRegisterService();
-                else
-                    Toast.makeText(this, "", Toast.LENGTH_LONG).show();
-                break;
-        }
-    }
-
     private void startRegisterService() {
         Intent intent = new Intent(this, RegistrationIntentService.class);
         intent.putExtra("USER_ID", userId);
-        intent.putExtra("DEVICE_ID", getDeviceId());
-        intent.putExtra("DEVICE_NAME", getDeviceName());
         startService(intent);
-    }
-
-    @SuppressLint("MissingPermission")
-    private String getDeviceId() {
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
-    }
-
-    private String getDeviceName() {
-        String deviceName = Build.MODEL;
-        String deviceMan = Build.MANUFACTURER;
-        return deviceMan + " " + deviceName;
     }
 
     // Interaction Listener
@@ -635,14 +587,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 String imageUri_s = data.getStringExtra("groupImageUri");
                 mygroupList.add(new dummyDataForGroup(groupNum_s, groupTitle_s, imageUri_s));
                 int i;
-                for(i=0; i<groupList1.size(); i++) {
-                    if (groupTitle_s.equals(groupList1.get(i).getGroupName())){
+                for (i = 0; i < groupList1.size(); i++) {
+                    if (groupTitle_s.equals(groupList1.get(i).getGroupName())) {
                         groupList1.remove(i);
                     }
                 }
 
-                for(i=0; i<groupList2.size(); i++) {
-                    if (groupTitle_s.equals(groupList2.get(i).getGroupName())){
+                for (i = 0; i < groupList2.size(); i++) {
+                    if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
                         groupList2.remove(i);
                     }
 
@@ -659,6 +611,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             }
         }
+
     }
 
     @Override
@@ -675,19 +628,30 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void signOut() {
 
 
+//        if(isSignIn) {
+//            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
+//                // TODO me page 변경 >>> 1. sign in / sign up 2. token 삭제
+//                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//                intent.setAction("SIGN_OUT");
+//                startActivity(intent);
+//                finish();
+//            });
+//        }
+
+
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
         intent.setAction(ConstantUtil.SIGN_OUT);
         startActivity(intent);
         finish();
-
-        /* TODO 지상
-            Intent를 메인에서 메인으로 주는데 이는 로그아웃시 이슈?
-            이 부분 이해가 필요함.
-         */
     }
 
     @Override
     public void signUp() {
         startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+    }
+
+    @Override
+    public void signIn() {
+        startActivity(new Intent(MainActivity.this, SignInActivity.class));
     }
 }

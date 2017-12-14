@@ -1,8 +1,5 @@
 package com.immymemine.kevin.skillshare.entity;
 
-/**
- * Created by JisangYou on 2017-12-13.
- */
 
 public class GroupItem {
 

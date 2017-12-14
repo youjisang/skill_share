@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
-import com.immymemine.kevin.skillshare.network.user.SignInResponse;
+import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -156,7 +156,7 @@ public class SignInActivity extends AppCompatActivity{
         );
     }
 
-    private void handleResponse(SignInResponse response) {
+    private void handleResponse(UserResponse response) {
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);

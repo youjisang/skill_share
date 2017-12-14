@@ -51,9 +51,7 @@ public class GetMeViewRecylerViewAdapter extends RecyclerView.Adapter<GetMeViewR
 
         public ViewHolder(View itemView) {
             super(itemView);
-//            FlexboxLayoutManager.LayoutParams flexboxLayoutParams =
-//                    (FlexboxLayoutManager.LayoutParams) itemView.getLayoutParams();
-//            flexboxLayoutParams.setFlexGrow(1.0f);
+
             textViewSkill = itemView.findViewById(R.id.text_view_skill);
         }
     }

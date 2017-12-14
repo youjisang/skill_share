@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f0f0f0"
+    android:background="#f4f4f4"
     tools:context=".activity.MainActivity">
 
     <TextView
@@ -14,8 +14,7 @@
         android:layout_marginTop="16dp"
         android:text="Welcome to Skillshare!"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:textColor="@android:color/black" />
 
     <TextView
         android:layout_width="match_parent"
@@ -27,30 +26,29 @@
         android:gravity="center"
         android:text="Sign up to access thousands of classes taught by expert practitioners"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/cardview_dark_background" />
+        android:textColor="@color/IcInactive" />
 
-
-    <ImageButton
-        android:id="@+id/close_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="4dp"
-        android:background="@android:color/transparent"
-        android:padding="8dp"
-        android:tint="@color/IcInactive"
-        app:srcCompat="@android:drawable/ic_delete" />
 
     <Button
         android:id="@+id/button_sign_up"
         android:layout_width="120dp"
-        android:layout_height="52dp"
+        android:layout_height="48dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="136dp"
         android:background="@drawable/corner_rounded_button_google"
         android:text="@string/sign_up"
         android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/presence_offline"
+        android:padding="8dp" />
 
 
 </FrameLayout>
