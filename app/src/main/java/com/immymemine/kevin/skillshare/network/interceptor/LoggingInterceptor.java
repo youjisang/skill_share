@@ -27,6 +27,7 @@ public class LoggingInterceptor implements Interceptor {
         Log.d(TAG, "-------------------------------------------------------------------");
         Log.d(TAG,"| response requested url : " + response.request().url());
         Log.d(TAG,"| response header        : " + response.headers());
+        Log.d(TAG, "| response              : " + response.body().string());
         Log.d(TAG, "-------------------------------------------------------------------");
         return response;
     }

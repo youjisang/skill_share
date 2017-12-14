@@ -19,23 +19,12 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
 import com.immymemine.kevin.skillshare.R;
-
-import com.immymemine.kevin.skillshare.activity.GroupActivity;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.activity.SavedActivity;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.adapter.GetMeViewRecylerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.model.dummy.dummyDataForGroup;
 import com.immymemine.kevin.skillshare.model.home.Class;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
-
-
-import java.util.ArrayList;
 
 import java.util.List;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,7 +38,7 @@ import java.util.concurrent.Future;
 public class ViewFactory {
     Context context;
     LayoutInflater inflater;
-    RecyclerView recyclerView, selectRecyclerView;
+    RecyclerView recyclerView;
     InteractionInterface interactionInterface;
 
     // TODO nThreads 를 정하는 합리적인 로직이 있어야한다.
@@ -57,7 +46,6 @@ public class ViewFactory {
 
     // Singleton
     private static ViewFactory v;
-
 
     private ViewFactory(Context context) {
         // context
@@ -77,14 +65,10 @@ public class ViewFactory {
         return v;
     }
 
-    //TODO 이 부분까지는 시스템 자원과 싱글톤 세팅. 인터페이스로 각 뷰와 연결되는 와중이므로..
-
     public LinearLayout getViewContainer() {
         LinearLayout view_container = (LinearLayout) inflater.inflate(R.layout.container, null);
         return view_container;
     }
-
-    //TODO 이 부분은 view container로 그냥 뷰들을 붙이기 위한 도화지 같은 역할
 
     public View getWelcomeView() {
         // 하나의 Thread 를 Thread pool 에서 가져와서 Callable 객체를 던져서 Thread 를 실행시킨다.
@@ -119,7 +103,7 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            if (classes == null)
+            if(classes == null)
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
             else
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
@@ -128,7 +112,6 @@ public class ViewFactory {
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
             Button see_all_button = view.findViewById(R.id.button_see_all);
-
             see_all_button.setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
@@ -153,12 +136,6 @@ public class ViewFactory {
         return getGeneralView(title, null);
     }
 
-        /* TODO 지상
-    ExecutorService, collable -작업 완료 후 리턴값이 있음, future- 객체는 작업이 완료될때까지 기다렸다가 최종 결과를 얻는데 사용
-    일단 유연하고 효과적인 비동기 작업을 위해 사용한다고 이해.
-    쓰레드 그룹과 쓰레드 풀 차이?
-     */
-
     class GroupViewFactory implements Callable<View> {
         String title;
         List<dummyDataForGroup> groupList;
@@ -176,10 +153,8 @@ public class ViewFactory {
 
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
-
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-
 
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
@@ -206,8 +181,9 @@ public class ViewFactory {
         public View call() throws Exception {
             View view = inflater.inflate(R.layout.discover_view, null);
             recyclerView = view.findViewById(R.id.recycler_view_discover);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             recyclerView.setAdapter(new DiscoverRecyclerViewAdapter());
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
             return view;
         }
     }
@@ -233,12 +209,18 @@ public class ViewFactory {
                     your_classes_video_thumbnail.setOnClickListener(v -> {
 //                        interactionInterface.seeAll(id);
 
-                        // TODO 지상 클릭 이벤트 수정-------------------------------------------------
-                        Intent intent = new Intent(context, SavedActivity.class);
-                        v.getContext().startActivity(intent);
+                    // main thread 영역 ------------------------------------------------------------
+                    // video thumbnail setting
 
-                        // ----------------------------------------------------------
-                    });
+                    // Review ) 속도가 너무 느리다... MainActivity 에서 view 를 받아서 처리해주는게 훨씬 빠름
+//                    if(context instanceof MainActivity) {
+//                        ((MainActivity) context).runOnUiThread(
+//                                () -> {
+//                                    ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+//                                    Glide.with(context).load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal).into(video_thumbnail);
+//                                }
+//                        );
+//                    }
                     return view;
                 }
         );
@@ -251,14 +233,14 @@ public class ViewFactory {
         }
     }
 
-    public View getMeView() {
+    public View getMeView(String name) {
         Future<View> f = executor.submit(
                 () -> {
                     // main thread 에서 굳이 해주지 않아도 된다
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView) view.findViewById(R.id.me_name)).setText("name");
+                    ((TextView) view.findViewById(R.id.me_name)).setText(name);
                     ((TextView) view.findViewById(R.id.me_nickname)).setText("@nickname");
 
                     // followers, following <<< onClick setting...
@@ -267,6 +249,16 @@ public class ViewFactory {
 
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
 
+                    // main thread 영역 ------------------------------------------------------------
+                    // rounding image setting
+//                    if(context instanceof MainActivity) {
+//                        ((MainActivity) context).runOnUiThread(
+//                                () -> {
+//                                    Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
+//                                }
+//                        );
+//                    }
+
                     return view;
                 }
         );
@@ -279,24 +271,26 @@ public class ViewFactory {
         }
     }
 
-
-    public View getMeSkillView(ArrayList<String> selectData) {
-
+    public View getMeSkillView(List<String> skills) {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
-                    Button personalize = view.findViewById(R.id.personalize);
-                    personalize.setOnClickListener(v -> interactionInterface.select());
-                    selectRecyclerView = view.findViewById(R.id.recycler_vIew_selectSkill);
+                    RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
                     FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
                     layoutManager.setFlexDirection(FlexDirection.ROW);
 
-                    selectRecyclerView.setLayoutManager(layoutManager);
-                    selectRecyclerView.setAdapter(new GetMeViewRecylerViewAdapter(context, selectData));
+                    recyclerViewSkills.setLayoutManager(layoutManager);
+                    recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
+
+                    Button personalize = view.findViewById(R.id.personalize);
+                    personalize.setOnClickListener(v -> interactionInterface.select());
+                    if(skills == null)
+                        view.findViewById(R.id.divider).setVisibility(View.GONE);
+                    else
+                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
                     return view;
                 }
-
         );
 
         try {
@@ -305,9 +299,11 @@ public class ViewFactory {
             e.printStackTrace();
             return null;
         }
-
     }
 
+    public View getMeSkillView() {
+        return getMeSkillView(null);
+    }
 
     public View getNotSignedInMeView() {
         Future<View> f = executor.submit(
@@ -319,7 +315,6 @@ public class ViewFactory {
                     view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
                         interactionInterface.signIn();
                     });
-
                     return view;
                 }
         );
@@ -332,14 +327,12 @@ public class ViewFactory {
         }
     }
 
-
     public interface InteractionInterface {
         // welcome view 닫기
         void close();
 
         // sign up / in page 이동
         void signUp();
-
         void signIn();
 
         // select activity 로 이동

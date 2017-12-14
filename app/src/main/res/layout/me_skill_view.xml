@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@android:color/background_light">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/background_light">
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="30dp"
+        android:text="Skills You Follow"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="30dp"
-            android:text="Skills You Follow"
-            android:textColor="@android:color/black"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/personalize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="18dp"
-            android:background="@android:color/transparent"
-            android:text="Personalize"
-            android:textColor="@color/IcActive" />
-
-    </FrameLayout>
+    <Button
+        android:id="@+id/personalize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="18dp"
+        android:background="@android:color/transparent"
+        android:text="Personalize"
+        android:textColor="@color/IcActive" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_vIew_selectSkill"
+        android:id="@+id/recycler_view_skills"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personalize"
+        android:layout_marginTop="8dp"
+        tools:listitem="@layout/recycler_view_item_skills">
 
+    </android.support.v7.widget.RecyclerView>
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/recycler_view_skills"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="#c8d9d9d9" />
 
 
-</LinearLayout>
+</RelativeLayout>
