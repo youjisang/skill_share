@@ -10,10 +10,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
 import java.util.List;
@@ -141,8 +144,9 @@ public class ViewFactory {
 
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
 
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
@@ -253,13 +257,24 @@ public class ViewFactory {
         }
     }
 
-    public View getMeSkillView() {
-
+    public View getMeSkillView(List<String> skills) {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.me_skill_view, null);
+                    RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
+                    FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+                    layoutManager.setFlexDirection(FlexDirection.ROW);
+
+                    recyclerViewSkills.setLayoutManager(layoutManager);
+                    recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
+
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
+                    if(skills == null)
+                        view.findViewById(R.id.divider).setVisibility(View.GONE);
+                    else
+                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+                    
                     return view;
                 }
         );
@@ -270,6 +285,10 @@ public class ViewFactory {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public View getMeSkillView() {
+        return getMeSkillView(null);
     }
 
     public View getNotSignedInMeView() {

@@ -62,4 +62,5 @@ public class ConstantUtil {
     public static final String SEE_ALL_FLAG = "See All";
     public static final String URL_FLAG = "URL";
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
+    public static final String SKILLS_FLAG = "skills";
 }
