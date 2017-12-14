@@ -7,19 +7,19 @@ package com.immymemine.kevin.skillshare.model.home;
 public class Class {
     String _id;
     String title;
-    String pictureUrl;
+    String imageUrl;
     String tutorName;
     String duration;
 
     // for testing
     public Class(String _id,
             String title,
-            String pictureUrl,
+            String imageUrl,
             String tutorName,
             String duration) {
         this._id = _id;
         this.title = title;
-        this.pictureUrl = pictureUrl;
+        this.imageUrl = imageUrl;
         this.tutorName = tutorName;
         this.duration = duration;
     }
@@ -32,8 +32,8 @@ public class Class {
         return title;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getTutorName() {

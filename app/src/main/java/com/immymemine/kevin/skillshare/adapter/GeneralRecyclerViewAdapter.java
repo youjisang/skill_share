@@ -16,6 +16,7 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ClassActivity;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
 
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             holder.id = mClass.get_id();
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
-            holder.textViewTime.setText(mClass.getDuration() + "m");
-            holder.url = mClass.getPictureUrl();
+            holder.textViewTime.setText(TimeUtil.calculateVideoTime(mClass.getDuration()));
+            holder.url = mClass.getImageUrl();
             Glide.with(context).load(Uri.parse(holder.url))
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageView);
@@ -83,7 +84,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassActivity.class);
                 intent.putExtra(ConstantUtil.ID_FLAG, id); // data for identification
-                intent.putExtra("URL", url);
+                intent.putExtra(ConstantUtil.URL_FLAG, url);
                 context.startActivity(intent);
             });
         }

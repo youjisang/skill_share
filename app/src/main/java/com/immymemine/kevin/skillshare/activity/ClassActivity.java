@@ -69,7 +69,7 @@ public class ClassActivity extends AppCompatActivity {
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
         id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
-        url = intent.getStringExtra("URL");
+        url = intent.getStringExtra(ConstantUtil.URL_FLAG);
         // 2. model object 에 담아주고
 
         // 3. view 에서 model object 를 사용

@@ -22,6 +22,6 @@ public interface UserService {
     @GET("user/sign-in")
     Observable<UserResponse> signIn(@Query("email") String email, @Query("password") String password);
 
-    @GET("user/{_id}")
-    Observable<User> getUser(@Path("_id") String id);
+    @GET("user/{id}")
+    Observable<User> getUser(@Path("id") String id);
 }
