@@ -30,6 +30,8 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.model.user.Following;
+import com.immymemine.kevin.skillshare.model.user.SubscribeClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
-    View meView, meSkillView;
+    View yourClassesView, meView, meSkillView, notSignedInMeView;
     SkillsRecyclerViewAdapter meSkillRecyclerViewAdapter;
 
     // attach view container to scroll view
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     String userId;
     boolean isSignIn;
     User user;
+
     // user followed skills
     List<String> followSkills = new ArrayList<>();
 
@@ -119,20 +122,57 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
 
+                                        setContainer();
+
                                     }, (Throwable error) -> {
+                                        // TODO handle networking error
+
+                                        // for test ====================
+                                        // 통신이 성공했다고 가정하고...
                                         user = new User();
+
                                         user.set_id(userId);
                                         user.setName("JUWON LEE");
+                                        user.setNickname("@jwl");
+
+                                        List<Following> followings = new ArrayList<>();
+                                        followings.add(new Following());
+                                        user.setFollowing(followings);
+
+                                        List<String> userSkills = new ArrayList<>();
+                                        userSkills.add("Design");
+                                        userSkills.add("Photography");
+                                        userSkills.add("Crafts");
+                                        userSkills.add("Music");
+                                        user.setFollowingSkills(userSkills);
 
                                         followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
+                                        followSkills.addAll(userSkills);
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
                                         followSkills.add(ConstantUtil.BEST_THIS_MONTH);
 
+                                        user.setPictureUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
+
+                                        List<SubscribeClass> subscribeClasses = new ArrayList<>();
+                                        subscribeClasses.add(new SubscribeClass(
+                                                "https://i.pinimg.com/736x/fe/3f/df/fe3fdf460ee15c59b45fda4b0aff6feb--botanical-wallpaper-feature-wallpaper.jpg",
+                                                "99%",
+                                                "Botanical Line Drawing",
+                                                "4740000",
+                                                "classId",
+                                                "9400",
+                                                "Peggy Dean"
+                                        ));
+                                        user.setSubscribeClass(subscribeClasses);
+
+                                        // for test ====================
                                         RetrofitHelper.createApi(HomeService.class)
                                                 .getHomeClasses(followSkills)
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
+
+                                        setContainer();
                                     }
                             );
                     break;
@@ -170,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // TODO Progress Bar
         // follow skills 에 해당되는 카테고리들을 받아온다.
 
-        setContainer();
+
 
         // BroadCast Receiver 등록
         registerReceiver();
@@ -228,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     private void setContainer() {
-
         Future<Boolean> f = executor.submit(
                 () -> {
                     // view container 만들기
@@ -249,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     Future<LinearLayout> g, d;
-
+    Future<View> e;
     private void setViews() {
         g = executor.submit(
                 () -> {
@@ -270,36 +309,49 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         );
 
         // main 에서 처리해줘야 한다.
-        View view = viewFactory.getYourClassesView();
-        ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-        Glide.with(this)
-                .load(/*thumbnail*/R.drawable.skill_business)
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
-                .into(video_thumbnail);
-        your_classes_view_container.addView(view);
+        e = executor.submit(
+                () -> {
+                    yourClassesView = viewFactory.getYourClassesView();
+                    meView = viewFactory.getMeView(user);
+                    return meView;
+                }
+        );
 
+        try {
+            if(e.get() != null) {
+                runOnUiThread(() -> {
+                    Glide.with(MainActivity.this)
+                            .load(user.getSubscribeClass().get(0).getClassThumbnail())
+                            .apply(RequestOptions.centerCropTransform())
+                            .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
+                            .into((ImageView)yourClassesView.findViewById(R.id._your_classes_video_thumbnail));
 
+                    your_classes_view_container.addView(yourClassesView);
 
-        if (isSignIn) {
-            Log.e("JUWONLEE", "me view start");
-            meView = viewFactory.getMeView("hello");
-            Glide.with(this)
-                    .load(R.drawable.skill_business)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(((ImageView) meView.findViewById(R.id.me_image)));
-            Log.e("JUWONLEE", "me view middle");
-            me_view_container.addView(meView);
-            meSkillView = viewFactory.getMeSkillView();
-            meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView)meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
-            me_view_container.addView(meSkillView);
-            Log.e("JUWONLEE", "me view end");
-        } else {
-            notSignedInMeView = viewFactory.getNotSignedInMeView();
+                    if (isSignIn) {
+                        Glide.with(this)
+                                .load(user.getPictureUrl())
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(((ImageView) meView.findViewById(R.id.me_image)));
+
+                        me_view_container.addView(meView);
+
+                        if( followSkills.size() > 3)
+                            meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
+                        else
+                            meSkillView = viewFactory.getMeSkillView();
+
+                        meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView)meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
+                        me_view_container.addView(meSkillView);
+                    } else {
+                        notSignedInMeView = viewFactory.getNotSignedInMeView();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    View notSignedInMeView;
 
     private void drawingView(LinearLayout view_container) {
         // remove previous view

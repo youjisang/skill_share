@@ -5,6 +5,17 @@ package com.immymemine.kevin.skillshare.model.user;
  */
 
 public class SubscribeClass {
+    // test
+    public SubscribeClass(String classThumbnail, String feedback, String title, String totalDuration, String classId, String views, String tutorName) {
+        this.classThumbnail = classThumbnail;
+        this.feedback = feedback;
+        this.title = title;
+        this.totalDuration = totalDuration;
+        this.classId = classId;
+        this.views = views;
+        this.tutorName = tutorName;
+    }
+
     private String classThumbnail;
 
     private String feedback;

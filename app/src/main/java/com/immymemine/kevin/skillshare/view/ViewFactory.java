@@ -19,6 +19,7 @@ import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.model.user.User;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -224,31 +225,29 @@ public class ViewFactory {
         }
     }
 
-    public View getMeView(String name) {
+    public View getMeView(User user) {
         Future<View> f = executor.submit(
                 () -> {
                     // main thread 에서 굳이 해주지 않아도 된다
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView) view.findViewById(R.id.me_name)).setText(name);
-                    ((TextView) view.findViewById(R.id.me_nickname)).setText("@nickname");
+                    ((TextView) view.findViewById(R.id.me_name)).setText(user.getName());
+                    ((TextView) view.findViewById(R.id.me_nickname)).setText(user.getNickname());
 
                     // followers, following <<< onClick setting...
-                    ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
-                    ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
+                    if(user.getFollowers() !=null)
+                        ((TextView) view.findViewById(R.id.me_followers)).setText(user.getFollowers().size() + " Followers");
+                    else
+                        ((TextView) view.findViewById(R.id.me_followers)).setText("0 Followers");
+
+                    if(user.getFollowing() != null)
+                        ((TextView) view.findViewById(R.id.me_following)).setText("Following " + user.getFollowing().size());
+                    else
+                        ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
 
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
 
-                    // main thread 영역 ------------------------------------------------------------
-                    // rounding image setting
-//                    if(context instanceof MainActivity) {
-//                        ((MainActivity) context).runOnUiThread(
-//                                () -> {
-//                                    Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
-//                                }
-//                        );
-//                    }
 
                     return view;
                 }
