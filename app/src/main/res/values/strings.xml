@@ -58,5 +58,12 @@
 
     <!-- constant util -->
     <string name="project">Project</string>
-    <string name="review">Class Reviews</string>
+    <string name="review">Review</string>
+    <string name="subscriber">Subscriber</string>
+    <string name="classes">Class</string>
+
+    <!-- chatting toolgroupItemstems -->
+    <string name="leave_group">Leave Group</string>
+    <string name="create_group">Create a New Group</string>
+    <string name="class_review">Class Reviews</string>
 </resources>
