@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
-    View meView;
+    View meView, meSkillView;
     SkillsRecyclerViewAdapter meSkillRecyclerViewAdapter;
 
     // attach view container to scroll view
@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .subscribe(this::handleResponse, this::handleError);
 
                                     }, (Throwable error) -> {
+                                        user = new User();
+                                        user.set_id(userId);
 
                                         followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
@@ -138,6 +140,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     break;
                 case ConstantUtil.SIGN_UP_SUCCESS:
                     userId = intent.getStringExtra("USER_ID");
+                    // test ================
+                    user = new User();
+                    user.set_id(userId);
+                    // test ================
                     startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
                     break;
                 case ConstantUtil.SIGN_UP_BY_GOOGLE:
@@ -282,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
             me_view_container.addView(meView);
-            View meSkillView = viewFactory.getMeSkillView();
+            meSkillView = viewFactory.getMeSkillView();
             meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView)meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
             me_view_container.addView(meSkillView);
         } else {
@@ -477,6 +483,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 선택된 카테고리들을 받아와서 그려줘야 함
         // startActivityForResult();
         Intent intent = new Intent(MainActivity.this, SelectSkillsActivity.class);
+        if(user.getFollowingSkills() != null)
+            intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) user.getFollowingSkills());
         startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
     }
 
@@ -518,10 +526,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
+            if (skills != null && skills.size() > 0)
+                meSkillView.findViewById(R.id.divider).setVisibility(View.VISIBLE);
             meSkillRecyclerViewAdapter.update(skills);
-
+            user.setFollowingSkills(skills);
+        }
 //        } else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
 //            if (resultCode == RESULT_OK) {
 //                Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -555,6 +567,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //
 //
 //            }
-        }
+
     }
 }

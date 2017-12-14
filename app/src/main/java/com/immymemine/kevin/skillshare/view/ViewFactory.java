@@ -270,11 +270,10 @@ public class ViewFactory {
 
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
+
                     if(skills == null)
                         view.findViewById(R.id.divider).setVisibility(View.GONE);
-                    else
-                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
-                    
+
                     return view;
                 }
         );
