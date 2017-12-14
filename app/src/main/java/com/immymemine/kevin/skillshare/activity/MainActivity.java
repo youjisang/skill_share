@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             // user follow skills 를 배열로 담아서 Query 로 보낸다
             followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
-            followSkills.add(ConstantUtil.TRENDING_NOW);
+//            followSkills.add(ConstantUtil.TRENDING_NOW);
             followSkills.add(ConstantUtil.BEST_THIS_MONTH);
         }
 
@@ -169,14 +169,16 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         startRegisterService();
     }
 
-    private void handleResponse(Map<String, List<Class>> classes) {
+    private void handleResponse(List<Map<String, List<Class>>> classes) {
         // 기본 view 추가
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
                     int i = home_view_container.getChildCount();
-                    for(String key : classes.keySet()) {
-                        home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)), i);
-                        i++;
+                    for(Map<String, List<Class>> item : classes) {
+                        for(String key : item.keySet()) {
+                            home_view_container.addView(viewFactory.getGeneralView(key, item.get(key)), i);
+                            i++;
+                        }
                     }
 
                     return home_view_container;

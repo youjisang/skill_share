@@ -51,14 +51,15 @@ public class ConstantUtil {
     public static final String REVIEW_ITEM = "See All Review";
     public static final String DISCUSSION_ITEM = "Discussion";
 
-    public static final String FEATURED_ON_SKILLSHARE = "featured_on_skillshare";
+    public static final String FEATURED_ON_SKILLSHARE = "f";
     public static final String TRENDING_NOW = "Trending Now";
-    public static final String BEST_THIS_MONTH = "Best This Month";
+    public static final String BEST_THIS_MONTH = "b";
 
     // intent flag
     public static final String USER_ID_FLAG = "USER_ID";
     public static final String TOOLBAR_TITLE_FLAG = "TTF";
     public static final String ID_FLAG = "ID";
     public static final String SEE_ALL_FLAG = "See All";
+    public static final String URL_FLAG = "URL";
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
 }
