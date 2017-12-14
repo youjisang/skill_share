@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +59,10 @@ public class ViewFactory {
         }
 
         return v;
+    }
+
+    public void destroyViewFactory() {
+        v = null;
     }
 
     public LinearLayout getViewContainer() {
@@ -308,6 +313,7 @@ public class ViewFactory {
             return f.get();
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("JUWONLEE", e.getMessage());
             return null;
         }
     }

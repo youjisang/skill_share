@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                     }, (Throwable error) -> {
                                         user = new User();
                                         user.set_id(userId);
+                                        user.setName("JUWON LEE");
 
                                         followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
@@ -168,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // TODO Progress Bar
         // follow skills 에 해당되는 카테고리들을 받아온다.
-
 
         setContainer();
 
@@ -282,15 +282,18 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
 
         if (isSignIn) {
-            meView = viewFactory.getMeView("My Name");
+            Log.e("JUWONLEE", "me view start");
+            meView = viewFactory.getMeView("hello");
             Glide.with(this)
-                    .load(R.drawable.skill_design)
+                    .load(R.drawable.skill_business)
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
+            Log.e("JUWONLEE", "me view middle");
             me_view_container.addView(meView);
             meSkillView = viewFactory.getMeSkillView();
             meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView)meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
             me_view_container.addView(meSkillView);
+            Log.e("JUWONLEE", "me view end");
         } else {
             notSignedInMeView = viewFactory.getNotSignedInMeView();
         }
@@ -568,5 +571,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //
 //            }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewFactory.destroyViewFactory();
     }
 }
