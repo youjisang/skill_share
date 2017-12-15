@@ -201,7 +201,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 expandableTextViewReply.setVisibility(View.VISIBLE);
 
                 int size = replies.size();
-                if( size > 1 ) {
+                if( size >= 2 ) {
                     textViewReplies.setText("See all " + replies.size() + " replies");
                     textViewReplies.setVisibility(View.VISIBLE);
                     textViewReplies.setOnClickListener(view -> {
@@ -209,12 +209,15 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
                         intent.putExtra(ConstantUtil.ID_FLAG, id);
                         intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
-                        replies.add(0, new Reply(
+
+                        Reply reply = new Reply(
                                 textViewProfile.getText().toString(),
                                 imageUrl,
                                 expandableTextView.getText().toString(),
-                                textViewTime.getText().toString()
-                        ));
+                                textViewTime.getText().toString());
+                        if(!replies.contains(reply))
+                            replies.add(0, reply);
+
                         intent.putParcelableArrayListExtra("TEST", (ArrayList) replies);
                         context.startActivity(intent);
                     });

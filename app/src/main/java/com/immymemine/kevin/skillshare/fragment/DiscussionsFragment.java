@@ -22,6 +22,7 @@ import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,6 +42,8 @@ public class DiscussionsFragment extends Fragment {
     Context context;
 
     List<Discussion> discussions;
+
+    String classId;
     public DiscussionsFragment() {
         // Required empty public constructor
     }
@@ -66,7 +69,8 @@ public class DiscussionsFragment extends Fragment {
                 addDiscussion()
         );
 
-        String classId = getArguments().getString(ConstantUtil.ID_FLAG);
+        classId = getArguments().getString(ConstantUtil.ID_FLAG);
+
         RetrofitHelper.createApi(ClassService.class)
                 .getDiscussions(classId)
                 .subscribeOn(Schedulers.io())
@@ -129,7 +133,7 @@ public class DiscussionsFragment extends Fragment {
 
             // add discussion 통신
             RetrofitHelper.createApi(ClassService.class)
-                    .addDiscussion(discussion)
+                    .addDiscussion(discussion, classId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleResponse, this::handleError);
@@ -137,6 +141,10 @@ public class DiscussionsFragment extends Fragment {
     }
 
     private void handleResponse(List<Discussion> discussions) {
+        if(this.discussions == null) {
+            this.discussions = new ArrayList<>();
+            this.discussions = discussions;
+        }
 
         // TODO list reverse or get data by sort
         if(discussions == null || discussions.size() == 0) {
