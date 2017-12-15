@@ -29,13 +29,11 @@
 
         <ImageButton
             android:id="@+id/toolbar_close_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/image_close"
-            android:tint="@color/CommonButton"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
             tools:layout_editor_absoluteX="387dp"
             tools:layout_editor_absoluteY="16dp" />
 

@@ -1,16 +1,12 @@
 package com.immymemine.kevin.skillshare.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +18,8 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
 import java.util.List;
@@ -65,6 +63,10 @@ public class ViewFactory {
         return v;
     }
 
+    public void destroyViewFactory() {
+        v = null;
+    }
+
     public LinearLayout getViewContainer() {
         LinearLayout view_container = (LinearLayout) inflater.inflate(R.layout.container, null);
         return view_container;
@@ -103,7 +105,7 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            if(classes == null)
+            if (classes == null)
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
             else
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
@@ -138,10 +140,11 @@ public class ViewFactory {
 
     class GroupViewFactory implements Callable<View> {
         String title;
-        List<dummyDataForGroup> groupList;
+        //TODO 지상
+        List<Group> groupList;
 
 
-        public GroupViewFactory(String title, List<dummyDataForGroup> groupList) {
+        public GroupViewFactory(String title, List<Group> groupList) {
             this.title = title;
             this.groupList = groupList;
         }
@@ -153,7 +156,7 @@ public class ViewFactory {
 
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
             // title setting
@@ -163,7 +166,7 @@ public class ViewFactory {
         }
     }
 
-    public View getGroupView(String title, List<dummyDataForGroup> list) {
+    public View getGroupView(String title, List<Group> list) {
         Future<View> f = executor.submit(new GroupViewFactory(title, list));
 
 
@@ -199,15 +202,11 @@ public class ViewFactory {
         }
     }
 
-    String id;
 
     public View getYourClassesView() {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.your_classes_view, null);
-                    ImageView your_classes_video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-                    your_classes_video_thumbnail.setOnClickListener(v -> {
-//                        interactionInterface.seeAll(id);
 
                     // main thread 영역 ------------------------------------------------------------
                     // video thumbnail setting
@@ -283,11 +282,13 @@ public class ViewFactory {
                     recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
 
                     Button personalize = view.findViewById(R.id.personalize);
-                    personalize.setOnClickListener(v -> interactionInterface.select());
-                    if(skills == null)
+                    personalize.setOnClickListener(v ->
+                            interactionInterface.select()
+                    );
+
+                    if (skills == null)
                         view.findViewById(R.id.divider).setVisibility(View.GONE);
-                    else
-                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+
 
                     return view;
                 }
@@ -333,6 +334,7 @@ public class ViewFactory {
 
         // sign up / in page 이동
         void signUp();
+
         void signIn();
 
         // select activity 로 이동

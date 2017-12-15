@@ -1,9 +1,6 @@
 package com.immymemine.kevin.skillshare.activity;
 
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +30,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
-import com.immymemine.kevin.skillshare.model.dummy.dummyDataForGroup;
+import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
 
@@ -67,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
+    View meView, meSkillView;
+    SkillsRecyclerViewAdapter meSkillRecyclerViewAdapter;
+
 
     // attach view container to scroll view
     ScrollView scrollView;
@@ -81,17 +83,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // user
     String userId;
     boolean isSignIn;
-
+    User user;
     // user followed skills
     List<String> followSkills = new ArrayList<>();
 
-    //TODO 지상 for select skills -----------------------
-    ArrayList<String> selectList = new ArrayList<>();
-    View meView;
-    //---------------------------------------------------
+
 
     //TODO 지상 for group--------------------------------
-    List<dummyDataForGroup> groupList1, groupList2, mygroupList;
+    List<Group> groupList1, groupList2, mygroupList;
 
 
     //--------------------------------------------------
@@ -116,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 로그인 상태 확인
         Intent intent = getIntent();
 
+
         if (intent.getAction() != null) {
             isSignIn = true;
             switch (intent.getAction()) {
@@ -127,21 +127,45 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                             .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     (User user) -> {
+                                        this.user = user;
+
                                         followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
                                         followSkills = user.getFollowingSkills();
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
                                         followSkills.add(ConstantUtil.BEST_THIS_MONTH);
-                                    }, (Throwable error) -> {
 
+                                        RetrofitHelper.createApi(HomeService.class)
+                                                .getHomeClasses(followSkills)
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(this::handleResponse, this::handleError);
+
+                                    }, (Throwable error) -> {
+                                        user = new User();
+                                        user.set_id(userId);
+                                        user.setName("JUWON LEE");
+
+                                        followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
+                                        followSkills.add(ConstantUtil.TRENDING_NOW);
+                                        followSkills.add(ConstantUtil.BEST_THIS_MONTH);
+
+                                        RetrofitHelper.createApi(HomeService.class)
+                                                .getHomeClasses(followSkills)
+                                                .subscribeOn(Schedulers.io())
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe(this::handleResponse, this::handleError);
                                     }
                             );
                     break;
                 case ConstantUtil.SIGN_IN_BY_GOOGLE:
                     account = GoogleSignIn.getLastSignedInAccount(this);
-
                     break;
                 case ConstantUtil.SIGN_UP_SUCCESS:
                     userId = intent.getStringExtra("USER_ID");
+                    // test ================
+                    user = new User();
+                    user.set_id(userId);
+                    // test ================
                     startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
                     break;
                 case ConstantUtil.SIGN_UP_BY_GOOGLE:
@@ -160,29 +184,19 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             // user follow skills 를 배열로 담아서 Query 로 보낸다
             followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
-            followSkills.add(ConstantUtil.TRENDING_NOW);
+//            followSkills.add(ConstantUtil.TRENDING_NOW);
             followSkills.add(ConstantUtil.BEST_THIS_MONTH);
         }
 
         // TODO Progress Bar
-
         // follow skills 에 해당되는 카테고리들을 받아온다.
-        RetrofitHelper.createApi(HomeService.class)
-                .getHomeClasses(followSkills)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResponse, this::handleError);
 
-
+        //TODO 지상
         groupDummyDataSetting();
+        //
 
         setContainer();// 컨테이너 만드는 method
 
-        // BroadCast Receiver 등록
-        registerReceiver();
-
-
-        setContainer();
 
         // BroadCast Receiver 등록
         registerReceiver();
@@ -190,16 +204,16 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     }
 
-    private void handleResponse(Map<String, List<Class>> classes) {
+    private void handleResponse(List<Map<String, List<Class>>> classes) {
         // 기본 view 추가
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
                     int i = home_view_container.getChildCount();
-
-
-                    for (String key : classes.keySet()) {
-                        home_view_container.addView(viewFactory.getGeneralView(key, classes.get(key)), i);
-                        i++;
+                    for (Map<String, List<Class>> item : classes) {
+                        for (String key : item.keySet()) {
+                            home_view_container.addView(viewFactory.getGeneralView(key, item.get(key)), i);
+                            i++;
+                        }
                     }
 
                     return home_view_container;
@@ -218,11 +232,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Log.e("JUWONLEE", error.getMessage());
     }
 
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-    }
 
     private void initiateView() {
         toolbar = findViewById(R.id.toolbar);
@@ -285,19 +294,19 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     private void groupDummyDataSetting() {
         //TODO 지상 group dummydata 만들기
 
-        groupList1 = new ArrayList<dummyDataForGroup>();
-        groupList1.add(new dummyDataForGroup("6.4k", "Ux/Ui", "https://cdn-images-1.medium.com/max/2000/1*7pjzaWKedACc3-olWUghLg.png"));
-        groupList1.add(new dummyDataForGroup("4.6k", "Design a Beautiful App", "https://learn.canva.com/wp-content/uploads/2015/10/40-People-Through-History-Who-Changed-Design-For-Good-04.png"));
-        groupList1.add(new dummyDataForGroup("5.6k", "Moblie/App", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeQXRYXiQyOD3f_Kbw3lvlvo92XMcMImEJrqcwKq1JliJQkfj"));
+        groupList1 = new ArrayList<Group>();
+        groupList1.add(new Group("6.4k", "Ux/Ui", "https://cdn-images-1.medium.com/max/2000/1*7pjzaWKedACc3-olWUghLg.png"));
+        groupList1.add(new Group("4.6k", "Design a Beautiful App", "https://learn.canva.com/wp-content/uploads/2015/10/40-People-Through-History-Who-Changed-Design-For-Good-04.png"));
+        groupList1.add(new Group("5.6k", "Moblie/App", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeQXRYXiQyOD3f_Kbw3lvlvo92XMcMImEJrqcwKq1JliJQkfj"));
 
 
         groupList2 = new ArrayList<>();
-        groupList2.add(new dummyDataForGroup("2.1k", "codings", "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2"));
-        groupList2.add(new dummyDataForGroup("3.8k", "music", "https://i.ytimg.com/vi/eqEcRwmV2vU/maxresdefault.jpg"));
-        groupList2.add(new dummyDataForGroup("7.1k", "marketing", "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH82423479_w300_h300.jpg"));
+        groupList2.add(new Group("2.1k", "codings", "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2"));
+        groupList2.add(new Group("3.8k", "music", "https://i.ytimg.com/vi/eqEcRwmV2vU/maxresdefault.jpg"));
+        groupList2.add(new Group("7.1k", "marketing", "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH82423479_w300_h300.jpg"));
 
 
-        mygroupList = new ArrayList<dummyDataForGroup>();
+        mygroupList = new ArrayList<Group>();
         //----------------------------------
 
     }
@@ -323,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 }
         );
 
-        //TODO 지상 여기는 Saved video를 처리해주는 부분임.
+
         // main 에서 처리해줘야 한다.
         View view = viewFactory.getYourClassesView();
         ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
@@ -334,19 +343,20 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 .into(video_thumbnail);
         your_classes_view_container.addView(view);
 
-        //TODO 지상 여기는 여기는 내 프로필을 처리해주는 부분임. git pull 시 수정 필요
 
         if (isSignIn) {
-
-            meView = viewFactory.getMeView();
-
+            Log.e("JUWONLEE", "me view start");
+            meView = viewFactory.getMeView("hello");
             Glide.with(this)
                     .load(R.drawable.skill_design)
                     .apply(RequestOptions.circleCropTransform())
                     .into(((ImageView) meView.findViewById(R.id.me_image)));
+            Log.e("JUWONLEE", "me view middle");
             me_view_container.addView(meView);
-            me_view_container.addView(viewFactory.getMeSkillView(selectList));
-
+            meSkillView = viewFactory.getMeSkillView();
+            meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView) meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
+            me_view_container.addView(meSkillView);
+            Log.e("JUWONLEE", "me view end");
 
         } else {
             notSignedInMeView = viewFactory.getNotSignedInMeView();
@@ -388,8 +398,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_title.setText("Groups");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-
-
         } else if (id == R.id.navigation_discover) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Discover");
@@ -402,15 +410,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.GONE);
         } else if (id == R.id.navigation_me) {
-//            if (isSignIn)
-//                toolbar.setVisibility(View.GONE);
-//            else
-//                {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_title.setText("Me");
-            toolbar_left_button.setVisibility(View.GONE);
-            toolbar_right_button.setVisibility(View.VISIBLE);
-//            }
+            if (isSignIn)
+                toolbar.setVisibility(View.GONE);
+            else {
+                toolbar.setVisibility(View.VISIBLE);
+                toolbar_title.setText("Me");
+                toolbar_left_button.setVisibility(View.GONE);
+                toolbar_right_button.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -501,10 +508,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_me);
-//                        if (isSignIn)
-                        drawingView(me_view_container);
-//                        else
-//                            drawingView(notSignedInMeView);
+                        if (isSignIn)
+                            drawingView(me_view_container);
+                        else
+                            drawingView(notSignedInMeView);
                         return true;
                     }
             }
@@ -547,71 +554,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void select() {
         // 선택된 카테고리들을 받아와서 그려줘야 함
         // startActivityForResult();
+        Intent intent = new Intent(MainActivity.this, SelectSkillsActivity.class);
+        if (user.getFollowingSkills() != null)
+            intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) user.getFollowingSkills());
 
-        Intent intent1 = new Intent(MainActivity.this, SelectSkillsActivity.class);
-        startActivityForResult(intent1, ConstantUtil.SELECT_SKILLS_REQUEST_CODE2);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE2) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
-
-
-                selectList = (ArrayList<String>) data.getSerializableExtra("toggleArray");
-                Log.e("fromSelectActivity", "========list================" + selectList);
-
-
-                meView = viewFactory.getMeView();
-
-                Glide.with(this)
-                        .load(R.drawable.skill_design)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(((ImageView) meView.findViewById(R.id.me_image)));
-                me_view_container.removeAllViews();
-
-                me_view_container.addView(meView);
-                me_view_container.addView(viewFactory.getMeSkillView(selectList));
-
-            }
-        } else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
-
-                int groupItemPosition = data.getIntExtra("position", 0);
-                String groupTitle_s = data.getStringExtra("groupName");
-                String groupNum_s = data.getStringExtra("groupJoinNum");
-                String imageUri_s = data.getStringExtra("groupImageUri");
-                mygroupList.add(new dummyDataForGroup(groupNum_s, groupTitle_s, imageUri_s));
-                int i;
-                for (i = 0; i < groupList1.size(); i++) {
-                    if (groupTitle_s.equals(groupList1.get(i).getGroupName())) {
-                        groupList1.remove(i);
-                    }
-                }
-
-                for (i = 0; i < groupList2.size(); i++) {
-                    if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
-                        groupList2.remove(i);
-                    }
-
-                }
-
-
-                Log.e("MainActivity", "check============" + mygroupList.get(0).getGroupName());
-                Log.e("MainActivity", "check position============" + groupItemPosition);
-                group_view_container.removeAllViews();
-                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
-                group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-                group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
-
-
-            }
-        }
-
+        startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
     }
 
     @Override
@@ -654,4 +601,55 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     public void signIn() {
         startActivity(new Intent(MainActivity.this, SignInActivity.class));
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
+            if (skills != null && skills.size() > 0)
+                meSkillView.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+            meSkillRecyclerViewAdapter.update(skills);
+            user.setFollowingSkills(skills);
+        } else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
+
+                int groupItemPosition = data.getIntExtra("position", 0);
+                String groupTitle_s = data.getStringExtra("groupName");
+                String groupNum_s = data.getStringExtra("groupJoinNum");
+                String imageUri_s = data.getStringExtra("groupImageUri");
+                mygroupList.add(new Group(groupNum_s, groupTitle_s, imageUri_s));
+                int i;
+                for (i = 0; i < groupList1.size(); i++) {
+                    if (groupTitle_s.equals(groupList1.get(i).getGroupName())) {
+                        groupList1.remove(i);
+                    }
+                }
+
+                for (i = 0; i < groupList2.size(); i++) {
+                    if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
+                        groupList2.remove(i);
+                    }
+
+                }
+
+
+                Log.e("MainActivity", "check============" + mygroupList.get(0).getGroupName());
+                Log.e("MainActivity", "check position============" + groupItemPosition);
+                group_view_container.removeAllViews();
+                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
+                group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
+                group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
+
+
+            }
+        }
+
+    }
+
 }
+
+

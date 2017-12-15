@@ -4,7 +4,7 @@ package com.immymemine.kevin.skillshare.model.dummy;
  * Created by JisangYou on 2017-12-12.
  */
 
-public class dummyData {
+public class Search {
 
     String title;
     String tutor;
@@ -14,7 +14,7 @@ public class dummyData {
     String attendanceNum;
 
 
-    public dummyData(String title, String tutor, String imageUrl, String duration, String thumbup, String attendanceNum) {
+    public Search(String title, String tutor, String imageUrl, String duration, String thumbup, String attendanceNum) {
         this.title = title;
         this.tutor = tutor;
         this.imageUrl = imageUrl;

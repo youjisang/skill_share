@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.dummy.dummyData;
+import com.immymemine.kevin.skillshare.model.dummy.Search;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -23,15 +23,15 @@ import java.util.List;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
     Context context;
-    List<dummyData> data;
+    List<Search> data;
     int state;
 
-    public SearchRecyclerViewAdapter(Context context, List<dummyData> data) {
+    public SearchRecyclerViewAdapter(Context context, List<Search> data) {
         this.context = context;
         this.data = data;
     }
 
-    public void setData(List<dummyData> data, int state) {
+    public void setData(List<Search> data, int state) {
         this.data = data;
         this.state = state;
         notifyDataSetChanged();
@@ -61,7 +61,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (state != 0) {
-            dummyData dummy = data.get(position);
+            Search dummy = data.get(position);
             holder.text_view_title.setText(dummy.getTitle());
             holder.text_view_tutor.setText(dummy.getTutor());
             holder.text_view_duration.setText(dummy.getDuration());

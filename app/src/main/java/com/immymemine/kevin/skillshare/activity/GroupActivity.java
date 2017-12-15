@@ -44,7 +44,6 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
         , SwipeRefreshLayout.OnRefreshListener {
 
 
-
     private Toolbar toolbar;
     private GroupChattingAdapter mAdapter;
     private ArrayList<GroupItem> groupItemList;
@@ -59,12 +58,10 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     boolean check = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-
 
 
         initiateView();
@@ -84,16 +81,6 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
 
         groupItemList = new ArrayList<>();
 
-//        toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.inflateMenu(R.menu.chatting_toolbar_menu);
-//
-//        groupItemList = new ArrayList<>();
-//        RecyclerView mRecyclerView =  findViewById(R.id.recycler_view_chatting);
-//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new GroupChattingAdapter(this);
-//        mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -106,7 +93,6 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
             }
         });
     }
-
 
 
     //TODO 지상 ----------------------------------------------------
@@ -136,20 +122,20 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     }
 
     private void fromGroupRecylcerViewAdapter() {
-//        if (check != true) {
-            Intent intent = getIntent();
-            position = intent.getIntExtra("position",0);
-            groupTitle_s = intent.getStringExtra("groupName");
-            groupNum_s = intent.getStringExtra("groupJoinNum");
-            imageUri_s = intent.getStringExtra("groupImageUri");
-            Log.e("groupActivity", "========groupname========" + groupTitle_s + "=========groupjoinnum==========" + groupNum_s + "========groupImageUri===========" + imageUri_s);
-//        }
+
+        Intent intent = getIntent();
+        position = intent.getIntExtra("position", 0);
+        groupTitle_s = intent.getStringExtra("groupName");
+        groupNum_s = intent.getStringExtra("groupJoinNum");
+        imageUri_s = intent.getStringExtra("groupImageUri");
+        Log.e("groupActivity", "========groupname========" + groupTitle_s + "=========groupjoinnum==========" + groupNum_s + "========groupImageUri===========" + imageUri_s);
+
     }
 
     private void settingViewFromData() {
         groupNum.setText(groupNum_s);
         groupTitle.setText(groupTitle_s);
-//        Glide.with(this).load(imageUri_s).into(toolbar);
+
     }
 
     private void checkJoinOrNot() {
@@ -160,7 +146,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
             public void onClick(View v) {
 
                 Intent intent = new Intent();
-                intent.putExtra("position",position);
+                intent.putExtra("position", position);
                 intent.putExtra("groupName", groupTitle_s);
                 intent.putExtra("groupJoinNum", groupNum_s);
                 intent.putExtra("groupImageUri", imageUri_s);
@@ -187,17 +173,16 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("GroupActivity_","onStart");
+        Log.d("GroupActivity_", "onStart");
         loadData();
     }
 
     @Override
     public void onRefresh() {
-        Log.d("GroupActivity_","onRefresh");
+        Log.d("GroupActivity_", "onRefresh");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -205,13 +190,13 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
                 loadData();
 
             }
-        },2000);
+        }, 2000);
     }
 
     @SuppressLint("StaticFieldLeak")
     @Override
     public void onLoadMore() {
-        new AsyncTask<Void,Void,List<GroupItem>>(){
+        new AsyncTask<Void, Void, List<GroupItem>>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();

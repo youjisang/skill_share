@@ -29,7 +29,7 @@ public class SavedActivity extends AppCompatActivity {
     }
 
     private void initRecylcerView(){
-        savedRecyclerView.setHasFixedSize(true);
+
 
     }
 

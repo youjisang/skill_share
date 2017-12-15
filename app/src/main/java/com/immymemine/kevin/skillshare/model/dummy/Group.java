@@ -4,14 +4,14 @@ package com.immymemine.kevin.skillshare.model.dummy;
  * Created by JisangYou on 2017-12-13.
  */
 
-public class dummyDataForGroup {
+public class Group {
 
 
     String groupJoinNum;
     String groupName;
     String groupImage;
 
-    public dummyDataForGroup(String groupJoinNum, String groupName, String groupImage) {
+    public Group(String groupJoinNum, String groupName, String groupImage) {
 
         this.groupJoinNum = groupJoinNum;
         this.groupName = groupName;

@@ -9,21 +9,16 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.SearchRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.model.dummy.dummyData;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
-import com.immymemine.kevin.skillshare.utility.DialogUtil;
+import com.immymemine.kevin.skillshare.model.dummy.Search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -31,7 +26,7 @@ public class SearchActivity extends AppCompatActivity {
     ImageButton toolbar_button_back, toolbar_button_cancel;
     RecyclerView searchRecyclerView;
     SearchRecyclerViewAdapter searchRecyclerViewAdapter;
-    List<dummyData> data, data2;
+    List<Search> data, data2;
 
 
 
@@ -42,9 +37,9 @@ public class SearchActivity extends AppCompatActivity {
         initiateView();
         data = new ArrayList<>();
         data2 = new ArrayList<>();
-        data.add(new dummyData("music", "allen", "http://s3.amazonaws.com/skillshare/uploads/parentClasses/2f4f5efd1d503e7131249c94cf2ed7bc/681a4bd7", "3:40", "150", "200"));
-        data.add(new dummyData("coding", "james", "https://static.skillshare.com/uploads/project/95045c8c57d1227a6cfb442bd5d3661d/219967c6", "4:40", "200", "450"));
-        data.add(new dummyData("hobby", "sera", "https://static.skillshare.com/uploads/project/d00cdd4401224eb969fc135174b89135/b6adbd89", "3:35", "180", "320"));
+        data.add(new Search("music", "allen", "http://s3.amazonaws.com/skillshare/uploads/parentClasses/2f4f5efd1d503e7131249c94cf2ed7bc/681a4bd7", "3:40", "150", "200"));
+        data.add(new Search("coding", "james", "https://static.skillshare.com/uploads/project/95045c8c57d1227a6cfb442bd5d3661d/219967c6", "4:40", "200", "450"));
+        data.add(new Search("hobby", "sera", "https://static.skillshare.com/uploads/project/d00cdd4401224eb969fc135174b89135/b6adbd89", "3:35", "180", "320"));
         initRecyclerView();
 
         textWatcherControl();
@@ -98,7 +93,7 @@ public class SearchActivity extends AppCompatActivity {
                     for (int i = 0; i < data.size(); i++) {
                         Log.e("check1", "======check1 =====");
                         if (c.toString().equals(data.get(i).getTitle().toString())) {
-                            data2.add(new dummyData(data.get(i).getTitle().toString(), data.get(i).getTutor().toString(), data.get(i).getImageUrl().toString(), data.get(i).getDuration().toString(), data.get(i).getThumbup().toString(), data.get(i).getAttendanceNum().toString()));
+                            data2.add(new Search(data.get(i).getTitle().toString(), data.get(i).getTutor().toString(), data.get(i).getImageUrl().toString(), data.get(i).getDuration().toString(), data.get(i).getThumbup().toString(), data.get(i).getAttendanceNum().toString()));
                         }
                     }
 

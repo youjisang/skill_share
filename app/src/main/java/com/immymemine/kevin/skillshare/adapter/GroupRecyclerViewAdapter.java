@@ -3,8 +3,6 @@ package com.immymemine.kevin.skillshare.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,16 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.GroupActivity;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.model.dummy.dummyDataForGroup;
-import com.immymemine.kevin.skillshare.model.user.Group;
+import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
-import java.io.Serializable;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -32,15 +25,15 @@ import java.util.List;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
-    List<dummyDataForGroup> groupList;
+    List<Group> groupList;
     Context context;
     int size;
-    int index;
-    Intent intent, intent1;
 
-    dummyDataForGroup dummy;
+    Intent intent;
 
-    public GroupRecyclerViewAdapter(List<dummyDataForGroup> groupList, Context context, int size) {
+    Group dummy;
+
+    public GroupRecyclerViewAdapter(List<Group> groupList, Context context, int size) {
         this.groupList = groupList;
         this.context = context;
         this.size = size;
@@ -80,7 +73,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
             holder.textViewGroup.setText(dummy.getGroupName());
 
-            Glide.with(context).load(dummy.getGroupImage()).into(holder.imageView);
+
+//            Glide.with(context).load(dummy.getGroupImage()).into(holder.imageView);
+//            로그인 후 그룹카테고리에 들어가면  Exception이 발생! 그 이유는 Activity가 끝난 상태에서 Glide with 함수를 호출해서 발생한 문제
 
 
         }
