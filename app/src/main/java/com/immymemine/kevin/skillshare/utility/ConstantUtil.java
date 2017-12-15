@@ -56,11 +56,12 @@ public class ConstantUtil {
     public static final String BEST_THIS_MONTH = "b";
 
     // intent flag
-    public static final String USER_ID_FLAG = "USER_ID";
-    public static final String TOOLBAR_TITLE_FLAG = "TTF";
-    public static final String ID_FLAG = "ID";
-    public static final String SEE_ALL_FLAG = "See All";
-    public static final String URL_FLAG = "URL";
+    public static final String USER_ID_FLAG = "user id";
+    public static final String TOOLBAR_TITLE_FLAG = "ttf";
+    public static final String ID_FLAG = "id";
+    public static final String SEE_ALL_FLAG = "see all";
+    public static final String URL_FLAG = "url";
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
     public static final String SKILLS_FLAG = "skills";
+    public static final String TYPE_FLAG = "type";
 }

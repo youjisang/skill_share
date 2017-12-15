@@ -112,8 +112,7 @@ public class ViewFactory {
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
-            Button see_all_button = view.findViewById(R.id.button_see_all);
-            see_all_button.setOnClickListener(v -> {
+            view.findViewById(R.id.button_see_all).setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
             });

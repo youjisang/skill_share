@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             isSignIn = true;
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
-                    userId = intent.getStringExtra("USER_ID");
+                    userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
                     RetrofitHelper.createApi(UserService.class)
                             .getUser(userId)
                             .observeOn(Schedulers.io())
@@ -260,7 +260,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             // 다른 부분이 있으면 view 를 추가하거나 삭제
 
-
             // 완료 되면 호출 ∇
             refreshLayout.setRefreshing(false);
         });
@@ -289,7 +288,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     Future<LinearLayout> g, d;
     Future<View> e;
+
     private void setViews() {
+
         g = executor.submit(
                 () -> {
                     group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups)));
@@ -308,7 +309,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 }
         );
 
-        // main 에서 처리해줘야 한다.
         e = executor.submit(
                 () -> {
                     yourClassesView = viewFactory.getYourClassesView();
@@ -316,40 +316,43 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     return meView;
                 }
         );
+    }
 
-        try {
-            if(e.get() != null) {
-                runOnUiThread(() -> {
-                    Glide.with(MainActivity.this)
-                            .load(user.getSubscribeClass().get(0).getClassThumbnail())
-                            .apply(RequestOptions.centerCropTransform())
-                            .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
-                            .into((ImageView)yourClassesView.findViewById(R.id._your_classes_video_thumbnail));
+    private void setYourClassesViewContainer() {
+        if(yourClassesView != null) {
+            Glide.with(MainActivity.this)
+                    .load(user.getSubscribeClass().get(0).getClassThumbnail())
+                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
+                    .into((ImageView)yourClassesView.findViewById(R.id._your_classes_video_thumbnail));
 
-                    your_classes_view_container.addView(yourClassesView);
+            your_classes_view_container.addView(yourClassesView);
+        }
+    }
 
-                    if (isSignIn) {
-                        Glide.with(this)
-                                .load(user.getPictureUrl())
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(((ImageView) meView.findViewById(R.id.me_image)));
+    private void setMeViewContainer() {
 
-                        me_view_container.addView(meView);
+        if (isSignIn ) {
+            if(meView != null) {
+                Glide.with(this)
+                        .load(user.getPictureUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(((ImageView) meView.findViewById(R.id.me_image)));
 
-                        if( followSkills.size() > 3)
-                            meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
-                        else
-                            meSkillView = viewFactory.getMeSkillView();
+                me_view_container.addView(meView);
 
-                        meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView)meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
-                        me_view_container.addView(meSkillView);
-                    } else {
-                        notSignedInMeView = viewFactory.getNotSignedInMeView();
-                    }
-                });
+                if (followSkills.size() > 3)
+                    meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
+                else
+                    meSkillView = viewFactory.getMeSkillView();
+
+                meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView) meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
+                me_view_container.addView(meSkillView);
+            } else {
+                // TODO network error
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            notSignedInMeView = viewFactory.getNotSignedInMeView();
         }
     }
 
@@ -449,6 +452,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     } else {
                         // toolbar 바꾸기
                         changeToolbar(R.id.navigation_home);
+
                         // container 에 담기 ( 그리기 )
                         drawingView(home_view_container);
                         return true;
@@ -471,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_discover);
+
                         try {
                             drawingView(d.get());
                         } catch (Exception e) {
@@ -483,6 +488,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_your_classes);
+
+                        if(your_classes_view_container.getChildCount() == 0) {
+                            setYourClassesViewContainer();
+                        }
                         drawingView(your_classes_view_container);
                         return true;
                     }
@@ -491,10 +500,16 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_me);
-                        if (isSignIn)
+
+                        if(me_view_container.getChildCount() < 2) {
+                            setMeViewContainer();
+                        }
+
+                        if (isSignIn) {
                             drawingView(me_view_container);
-                        else
+                        } else {
                             drawingView(notSignedInMeView);
+                        }
                         return true;
                     }
             }
@@ -544,11 +559,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     }
 
     @Override
-    public void seeAll(String title) {
+    public void seeAll(String type) {
         Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
         // title >> int
         // ConstantUtil
-        intent.putExtra("TYPE", title);
+        intent.putExtra(ConstantUtil.TYPE_FLAG, type);
         startActivity(intent);
     }
 
@@ -619,7 +634,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
 //                group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
 //                group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
-//
 //
 //            }
 
