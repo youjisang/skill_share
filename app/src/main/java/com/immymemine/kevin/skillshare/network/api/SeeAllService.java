@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.see_all.Project;
 import com.immymemine.kevin.skillshare.model.see_all.Review;
 import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
@@ -7,7 +8,9 @@ import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -23,4 +26,7 @@ public interface SeeAllService {
 
     @GET("SeeAll/project/{id}")
     Observable<List<Project>> getSeeAllProject(@Path("id") String id);
+
+    @POST("seeAll/addReply")
+    Observable<List<Reply>> addReply(@Body Reply reply);
 }

@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // user
     String userId;
     boolean isSignIn;
-    User user;
+    public static User user;
 
     // user followed skills
     List<String> followSkills = new ArrayList<>();
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
                                         followSkills.add(ConstantUtil.BEST_THIS_MONTH);
 
-                                        user.setPictureUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
+                                        user.setImageUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
 
                                         List<SubscribeClass> subscribeClasses = new ArrayList<>();
                                         subscribeClasses.add(new SubscribeClass(
@@ -179,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
+
+                                        groupDummyDataSetting();
 
                                         setContainer();
                                     }
@@ -217,11 +219,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         // TODO Progress Bar
         // follow skills 에 해당되는 카테고리들을 받아온다.
-
-        //TODO 지상
-        groupDummyDataSetting();
-        setContainer();
-        //
 
         // BroadCast Receiver 등록
         registerReceiver();
@@ -271,14 +268,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             // 다른 부분이 있으면 view 를 추가하거나 삭제
 
-
             // 완료 되면 호출 ∇
             refreshLayout.setRefreshing(false);
         });
         refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
     }
-
-    //TODO 지상 toolbar에 버튼 달았음-------------------------------------------
 
     private void searchButtonListener() {
         toolbar_right_button.setOnClickListener(new View.OnClickListener() {
@@ -287,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
-
         });
     }
     
@@ -384,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         if (isSignIn) {
             if (meView != null) {
                 Glide.with(this)
-                        .load(user.getPictureUrl())
+                        .load(user.getImageUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(((ImageView) meView.findViewById(R.id.me_image)));
 
@@ -655,7 +648,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             meSkillRecyclerViewAdapter.update(skills);
             user.setFollowingSkills(skills);
         }
-        //TODO 지상 그룹 부분-------------------------------------------------------------------------------
+        //TODO 지상 그룹 부분 -------------------------------------------------------------------------------
         else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -676,9 +669,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
                         groupList2.remove(i);
                     }
-
                 }
-
 
                 Log.e("MainActivity", "check============" + mygroupList.get(0).getGroupName());
                 Log.e("MainActivity", "check position============" + groupItemPosition);

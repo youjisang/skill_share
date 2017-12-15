@@ -2,7 +2,6 @@ package com.immymemine.kevin.skillshare.adapter.see_all_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import java.util.List;
@@ -24,10 +24,15 @@ import java.util.List;
 public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<DiscussionSeeAllRecyclerViewAdapter.Holder> {
 
     Context context;
-    List<Reply> replyList;
-    public DiscussionSeeAllRecyclerViewAdapter(Context context, List<Reply> replyList) {
+    List<Reply> replies;
+    public DiscussionSeeAllRecyclerViewAdapter(Context context, List<Reply> replies) {
         this.context = context;
-        this.replyList = replyList;
+        this.replies = replies;
+    }
+
+    public void update(List<Reply> replies) {
+        this.replies = replies;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -41,20 +46,19 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
         if(position == 0) {
             holder.holder.setBackground(context.getResources().getDrawable(R.drawable.reply_boundary));
         }
-        Log.d("JUWONLEE", position + "");
-        Reply reply = replyList.get(position);
+        Reply reply = replies.get(position);
 
         Glide.with(context).load(reply.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageViewProfile);
         holder.textViewTime.setText(reply.getName());
         holder.expandableTextView.setText(reply.getContent(), TextView.BufferType.NORMAL);
-        holder.textViewTime.setText(reply.getTime());
+        holder.textViewTime.setText(TimeUtil.calculateTime(reply.getTime()));
     }
 
     @Override
     public int getItemCount() {
-        return replyList.size();
+        return replies.size();
     }
 
     class Holder extends RecyclerView.ViewHolder {

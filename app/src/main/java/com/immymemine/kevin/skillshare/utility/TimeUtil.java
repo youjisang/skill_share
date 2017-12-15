@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
+import android.util.Log;
+
 /**
  * Created by quf93 on 2017-12-11.
  */
@@ -8,9 +10,9 @@ public class TimeUtil {
 
     public static String calculateTime(String timeString) {
         long time = System.currentTimeMillis() - Long.parseLong(timeString);
-
+        Log.d("TIMEUTIL", "time : " + time);
         if(time < 60000) // 1분 이내면
-            return "now";
+            return "Just now";
         else if(time >= 60000 && time < 120000) // 1분 이상 2분 미만
             return "1 minute ago";
         else if(time >= 120000 && time < 3600000) // 2분 이상 1시간 미만

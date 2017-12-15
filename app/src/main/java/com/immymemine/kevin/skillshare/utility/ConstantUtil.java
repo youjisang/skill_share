@@ -64,7 +64,6 @@ public class ConstantUtil {
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
     public static final String SKILLS_FLAG = "skills";
     public static final String TYPE_FLAG = "type";
-
     //Search
     public static final int FAIL_SEARCH = 293;
 

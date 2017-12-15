@@ -70,4 +70,7 @@ public class Discussion {
         return replies;
     }
 
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
+    }
 }

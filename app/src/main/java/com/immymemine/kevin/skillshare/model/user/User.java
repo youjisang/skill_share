@@ -25,7 +25,7 @@ public class User
 
     private List<Followers> followers;
 
-    private String pictureUrl;
+    private String imageUrl;
 
     private String email;
 
@@ -75,14 +75,14 @@ public class User
         this.password = password;
     }
 
-    public String getPictureUrl ()
+    public String getImageUrl ()
     {
-        return pictureUrl;
+        return imageUrl;
     }
 
-    public void setPictureUrl (String pictureUrl)
+    public void setImageUrl (String imageUrl)
     {
-        this.pictureUrl = pictureUrl;
+        this.imageUrl = imageUrl;
     }
 
     public String getEmail ()
@@ -164,6 +164,6 @@ public class User
     @Override
     public String toString()
     {
-        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", pictureUrl = "+pictureUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", group = "+group+"]";
+        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", imageUrl = "+imageUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", group = "+group+"]";
     }
 }

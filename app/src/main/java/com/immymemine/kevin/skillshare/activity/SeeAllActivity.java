@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.view.View;
+import android.util.Log;
 import android.widget.EditText;
-
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
@@ -20,12 +18,18 @@ import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.see_all.Project;
 import com.immymemine.kevin.skillshare.model.see_all.Review;
 import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
+import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.SeeAllService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.ValidationUtil;
+import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -34,9 +38,20 @@ public class SeeAllActivity extends AppCompatActivity {
 
     // intent
     Intent intent;
+    String type;
+    int position;
+
+    // api
+    SeeAllService service;
 
     // recycler view
     RecyclerView recyclerView;
+    RecyclerView.Adapter adapter;
+
+    // discussion
+    EditText editTextReply;
+    TextView textViewSendReply;
+    List<Reply> replies;
 
     // Review
     TextView textViewReviewPercent, textViewTestimonials, textViewPositiveCount, textViewNegativeCount;
@@ -46,7 +61,8 @@ public class SeeAllActivity extends AppCompatActivity {
 
         // 1. 인텐트 받아옴
         intent = getIntent();
-        String type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
+        type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
+        position = intent.getIntExtra("position", -1);
 
         if(type.equals(ConstantUtil.REVIEW_ITEM))
             setContentView(R.layout.activity_see_all_review);
@@ -58,30 +74,22 @@ public class SeeAllActivity extends AppCompatActivity {
         String id = intent.getStringExtra("ID");
         String title = intent.getStringExtra(ConstantUtil.TOOLBAR_TITLE_FLAG);
 
+        service = RetrofitHelper.createApi(SeeAllService.class);
 
-//        // 1. 인텐트 받아옴
-//        intent = getIntent();
-//        String type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
-//        String id = intent.getStringExtra("ID");
-//        String title = intent.getStringExtra(ConstantUtil.TOOLBAR_TITLE_FLAG);
-//
-//        initiateView(title);
-//
-//        // TODO 2. 인텐트에서 받아온 구분 값을 어댑터 설정
-//        networking(type, id);
+        initiateView(title, type);
+        networking(type, id);
     }
 
     private void networking(String type, String id) {
-        SeeAllService service = RetrofitHelper.createApi(SeeAllService.class);
         //retrofit...
         switch (type) {
             case ConstantUtil.CLASS_ITEM:
 
                 break;
             case ConstantUtil.DISCUSSION_ITEM:
-                List<Reply> replyList = new ArrayList<>();
-                replyList = (ArrayList) intent.getParcelableArrayListExtra("TEST");
-                recyclerView.setAdapter(new DiscussionSeeAllRecyclerViewAdapter(this, replyList));
+                replies = intent.getParcelableArrayListExtra(ConstantUtil.DISCUSSION_ITEM);
+                adapter = new DiscussionSeeAllRecyclerViewAdapter(this, replies);
+                recyclerView.setAdapter(adapter);
                 break;
             case ConstantUtil.PROJECT_ITEM:
                 service.getSeeAllProject(id)
@@ -192,9 +200,21 @@ public class SeeAllActivity extends AppCompatActivity {
 
 
 
-    private void initiateView(String title) {
+    @Override
+    public void onBackPressed() {
+        if(type.equals(ConstantUtil.DISCUSSION_ITEM)) {
+            Map<Integer, List<Reply>> data = new HashMap<>();
+            replies.remove(0);
+            data.put(position, replies);
+            Bus.getInstance().post(data);
+        }
+        super.onBackPressed();
+    }
+    TextView textViewToolbarTitle;
+    private void initiateView(String title, String type) {
         // toolbar title
-        ((TextView)findViewById(R.id.toolbar_title)).setText(title);
+        textViewToolbarTitle = findViewById(R.id.toolbar_title);
+        textViewToolbarTitle.setText(title);
 
         // back
         findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
@@ -203,10 +223,72 @@ public class SeeAllActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view_seeAll);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // review
-        textViewTestimonials = findViewById(R.id.text_view_testimonials);
-        textViewReviewPercent = findViewById(R.id.text_view_review_percent);
-        textViewPositiveCount = findViewById(R.id.text_view_positive_count);
-        textViewNegativeCount = findViewById(R.id.text_view_negative_count);
+        switch (type) {
+            case ConstantUtil.CLASS_ITEM:
+
+                break;
+            case ConstantUtil.DISCUSSION_ITEM:
+                editTextReply = findViewById(R.id.edit_text_reply);
+                textViewSendReply = findViewById(R.id.text_view_send_reply);
+
+                int activeColor = getResources().getColor(R.color.IcActive);
+
+                RxTextView.textChanges(editTextReply).subscribe(
+                        charSequence -> {
+                            if(!ValidationUtil.isEmpty(charSequence.toString())) {
+                                textViewSendReply.setEnabled(true);
+                                textViewSendReply.setTextColor(activeColor);
+                            }
+                        }
+                );
+
+                textViewSendReply.setOnClickListener(
+                        view -> {
+
+                            User user = MainActivity.user;
+                            Reply reply = new Reply(
+                                    user.getName(),
+                                    user.getImageUrl(),
+                                    editTextReply.getText().toString(),
+                                    System.currentTimeMillis() + ""
+                            );
+
+                            service.addReply(reply)
+                                    .observeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            (List<Reply> replies) -> {
+                                                ((DiscussionSeeAllRecyclerViewAdapter)adapter).update(replies);
+                                            },
+                                            (Throwable error) -> {
+                                                Log.e("JUWONLEE", error.getMessage() + "");
+                                            }
+                                    );
+
+                            // Reply 입력칸 비우기
+                            editTextReply.setText("");
+
+                            replies.add(1, reply);
+                            textViewToolbarTitle.setText(replies.size() + " Replies");
+
+                            ((DiscussionSeeAllRecyclerViewAdapter)adapter).update(replies);
+                        }
+                );
+
+                break;
+            case ConstantUtil.PROJECT_ITEM:
+
+                break;
+            case ConstantUtil.REVIEW_ITEM:
+                // review
+                textViewTestimonials = findViewById(R.id.text_view_testimonials);
+                textViewReviewPercent = findViewById(R.id.text_view_review_percent);
+                textViewPositiveCount = findViewById(R.id.text_view_positive_count);
+                textViewNegativeCount = findViewById(R.id.text_view_negative_count);
+                break;
+            case ConstantUtil.SUBSCRIBER_ITEM:
+
+                break;
+        }
     }
 }
