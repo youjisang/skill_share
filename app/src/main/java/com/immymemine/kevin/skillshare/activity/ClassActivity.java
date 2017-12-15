@@ -1,13 +1,8 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.content.Intent;
-
-
-import android.graphics.Bitmap;
-
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -66,15 +61,14 @@ public class ClassActivity extends AppCompatActivity {
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
-    String id, url;
-
+    String classId, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
-        id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
+        classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
         // 2. model object 에 담아주고
 
@@ -106,7 +100,7 @@ public class ClassActivity extends AppCompatActivity {
                     // controller
                     simpleExoPlayerView.setUseController(true); //Set media controller
                     simpleExoPlayerView.showController();
-                });
+        });
     }
 
     private void setTabLayout() {
@@ -119,7 +113,7 @@ public class ClassActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         Bundle bundle = new Bundle();
-        bundle.putString(ConstantUtil.ID_FLAG, id);
+        bundle.putString(ConstantUtil.ID_FLAG, classId);
 
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);
@@ -144,15 +138,6 @@ public class ClassActivity extends AppCompatActivity {
     // share button 클릭 리스너
     public void share(View view) {
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-       /*해당 동영상 url 넣는 부분*/
-        startActivity(Intent.createChooser(shareIntent, "skillShare"));
-
-       /* TODO 지상 완료
-       공유하기 추가
-        */
-
     }
 
     // back button 클릭 리스너
@@ -163,16 +148,10 @@ public class ClassActivity extends AppCompatActivity {
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
-    /*TODO 지상
-     해당 버튼을 클릭하면, POST방식으로 user에 있는 savedClasses에 해당 url을 추가한다.
-     */
 
     }
 
     public void student_profile(View view) {
-
-        int id = view.getId();
-
 
     }
     // Exo Player -----------------------------------------------------------------------
@@ -225,7 +204,7 @@ public class ClassActivity extends AppCompatActivity {
         // [ 1, 2, 3 ( ? ) ]
         mediaSource = buildMediaSource(Uri.parse(URL));
 
-        if (resumePosition > 0)
+        if(resumePosition > 0)
             player.seekTo(resumePosition);
         player.prepare(mediaSource);
     }
@@ -271,7 +250,7 @@ public class ClassActivity extends AppCompatActivity {
 
 
     private void releasePlayer() {
-        if (player != null) {
+        if(player != null) {
             saveResumePosition();
             player.release();
             player = null;
@@ -306,7 +285,7 @@ public class ClassActivity extends AppCompatActivity {
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            Log.v(TAG, "Listener-onLoadingChanged...isLoading:" + isLoading);
+            Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
         }
 
         @Override

@@ -44,7 +44,7 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
         Log.d("JUWONLEE", position + "");
         Reply reply = replyList.get(position);
 
-        Glide.with(context).load(reply.getPictureUrl())
+        Glide.with(context).load(reply.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageViewProfile);
         holder.textViewTime.setText(reply.getName());
