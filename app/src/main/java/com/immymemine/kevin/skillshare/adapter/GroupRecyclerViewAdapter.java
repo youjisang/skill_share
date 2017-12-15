@@ -74,7 +74,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             holder.textViewGroup.setText(dummy.getGroupName());
 
 
-//            Glide.with(context).load(dummy.getGroupImage()).into(holder.imageView);
+            Glide.with(context).load(dummy.getGroupImage()).into(holder.imageView);
 //            로그인 후 그룹카테고리에 들어가면  Exception이 발생! 그 이유는 Activity가 끝난 상태에서 Glide with 함수를 호출해서 발생한 문제
 
 
