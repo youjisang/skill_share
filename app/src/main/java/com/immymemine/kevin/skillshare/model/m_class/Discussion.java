@@ -12,7 +12,7 @@ public class Discussion {
     // TODO time 과 rediscussions 처리해야함
     String _id;
     String name;
-    String pictureUrl;
+    String imageUrl;
     String content;
     String time; // Time Util 을 만들어서 String 으로 둔갑되어 있는 long 값을 파싱해서 18 minutes ago / 1 year ago ... 와 같이 표시해줘야 한다
     String likeCount;
@@ -22,7 +22,7 @@ public class Discussion {
     // for test
     public Discussion(String _id,
             String name,
-            String pictureUrl,
+            String imageUrl,
             String content,
             String time,
             String likeCount,
@@ -30,10 +30,11 @@ public class Discussion {
             List<Reply> replies) {
         this._id = _id;
         this.name = name;
-        this.pictureUrl = pictureUrl;
+        this.imageUrl = imageUrl;
         this.content = content;
         this.time = time;
         this.likeCount = likeCount;
+        this.userId = userId;
         this.replies = replies;
     }
 
@@ -45,8 +46,8 @@ public class Discussion {
         return name;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getContent() {

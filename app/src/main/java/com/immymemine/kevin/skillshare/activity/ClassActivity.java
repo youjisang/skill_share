@@ -61,14 +61,14 @@ public class ClassActivity extends AppCompatActivity {
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
-    String id, url;
+    String classId, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
-        id = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
+        classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
         // 2. model object 에 담아주고
 
@@ -113,7 +113,7 @@ public class ClassActivity extends AppCompatActivity {
         List<Fragment> fragmentList = new ArrayList<>();
 
         Bundle bundle = new Bundle();
-        bundle.putString(ConstantUtil.ID_FLAG, id);
+        bundle.putString(ConstantUtil.ID_FLAG, classId);
 
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);

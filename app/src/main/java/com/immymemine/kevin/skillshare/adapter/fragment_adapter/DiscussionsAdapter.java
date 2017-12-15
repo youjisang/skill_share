@@ -2,7 +2,6 @@ package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import com.immymemine.kevin.skillshare.network.api.GCMService;
 import com.immymemine.kevin.skillshare.network.gcm.SendMessageBody;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
-import com.immymemine.kevin.skillshare.utility.diff_util.DiscussionDiffCallback;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
@@ -55,15 +53,15 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
-        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
-
+//        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
+//        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+//
 //        this.discussions.clear();
 //        this.discussions.addAll(discussions);
-        result.dispatchUpdatesTo(this);
+//        result.dispatchUpdatesTo(this);
 
-//        this.discussions = discussions;
-//        notifyDataSetChanged();
+        this.discussions = discussions;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -95,8 +93,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             holder.userId = discussion.getUserId();
 
             // profile
-            holder.pictureUrl = discussion.getPictureUrl();
-            Glide.with(context).load(holder.pictureUrl)
+            holder.imageUrl = discussion.getImageUrl();
+            Glide.with(context).load(holder.imageUrl)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewProfile);
             holder.textViewProfile.setText(discussion.getName());
@@ -137,7 +135,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ToggleImageButton imageButtonLike;
         TextView textViewLikeCount;
 
-        String pictureUrl;
+        String imageUrl;
 
         public Holder(View v) {
             super(v);
@@ -213,7 +211,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
                         replies.add(0, new Reply(
                                 textViewProfile.getText().toString(),
-                                pictureUrl,
+                                imageUrl,
                                 expandableTextView.getText().toString(),
                                 textViewTime.getText().toString()
                         ));
@@ -225,7 +223,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 Reply reply = replies.get(size-1);
                 textViewReplyProfile.setText(reply.getName());
                 textViewTimeReply.setText( TimeUtil.calculateTime(reply.getTime()) );
-                Glide.with(context).load(reply.getPictureUrl())
+                Glide.with(context).load(reply.getImageUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewReplyProfile);
                 expandableTextViewReply.setTrimLength(4);

@@ -19,6 +19,7 @@ import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapt
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
 import java.util.List;
@@ -65,8 +66,9 @@ public class DiscussionsFragment extends Fragment {
                 addDiscussion()
         );
 
+        String classId = getArguments().getString(ConstantUtil.ID_FLAG);
         RetrofitHelper.createApi(ClassService.class)
-                .getDiscussions("5a31092d7721ab3ee962f1d5")
+                .getDiscussions(classId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
@@ -155,7 +157,7 @@ public class DiscussionsFragment extends Fragment {
 
     private void handleError(Throwable error) {
         // wifi connection retry page
-        Log.e("error :  ", error.getMessage());
+        Log.e("discussion error :  ", error.getMessage());
     }
 
 }

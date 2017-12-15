@@ -9,24 +9,24 @@ import android.os.Parcelable;
 
 public class Reply implements Parcelable {
     String name;
-    String pictureUrl;
+    String imageUrl;
     String content;
     String time;
 
     // test
     public Reply(String name,
-            String pictureUrl,
+            String imageUrl,
             String content,
             String time) {
         this.name = name;
-        this.pictureUrl = pictureUrl;
+        this.imageUrl = imageUrl;
         this.content = content;
         this.time = time;
     }
 
     protected Reply(Parcel in) {
         name = in.readString();
-        pictureUrl = in.readString();
+        imageUrl = in.readString();
         content = in.readString();
         time = in.readString();
     }
@@ -51,12 +51,12 @@ public class Reply implements Parcelable {
         this.name = name;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getContent() {
@@ -83,7 +83,7 @@ public class Reply implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(pictureUrl);
+        dest.writeString(imageUrl);
         dest.writeString(content);
         dest.writeString(time);
     }

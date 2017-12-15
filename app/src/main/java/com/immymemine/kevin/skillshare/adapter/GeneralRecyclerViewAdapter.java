@@ -48,7 +48,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         if(classes != null) {
             Class mClass = classes.get(position);
 
-            holder.id = mClass.get_id();
+            holder.classId = mClass.get_id();
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
             holder.textViewTime.setText(TimeUtil.calculateVideoTime(mClass.getDuration()));
@@ -70,7 +70,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         ImageView imageView;
         TextView textViewTime, textViewTitle, textViewTutor;
 
-        String id;
+        String classId;
         String url;
         public GeneralViewHolder(View v) {
             super(v);
@@ -83,7 +83,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ClassActivity.class);
-                intent.putExtra(ConstantUtil.ID_FLAG, id); // data for identification
+                intent.putExtra(ConstantUtil.ID_FLAG, classId); // data for identification
                 intent.putExtra(ConstantUtil.URL_FLAG, url);
                 context.startActivity(intent);
             });
