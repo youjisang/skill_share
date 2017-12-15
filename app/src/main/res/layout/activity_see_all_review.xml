@@ -56,7 +56,7 @@
             android:layout_weight="1"
             android:text="99% Positive Reviews"
             android:textColor="@android:color/black"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -98,14 +98,14 @@
         android:id="@+id/text_view_testimonials"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ededed"
+        android:background="#f4f4f4"
         android:paddingBottom="8dp"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
         android:text="2 Testimonials"
         android:textColor="@color/IcInactive"
-        android:textSize="18sp"
-        android:visibility="gone" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_seeAll"
@@ -113,7 +113,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#ededed"
-        tools:listitem="@layout/recycler_view_item_see_all_classes">
+        tools:listitem="@layout/recycler_view_item_see_all_reviews">
 
     </android.support.v7.widget.RecyclerView>
 

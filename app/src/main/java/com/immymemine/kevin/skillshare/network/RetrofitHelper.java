@@ -1,13 +1,11 @@
 package com.immymemine.kevin.skillshare.network;
 
 import com.immymemine.kevin.skillshare.network.interceptor.AuthenticationInterceptor;
-import com.immymemine.kevin.skillshare.network.interceptor.LoggingInterceptor;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -18,9 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitHelper {
-    public static final String BASE_URL = "http://192.168.1.105:8079/";
 
-
+    public static final String BASE_URL = "http://10.0.2.2:8079/";
 
     // OkHttpClient
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
@@ -31,9 +28,9 @@ public class RetrofitHelper {
 
     // Retrofit Builder
     private static Retrofit.Builder builder =new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+                                                         .baseUrl(BASE_URL)
+                                                         .addConverterFactory(GsonConverterFactory.create())
+                                                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
     // Retrofit
     private static Retrofit retrofit = builder.build();
 

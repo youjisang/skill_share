@@ -160,7 +160,7 @@ public class SignInActivity extends AppCompatActivity{
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
-            intent.putExtra("USER_ID", response.getUserId());
+            intent.putExtra(ConstantUtil.USER_ID_FLAG, response.getUserId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             startActivity(intent);
         } else {

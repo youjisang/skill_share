@@ -3,7 +3,6 @@ package com.immymemine.kevin.skillshare.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
@@ -22,24 +21,32 @@ public class SelectSkillsActivity extends Activity implements CompoundButton.OnC
     Intent intent;
     List<String> skills;
 
+    CustomToggleButton toggleButtonDesign, toggleButtonPhotography, toggleButtonBusiness, toggleButtonTechnology,
+            toggleButtonCrafts, toggleButtonCulinary, toggleButtonFilm, toggleButtonFashion, toggleButtonMusic,
+            toggleButtonLifestyle, toggleButtonGaming, toggleButtonTeaching;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_skills);
 
-        intent = getIntent();
-        // 초기화
-        if(intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG) != null)
-            skills = intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
-        else
-            skills = new ArrayList<>();
-
         initiateView();
+
+        intent = getIntent();
+
+        // 초기화
+        if(intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG) != null) {
+            skills = intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
+            setAlreadyCheckedSkills(skills);
+        } else {
+            skills = new ArrayList<>();
+        }
+
+        attachOnCheckedChangeListener();
     }
 
     @Override
     public void onBackPressed() {
-        Log.d("JUWONLEE", skills.get(0));
         Intent intent = new Intent();
         intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
         setResult(RESULT_OK, intent);
@@ -49,24 +56,82 @@ public class SelectSkillsActivity extends Activity implements CompoundButton.OnC
     }
 
     private void initiateView() {
-        ((CustomToggleButton)findViewById(R.id.toggle_design)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_photography)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_business)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_technology)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_crafts)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_culinary)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_film)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_fashion)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_music)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_lifestyle)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_gaming)).setOnCheckedChangeListener(this);
-        ((CustomToggleButton)findViewById(R.id.toggle_teaching)).setOnCheckedChangeListener(this);
+        toggleButtonDesign = findViewById(R.id.toggle_design);
+        toggleButtonPhotography = findViewById(R.id.toggle_photography);
+        toggleButtonBusiness = findViewById(R.id.toggle_business);
+        toggleButtonTechnology = findViewById(R.id.toggle_technology);
+        toggleButtonCrafts = findViewById(R.id.toggle_crafts);
+        toggleButtonCulinary = findViewById(R.id.toggle_culinary);
+        toggleButtonFilm = findViewById(R.id.toggle_film);
+        toggleButtonFashion = findViewById(R.id.toggle_fashion);
+        toggleButtonMusic = findViewById(R.id.toggle_music);
+        toggleButtonLifestyle = findViewById(R.id.toggle_lifestyle);
+        toggleButtonGaming = findViewById(R.id.toggle_gaming);
+        toggleButtonTeaching = findViewById(R.id.toggle_teaching);
 
         findViewById(R.id.toolbar_close_button).setOnClickListener(view -> {
             intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
             setResult(RESULT_OK, intent);
             finish();
         });
+    }
+
+    private void attachOnCheckedChangeListener() {
+        toggleButtonDesign.setOnCheckedChangeListener(this);
+        toggleButtonPhotography.setOnCheckedChangeListener(this);
+        toggleButtonBusiness.setOnCheckedChangeListener(this);
+        toggleButtonTechnology.setOnCheckedChangeListener(this);
+        toggleButtonCrafts.setOnCheckedChangeListener(this);
+        toggleButtonCulinary.setOnCheckedChangeListener(this);
+        toggleButtonFilm.setOnCheckedChangeListener(this);
+        toggleButtonFashion.setOnCheckedChangeListener(this);
+        toggleButtonMusic.setOnCheckedChangeListener(this);
+        toggleButtonLifestyle.setOnCheckedChangeListener(this);
+        toggleButtonGaming.setOnCheckedChangeListener(this);
+        toggleButtonTeaching.setOnCheckedChangeListener(this);
+    }
+
+    private void setAlreadyCheckedSkills(List<String> skills) {
+        for(int i=0; i<skills.size(); i++) {
+            switch (skills.get(i)) {
+                case "Design":
+                    toggleButtonDesign.setChecked(true);
+                    break;
+                case "Photography":
+                    toggleButtonPhotography.setChecked(true);
+                    break;
+                case "Business":
+                    toggleButtonBusiness.setChecked(true);
+                    break;
+                case "Technology":
+                    toggleButtonTechnology.setChecked(true);
+                    break;
+                case "Crafts":
+                    toggleButtonCrafts.setChecked(true);
+                    break;
+                case "Culinary":
+                    toggleButtonCulinary.setChecked(true);
+                    break;
+                case "Film":
+                    toggleButtonFilm.setChecked(true);
+                    break;
+                case "Fashion":
+                    toggleButtonFashion.setChecked(true);
+                    break;
+                case "Music":
+                    toggleButtonMusic.setChecked(true);
+                    break;
+                case "LifeStyle":
+                    toggleButtonLifestyle.setChecked(true);
+                    break;
+                case "Gaming":
+                    toggleButtonGaming.setChecked(true);
+                    break;
+                case "Teaching":
+                    toggleButtonTeaching.setChecked(true);
+                    break;
+            }
+        }
     }
 
     private void addSkill(String skill) {

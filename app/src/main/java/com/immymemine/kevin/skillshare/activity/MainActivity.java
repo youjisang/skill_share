@@ -1,6 +1,5 @@
 package com.immymemine.kevin.skillshare.activity;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,16 +27,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
-
-
+import com.immymemine.kevin.skillshare.model.user.Following;
+import com.immymemine.kevin.skillshare.model.user.SubscribeClass;
 import com.immymemine.kevin.skillshare.model.user.User;
-
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
 import com.immymemine.kevin.skillshare.network.api.UserService;
@@ -66,9 +63,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // view container
     LinearLayout home_view_container, group_view_container, discover_view_container, your_classes_view_container, me_view_container;
-    View meView, meSkillView;
+    View yourClassesView, meView, meSkillView, notSignedInMeView;
     SkillsRecyclerViewAdapter meSkillRecyclerViewAdapter;
-
 
     // attach view container to scroll view
     ScrollView scrollView;
@@ -84,16 +80,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     String userId;
     boolean isSignIn;
     User user;
+
     // user followed skills
     List<String> followSkills = new ArrayList<>();
 
-
-
-    //TODO 지상 for group--------------------------------
-    List<Group> groupList1, groupList2, mygroupList;
-
-
-    //--------------------------------------------------
+    //group
+    List<Group> mygroupList, groupList1, groupList2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +95,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         initiateView(); // initiate view
         setBottomNavigation(); // navigation view setting
 
-        // TODO 지상 추가
+        //TODO 지상
         searchButtonListener();
         //
-
         viewFactory = ViewFactory.getInstance(this); // view 생성을 담당할 view factory
         executor = viewFactory.executor; // Thread pool
 
@@ -115,12 +106,11 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 로그인 상태 확인
         Intent intent = getIntent();
 
-
         if (intent.getAction() != null) {
             isSignIn = true;
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
-                    userId = intent.getStringExtra("USER_ID");
+                    userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
                     RetrofitHelper.createApi(UserService.class)
                             .getUser(userId)
                             .observeOn(Schedulers.io())
@@ -140,20 +130,57 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
 
+                                        setContainer();
+
                                     }, (Throwable error) -> {
+                                        // TODO handle networking error
+
+                                        // for test ====================
+                                        // 통신이 성공했다고 가정하고...
                                         user = new User();
+
                                         user.set_id(userId);
                                         user.setName("JUWON LEE");
+                                        user.setNickname("@jwl");
+
+                                        List<Following> followings = new ArrayList<>();
+                                        followings.add(new Following());
+                                        user.setFollowing(followings);
+
+                                        List<String> userSkills = new ArrayList<>();
+                                        userSkills.add("Design");
+                                        userSkills.add("Photography");
+                                        userSkills.add("Crafts");
+                                        userSkills.add("Music");
+                                        user.setFollowingSkills(userSkills);
 
                                         followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
+                                        followSkills.addAll(userSkills);
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
                                         followSkills.add(ConstantUtil.BEST_THIS_MONTH);
 
+                                        user.setPictureUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
+
+                                        List<SubscribeClass> subscribeClasses = new ArrayList<>();
+                                        subscribeClasses.add(new SubscribeClass(
+                                                "https://i.pinimg.com/736x/fe/3f/df/fe3fdf460ee15c59b45fda4b0aff6feb--botanical-wallpaper-feature-wallpaper.jpg",
+                                                "99%",
+                                                "Botanical Line Drawing",
+                                                "4740000",
+                                                "classId",
+                                                "9400",
+                                                "Peggy Dean"
+                                        ));
+                                        user.setSubscribeClass(subscribeClasses);
+
+                                        // for test ====================
                                         RetrofitHelper.createApi(HomeService.class)
                                                 .getHomeClasses(followSkills)
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
+
+                                        setContainer();
                                     }
                             );
                     break;
@@ -193,15 +220,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         //TODO 지상
         groupDummyDataSetting();
+        setContainer();
         //
-
-        setContainer();// 컨테이너 만드는 method
-
 
         // BroadCast Receiver 등록
         registerReceiver();
         startRegisterService();
-
     }
 
     private void handleResponse(List<Map<String, List<Class>>> classes) {
@@ -231,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     private void handleError(Throwable error) {
         Log.e("JUWONLEE", error.getMessage());
     }
-
 
     private void initiateView() {
         toolbar = findViewById(R.id.toolbar);
@@ -306,19 +329,21 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         groupList2.add(new Group("7.1k", "marketing", "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH82423479_w300_h300.jpg"));
 
 
-        mygroupList = new ArrayList<Group>();
+        mygroupList = new ArrayList<>();
         //----------------------------------
 
     }
 
     Future<LinearLayout> g, d;
+    Future<View> e;
 
     private void setViews() {
+
         g = executor.submit(
                 () -> {
                     group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
                     group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
+                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups),groupList2));
                     return group_view_container;
                 }
         );
@@ -332,41 +357,52 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 }
         );
 
-
-        // main 에서 처리해줘야 한다.
-        View view = viewFactory.getYourClassesView();
-        ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-        Glide.with(this)
-                .load(/*thumbnail*/R.drawable.skill_business)
-                .apply(RequestOptions.centerCropTransform())
-                .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
-                .into(video_thumbnail);
-        your_classes_view_container.addView(view);
-
-
-        if (isSignIn) {
-            Log.e("JUWONLEE", "me view start");
-            meView = viewFactory.getMeView("hello");
-            Glide.with(this)
-                    .load(R.drawable.skill_design)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(((ImageView) meView.findViewById(R.id.me_image)));
-            Log.e("JUWONLEE", "me view middle");
-            me_view_container.addView(meView);
-            meSkillView = viewFactory.getMeSkillView();
-            meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView) meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
-            me_view_container.addView(meSkillView);
-            Log.e("JUWONLEE", "me view end");
-
-        } else {
-            notSignedInMeView = viewFactory.getNotSignedInMeView();
-
-        }
-
-
+        e = executor.submit(
+                () -> {
+                    yourClassesView = viewFactory.getYourClassesView();
+                    meView = viewFactory.getMeView(user);
+                    return meView;
+                }
+        );
     }
 
-    View notSignedInMeView;
+    private void setYourClassesViewContainer() {
+        if (yourClassesView != null) {
+            Glide.with(MainActivity.this)
+                    .load(user.getSubscribeClass().get(0).getClassThumbnail())
+                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.placeholderOf(R.drawable.skill_design)) // if( image == null ) setting default 이미지
+                    .into((ImageView) yourClassesView.findViewById(R.id._your_classes_video_thumbnail));
+
+            your_classes_view_container.addView(yourClassesView);
+        }
+    }
+
+    private void setMeViewContainer() {
+
+        if (isSignIn) {
+            if (meView != null) {
+                Glide.with(this)
+                        .load(user.getPictureUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(((ImageView) meView.findViewById(R.id.me_image)));
+
+                me_view_container.addView(meView);
+
+                if (followSkills.size() > 3)
+                    meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
+                else
+                    meSkillView = viewFactory.getMeSkillView();
+
+                meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView) meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
+                me_view_container.addView(meSkillView);
+            } else {
+                // TODO network error
+            }
+        } else {
+            notSignedInMeView = viewFactory.getNotSignedInMeView();
+        }
+    }
 
     private void drawingView(LinearLayout view_container) {
         // remove previous view
@@ -392,7 +428,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_title.setText("Home");
             toolbar_left_button.setVisibility(View.GONE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-
         } else if (id == R.id.navigation_groups) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Groups");
@@ -403,7 +438,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             toolbar_title.setText("Discover");
             toolbar_left_button.setVisibility(View.VISIBLE);
             toolbar_right_button.setVisibility(View.VISIBLE);
-
         } else if (id == R.id.navigation_your_classes) {
             toolbar.setVisibility(View.VISIBLE);
             toolbar_title.setText("Your Classes");
@@ -466,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     } else {
                         // toolbar 바꾸기
                         changeToolbar(R.id.navigation_home);
+
                         // container 에 담기 ( 그리기 )
                         drawingView(home_view_container);
                         return true;
@@ -488,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_discover);
+
                         try {
                             drawingView(d.get());
                         } catch (Exception e) {
@@ -500,6 +536,10 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_your_classes);
+
+                        if (your_classes_view_container.getChildCount() == 0) {
+                            setYourClassesViewContainer();
+                        }
                         drawingView(your_classes_view_container);
                         return true;
                     }
@@ -508,10 +548,16 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         return false;
                     } else {
                         changeToolbar(R.id.navigation_me);
-                        if (isSignIn)
+
+                        if (me_view_container.getChildCount() < 2) {
+                            setMeViewContainer();
+                        }
+
+                        if (isSignIn) {
                             drawingView(me_view_container);
-                        else
+                        } else {
                             drawingView(notSignedInMeView);
+                        }
                         return true;
                     }
             }
@@ -557,24 +603,20 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         Intent intent = new Intent(MainActivity.this, SelectSkillsActivity.class);
         if (user.getFollowingSkills() != null)
             intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) user.getFollowingSkills());
-
         startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
     }
 
     @Override
-    public void seeAll(String title) {
+    public void seeAll(String type) {
         Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
         // title >> int
         // ConstantUtil
-        intent.putExtra("TYPE", title);
+        intent.putExtra(ConstantUtil.TYPE_FLAG, type);
         startActivity(intent);
-
     }
 
     @Override
     public void signOut() {
-
-
 //        if(isSignIn) {
 //            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
 //                // TODO me page 변경 >>> 1. sign in / sign up 2. token 삭제
@@ -584,7 +626,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 //                finish();
 //            });
 //        }
-
 
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
         intent.setAction(ConstantUtil.SIGN_OUT);
@@ -602,7 +643,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         startActivity(new Intent(MainActivity.this, SignInActivity.class));
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -613,7 +653,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 meSkillView.findViewById(R.id.divider).setVisibility(View.VISIBLE);
             meSkillRecyclerViewAdapter.update(skills);
             user.setFollowingSkills(skills);
-        } else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
+        }
+        //TODO 지상 그룹 부분-------------------------------------------------------------------------------
+        else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
 
@@ -647,7 +689,13 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             }
         }
+        //--------------------------------------------------------------------------------------------------------------
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewFactory.destroyViewFactory();
     }
 
 }

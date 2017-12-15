@@ -11,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
-
 import com.google.android.flexbox.FlexboxLayoutManager;
-
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
@@ -21,6 +19,7 @@ import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.model.user.User;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -113,8 +112,7 @@ public class ViewFactory {
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
             // button onClickListener setting
-            Button see_all_button = view.findViewById(R.id.button_see_all);
-            see_all_button.setOnClickListener(v -> {
+            view.findViewById(R.id.button_see_all).setOnClickListener(v -> {
                 // see all page 이동
                 interactionInterface.seeAll(title);
             });
@@ -140,15 +138,15 @@ public class ViewFactory {
 
     class GroupViewFactory implements Callable<View> {
         String title;
-        //TODO 지상
         List<Group> groupList;
 
 
         public GroupViewFactory(String title, List<Group> groupList) {
             this.title = title;
             this.groupList = groupList;
-        }
 
+
+        }
 
         @Override
         public View call() throws Exception {
@@ -156,8 +154,9 @@ public class ViewFactory {
 
             // recycler view setting
             recyclerView = view.findViewById(R.id.group_recycler_view);
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
 
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
@@ -166,9 +165,8 @@ public class ViewFactory {
         }
     }
 
-    public View getGroupView(String title, List<Group> list) {
-        Future<View> f = executor.submit(new GroupViewFactory(title, list));
-
+    public View getGroupView(String title, List<Group> groupList) {
+        Future<View> f = executor.submit(new GroupViewFactory(title, groupList));
 
         try {
             return f.get();
@@ -202,7 +200,6 @@ public class ViewFactory {
         }
     }
 
-
     public View getYourClassesView() {
         Future<View> f = executor.submit(
                 () -> {
@@ -232,31 +229,29 @@ public class ViewFactory {
         }
     }
 
-    public View getMeView(String name) {
+    public View getMeView(User user) {
         Future<View> f = executor.submit(
                 () -> {
                     // main thread 에서 굳이 해주지 않아도 된다
                     View view = inflater.inflate(R.layout.me_view, null);
 
                     // 이름, 닉네임 세팅
-                    ((TextView) view.findViewById(R.id.me_name)).setText(name);
-                    ((TextView) view.findViewById(R.id.me_nickname)).setText("@nickname");
+                    ((TextView) view.findViewById(R.id.me_name)).setText(user.getName());
+                    ((TextView) view.findViewById(R.id.me_nickname)).setText(user.getNickname());
 
                     // followers, following <<< onClick setting...
-                    ((TextView) view.findViewById(R.id.me_followers)).setText(/*number + */1 + " Followers");
-                    ((TextView) view.findViewById(R.id.me_following)).setText("Following " +/*number + */2);
+                    if (user.getFollowers() != null)
+                        ((TextView) view.findViewById(R.id.me_followers)).setText(user.getFollowers().size() + " Followers");
+                    else
+                        ((TextView) view.findViewById(R.id.me_followers)).setText("0 Followers");
+
+                    if (user.getFollowing() != null)
+                        ((TextView) view.findViewById(R.id.me_following)).setText("Following " + user.getFollowing().size());
+                    else
+                        ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
 
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
 
-                    // main thread 영역 ------------------------------------------------------------
-                    // rounding image setting
-//                    if(context instanceof MainActivity) {
-//                        ((MainActivity) context).runOnUiThread(
-//                                () -> {
-//                                    Glide.with(context).load(R.drawable.ic_home_black_24dp).apply(RequestOptions.circleCropTransform()).into(((ImageView) view.findViewById(R.id.me_image)));
-//                                }
-//                        );
-//                    }
 
                     return view;
                 }
@@ -282,13 +277,11 @@ public class ViewFactory {
                     recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
 
                     Button personalize = view.findViewById(R.id.personalize);
-                    personalize.setOnClickListener(v ->
-                            interactionInterface.select()
-                    );
-
+                    personalize.setOnClickListener(v -> interactionInterface.select());
                     if (skills == null)
                         view.findViewById(R.id.divider).setVisibility(View.GONE);
-
+                    else
+                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
                     return view;
                 }
