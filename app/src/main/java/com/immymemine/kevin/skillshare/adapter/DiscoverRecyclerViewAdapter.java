@@ -43,6 +43,7 @@ public class DiscoverRecyclerViewAdapter extends RecyclerView.Adapter<DiscoverRe
 
             v.setOnClickListener(view -> {
 
+
             });
         }
     }

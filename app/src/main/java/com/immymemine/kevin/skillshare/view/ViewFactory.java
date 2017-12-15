@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +17,7 @@ import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.User;
 
@@ -104,7 +104,7 @@ public class ViewFactory {
             View view = inflater.inflate(R.layout.general_view, null);
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
-            if(classes == null)
+            if (classes == null)
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
             else
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
@@ -138,9 +138,14 @@ public class ViewFactory {
 
     class GroupViewFactory implements Callable<View> {
         String title;
+        List<Group> groupList;
 
-        public GroupViewFactory(String title) {
+
+        public GroupViewFactory(String title, List<Group> groupList) {
             this.title = title;
+            this.groupList = groupList;
+
+
         }
 
         @Override
@@ -151,7 +156,7 @@ public class ViewFactory {
             recyclerView = view.findViewById(R.id.group_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(/* data input */ context));
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
 
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
@@ -160,8 +165,8 @@ public class ViewFactory {
         }
     }
 
-    public View getGroupView(String title) {
-        Future<View> f = executor.submit(new GroupViewFactory(title));
+    public View getGroupView(String title, List<Group> groupList) {
+        Future<View> f = executor.submit(new GroupViewFactory(title, groupList));
 
         try {
             return f.get();
@@ -235,12 +240,12 @@ public class ViewFactory {
                     ((TextView) view.findViewById(R.id.me_nickname)).setText(user.getNickname());
 
                     // followers, following <<< onClick setting...
-                    if(user.getFollowers() !=null)
+                    if (user.getFollowers() != null)
                         ((TextView) view.findViewById(R.id.me_followers)).setText(user.getFollowers().size() + " Followers");
                     else
                         ((TextView) view.findViewById(R.id.me_followers)).setText("0 Followers");
 
-                    if(user.getFollowing() != null)
+                    if (user.getFollowing() != null)
                         ((TextView) view.findViewById(R.id.me_following)).setText("Following " + user.getFollowing().size());
                     else
                         ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
@@ -273,9 +278,10 @@ public class ViewFactory {
 
                     Button personalize = view.findViewById(R.id.personalize);
                     personalize.setOnClickListener(v -> interactionInterface.select());
-
-                    if(skills == null)
+                    if (skills == null)
                         view.findViewById(R.id.divider).setVisibility(View.GONE);
+                    else
+                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
                     return view;
                 }
@@ -311,7 +317,6 @@ public class ViewFactory {
             return f.get();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("JUWONLEE", e.getMessage());
             return null;
         }
     }
@@ -322,6 +327,7 @@ public class ViewFactory {
 
         // sign up / in page 이동
         void signUp();
+
         void signIn();
 
         // select activity 로 이동

@@ -33,6 +33,7 @@
             android:name=".activity.ClassActivity"
             android:windowSoftInputMode="adjustResize" />
 
+
         <!-- gcm receiver -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -69,7 +70,11 @@
             android:exported="false" />
 
         <activity android:name=".activity.TutorActivity" />
+
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SavedActivity" />
         <activity android:name=".activity.GroupActivity" />
+
     </application>
 
 </manifest>

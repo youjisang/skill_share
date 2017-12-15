@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import android.view.View;
+import android.widget.EditText;
+
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
@@ -40,8 +44,6 @@ public class SeeAllActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         // 1. 인텐트 받아옴
         intent = getIntent();
         String type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
@@ -56,10 +58,17 @@ public class SeeAllActivity extends AppCompatActivity {
         String id = intent.getStringExtra("ID");
         String title = intent.getStringExtra(ConstantUtil.TOOLBAR_TITLE_FLAG);
 
-        initiateView(title);
 
-        // TODO 2. 인텐트에서 받아온 구분 값을 어댑터 설정
-        networking(type, id);
+//        // 1. 인텐트 받아옴
+//        intent = getIntent();
+//        String type = intent.getStringExtra(ConstantUtil.SEE_ALL_FLAG);
+//        String id = intent.getStringExtra("ID");
+//        String title = intent.getStringExtra(ConstantUtil.TOOLBAR_TITLE_FLAG);
+//
+//        initiateView(title);
+//
+//        // TODO 2. 인텐트에서 받아온 구분 값을 어댑터 설정
+//        networking(type, id);
     }
 
     private void networking(String type, String id) {
@@ -180,6 +189,8 @@ public class SeeAllActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 
     private void initiateView(String title) {
         // toolbar title

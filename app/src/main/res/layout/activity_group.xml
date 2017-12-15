@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +28,8 @@
             android:background="@android:color/transparent"
             android:scaleType="centerCrop"
             android:tint="@color/colorBottomNavigationActiveColored"
-            app:srcCompat="@drawable/image_back" />
+
+            app:srcCompat="@drawable/button_back_24dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -56,7 +59,6 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/image_person"
                     android:tint="@color/white" />
 
                 <TextView
@@ -73,21 +75,9 @@
                     android:text="members"
                     android:textSize="12sp" />
             </LinearLayout>
-
         </LinearLayout>
-
-        <!--<ImageButton
-            android:id="@+id/toolbar_button_exit"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="10sp"
-            android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/image_menu"
-            android:tint="@color/white" />-->
-
     </android.support.v7.widget.Toolbar>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chatting"
@@ -95,14 +85,17 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/recycler_view_item_chatting"></android.support.v7.widget.RecyclerView>
+        tools:listitem="@layout/recycler_view_item_chatting"/>
 
 
     <LinearLayout
         android:id="@+id/layout_frame_discussion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+
+        android:orientation="horizontal"
+        android:visibility="gone">
+
 
         <EditText
             android:id="@+id/editText"
@@ -110,6 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+
             android:hint="Message (use @username to reply)"
             android:inputType="textPersonName"
             android:paddingLeft="8dp"
@@ -124,7 +118,17 @@
             android:text="Send"
             android:textColor="@color/IcActive"
             android:textSize="16sp" />
-
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button_join"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/IcActive"
+        android:text="Join Group"
+        android:textColor="@color/IcDisabled"
+        android:visibility="visible" />
+
+
 </LinearLayout>
+

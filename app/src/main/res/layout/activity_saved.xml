@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.immymemine.kevin.skillshare.activity.SeeAllActivity">
+    tools:context="com.immymemine.kevin.skillshare.activity.SavedActivity">
 
 
     <android.support.v7.widget.Toolbar
@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:maxLines="1"
             android:maxWidth="300dp"
-            android:text="Class Reviews"
+            android:text="Saved Classes"
             android:textColor="@android:color/black"
             android:textSize="22sp"
             tools:layout_editor_absoluteX="16dp"
@@ -35,27 +35,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_home_black_24dp" />
+            app:srcCompat="@drawable/button_back_24dp" />
 
     </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/text_view_testimonials"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ededed"
-        android:paddingBottom="8dp"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:text="2 Testimonials"
-        android:textColor="@color/IcInactive"
-        android:textSize="18sp"
-        android:visibility="gone" />
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_seeAll"
+        android:id="@+id/recycler_view_saved"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
         android:layout_weight="1"
         android:background="#ededed"
         tools:listitem="@layout/recycler_view_item_see_all_classes">
