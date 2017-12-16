@@ -7,27 +7,27 @@ import android.support.v7.widget.RecyclerView;
 
 import com.immymemine.kevin.skillshare.R;
 
-import com.immymemine.kevin.skillshare.adapter.TutorRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.ProfileRecyclerViewAdapter;
 
-public class TutorActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     RecyclerView TutorRecyclerView;
-    TutorRecyclerViewAdapter tutorRecyclerViewAdapter;
+    ProfileRecyclerViewAdapter tutorRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutor);
+        setContentView(R.layout.activity_profile);
         initView();
         initRecycler();
     }
 
     private void initView(){
-        TutorRecyclerView = findViewById(R.id.recycler_view_teaching);
+//        TutorRecyclerView = findViewById(R.id.recycler_view_teaching);
     }
     private void initRecycler(){
         TutorRecyclerView.setHasFixedSize(true);
-        tutorRecyclerViewAdapter = new TutorRecyclerViewAdapter();
+        tutorRecyclerViewAdapter = new ProfileRecyclerViewAdapter();
         TutorRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         TutorRecyclerView.setAdapter(tutorRecyclerViewAdapter);
     }

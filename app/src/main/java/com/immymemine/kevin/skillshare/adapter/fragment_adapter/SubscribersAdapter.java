@@ -1,7 +1,6 @@
 package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.m_class.Subscribers;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+
+import java.util.List;
 
 /**
  * Created by quf93 on 2017-12-05.
@@ -21,27 +22,19 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.SubscriberHolder> {
 
     Context context;
-    String[] pictureUrls, ids;
-
-    int count;
-
+    List<Subscriber> subscribers;
     public SubscribersAdapter(Context context) {
         this.context = context;
-        count = 0;
     }
 
-    public void update(Subscribers subscriber, int count) {
-        this.pictureUrls = subscriber.getPictureUrls();
-        this.ids = subscriber.getIds();
-
-        this.count = count;
-
+    public void update(List<Subscriber> subscribers) {
+        this.subscribers = subscribers;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(count == 0)
+        if(subscribers == null || subscribers.size()==0)
             return ConstantUtil.NO_ITEM;
 
         return super.getItemViewType(position);
@@ -62,29 +55,31 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
 
     @Override
     public void onBindViewHolder(SubscriberHolder holder, int position) {
-        if(count != 0) {
-            Glide.with(context).load(Uri.parse(pictureUrls[position]))
+        if(subscribers != null) {
+            Subscriber subscriber = subscribers.get(subscribers.size()-1-position);
+
+            Glide.with(context).load(subscriber.getImageUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewSubscriber);
 
-            holder.id = ids[position];
+            holder.userId = subscriber.get_id();
         }
     }
 
     @Override
     public int getItemCount() {
-        if(count == 0)
+        if(subscribers == null || subscribers.size() == 0)
             return 1;
         return 10;
     }
 
     class SubscriberHolder extends RecyclerView.ViewHolder {
-        String id;
+        String userId;
         ImageView imageViewSubscriber;
 
         public SubscriberHolder(View view) {
             super(view);
-            if(count != 0) {
+            if(subscribers !=null && subscribers.size() != 0) {
                 imageViewSubscriber = view.findViewById(R.id.image_view_subscriber);
                 imageViewSubscriber.setOnClickListener( v -> {
                     // profile 이동

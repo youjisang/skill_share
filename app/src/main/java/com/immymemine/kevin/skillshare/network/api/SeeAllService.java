@@ -1,9 +1,9 @@
 package com.immymemine.kevin.skillshare.network.api;
 
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.model.see_all.Project;
 import com.immymemine.kevin.skillshare.model.see_all.Review;
-import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
 
 import java.util.List;
 

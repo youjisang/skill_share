@@ -8,17 +8,17 @@ public class Tutor {
     String _id;
     String name;
     String followers;
-    String pictureUrl;
+    String imageUrl;
 
     // for test
     public Tutor(String _id,
             String name,
             String followers,
-            String pictureUrl) {
+            String imageUrl) {
         this._id = _id;
         this.name = name;
         this.followers = followers;
-        this.pictureUrl = pictureUrl;
+        this.imageUrl = imageUrl;
     }
 
     public String get_id() {
@@ -45,11 +45,11 @@ public class Tutor {
         this.followers = followers;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

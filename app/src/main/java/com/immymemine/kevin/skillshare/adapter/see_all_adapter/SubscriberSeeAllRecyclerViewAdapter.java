@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 
 import java.util.List;
 
@@ -38,9 +38,9 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
     public void onBindViewHolder(Holder holder, int position) {
         Subscriber subscriber = subscribers.get(position);
 
-        holder.id = subscriber.get_id();
+        holder.userId = subscriber.get_id();
         holder.textViewName.setText(subscriber.getName());
-        Glide.with(context).load(subscriber.getPictureUrl())
+        Glide.with(context).load(subscriber.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageViewProfile);
     }
@@ -52,7 +52,7 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
 
     class Holder extends RecyclerView.ViewHolder {
 
-        String id;
+        String userId;
 
         ImageView imageViewProfile;
         TextView textViewName;

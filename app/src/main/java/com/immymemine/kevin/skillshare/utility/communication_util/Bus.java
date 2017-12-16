@@ -1,7 +1,5 @@
 package com.immymemine.kevin.skillshare.utility.communication_util;
 
-import android.util.Log;
-
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 
 import java.lang.reflect.Method;
@@ -9,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This Util is made for communicating DiscussionFragment and SeeAllActivity
+ * This Util is made for communicating Fragment and Activity
  * Created by quf93 on 2017-12-15.
  */
 
@@ -25,14 +23,14 @@ public class Bus {
         return instance;
     }
 
-    private final ThreadLocal<ThreadLocalWrapper> threadLocal = new ThreadLocal<ThreadLocalWrapper>() {
-        @Override
-        protected ThreadLocalWrapper initialValue() {
-            return new ThreadLocalWrapper();
-        }
-    };
+//    private final ThreadLocal<ThreadLocalWrapper> threadLocal = new ThreadLocal<ThreadLocalWrapper>() {
+//        @Override
+//        protected ThreadLocalWrapper initialValue() {
+//            return new ThreadLocalWrapper();
+//        }
+//    };
 
-    public void register(Object subscriber) {
+    public void register(Object subscriber) { // Bus.getInstance().register(this);
         Class<?> subscriberClass = subscriber.getClass();
 
         SubscriberMethod subscriberMethod = getMethod(subscriberClass);
@@ -46,8 +44,8 @@ public class Bus {
     }
 
     public void post(Map<Integer, List<Reply>> data) {
-        ThreadLocalWrapper wrapper = threadLocal.get();
-        wrapper.data = data;
+//        ThreadLocalWrapper wrapper = threadLocal.get();
+//        wrapper.data = data;
 
         invokeSubscriber(subscription, data);
     }
@@ -60,9 +58,9 @@ public class Bus {
         }
     }
 
-    static class ThreadLocalWrapper {
-        Map<Integer, List<Reply>> data;
-    }
+//    static class ThreadLocalWrapper {
+//        Map<Integer, List<Reply>> data;
+//    }
 
     private SubscriberMethod getMethod(Class<?> subscriberClass) {
         for(Method method : subscriberClass.getMethods()) {

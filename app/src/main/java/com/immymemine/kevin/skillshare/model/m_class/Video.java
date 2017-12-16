@@ -6,10 +6,10 @@ package com.immymemine.kevin.skillshare.model.m_class;
 
 public class Video {
     String _id;
-    String order;
     String title;
     String duration;
     String thumbnailUrl;
+    String order;
 
     // for test
     public Video(String _id,

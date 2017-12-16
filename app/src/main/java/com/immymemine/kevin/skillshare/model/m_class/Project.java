@@ -8,7 +8,8 @@ public class Project {
     String _id;
     String pictureUrl;
 
-    public Project(String pictureUrl) {
+    public Project(String _id, String pictureUrl) {
+        this._id = _id;
         this.pictureUrl = pictureUrl;
     }
 

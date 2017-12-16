@@ -71,8 +71,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="16dp">
 
             <TextView
@@ -95,48 +95,15 @@
                 android:textColor="@color/IcActive"
                 android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/image_view_thumb"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/app_icon" />
-
-            <ImageView
-                android:id="@+id/image_view_review_profile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="80dp"
-                android:src="@drawable/app_icon" />
-
-            <TextView
-                android:id="@+id/text_view_review"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="80dp"
-                android:layout_marginRight="12dp"
-                android:maxLines="2"
-                android:text="Wonderful class. If found many useful things I didn't know. Thank you!"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/text_view_reviewer_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="140dp"
-                android:layout_marginRight="12dp"
-                android:maxLines="2"
-                android:text="Olena Baluta"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-
         </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_review"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/recycler_view_item_review" />
 
         <View
             android:layout_width="match_parent"

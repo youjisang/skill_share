@@ -15,9 +15,9 @@ import com.immymemine.kevin.skillshare.adapter.see_all_adapter.ProjectSeeAllRecy
 import com.immymemine.kevin.skillshare.adapter.see_all_adapter.ReviewSeeAllRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.see_all_adapter.SubscriberSeeAllRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.model.see_all.Project;
 import com.immymemine.kevin.skillshare.model.see_all.Review;
-import com.immymemine.kevin.skillshare.model.see_all.Subscriber;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.SeeAllService;
@@ -76,11 +76,11 @@ public class SeeAllActivity extends AppCompatActivity {
 
         service = RetrofitHelper.createApi(SeeAllService.class);
 
-        initiateView(title, type);
-        networking(type, id);
+        initiateView(title);
+        networking(id);
     }
 
-    private void networking(String type, String id) {
+    private void networking(String id) {
         //retrofit...
         switch (type) {
             case ConstantUtil.CLASS_ITEM:
@@ -164,36 +164,7 @@ public class SeeAllActivity extends AppCompatActivity {
                 recyclerView.setAdapter(new ReviewSeeAllRecyclerViewAdapter(this, reviews));
                 break;
             case ConstantUtil.SUBSCRIBER_ITEM:
-                service.getSeeAllSubscriber(id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                (List<Subscriber> subscribers) -> {
-                                    recyclerView.setAdapter(new SubscriberSeeAllRecyclerViewAdapter(this, subscribers));
-                                },
-                                (Throwable error) -> {
-                                    // if( error ) >>> networking 이 안된다는 ... 메시지
-                                }
-                        );
 
-                // test subscriber
-                List<Subscriber> subscribers = new ArrayList<>();
-                subscribers.add(new Subscriber(
-                        "subscriber_id1",
-                        "James",
-                        "https://pbs.twimg.com/profile_images/908706663519051776/84pGO2Zl.jpg"
-                ));
-                subscribers.add(new Subscriber(
-                        "subscriber_id2",
-                        "Ruthie Frank",
-                        "http://news20.busan.com/content/image/2017/09/11/20170911000004_0.jpg"
-                ));
-                subscribers.add(new Subscriber(
-                        "subscriber_id3",
-                        "Kathy Archambault",
-                        "http://image.chosun.com/sitedata/image/201508/06/2015080603367_0.jpg"
-                ));
-                recyclerView.setAdapter(new SubscriberSeeAllRecyclerViewAdapter(this, subscribers));
                 break;
         }
     }
@@ -211,7 +182,7 @@ public class SeeAllActivity extends AppCompatActivity {
         super.onBackPressed();
     }
     TextView textViewToolbarTitle;
-    private void initiateView(String title, String type) {
+    private void initiateView(String title) {
         // toolbar title
         textViewToolbarTitle = findViewById(R.id.toolbar_title);
         textViewToolbarTitle.setText(title);
@@ -287,7 +258,8 @@ public class SeeAllActivity extends AppCompatActivity {
                 textViewNegativeCount = findViewById(R.id.text_view_negative_count);
                 break;
             case ConstantUtil.SUBSCRIBER_ITEM:
-
+                List<Subscriber> subscribers = intent.getParcelableArrayListExtra(ConstantUtil.SUBSCRIBERS_FLAG);
+                recyclerView.setAdapter(new SubscriberSeeAllRecyclerViewAdapter(this, subscribers));
                 break;
         }
     }

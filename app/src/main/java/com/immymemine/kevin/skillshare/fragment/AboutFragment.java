@@ -4,28 +4,27 @@ package com.immymemine.kevin.skillshare.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.ProjectAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.RelatedClassAdapter;
+import com.immymemine.kevin.skillshare.adapter.fragment_adapter.ReviewAdapter;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.SubscribersAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Project;
 import com.immymemine.kevin.skillshare.model.m_class.RelatedClass;
-import com.immymemine.kevin.skillshare.model.m_class.Reviews;
-import com.immymemine.kevin.skillshare.model.m_class.Subscribers;
+import com.immymemine.kevin.skillshare.model.m_class.Review;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
@@ -46,8 +45,8 @@ public class AboutFragment extends Fragment {
     TextView textViewProjectCount, textViewProjectSeeAll;
     RecyclerView recyclerViewProject;
     // review
-    TextView textViewReviewPercent, textViewReviewSeeAll, textViewReview, textViewReviewerName;
-    ImageView imageViewThumb, imageViewReviewProfile;
+    TextView textViewReviewPercent, textViewReviewSeeAll;
+    RecyclerView recyclerViewReview;
     // student
     TextView textViewSubscriberNum, textViewSubscriberSeeAll;
     RecyclerView recyclerViewSubscribers;
@@ -57,6 +56,7 @@ public class AboutFragment extends Fragment {
     ProjectAdapter projectAdapter;
     SubscribersAdapter subscribersAdapter;
     RelatedClassAdapter relatedClassAdapter;
+    ReviewAdapter reviewAdapter;
     // about ( test data )
     About about;
 
@@ -83,32 +83,45 @@ public class AboutFragment extends Fragment {
         context = getActivity();
 
         projectAdapter = new ProjectAdapter(context);
-        recyclerViewProject.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewProject.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewProject.setAdapter(projectAdapter);
 
+        reviewAdapter = new ReviewAdapter(context);
+        recyclerViewReview.setLayoutManager(new LinearLayoutManager(context));
+        recyclerViewReview.setAdapter(reviewAdapter);
+
         subscribersAdapter = new SubscribersAdapter(context);
-        recyclerViewSubscribers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewSubscribers.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewSubscribers.setAdapter(subscribersAdapter);
 
         relatedClassAdapter = new RelatedClassAdapter(context);
-        recyclerViewRelatedClass.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerViewRelatedClass.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewRelatedClass.setAdapter(relatedClassAdapter);
+
 
         // test data ==========================================
         about = new About();
         // project
         List<Project> projects = new ArrayList<>();
-        projects.add(new Project("http://files.idg.co.kr/ciokr/image/imce/u132754/project_management-100536264-primary_idge.jpg"));
-        projects.add(new Project("https://www.sktinsight.com/wp-content/uploads/2017/08/4%EC%B0%A8%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85_%EC%9D%BC%EC%9E%90%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EA%B8%B0%EC%97%85_3.jpg"));
-        projects.add(new Project("http://www.samsungengineering.co.kr/upload/MP/thumb_201507100237261334.jpg"));
+        projects.add(new Project("id","http://files.idg.co.kr/ciokr/image/imce/u132754/project_management-100536264-primary_idge.jpg"));
+        projects.add(new Project("id","https://www.sktinsight.com/wp-content/uploads/2017/08/4%EC%B0%A8%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85_%EC%9D%BC%EC%9E%90%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EA%B8%B0%EC%97%85_3.jpg"));
+        projects.add(new Project("id","http://www.samsungengineering.co.kr/upload/MP/thumb_201507100237261334.jpg"));
+        projects.add(new Project("id","https://www.sktinsight.com/wp-content/uploads/2017/08/4%EC%B0%A8%EC%82%B0%EC%97%85%ED%98%81%EB%AA%85_%EC%9D%BC%EC%9E%90%EB%A6%AC_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EA%B8%B0%EC%97%85_3.jpg"));
 
         about.setProjects(projects);
+
         // review
-        Reviews reviews = new Reviews("99%", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800");
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review("like", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800"));
+        reviews.add(new Review("like", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800"));
+        reviews.add(new Review("dislike", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800"));
+        reviews.add(new Review("like", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800"));
+        reviews.add(new Review("like", "Great way to get organized in Design Systems, and give a lot of consistency through Web and Mobile apps", "Conekta Design", "http://mblogthumb2.phinf.naver.net/MjAxNjEyMDhfNCAg/MDAxNDgxMTMwNjE1Nzk3.LgjHSitMLnOucYcE7uINtAVVxS1DK3zTFAajRXx9guIg.Y2bK-n1zsPTgBvLDspWS4TmMkRG7dXPDl9QcQxHyfQMg.JPEG.hy_chu/%EB%8F%84%EA%B9%A8%EB%B9%84_%EA%B9%80%EA%B3%A0%EC%9D%80_1.jpg?type=w800"));
         about.setReviews(reviews);
+
         // subscriber
         String[] pictureUrls = {
-                "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2",
+                "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH92438362_w300_h300.jpg",
                 "https://i.ytimg.com/vi/eqEcRwmV2vU/maxresdefault.jpg",
                 "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH82423479_w300_h300.jpg",
                 "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH92438362_w300_h300.jpg",
@@ -119,8 +132,18 @@ public class AboutFragment extends Fragment {
                 "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH92438362_w300_h300.jpg",
                 "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2"
         };
-        Subscribers subscriber = new Subscribers("10",pictureUrls, pictureUrls);
-        about.setSubscriber(subscriber);
+        List<Subscriber> subscribers = new ArrayList<>();
+        subscribers.add(new Subscriber("test id 0", "James", pictureUrls[0]));
+        subscribers.add(new Subscriber("test id 1", "ChicChoc", pictureUrls[1]));
+        subscribers.add(new Subscriber("test id 2", "Butter Waffle", pictureUrls[2]));
+        subscribers.add(new Subscriber("test id 3", "Wing Study", pictureUrls[3]));
+        subscribers.add(new Subscriber("test id 4", "Computer", pictureUrls[4]));
+        subscribers.add(new Subscriber("test id 5", "Apple", pictureUrls[5]));
+        subscribers.add(new Subscriber("test id 6", "Samsung", pictureUrls[6]));
+        subscribers.add(new Subscriber("test id 7", "Key Board", pictureUrls[7]));
+        subscribers.add(new Subscriber("test id 8", "Speaker", pictureUrls[8]));
+        subscribers.add(new Subscriber("test id 9", "Water bottle", pictureUrls[9]));
+        about.setSubscribers(subscribers);
         // related class
         List<RelatedClass> relatedClasses = new ArrayList<>();
         relatedClasses.add(new RelatedClass("id_1","https://cdn-images-1.medium.com/max/2000/1*7pjzaWKedACc3-olWUghLg.png","iOS Design I: Getting Started with UX", "Kara Hodecker"));
@@ -138,29 +161,40 @@ public class AboutFragment extends Fragment {
     private void handleResponse(About about) {
         // project
         List<Project> projects = about.getProjects();
-        //textViewProjectCount.setText(about.getProjectSubscriberCount() + " Subscriber Project");
-        textViewProjectCount.setText(projects.size()+ " Subscriber Project");
+        int projectsSize = projects.size();
+        if(projectsSize == 0) {
+            textViewProjectCount.setText("Subscriber Project");
+            textViewProjectSeeAll.setVisibility(View.GONE);
+        } else
+            textViewProjectCount.setText(projectsSize + " Subscriber Project");
+
         projectAdapter.update(projects); // <<< data 전달 & notifyDataSetChanged
 
         // review
-        Reviews reviews = about.getReviews();
-        textViewReviewPercent.setText(reviews.getReviewPercent()+" Positive Reviews");
-        textViewReview.setText(reviews.getContent());
-        textViewReviewerName.setText(reviews.getReviewerName());
-        Glide.with(context).load(reviews.getPictureUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(imageViewReviewProfile);
+        List<Review> reviews = about.getReviews();
+        int size = reviews.size();
+        if(size != 0) {
+            int likeCount = 0;
+            for(Review review : reviews) {
+                if( "like".equals(review.getLikeOrNot()) )
+                    likeCount++;
+            }
+            textViewReviewPercent.setText((likeCount * 100 / size)+"% Positive Reviews");
+            reviewAdapter.updateData(reviews.get(size-1));
+        } else {
+            textViewReviewPercent.setText("No Reviews");
+            textViewReviewSeeAll.setVisibility(View.GONE);
+        }
 
         // subscriber
-        Subscribers subscriber = about.getSubscriber();
-        int count = Integer.parseInt(subscriber.getSubscriberNumber());
+        List<Subscriber> subscribers = about.getSubscribers();
+        int count = subscribers.size();
         if(count != 0) {
             textViewSubscriberNum.setVisibility(View.VISIBLE);
-            textViewSubscriberNum.setText(subscriber.getSubscriberNumber() + " Subscribers");
+            textViewSubscriberNum.setText(count + " Subscribers");
         } else
             textViewSubscriberNum.setVisibility(View.GONE);
-
-        subscribersAdapter.update(subscriber, count);
+        subscribersAdapter.update(subscribers);
 
         // related class
         List<RelatedClass> relatedClasses = about.getRelatedClasses();
@@ -179,12 +213,9 @@ public class AboutFragment extends Fragment {
         textViewProjectSeeAll = view.findViewById(R.id.text_view_project_see_all);
         recyclerViewProject = view.findViewById(R.id.recycler_view_project);
         // review
-        textViewReview = view.findViewById(R.id.text_view_review);
-        textViewReviewSeeAll = view.findViewById(R.id.text_view_review_see_all);
-        imageViewThumb = view.findViewById(R.id.image_view_thumb);
-        imageViewReviewProfile = view.findViewById(R.id.image_view_review_profile);
         textViewReviewPercent = view.findViewById(R.id.text_view_review_percent);
-        textViewReviewerName = view.findViewById(R.id.text_view_reviewer_name);
+        textViewReviewSeeAll = view.findViewById(R.id.text_view_review_see_all);
+        recyclerViewReview = view.findViewById(R.id.recycler_view_review);
         // student
         textViewSubscriberNum = view.findViewById(R.id.text_view_subscriber_num);
         textViewSubscriberSeeAll = view.findViewById(R.id.text_view_subscriber_see_all);
@@ -197,7 +228,6 @@ public class AboutFragment extends Fragment {
         textViewProjectSeeAll.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
-            intent.putExtra(ConstantUtil.ID_FLAG, id);
             intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, "Subscriber Projects");
             context.startActivity(intent);
         });
@@ -207,6 +237,7 @@ public class AboutFragment extends Fragment {
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.SUBSCRIBER_ITEM);
             intent.putExtra(ConstantUtil.ID_FLAG, id);
             intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, textViewSubscriberNum.getText().toString());
+            intent.putParcelableArrayListExtra(ConstantUtil.SUBSCRIBERS_FLAG, (ArrayList<? extends Parcelable>) about.getSubscribers());
             context.startActivity(intent);
         });
 
