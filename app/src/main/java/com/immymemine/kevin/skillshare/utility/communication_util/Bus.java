@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This Util is made for communicating DiscussionFragment and SeeAllActivity
  * Created by quf93 on 2017-12-15.
  */
 
@@ -32,7 +33,6 @@ public class Bus {
     };
 
     public void register(Object subscriber) {
-        Log.d("JUWONLEE","register");
         Class<?> subscriberClass = subscriber.getClass();
 
         SubscriberMethod subscriberMethod = getMethod(subscriberClass);
@@ -46,7 +46,6 @@ public class Bus {
     }
 
     public void post(Map<Integer, List<Reply>> data) {
-        Log.d("JUWONLEE","post");
         ThreadLocalWrapper wrapper = threadLocal.get();
         wrapper.data = data;
 
@@ -56,9 +55,7 @@ public class Bus {
     private void invokeSubscriber(Subscription subscription, Map<Integer, List<Reply>> data) {
         try {
             subscription.subscriberMethod.method.invoke(subscription.subscriber, data);
-            Log.d("JUWONLEE","invoke");
         } catch (Exception e) {
-            Log.d("JUWONLEE","invoke error : " + e.getMessage());
             e.printStackTrace();
         }
     }

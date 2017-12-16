@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.adapter.see_all_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
         Glide.with(context).load(reply.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageViewProfile);
-        holder.textViewTime.setText(reply.getName());
+        holder.textViewProfile.setText(reply.getName());
         holder.expandableTextView.setText(reply.getContent(), TextView.BufferType.NORMAL);
         holder.textViewTime.setText(TimeUtil.calculateTime(reply.getTime()));
     }
