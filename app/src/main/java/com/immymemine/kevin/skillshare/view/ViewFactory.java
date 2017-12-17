@@ -1,18 +1,23 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.MainActivity;
+import com.immymemine.kevin.skillshare.activity.SavedActivity;
+import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
@@ -204,7 +209,7 @@ public class ViewFactory {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.your_classes_view, null);
-
+                    ImageView savedThumbnail;
                     // main thread 영역 ------------------------------------------------------------
                     // video thumbnail setting
 
@@ -217,6 +222,14 @@ public class ViewFactory {
 //                                }
 //                        );
 //                    }
+                    savedThumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
+                    savedThumbnail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, SavedActivity.class);
+                            context.startActivity(intent);
+                        }
+                    });
                     return view;
                 }
         );

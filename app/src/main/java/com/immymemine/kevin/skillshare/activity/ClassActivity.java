@@ -1,16 +1,23 @@
 package com.immymemine.kevin.skillshare.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.ViewTarget;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -55,13 +62,18 @@ public class ClassActivity extends AppCompatActivity {
     ViewPager tabPager;
     TabLayout tabLayout;
     ImageButton start_button;
-
+    ToggleButton subscribe_button;
+    FrameLayout Frame_layout_videoThumbnail;
     // fragments
     AboutFragment aboutfragment;
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
+
     String classId, url;
+
+    String thumbnailImageUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +83,7 @@ public class ClassActivity extends AppCompatActivity {
         classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
         // 2. model object 에 담아주고
+        thumbnailImageUrl = "https://static.skillshare.com/uploads/users/3110168/user-image-medium.jpg?43101635";
 
         // 3. view 에서 model object 를 사용
 
@@ -86,6 +99,9 @@ public class ClassActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
         start_button = findViewById(R.id.start_button);
+        subscribe_button = findViewById(R.id.button_subscribe2);
+        Frame_layout_videoThumbnail = findViewById(R.id.Frame_layout_videoThumbnail);
+
 
         start_button.setOnClickListener(
                 v -> {
@@ -100,8 +116,9 @@ public class ClassActivity extends AppCompatActivity {
                     // controller
                     simpleExoPlayerView.setUseController(true); //Set media controller
                     simpleExoPlayerView.showController();
-        });
+                });
     }
+
 
     private void setTabLayout() {
         tabLayout.addTab(tabLayout.newTab().setText("Lessons"));
@@ -137,6 +154,14 @@ public class ClassActivity extends AppCompatActivity {
 
     // share button 클릭 리스너
     public void share(View view) {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        String url = "https://www.skillshare.com/";
+        String subject = "music"; // 해당 클래스 비디오 제목
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.setType("text/plain");
+        Intent chooser = Intent.createChooser(intent, "skillShare");
+        startActivity(chooser);
 
     }
 
@@ -146,8 +171,20 @@ public class ClassActivity extends AppCompatActivity {
         finish();
     }
 
+
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
+
+        if (subscribe_button.isChecked()) {
+            subscribe_button.setBackgroundDrawable(getResources().getDrawable(R.drawable.image_used_bookmark));
+            Snackbar.make(view, "Saved class for later", Snackbar.LENGTH_LONG).show();
+
+
+        } else {
+            subscribe_button.setBackgroundDrawable(getResources().getDrawable(R.drawable.image_unused_bookmark));
+            Snackbar.make(view, "unsaved", Snackbar.LENGTH_LONG).show();
+
+        }
 
     }
 
@@ -204,7 +241,7 @@ public class ClassActivity extends AppCompatActivity {
         // [ 1, 2, 3 ( ? ) ]
         mediaSource = buildMediaSource(Uri.parse(URL));
 
-        if(resumePosition > 0)
+        if (resumePosition > 0)
             player.seekTo(resumePosition);
         player.prepare(mediaSource);
     }
@@ -250,7 +287,7 @@ public class ClassActivity extends AppCompatActivity {
 
 
     private void releasePlayer() {
-        if(player != null) {
+        if (player != null) {
             saveResumePosition();
             player.release();
             player = null;
@@ -285,7 +322,7 @@ public class ClassActivity extends AppCompatActivity {
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
+            Log.v(TAG, "Listener-onLoadingChanged...isLoading:" + isLoading);
         }
 
         @Override

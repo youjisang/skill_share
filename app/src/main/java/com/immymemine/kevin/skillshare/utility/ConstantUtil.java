@@ -68,7 +68,9 @@ public class ConstantUtil {
     //Search
     public static final int FAIL_SEARCH = 293;
 
-    //GROUP
+    //Group
     public static final int ALREADY_JOIN_GROUP = 590;
     public static final int NOT_JOIN_GROUP = 591;
+
+
 }
