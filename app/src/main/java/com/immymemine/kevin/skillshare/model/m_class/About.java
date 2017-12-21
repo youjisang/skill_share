@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.model.m_class;
 
+
 import java.util.List;
 
 /**
@@ -7,36 +8,10 @@ import java.util.List;
  */
 
 public class About {
-    String projectSubscriberCount;
     List<Project> projects;
-
-    Reviews reviews;
-    Subscribers subscriber;
+    List<Review> reviews;
+    List<Subscriber> subscribers;
     List<RelatedClass> relatedClasses;
-
-    public String getProjectSubscriberCount() {
-        return projectSubscriberCount;
-    }
-
-    public Reviews getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Reviews reviews) {
-        this.reviews = reviews;
-    }
-
-    public Subscribers getSubscriber() {
-        return subscriber;
-    }
-
-    public void setSubscriber(Subscribers subscriber) {
-        this.subscriber = subscriber;
-    }
-
-    public void setProjectSubscriberCount(String projectSubscriberCount) {
-        this.projectSubscriberCount = projectSubscriberCount;
-    }
 
     public List<Project> getProjects() {
         return projects;
@@ -52,5 +27,21 @@ public class About {
 
     public void setRelatedClasses(List<RelatedClass> relatedClasses) {
         this.relatedClasses = relatedClasses;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Subscriber> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<Subscriber> subscribers) {
+        this.subscribers = subscribers;
     }
 }

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,12 +17,18 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
+import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
+import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
+import com.immymemine.kevin.skillshare.utility.communication_util.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -41,7 +46,9 @@ public class DiscussionsFragment extends Fragment {
     LinearLayout linearLayoutDiscussion;
     Context context;
 
-    List<Discussion> discussions;
+//    List<Discussion> discussions;
+
+    String classId;
     public DiscussionsFragment() {
         // Required empty public constructor
     }
@@ -67,7 +74,8 @@ public class DiscussionsFragment extends Fragment {
                 addDiscussion()
         );
 
-        String classId = getArguments().getString(ConstantUtil.ID_FLAG);
+        classId = getArguments().getString(ConstantUtil.ID_FLAG);
+
         RetrofitHelper.createApi(ClassService.class)
                 .getDiscussions(classId)
                 .subscribeOn(Schedulers.io())
@@ -75,6 +83,7 @@ public class DiscussionsFragment extends Fragment {
                 .subscribe(this::handleResponse, this::handleError);
 
         // TODO progress bar
+        Bus.getInstance().register(this);
 
         // test =================================================================
 //        discussions = new ArrayList<>();
@@ -121,39 +130,54 @@ public class DiscussionsFragment extends Fragment {
                     System.currentTimeMillis()+"",
                     "2",
                     "613",
-                    null
+                    new ArrayList<>()
             );
 
-            discussions.add(0, discussion);
-            // test
-            handleResponse(discussions);
+//            if(discussions == null)
+//                discussions = new ArrayList<>();
+//            discussions.add(discussion);
 
             // add discussion 통신
             RetrofitHelper.createApi(ClassService.class)
-                    .addDiscussion(discussion)
+                    .addDiscussion(discussion, classId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleResponse, this::handleError);
         }
     }
 
+    List<Discussion> discussions;
+
     private void handleResponse(List<Discussion> discussions) {
 
+        Collections.reverse(discussions);
+        this.discussions = discussions;
         // TODO list reverse or get data by sort
         if(discussions == null || discussions.size() == 0) {
             textViewDiscussion.setVisibility(View.GONE);
         } else {
-            if(textViewDiscussion.getVisibility() == View.VISIBLE) {
+            if(textViewDiscussion.getVisibility() == View.VISIBLE) {// update 시에는 새롭게 갱신해준다. >>> recycler view 위치 초기화
                 adapter.updateData(discussions);
-                textViewDiscussion.setText(discussions.size() + " Discussions");
             } else {
                 adapter.initiateData(discussions);
                 textViewDiscussion.setVisibility(View.VISIBLE);
-                textViewDiscussion.setText(discussions.size() + " Discussions");
             }
-        }
 
+            textViewDiscussion.setText(discussions.size() + " Discussions");
+        }
         // TODO hide progress bar
+    }
+
+    @Subscribe
+    public void updateReplies(Map<Integer, List<Reply>> data) {
+        Log.d("JUWONLEE","update replies");
+        for(int position : data.keySet()) {
+            if(position != -1) {
+                Discussion discussion = discussions.get(position);
+                discussion.setReplies(data.get(position));
+            }
+            adapter.updateData(discussions);
+        }
     }
 
     private void handleError(Throwable error) {

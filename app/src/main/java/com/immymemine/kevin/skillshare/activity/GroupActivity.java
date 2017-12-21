@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
 import com.immymemine.kevin.skillshare.entity.GroupItem;
+import com.immymemine.kevin.skillshare.model.user.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import org.w3c.dom.Text;
@@ -34,6 +36,7 @@ import org.w3c.dom.Text;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
 import com.immymemine.kevin.skillshare.entity.GroupItem;
+import com.immymemine.kevin.skillshare.utility.DialogUtil;
 
 
 import java.util.ArrayList;
@@ -55,7 +58,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     private String groupTitle_s, groupNum_s, imageUri_s;
     private int position;
     private LinearLayout layout_discussion;
-    boolean check = false;
+    Intent intent;
 
 
     @Override
@@ -145,17 +148,23 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent();
-                intent.putExtra("position", position);
-                intent.putExtra("groupName", groupTitle_s);
-                intent.putExtra("groupJoinNum", groupNum_s);
-                intent.putExtra("groupImageUri", imageUri_s);
-                setResult(RESULT_OK, intent);
-                groupJoin.setVisibility(View.GONE);
-                layout_discussion.setVisibility(View.VISIBLE);
-                finish();
-                Log.e("GroupActivity intent", "check============" + intent);
+                //TODO 지상 로그인이 되어 있을 때, ▽
 
+                if (MainActivity.isSignIn == true) {
+                    Intent intent = new Intent();
+                    intent.putExtra("position", position);
+                    intent.putExtra("groupName", groupTitle_s);
+                    intent.putExtra("groupJoinNum", groupNum_s);
+                    intent.putExtra("groupImageUri", imageUri_s);
+                    setResult(RESULT_OK, intent);
+                    groupJoin.setVisibility(View.GONE);
+                    layout_discussion.setVisibility(View.VISIBLE);
+                }
+
+                //TODO 지상 로그인 및 회원가입이 안되어 있을 때, ▽
+                if (MainActivity.isSignIn == false) {
+                    DialogUtil.showGroupDialog(v.getContext());
+                }
 
             }
         });

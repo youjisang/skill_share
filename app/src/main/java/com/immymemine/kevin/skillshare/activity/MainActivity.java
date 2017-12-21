@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -79,17 +78,14 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
     // user
     String userId;
-    boolean isSignIn;
-    User user;
+    public static boolean isSignIn;
+    public static User user;
 
     // user followed skills
     List<String> followSkills = new ArrayList<>();
 
     //group
     List<Group> mygroupList, groupList1, groupList2;
-
-    //saved
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         //TODO 지상
         searchButtonListener();
-        groupDummyDataSetting();
         //
         viewFactory = ViewFactory.getInstance(this); // view 생성을 담당할 view factory
         executor = viewFactory.executor; // Thread pool
@@ -115,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             isSignIn = true;
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
-                    Log.d("JUWONLEE", "login success");
                     userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
                     RetrofitHelper.createApi(UserService.class)
                             .getUser(userId)
@@ -140,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
                                     }, (Throwable error) -> {
                                         // TODO handle networking error
-                                        Log.d("JUWONLEE", "login success2");
 
                                         // for test ====================
                                         // 통신이 성공했다고 가정하고...
@@ -166,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                         followSkills.add(ConstantUtil.TRENDING_NOW);
                                         followSkills.add(ConstantUtil.BEST_THIS_MONTH);
 
-                                        user.setPictureUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
+                                        user.setImageUrl("https://0.soompi.io/wp-content/uploads/2017/07/17012237/IU3.jpg");
 
                                         List<SubscribeClass> subscribeClasses = new ArrayList<>();
                                         subscribeClasses.add(new SubscribeClass(
@@ -186,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::handleResponse, this::handleError);
+
+                                        groupDummyDataSetting();
 
                                         setContainer();
                                     }
@@ -225,18 +220,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // TODO Progress Bar
         // follow skills 에 해당되는 카테고리들을 받아온다.
 
-        //TODO 지상
-
-        //
-
         // BroadCast Receiver 등록
         registerReceiver();
         startRegisterService();
     }
 
     private void handleResponse(List<Map<String, List<Class>>> classes) {
-        Log.d("JUWONLEE", "handle response");
-
         // 기본 view 추가
         Future<LinearLayout> f = viewFactory.executor.submit(
                 () -> {
@@ -272,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         scrollView = findViewById(R.id.scroll_view);
 
-
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
         refreshLayout.setOnRefreshListener(() -> {
@@ -287,8 +275,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
     }
 
-    //TODO 지상 toolbar에 버튼 달았음-------------------------------------------
-
     private void searchButtonListener() {
         toolbar_right_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,10 +282,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
-
         });
     }
-
+    
     //-------------------------------------------------------------------------
 
 
@@ -353,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 () -> {
                     group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
                     group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
+                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups),groupList2));
                     return group_view_container;
                 }
         );
@@ -393,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         if (isSignIn) {
             if (meView != null) {
                 Glide.with(this)
-                        .load(user.getPictureUrl())
+                        .load(user.getImageUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(((ImageView) meView.findViewById(R.id.me_image)));
 
@@ -664,7 +649,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             meSkillRecyclerViewAdapter.update(skills);
             user.setFollowingSkills(skills);
         }
-        //TODO 지상 그룹 부분-------------------------------------------------------------------------------
+        //TODO 지상 그룹 부분 -------------------------------------------------------------------------------
         else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
@@ -685,9 +670,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
                         groupList2.remove(i);
                     }
-
                 }
-
 
                 Log.e("MainActivity", "check============" + mygroupList.get(0).getGroupName());
                 Log.e("MainActivity", "check position============" + groupItemPosition);
@@ -699,18 +682,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
             }
         }
-
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-
-    }
-
-
-
 
     @Override
     protected void onDestroy() {

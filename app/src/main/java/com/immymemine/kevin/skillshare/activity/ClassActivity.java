@@ -72,7 +72,6 @@ public class ClassActivity extends AppCompatActivity {
 
     String classId, url;
 
-    String thumbnailImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class ClassActivity extends AppCompatActivity {
         classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
         // 2. model object 에 담아주고
-        thumbnailImageUrl = "https://static.skillshare.com/uploads/users/3110168/user-image-medium.jpg?43101635";
+
 
         // 3. view 에서 model object 를 사용
 

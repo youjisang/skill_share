@@ -7,7 +7,6 @@ import java.util.List;
  */
 
 public class Lessons {
-    String _id;
     String title;
     String time;
     String reviewPercent;
@@ -16,28 +15,18 @@ public class Lessons {
     List<Video> videos;
 
     // for test
-    public Lessons(String _id,
-            String title,
+    public Lessons(String title,
             String time,
             String reviewPercent,
             String subscriberCount,
             Tutor tutor,
             List<Video> videos) {
-        this._id = _id;
         this.title = title;
         this.time = time;
         this.reviewPercent = reviewPercent;
         this.subscriberCount = subscriberCount;
         this.tutor = tutor;
         this.videos = videos;
-    }
-
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public String getTitle() {

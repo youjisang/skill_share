@@ -19,7 +19,7 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.TutorActivity;
+import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.adapter.fragment_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
@@ -98,7 +98,6 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         videos.add(new Video("Video ID", "6", "BrushStroke and Nib Techniques", "8:47", "https://static.skillshare.com/uploads/project/61144/cover_800_e10d97be1e6045c496651c90efd59572.jpg"));
 
         Lessons lessons = new Lessons(
-                "Lessons ID",
                 "Ink Drawing Techniques: Brush, Nib, and Pen Style",
                 "1h 32m",
                 "99%",
@@ -131,7 +130,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         textViewTutor.setText(tutor.getName());
         textViewFollowersCount.setText(tutor.getFollowers());
         Glide.with(context)
-                .load(tutor.getPictureUrl())
+                .load(tutor.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageViewTutor);
 
@@ -167,7 +166,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
 
     private void clickedTutorProfile() {
         imageViewTutor.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), TutorActivity.class);
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
 
             /* TODO 지상
             intent.putExtra("follower_num", followers_i);

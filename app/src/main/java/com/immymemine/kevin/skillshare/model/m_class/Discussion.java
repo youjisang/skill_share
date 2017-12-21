@@ -8,8 +8,7 @@ import java.util.List;
 
 public class Discussion {
     // TODO teacher 여부를 확인해야 함
-    // TODO data 를 가져오는 순서가 중요함
-    // TODO time 과 rediscussions 처리해야함
+
     String _id;
     String name;
     String imageUrl;
@@ -70,4 +69,7 @@ public class Discussion {
         return replies;
     }
 
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
+    }
 }

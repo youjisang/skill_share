@@ -53,6 +53,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     // TODO DiffUtil 개선
     public void updateData(List<Discussion> discussions) {
+
 //        DiscussionDiffCallback callback = new DiscussionDiffCallback(this.discussions, discussions);
 //        DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
 //
@@ -62,6 +63,10 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
         this.discussions = discussions;
         notifyDataSetChanged();
+    }
+
+    public void updateReplies(List<Discussion> discussions, int position) {
+
     }
 
     @Override
@@ -91,6 +96,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             // identifier
             holder.id = discussion.get_id();
             holder.userId = discussion.getUserId();
+            holder.position = position;
 
             // profile
             holder.imageUrl = discussion.getImageUrl();
@@ -101,12 +107,15 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             // content
             holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
             // time
-            holder.textViewTime.setText( TimeUtil.calculateTime(discussion.getTime()) );
+            holder.time = discussion.getTime();
+            holder.textViewTime.setText( TimeUtil.calculateTime(holder.time) );
             // like
             holder.textViewLikeCount.setText(discussion.getLikeCount());
             // reply
             if( discussion.getReplies() != null )
                 holder.setReply(discussion.getReplies());
+            else
+                holder.setReply(new ArrayList<>());
         }
     }
 
@@ -118,10 +127,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             return discussions.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // id
         String id;
         String userId;
+        int position;
 
         // profile
         ImageView imageViewProfile;
@@ -131,6 +141,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         // info / reply
         ImageButton imageButtonReply;
         TextView textViewTime;
+        List<Reply> replies;
+        String time;
+
         // like
         ToggleImageButton imageButtonLike;
         TextView textViewLikeCount;
@@ -152,11 +165,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 // content
                 expandableTextView = v.findViewById(R.id.expandable_text_view);
                 expandableTextView.setTrimLength(8);
+
                 // info / reply
                 imageButtonReply = v.findViewById(R.id.image_button_reply);
-                imageButtonReply.setOnClickListener(view -> {
+                imageButtonReply.setOnClickListener(this);
 
-                });
                 textViewTime = v.findViewById(R.id.text_view_time);
                 // like
                 imageButtonLike = v.findViewById(R.id.image_button_like);
@@ -180,6 +193,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                     }
                 });
                 textViewLikeCount = v.findViewById(R.id.text_view_like_count);
+
                 // reply
                 textViewReplies = v.findViewById(R.id.text_view_replies);
                 imageViewReplyProfile = v.findViewById(R.id.image_view_reply_profile);
@@ -194,6 +208,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         ExpandableTextView expandableTextViewReply;
 
         public void setReply(List<Reply> replies) {
+
+            this.replies = replies;
+
             if(replies != null && replies.size() != 0) {
                 textViewReplyProfile.setVisibility(View.VISIBLE);
                 textViewTimeReply.setVisibility(View.VISIBLE);
@@ -201,23 +218,10 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 expandableTextViewReply.setVisibility(View.VISIBLE);
 
                 int size = replies.size();
-                if( size > 1 ) {
+                if( size >= 2 ) {
                     textViewReplies.setText("See all " + replies.size() + " replies");
                     textViewReplies.setVisibility(View.VISIBLE);
-                    textViewReplies.setOnClickListener(view -> {
-                        Intent intent = new Intent(context, SeeAllActivity.class);
-                        intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
-                        intent.putExtra(ConstantUtil.ID_FLAG, id);
-                        intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
-                        replies.add(0, new Reply(
-                                textViewProfile.getText().toString(),
-                                imageUrl,
-                                expandableTextView.getText().toString(),
-                                textViewTime.getText().toString()
-                        ));
-                        intent.putParcelableArrayListExtra("TEST", (ArrayList) replies);
-                        context.startActivity(intent);
-                    });
+                    textViewReplies.setOnClickListener(this);
                 }
 
                 Reply reply = replies.get(size-1);
@@ -228,7 +232,33 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         .into(imageViewReplyProfile);
                 expandableTextViewReply.setTrimLength(4);
                 expandableTextViewReply.setText(reply.getContent(), TextView.BufferType.NORMAL);
+            } else {
+                textViewReplyProfile.setVisibility(View.GONE);
+                textViewTimeReply.setVisibility(View.GONE);
+                imageViewReplyProfile.setVisibility(View.GONE);
+                expandableTextViewReply.setVisibility(View.GONE);
+                textViewReplies.setVisibility(View.GONE);
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, SeeAllActivity.class);
+            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
+            intent.putExtra(ConstantUtil.ID_FLAG, id);
+            intent.putExtra("position", position);
+            intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
+
+            Reply reply = new Reply(
+                    textViewProfile.getText().toString(),
+                    imageUrl,
+                    expandableTextView.getText().toString(),
+                    time);
+
+            replies.add(0, reply);
+
+            intent.putParcelableArrayListExtra(ConstantUtil.DISCUSSION_ITEM, (ArrayList) replies);
+            context.startActivity(intent);
         }
     }
 }

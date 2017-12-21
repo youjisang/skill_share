@@ -9,10 +9,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by quf93 on 2017-12-02.
@@ -29,7 +29,7 @@ public interface ClassService {
     Observable<List<Discussion>> getDiscussions(@Path("id") String id);
 
     @POST("class/addDiscussion")
-    Observable<List<Discussion>> addDiscussion(@Body Discussion discussion);
+    Observable<List<Discussion>> addDiscussion(@Body Discussion discussion, @Query("classId") String classId);
 
     @POST("class/like")
     Observable<Response> like();

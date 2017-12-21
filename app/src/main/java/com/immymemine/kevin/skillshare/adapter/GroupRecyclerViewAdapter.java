@@ -115,13 +115,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                     intent.putExtra("groupName", groupList.get(getLayoutPosition()).getGroupName());
                     intent.putExtra("groupJoinNum", groupList.get(getLayoutPosition()).getGroupJoinNum());
                     intent.putExtra("groupImageUri", groupList.get(getLayoutPosition()).getGroupImage());
-                    v.getContext().startActivity(intent);
-                    Log.e("=GroupAdapter=", "=========startActivity======" + intent);
-
-
+                    // groupActivity에 세팅해주는 데이터들
 
                     ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
-                    Log.e("=GroupAdapter=", "=========startActivityForResult======" + intent);
+                    // MainActivity에 onActivityResult에로
 
                 });
             }

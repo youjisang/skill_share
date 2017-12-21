@@ -13,7 +13,7 @@
         android:background="@drawable/dot_line"
         android:gravity="center"
         android:padding="32dp"
-        android:text="Students haven't shared any projects yet"
+        android:text="No written reviews yet"
         android:textColor="@color/IcInactive"
         android:textSize="18sp" />
 

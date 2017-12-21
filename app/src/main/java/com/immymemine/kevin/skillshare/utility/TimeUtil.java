@@ -10,7 +10,7 @@ public class TimeUtil {
         long time = System.currentTimeMillis() - Long.parseLong(timeString);
 
         if(time < 60000) // 1분 이내면
-            return "now";
+            return "Just now";
         else if(time >= 60000 && time < 120000) // 1분 이상 2분 미만
             return "1 minute ago";
         else if(time >= 120000 && time < 3600000) // 2분 이상 1시간 미만

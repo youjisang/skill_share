@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
  * Created by JisangYou on 2017-12-02.
  */
 
-public class PreferenceUtill {
+public class PreferenceUtil {
 
     private static final String filename = "skillShare_preference";
 

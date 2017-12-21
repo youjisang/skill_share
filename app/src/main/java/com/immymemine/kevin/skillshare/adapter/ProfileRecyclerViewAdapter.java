@@ -1,6 +1,5 @@
 package com.immymemine.kevin.skillshare.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,17 @@ import com.immymemine.kevin.skillshare.R;
  * Created by JisangYou on 2017-11-29.
  */
 
-public class TutorRecyclerViewAdapter extends RecyclerView.Adapter<TutorRecyclerViewAdapter.Holder> {
+public class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileRecyclerViewAdapter.Holder> {
 
 
     @Override
-    public TutorRecyclerViewAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProfileRecyclerViewAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_tutor, parent, false);
         return new Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(TutorRecyclerViewAdapter.Holder holder, int position) {
+    public void onBindViewHolder(ProfileRecyclerViewAdapter.Holder holder, int position) {
 
     }
 

@@ -31,9 +31,7 @@
         <activity android:name=".activity.SignUpActivity" />
         <activity
             android:name=".activity.ClassActivity"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
 
         <!-- gcm receiver -->
@@ -71,11 +69,13 @@
             android:name=".gcm.RegistrationIntentService"
             android:exported="false" />
 
-        <activity android:name=".activity.TutorActivity" />
+        <activity android:name=".activity.ProfileActivity" />
+
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.SavedActivity" />
-        <activity android:name=".activity.GroupActivity" />
+        <activity android:name=".activity.GroupActivity"/>
 
+        
     </application>
 
 </manifest>

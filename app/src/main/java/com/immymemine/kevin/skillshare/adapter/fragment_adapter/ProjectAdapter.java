@@ -34,16 +34,21 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
 
     @Override
     public ProjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_project, parent, false);
+        View view;
+
+        if( projects == null || projects.size() == 0 )
+            view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_project, parent, false);
+        else
+            view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_project, parent, false);
+
         return new ProjectHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ProjectHolder holder, int position) {
-        if(projects != null) {
+        if(projects != null && projects.size() != 0) {
             Project project = projects.get(position);
-//        holder.id = project.get_id();
-
+            holder.projectId = project.get_id();
             Glide.with(context).load(project.getPictureUrl())
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.projectImageView);
@@ -52,18 +57,24 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
 
     @Override
     public int getItemCount() {
+        if(projects == null || projects.size() == 0)
+            return 1;
         return 3;
     }
 
     class ProjectHolder extends RecyclerView.ViewHolder {
+
         ImageView projectImageView;
-        String id;
+        String projectId;
+
         public ProjectHolder(View view) {
             super(view);
-            projectImageView = view.findViewById(R.id.image_view_project);
-            projectImageView.setOnClickListener(v -> {
-                // project class 이동
-            });
+            if( projects != null && projects.size() != 0 ) {
+                projectImageView = view.findViewById(R.id.image_view_project);
+                projectImageView.setOnClickListener(v -> {
+                    // project class 이동
+                });
+            }
         }
     }
 }
