@@ -19,7 +19,7 @@ public interface UserService {
     @POST("user/sign-up")
     Observable<UserResponse> signUp(@Body SignUpRequestBody body);
 
-    @GET("user/sign-in")
+    @GET("users/sign-in")
     Observable<UserResponse> signIn(@Query("email") String email, @Query("password") String password);
 
     @GET("user/{id}")

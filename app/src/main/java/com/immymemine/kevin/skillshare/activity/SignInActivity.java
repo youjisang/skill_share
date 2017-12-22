@@ -78,6 +78,8 @@ public class SignInActivity extends AppCompatActivity{
             if(ValidationUtil.isValidEmailAddress(email)) {
                 warning_email.setVisibility(View.INVISIBLE);
                 if(ValidationUtil.isValidPassword(password)) {
+                    warning_password.setVisibility(View.INVISIBLE);
+                    Log.d("email & pw : ", email +" / "+ password);
                     RetrofitHelper
                             .createApi(UserService.class)
                             .signIn(email, password)

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Lessons {
     String title;
-    String time;
+    String totalDuration;
     String reviewPercent;
     String subscriberCount;
     Tutor tutor;
@@ -16,13 +16,13 @@ public class Lessons {
 
     // for test
     public Lessons(String title,
-            String time,
+            String totalDuration,
             String reviewPercent,
             String subscriberCount,
             Tutor tutor,
             List<Video> videos) {
         this.title = title;
-        this.time = time;
+        this.totalDuration = totalDuration;
         this.reviewPercent = reviewPercent;
         this.subscriberCount = subscriberCount;
         this.tutor = tutor;
@@ -37,12 +37,12 @@ public class Lessons {
         this.title = title;
     }
 
-    public String getTime() {
-        return time;
+    public String getTotalDuration() {
+        return totalDuration;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTotalDuration(String totalDuration) {
+        this.totalDuration = totalDuration;
     }
 
     public String getReviewPercent() {

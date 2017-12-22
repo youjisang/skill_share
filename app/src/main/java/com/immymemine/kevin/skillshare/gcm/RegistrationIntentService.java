@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.GCMService;
@@ -36,7 +37,7 @@ public class RegistrationIntentService extends IntentService {
             // token 값 생성
             InstanceID instanceID = InstanceID.getInstance(this);
             String registrationId = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            Log.d(TAG, "Registration ID : " + registrationId);
+            MainActivity.user.setRegistrationId(registrationId);
             // 서버 통신
             registerDevice(userId, registrationId);
         } catch (Exception e ) {

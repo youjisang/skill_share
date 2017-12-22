@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Project;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
 
@@ -33,13 +34,23 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if( projects == null || projects.size() == 0 ) {
+            return ConstantUtil.NO_ITEM;
+        } else {
+            return super.getItemViewType(position);
+        }
+    }
+
+    @Override
     public ProjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
 
-        if( projects == null || projects.size() == 0 )
+        if( viewType == ConstantUtil.NO_ITEM ) {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_project, parent, false);
-        else
+        } else {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_project, parent, false);
+        }
 
         return new ProjectHolder(view);
     }
@@ -47,11 +58,17 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
     @Override
     public void onBindViewHolder(ProjectHolder holder, int position) {
         if(projects != null && projects.size() != 0) {
+            if(position >= projects.size())
+                return;
+
             Project project = projects.get(position);
             holder.projectId = project.get_id();
-            Glide.with(context).load(project.getPictureUrl())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(holder.projectImageView);
+
+            if(project.getImageUrl() != null) {
+                Glide.with(context).load(project.getImageUrl())
+                        .apply(RequestOptions.centerCropTransform())
+                        .into(holder.projectImageView);
+            }
         }
     }
 
@@ -59,7 +76,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
     public int getItemCount() {
         if(projects == null || projects.size() == 0)
             return 1;
-        return 3;
+        else
+            return 3;
     }
 
     class ProjectHolder extends RecyclerView.ViewHolder {
@@ -69,7 +87,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectH
 
         public ProjectHolder(View view) {
             super(view);
-            if( projects != null && projects.size() != 0 ) {
+            if( projects != null ) {
                 projectImageView = view.findViewById(R.id.image_view_project);
                 projectImageView.setOnClickListener(v -> {
                     // project class 이동

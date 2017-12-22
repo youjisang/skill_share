@@ -28,6 +28,7 @@ public class RetrofitHelper {
 
     // Retrofit Builder
     private static Retrofit.Builder builder =new Retrofit.Builder()
+                                                         .client(httpClient.build())
                                                          .baseUrl(BASE_URL)
                                                          .addConverterFactory(GsonConverterFactory.create())
                                                          .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
@@ -49,11 +50,11 @@ public class RetrofitHelper {
                 retrofit = builder.build();
             }
         }
-
         return retrofit.create(service);
     }
 
     private static HttpLoggingInterceptor loggingInterceptor;
+
     private static HttpLoggingInterceptor createLogginInterceptor() {
         if(loggingInterceptor == null) {
             loggingInterceptor = new HttpLoggingInterceptor();

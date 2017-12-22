@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Video;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
     List<Video> videos;
 
     FragmentAndRecyclerViewInteractionInterface interactionInterface;
+
     public LessonsAdapter(Context context, FragmentAndRecyclerViewInteractionInterface interactionInterface) {
         this.context = context;
         this.interactionInterface = interactionInterface;
@@ -52,7 +54,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageViewVideo);
             holder.textViewVideoTitle.setText(video.getTitle());
-            holder.textViewDuration.setText(video.getDuration());
+            holder.textViewDuration.setText(TimeUtil.calculateVideoTime(video.getDuration()));
             holder.id = video.get_id();
             holder.position = position;
         }

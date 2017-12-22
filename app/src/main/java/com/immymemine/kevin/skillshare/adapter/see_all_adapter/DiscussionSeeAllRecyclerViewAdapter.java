@@ -2,7 +2,6 @@ package com.immymemine.kevin.skillshare.adapter.see_all_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
             holder = view;
 
             imageViewProfile = view.findViewById(R.id.image_view_profile);
-            textViewProfile = view.findViewById(R.id.text_view_profile);
+            textViewProfile = view.findViewById(R.id.text_view_tutor_name);
 
             expandableTextView = view.findViewById(R.id.expandable_text_view);
             expandableTextView.setTrimLength(8);

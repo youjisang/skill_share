@@ -12,6 +12,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by quf93 on 2017-12-08.
@@ -27,6 +28,6 @@ public interface SeeAllService {
     @GET("SeeAll/project/{id}")
     Observable<List<Project>> getSeeAllProject(@Path("id") String id);
 
-    @POST("seeAll/addReply")
-    Observable<List<Reply>> addReply(@Body Reply reply);
+    @POST("discussions/addReply")
+    Observable<List<Reply>> addReply(@Body Reply reply, @Query("discussionId") String discussionId);
 }
