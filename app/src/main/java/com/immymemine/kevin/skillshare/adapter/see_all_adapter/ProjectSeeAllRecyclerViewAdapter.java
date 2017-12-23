@@ -60,7 +60,7 @@ public class ProjectSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Proje
             super(itemView);
 
             imageViewProject = itemView.findViewById(R.id.image_view_project);
-            textViewLikeCount = itemView.findViewById(R.id.text_view_like_count);
+            textViewLikeCount = itemView.findViewById(R.id.text_view_reply);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewSubscriber = itemView.findViewById(R.id.text_view_subscriber);
         }

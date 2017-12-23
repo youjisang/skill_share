@@ -32,6 +32,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import io.reactivex.Observable;
+
 /**
  * Main Activity 에서 사용하는 View Factory
  * Created by quf93 on 2017-11-18.
@@ -93,6 +95,8 @@ public class ViewFactory {
             e.printStackTrace();
             return null;
         }
+
+
     }
 
     class GeneralViewFactory implements Callable<View> {

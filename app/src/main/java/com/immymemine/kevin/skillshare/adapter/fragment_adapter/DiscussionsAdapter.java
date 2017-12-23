@@ -192,7 +192,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) - 1) + "");
                     }
                 });
-                textViewLikeCount = v.findViewById(R.id.text_view_like_count);
+                textViewLikeCount = v.findViewById(R.id.text_view_reply);
 
                 // reply
                 textViewReplies = v.findViewById(R.id.text_view_replies);

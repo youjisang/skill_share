@@ -43,7 +43,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/text_view_profile_hashtag"
+                    android:id="@+id/text_view_profile_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -82,7 +82,7 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/text_view_like_count"
+                    android:id="@+id/text_view_reply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

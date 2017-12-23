@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         //TODO 자상
-        //autoLogin();
+//        autoLogin();
 
         // glide gif
         // gif 프레임 추출 > 프레임 사이즈 최적화 > 프레임 저장

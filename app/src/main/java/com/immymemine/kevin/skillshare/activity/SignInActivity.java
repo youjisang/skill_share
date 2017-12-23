@@ -172,12 +172,12 @@ public class SignInActivity extends AppCompatActivity {
             intent.putExtra(ConstantUtil.USER_ID_FLAG, response.getUserId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             //Todo 지상 자동로그인
-//
-//            PreferenceUtil.setValue(this, "success",ConstantUtil.SIGN_IN_SUCCESS);
-//            PreferenceUtil.setValue(this, ConstantUtil.USER_ID_FLAG, response.getUserId());
-//            PreferenceUtil.setValue(this, "auto_sign", "true");
-//            Log.e("success","check = "+ ConstantUtil.SIGN_IN_SUCCESS);
-//            Log.e("USER_ID_FLAG","check = "+ response.getUserId());
+
+            PreferenceUtil.setValue(this, "success",ConstantUtil.SIGN_IN_SUCCESS);
+            PreferenceUtil.setValue(this, ConstantUtil.USER_ID_FLAG, response.getUserId());
+            PreferenceUtil.setValue(this, "auto_sign", "true");
+            Log.e("success","check = "+ ConstantUtil.SIGN_IN_SUCCESS);
+            Log.e("USER_ID_FLAG","check = "+ response.getUserId());
             startActivity(intent);
         } else {
             Toast.makeText(SignInActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
