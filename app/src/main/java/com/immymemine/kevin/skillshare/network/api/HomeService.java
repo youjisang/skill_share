@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 
@@ -15,9 +16,12 @@ import retrofit2.http.Query;
  */
 
 public interface HomeService {
-    @GET("/class/home")
+    @GET("home")
     Observable<List<Map<String, List<Class>>>> getHomeClasses(@Query("types") List<String> types);
 
-    @GET("class/group")
+    @GET("group")
     Observable< List< List<Group> > > getGroups(@Query("my_groups") List<String> groups);
+
+    @GET("discover")
+    Observable<DiscoverClass> getDiscoverClass();
 }

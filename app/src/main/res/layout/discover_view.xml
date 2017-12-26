@@ -8,91 +8,33 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/relative_layout_class"
         android:layout_width="match_parent"
-        android:layout_height="240dp">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView14"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/skill_design" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/IcActive"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp"
-            android:text="Featured Class"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/contentsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp">
-
-
-        <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/imageView3"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_below="@+id/text_view_featured_class_title"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:src="@android:drawable/ic_lock_idle_alarm"
             android:tint="@color/cardview_dark_background" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/text_view_featured_class_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_featured_class_title"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:text="47m"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/plus" />
-
-        <TextView
-            android:id="@+id/thumbUpTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="100%"
+            android:layout_toRightOf="@+id/imageView3"
+            android:text="47m"
             android:textColor="@color/cardview_dark_background"
             android:textSize="18sp" />
 
@@ -100,72 +42,142 @@
             android:id="@+id/imageView5"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_below="@+id/text_view_featured_class_title"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/text_view_featured_class_duration"
+            android:src="@drawable/plus" />
+
+        <TextView
+            android:id="@+id/text_view_featured_class_review_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_featured_class_title"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/imageView5"
+            android:text="100%"
+            android:textColor="@color/cardview_dark_background"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_below="@+id/text_view_featured_class_title"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/text_view_featured_class_review_percent"
             android:src="@drawable/ic_group"
             android:tint="@color/cardview_dark_background" />
 
         <TextView
-            android:id="@+id/attendanceStudents"
+            android:id="@+id/text_view_featured_class_subscriber_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view_featured_class_title"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/imageView6"
             android:text="170"
             android:textColor="@color/cardview_dark_background"
             android:textSize="18sp" />
 
-    </LinearLayout>
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="240dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+            <ImageView
+                android:id="@+id/image_view_featured_class"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/skill_design" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/IcActive"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="Featured Class"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/text_view_profile"
+            android:id="@+id/text_view_featured_class_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/frame_layout"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_layout_tutor"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/text_view_tutor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/button_follow"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp"
-            android:layout_toEndOf="@+id/image_view_group"
-            android:layout_toRightOf="@+id/image_view_group"
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@+id/image_view_tutor"
+            android:layout_toRightOf="@+id/image_view_tutor"
             android:text="Mel Armstrong"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_view_group"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_tutor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.065"
-            app:layout_constraintStart_toEndOf="@+id/image_view_group"
-            app:layout_constraintTop_toTopOf="@+id/image_view_group" />
+            app:layout_constraintStart_toEndOf="@+id/image_view_tutor"
+            app:layout_constraintTop_toTopOf="@+id/image_view_tutor" />
 
         <TextView
-            android:id="@+id/text_view_followers_count"
+            android:id="@+id/text_view_followers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/text_view_profile"
-            android:layout_alignStart="@+id/text_view_profile"
-            android:layout_below="@+id/text_view_profile"
-            android:text="621 Follower"
+            android:layout_alignLeft="@+id/text_view_tutor_name"
+            android:layout_alignStart="@+id/text_view_tutor_name"
+            android:layout_below="@+id/text_view_tutor_name"
+            android:text="621 Followers"
             android:textColor="@color/IcInactive"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.261"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_profile" />
+            app:layout_constraintTop_toBottomOf="@+id/text_view_tutor_name" />
 
         <ImageView
-            android:id="@+id/image_view_group"
-            android:layout_width="57dp"
-            android:layout_height="51dp"
+            android:id="@+id/image_view_tutor"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
             android:src="@mipmap/ic_launcher_round"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.025"

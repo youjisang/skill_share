@@ -8,7 +8,8 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="8dp"
+    android:background="#c8ebebeb"
     android:scaleType="centerCrop"
-    app:srcCompat="@drawable/skill_crafts">
+    app:srcCompat="@android:drawable/ic_menu_crop">
 
 </ImageView>

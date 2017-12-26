@@ -7,7 +7,7 @@
 
 
     <ImageButton
-        android:id="@+id/download_button"
+        android:id="@+id/button_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/image_download_32dp" />
 
     <TextView
-        android:id="@+id/warning"
+        android:id="@+id/text_view_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="48dp"
@@ -27,7 +27,6 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/students"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -40,23 +39,20 @@
         android:textStyle="bold" />
 
 
-
-
     <TextView
-        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="36dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginLeft="48dp"
         android:layout_marginTop="72dp"
-        android:text="Saved Classes"
+        android:text="Subscribed Classes"
         android:textColor="@android:color/black"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/text_view_saved_count"
+        android:id="@+id/text_view_subscribed_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
@@ -69,7 +65,7 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/_your_classes_video_thumbnail"
+        android:id="@+id/image_view_thumbnail"
         android:layout_width="108dp"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
@@ -79,7 +75,6 @@
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="bottom"
@@ -87,6 +82,7 @@
         android:layout_marginLeft="76dp"
         android:background="@color/cardview_shadow_start_color"
         android:scaleType="centerCrop"
+        android:tint="@color/BottomNaviBackground"
         app:srcCompat="@drawable/ic_dashboard_black_24dp" />
 
 

@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Review;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 /**
  * Created by quf93 on 2017-12-16.
@@ -31,9 +32,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.Holder> {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if ( review == null ) {
+            return ConstantUtil.NO_ITEM;
+        }
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if ( review == null ) {
+        if ( viewType == ConstantUtil.NO_ITEM ) {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_review, parent, false);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_review, parent, false);

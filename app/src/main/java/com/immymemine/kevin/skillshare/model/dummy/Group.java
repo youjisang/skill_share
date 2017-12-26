@@ -9,38 +9,23 @@ public class Group {
 
     String groupJoinNum;
     String groupName;
-    String groupImage;
+    String imageUrl;
 
-    public Group(String groupJoinNum, String groupName, String groupImage) {
-
+    public Group(String groupJoinNum, String groupName, String imageUrl) {
         this.groupJoinNum = groupJoinNum;
         this.groupName = groupName;
-        this.groupImage = groupImage;
+        this.imageUrl = imageUrl;
     }
-
-
 
     public String getGroupJoinNum() {
         return groupJoinNum;
-    }
-
-    public void setGroupJoinNum(String groupJoinNum) {
-        this.groupJoinNum = groupJoinNum;
     }
 
     public String getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public String getGroupImage() {
-        return groupImage;
-    }
-
-    public void setGroupImage(String groupImage) {
-        this.groupImage = groupImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

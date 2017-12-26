@@ -105,8 +105,8 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GroupChattingHolder) {
-//            GroupItem singleGroupItem = (GroupItem) groupItemList.get(position);
-////            ((GroupChattingHolder) holder).imageViewProfile.setImageURI(singleGroupItem.getItem());
+            GroupItem singleGroupItem = (GroupItem) groupItemList.get(position);
+//            ((GroupChattingHolder) holder).imageViewProfile.set(singleGroupItem.getItem());
 //            ((GroupChattingHolder) holder).textViewProfile.setText(singleGroupItem.getItem());
 //            ((GroupChattingHolder) holder).textViewProfileHashtag.setText(singleGroupItem.getItem());
 //            ((GroupChattingHolder) holder).expandableTextView.setText(singleGroupItem.getItem());
@@ -132,8 +132,8 @@ public class GroupChattingAdapter extends RecyclerView.Adapter<RecyclerView.View
         public GroupChattingHolder(View v) {
             super(v);
             imageViewProfile = (ImageView) v.findViewById(R.id.image_view_profile);
-            textViewProfile = (TextView) v.findViewById(R.id.text_view_profile);
-            textViewProfileHashtag = (TextView) v.findViewById(R.id.text_view_nickName);
+//            textViewProfile = (TextView) v.findViewById(R.id.text_view_profile);
+//            textViewProfileHashtag = (TextView) v.findViewById(R.id.text_view_nickName);
             expandableTextView = (ExpandableTextView) v.findViewById(R.id.expandable_text_view);
             textViewTime = (TextView) v.findViewById(R.id.text_view_time);
             textViewLike = (TextView) v.findViewById(R.id.text_view_reply);

@@ -2,8 +2,8 @@ package com.immymemine.kevin.skillshare.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +47,13 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
         if(classes != null) {
             Class mClass = classes.get(position);
-
+            Log.d("JUWONLEE", "here is general rv adapter & thread name : " + Thread.currentThread().getName());
             holder.classId = mClass.get_id();
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
             holder.textViewTime.setText(TimeUtil.calculateVideoTime(mClass.getDuration()));
             holder.url = mClass.getImageUrl();
-            Glide.with(context).load(Uri.parse(holder.url))
+            Glide.with(context).load(holder.url)
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageView);
         }
@@ -63,7 +63,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     public int getItemCount() {
         if(classes != null)
             return classes.size();
-        return 5;
+        return 5; // for test
     }
 
     class GeneralViewHolder extends RecyclerView.ViewHolder {
@@ -75,10 +75,10 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         public GeneralViewHolder(View v) {
             super(v);
 
-            imageView = v.findViewById(R.id.image_view_group);
+            imageView = v.findViewById(R.id.image_view_tutor);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
-            textViewTutor = v.findViewById(R.id.text_view_profile);
+            textViewTutor = v.findViewById(R.id.text_view_tutor_name);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {

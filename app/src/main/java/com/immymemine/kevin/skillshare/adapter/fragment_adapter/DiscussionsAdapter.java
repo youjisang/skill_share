@@ -28,6 +28,7 @@ import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 import net.colindodd.toggleimagebutton.ToggleImageButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,10 +66,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         notifyDataSetChanged();
     }
 
-    public void updateReplies(List<Discussion> discussions, int position) {
-
-    }
-
     @Override
     public int getItemViewType(int position) {
         if(discussions == null)
@@ -94,7 +91,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         if(discussions != null) {
             Discussion discussion = discussions.get(position);
             // identifier
-            holder.id = discussion.get_id();
+            holder.discussionId = discussion.get_id();
             holder.userId = discussion.getUserId();
             holder.position = position;
 
@@ -112,9 +109,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             // like
             holder.textViewLikeCount.setText(discussion.getLikeCount());
             // reply
-            if( discussion.getReplies() != null )
+            if( discussion.getReplies() != null ) {
                 holder.setReply(discussion.getReplies());
-            else
+            } else
                 holder.setReply(new ArrayList<>());
         }
     }
@@ -129,7 +126,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // id
-        String id;
+        String discussionId;
         String userId;
         int position;
 
@@ -158,7 +155,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 imageViewProfile.setOnClickListener(view -> {
                     // profile activity 이동
                 });
-                textViewProfile = v.findViewById(R.id.text_view_profile);
+                textViewProfile = v.findViewById(R.id.text_view_tutor_name);
                 textViewProfile.setOnClickListener(view -> {
                     // profile activity 이동
                 });
@@ -224,7 +221,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                     textViewReplies.setOnClickListener(this);
                 }
 
-                Reply reply = replies.get(size-1);
+                Reply reply = replies.get(replies.size()-1);
                 textViewReplyProfile.setText(reply.getName());
                 textViewTimeReply.setText( TimeUtil.calculateTime(reply.getTime()) );
                 Glide.with(context).load(reply.getImageUrl())
@@ -245,9 +242,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         public void onClick(View v) {
             Intent intent = new Intent(context, SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.DISCUSSION_ITEM);
-            intent.putExtra(ConstantUtil.ID_FLAG, id);
+            intent.putExtra(ConstantUtil.ID_FLAG, discussionId);
             intent.putExtra("position", position);
             intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, replies.size() + " Replies");
+
+            Collections.reverse(replies);
 
             Reply reply = new Reply(
                     textViewProfile.getText().toString(),

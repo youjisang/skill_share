@@ -70,7 +70,7 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
     public int getItemCount() {
         if(subscribers == null || subscribers.size() == 0)
             return 1;
-        return 10;
+        return subscribers.size();
     }
 
     class SubscriberHolder extends RecyclerView.ViewHolder {

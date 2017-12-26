@@ -131,12 +131,12 @@ public class ClassActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString(ConstantUtil.ID_FLAG, classId);
 
+        lessonsfragment = new LessonsFragment();
+        lessonsfragment.setArguments(bundle);
         aboutfragment = new AboutFragment();
         aboutfragment.setArguments(bundle);
         discussionsfragment = new DiscussionsFragment();
         discussionsfragment.setArguments(bundle);
-        lessonsfragment = new LessonsFragment();
-        lessonsfragment.setArguments(bundle);
 
         fragmentList.add(lessonsfragment);
         fragmentList.add(aboutfragment);
@@ -187,9 +187,6 @@ public class ClassActivity extends AppCompatActivity {
 
     }
 
-    public void student_profile(View view) {
-
-    }
     // Exo Player -----------------------------------------------------------------------
     // video play step : 1. networking  2. buffering  3. extraction  4. decoding  5. rendering
 

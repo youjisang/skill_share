@@ -19,6 +19,7 @@ import retrofit2.http.Query;
  */
 
 public interface ClassService {
+
     @GET("class/lessons/{id}")
     Observable<Lessons> getLessons(@Path("id") String id);
 
@@ -28,9 +29,10 @@ public interface ClassService {
     @GET("class/discussions/{id}")
     Observable<List<Discussion>> getDiscussions(@Path("id") String id);
 
-    @POST("class/addDiscussion")
-    Observable<List<Discussion>> addDiscussion(@Body Discussion discussion, @Query("classId") String classId);
+    @POST("class/sendDiscussion")
+    Observable<List<Discussion>> sendDiscussion(@Body Discussion discussion, @Query("classId") String classId);
 
     @POST("class/like")
     Observable<Response> like();
+
 }

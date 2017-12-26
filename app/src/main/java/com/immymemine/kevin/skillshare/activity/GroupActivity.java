@@ -38,6 +38,7 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
 import com.immymemine.kevin.skillshare.entity.GroupItem;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     private String groupTitle_s, groupNum_s, imageUri_s;
     private int position;
     private LinearLayout layout_discussion;
-    Intent intent;
+
 
 
     @Override
@@ -81,7 +82,6 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
         settingViewFromData();
 
         initRecycler();
-
 
         groupItemList = new ArrayList<>();
 
@@ -151,7 +151,8 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
 
                 //TODO 지상 로그인이 되어 있을 때, ▽
 
-                if (MainActivity.isSignIn == true) {
+                if (StateUtil.getInstance().getState()==true) {
+                    Log.e("check",""+StateUtil.getInstance().getState());
                     Intent intent = new Intent();
                     intent.putExtra("position", position);
                     intent.putExtra("groupName", groupTitle_s);
@@ -163,7 +164,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
                 }
 
                 //TODO 지상 로그인 및 회원가입이 안되어 있을 때, ▽
-                if (MainActivity.isSignIn == false) {
+                else if (StateUtil.getInstance().getState()== false) {
                     DialogUtil.showGroupDialog(v.getContext());
                 }
 

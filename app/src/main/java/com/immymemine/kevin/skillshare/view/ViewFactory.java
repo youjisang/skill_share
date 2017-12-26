@@ -1,38 +1,34 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.activity.SavedActivity;
-import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.utility.TimeUtil;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import io.reactivex.Observable;
 
 /**
  * Main Activity 에서 사용하는 View Factory
@@ -83,23 +79,23 @@ public class ViewFactory {
         // Future< ? > >>> thread 가 끝나면 객체를 반환받는다.
         Future<View> f = executor.submit(() -> {
             View view = inflater.inflate(R.layout.welcome_view, null);
+
             view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
             view.findViewById(R.id.button_sign_up).setOnClickListener(v -> interactionInterface.signUp());
+
             return view;
         });
 
         try {
-            // thread process 가 끝나면 return 값 반환
-            return f.get();
+            return f.get(); // thread process 가 끝나면 return 값 반환
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-
     }
 
     class GeneralViewFactory implements Callable<View> {
+
         String title;
         List<Class> classes;
 
@@ -111,12 +107,17 @@ public class ViewFactory {
         @Override
         public View call() throws Exception {
             View view = inflater.inflate(R.layout.general_view, null);
+
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
+
+            Log.d("JUWONLEE", " here is call & thread name : " + Thread.currentThread().getName());
+
             if (classes == null)
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
             else
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
+
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
@@ -126,13 +127,14 @@ public class ViewFactory {
                 interactionInterface.seeAll(title);
             });
 
-
             return view;
         }
     }
 
     public View getGeneralView(String title, List<Class> classes) {
         Future<View> f = executor.submit(new GeneralViewFactory(title, classes));
+        Log.d("JUWONLEE", "here is get general view & thread name : " + Thread.currentThread().getName());
+
         try {
             return f.get();
         } catch (Exception e) {
@@ -153,8 +155,6 @@ public class ViewFactory {
         public GroupViewFactory(String title, List<Group> groupList) {
             this.title = title;
             this.groupList = groupList;
-
-
         }
 
         @Override
@@ -165,7 +165,7 @@ public class ViewFactory {
             recyclerView = view.findViewById(R.id.group_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context, groupList.size()));
+            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context));
 
             // title setting
             ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
@@ -187,19 +187,43 @@ public class ViewFactory {
 
     class DiscoverViewFactory implements Callable<View> {
 
+        DiscoverClass discoverClass;
+
+        public DiscoverViewFactory(DiscoverClass discoverClass) {
+            this.discoverClass = discoverClass;
+        }
+
         @Override
         public View call() throws Exception {
             View view = inflater.inflate(R.layout.discover_view, null);
+
+            view.findViewById(R.id.relative_layout_class).setOnClickListener(v -> {
+                // class activity 이동
+                String classId = discoverClass.get_id();
+            });
+
+            view.findViewById(R.id.relative_layout_tutor).setOnClickListener(v -> {
+                // profile activity 이동
+                String tutorId = discoverClass.getTutorId();
+            });
+
+            ((TextView)view.findViewById(R.id.text_view_featured_class_title)).setText(discoverClass.getTitle());
+            ((TextView)view.findViewById(R.id.text_view_featured_class_duration)).setText(TimeUtil.calculateVideoTime(discoverClass.getDuration()));
+            ((TextView)view.findViewById(R.id.text_view_featured_class_review_percent)).setText(discoverClass.getReviewPercent()+"%");
+            ((TextView)view.findViewById(R.id.text_view_featured_class_subscriber_count)).setText(discoverClass.getSubscriberCount());
+
+            ((TextView)view.findViewById(R.id.text_view_tutor_name)).setText(discoverClass.getTutorName());
+
             recyclerView = view.findViewById(R.id.recycler_view_discover);
-            recyclerView.setAdapter(new DiscoverRecyclerViewAdapter());
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setAdapter(new DiscoverRecyclerViewAdapter(context, discoverClass.getFeaturedClasses()));
 
             return view;
         }
-    }
 
-    public View getDiscoverView() {
-        Future<View> f = executor.submit(new DiscoverViewFactory());
+    }
+    public View getDiscoverView(DiscoverClass discoverClass) {
+        Future<View> f = executor.submit(new DiscoverViewFactory(discoverClass));
 
         try {
             return f.get();
@@ -208,32 +232,20 @@ public class ViewFactory {
             return null;
         }
     }
+    public View getDiscoverView() {
+        return getDiscoverView(null);
+    }
 
     public View getYourClassesView() {
         Future<View> f = executor.submit(
                 () -> {
                     View view = inflater.inflate(R.layout.your_classes_view, null);
-                    ImageView savedThumbnail;
-                    // main thread 영역 ------------------------------------------------------------
-                    // video thumbnail setting
 
-                    // Review ) 속도가 너무 느리다... MainActivity 에서 view 를 받아서 처리해주는게 훨씬 빠름
-//                    if(context instanceof MainActivity) {
-//                        ((MainActivity) context).runOnUiThread(
-//                                () -> {
-//                                    ImageView video_thumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-//                                    Glide.with(context).load(/*thumbnail*/R.drawable.common_google_signin_btn_icon_light_normal).into(video_thumbnail);
-//                                }
-//                        );
-//                    }
-                    savedThumbnail = view.findViewById(R.id._your_classes_video_thumbnail);
-                    savedThumbnail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, SavedActivity.class);
-                            context.startActivity(intent);
+                    view.findViewById(R.id.image_view_thumbnail).setOnClickListener(
+                        v -> {
+
                         }
-                    });
+                    );
                     return view;
                 }
         );
@@ -268,7 +280,6 @@ public class ViewFactory {
                         ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
 
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
-
 
                     return view;
                 }

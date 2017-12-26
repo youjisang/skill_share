@@ -25,25 +25,21 @@ import java.util.List;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
-    List<Group> groupList;
+    List<Group> groups;
     Context context;
-    int size;
-
     Intent intent;
 
-    Group dummy;
-
-    public GroupRecyclerViewAdapter(List<Group> groupList, Context context, int size) {
-        this.groupList = groupList;
+    boolean dataValidationCheck;
+    public GroupRecyclerViewAdapter(List<Group> groups, Context context) {
+        this.groups = groups;
         this.context = context;
-        this.size = size;
     }
 
 
     @Override
     public int getItemViewType(int position) {
-
-        if (size == 0)
+        dataValidationCheck = groups != null && groups.size() != 0;
+        if (!dataValidationCheck)
             return ConstantUtil.NO_ITEM;
         else
             return super.getItemViewType(position);
@@ -64,61 +60,46 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     @Override
     public void onBindViewHolder(GroupViewHolder holder, int position) {
 
-
-        if (size != 0) {
-
-            dummy = groupList.get(position);
-
-            holder.textViewCount.setText(dummy.getGroupJoinNum());
-
-            holder.textViewGroup.setText(dummy.getGroupName());
-
-
-            Glide.with(context).load(dummy.getGroupImage()).into(holder.imageView);
-//            로그인 후 그룹카테고리에 들어가면  Exception이 발생! 그 이유는 Activity가 끝난 상태에서 Glide with 함수를 호출해서 발생한 문제
-
-
+        if (dataValidationCheck) {
+            Group group = groups.get(position);
+            holder.textViewGroup.setText(group.getGroupName());
+            holder.textViewCount.setText(group.getGroupJoinNum());
+            Glide.with(context).load(group.getImageUrl()).into(holder.imageView);
         }
-        // Group group = data.get(position);
-
-        // holder.textViewGroup.setText(/* Group title ex) Graphic Designers */);
-        // holder.textViewCount.setText(/* ex) 3.1K */);
-        // Glide.with(context).load(/* Uri || Url */).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-
-        if (size == 0)
+        if (!dataValidationCheck)
             return 1;
         else
-            // return data.size();
-            return groupList.size();
+            return groups.size();
     }
 
     class GroupViewHolder extends RecyclerView.ViewHolder {
+
         ImageView imageView;
         TextView textViewCount, textViewGroup;
 
         public GroupViewHolder(View view) {
             super(view);
-            if (size != 0) {
 
-                imageView = view.findViewById(R.id.image_view_group);
+            if (dataValidationCheck) {
+
+                imageView = view.findViewById(R.id.image_view_tutor);
                 textViewCount = view.findViewById(R.id.text_view_count);
                 textViewGroup = view.findViewById(R.id.text_view_group);
                 view.setOnClickListener(v -> {
-                    // TODO if (그룹원이 아니면) 그룹 가입 else 밑에 edittext 창이 나와야 함
+
                     intent = new Intent(context, GroupActivity.class);
 
                     intent.putExtra("position", getLayoutPosition());
-                    intent.putExtra("groupName", groupList.get(getLayoutPosition()).getGroupName());
-                    intent.putExtra("groupJoinNum", groupList.get(getLayoutPosition()).getGroupJoinNum());
-                    intent.putExtra("groupImageUri", groupList.get(getLayoutPosition()).getGroupImage());
-                    // groupActivity에 세팅해주는 데이터들
+                    intent.putExtra("groupName", groups.get(getLayoutPosition()).getGroupName());
+                    intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getGroupJoinNum());
+                    intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getImageUrl());
 
                     ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
-                    // MainActivity에 onActivityResult에로
+
 
                 });
             }
@@ -127,6 +108,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     }
 }
+
 
 
 

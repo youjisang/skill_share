@@ -25,23 +25,6 @@ public class ConstantUtil {
     // Sign out
     public static final String SIGN_OUT = "sign-out";
 
-    // URL
-    public static final String BASE_URL = "http://localhost/8079/";
-
-    // selectSkill
-    public static final String DESIGN = "Design";
-    public static final String PHOTOGRAPHY = "PhotoGraphy";
-    public static final String BUSINESS = "Business";
-    public static final String TECHNOLOGY = "Technology";
-    public static final String CRAFTS = "Crafts";
-    public static final String CULINARY = "Culinary";
-    public static final String FILM = "Film";
-    public static final String FASHION = "Fashion";
-    public static final String MUSIC = "Music";
-    public static final String LIFESTYLE = "LifeStyle";
-    public static final String GAMING = "Gaming";
-    public static final String TEACHING = "Teaching";
-
     public static final int NO_ITEM = -9;
 
     // see all item
@@ -52,19 +35,23 @@ public class ConstantUtil {
     public static final String DISCUSSION_ITEM = "Discussion";
 
     public static final String FEATURED_ON_SKILLSHARE = "f";
-    public static final String TRENDING_NOW = "Trending Now";
+    public static final String TRENDING_NOW = "t";
     public static final String BEST_THIS_MONTH = "b";
 
     // intent flag
     public static final String USER_ID_FLAG = "user id";
+    public static final String USER_NAME_FLAG = "user name";
     public static final String TOOLBAR_TITLE_FLAG = "ttf";
     public static final String ID_FLAG = "id";
     public static final String SEE_ALL_FLAG = "see all";
     public static final String URL_FLAG = "url";
     public static final int SELECT_SKILLS_REQUEST_CODE = 44;
+    public static final int INIT_SKILLS_REQUEST_CODE = 47;
     public static final String SKILLS_FLAG = "skills";
     public static final String TYPE_FLAG = "type";
     public static final String SUBSCRIBERS_FLAG = "subscribers";
+    public static final String REVIEWS_FLAG = "reviews";
+    public static final String PROJECTS_FLAG = "projects";
     //Search
     public static final int FAIL_SEARCH = 293;
 

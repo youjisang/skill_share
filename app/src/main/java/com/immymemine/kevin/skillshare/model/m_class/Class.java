@@ -8,6 +8,11 @@ import java.util.List;
 
 public class Class {
     String _id;
+    String title;
+    String imageUrl;
+    String tutorName;
+    String totalDuration;
+
     List<Discussion> discussions;
     Lessons lessons;
     About about;
