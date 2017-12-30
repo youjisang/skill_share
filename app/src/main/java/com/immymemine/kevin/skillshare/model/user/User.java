@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.model.user;
 
-import java.security.acl.Group;
+import com.immymemine.kevin.skillshare.model.group.Group;
+
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class User
 
     private String email;
 
-        public String get_id() {
+    public String get_id() {
         return _id;
     }
 
@@ -43,7 +44,7 @@ public class User
 
     private List<String> followingSkills;
 
-    private List<Group> group;
+    private List<Group> groups;
 
     public String getRegistrationId ()
     {
@@ -153,17 +154,17 @@ public class User
         this.followingSkills = followingSkills;
     }
 
-    public List<Group> getGroup() {
-        return group;
+    public List<Group> getGroups() {
+        return groups;
     }
 
-    public void setGroup(List<Group> group) {
-        this.group = group;
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     @Override
     public String toString()
     {
-        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", imageUrl = "+imageUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", group = "+group+"]";
+        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", imageUrl = "+imageUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", groups = "+groups+"]";
     }
 }

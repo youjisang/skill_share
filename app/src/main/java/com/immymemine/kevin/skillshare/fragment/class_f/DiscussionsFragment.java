@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.fragment;
+package com.immymemine.kevin.skillshare.fragment.class_f;
 
 
 import android.content.Context;
@@ -15,14 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.DiscussionsAdapter;
+import com.immymemine.kevin.skillshare.adapter.class_adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
 import com.immymemine.kevin.skillshare.utility.communication_util.Subscribe;
@@ -95,7 +95,7 @@ public class DiscussionsFragment extends Fragment {
         String input = editText.getText().toString();
         if( !ValidationUtil.isEmpty(input) ) {
             editText.setText("");
-            User user = MainActivity.user;
+            User user = StateUtil.getInstance().getUserInstance();
             Discussion discussion = new Discussion(
                     input,
                     System.currentTimeMillis()+"",

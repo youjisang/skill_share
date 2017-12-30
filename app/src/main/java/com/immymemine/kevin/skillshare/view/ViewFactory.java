@@ -1,34 +1,30 @@
 package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.activity.SignInActivity;
+import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.dummy.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Main Activity 에서 사용하는 View Factory
@@ -36,16 +32,14 @@ import java.util.concurrent.Future;
  */
 
 public class ViewFactory {
+
     Context context;
     LayoutInflater inflater;
     RecyclerView recyclerView;
     InteractionInterface interactionInterface;
 
-    // TODO nThreads 를 정하는 합리적인 로직이 있어야한다.
-    public ExecutorService executor = Executors.newCachedThreadPool();
-
     // Singleton
-    private static ViewFactory v;
+    private static ViewFactory instance;
 
     private ViewFactory(Context context) {
         // context
@@ -58,15 +52,15 @@ public class ViewFactory {
     }
 
     public static ViewFactory getInstance(Context context) {
-        if (v == null) {
-            v = new ViewFactory(context);
+        if (instance == null) {
+            instance = new ViewFactory(context);
         }
 
-        return v;
+        return instance;
     }
 
     public void destroyViewFactory() {
-        v = null;
+        instance = null;
     }
 
     public LinearLayout getViewContainer() {
@@ -75,23 +69,12 @@ public class ViewFactory {
     }
 
     public View getWelcomeView() {
-        // 하나의 Thread 를 Thread pool 에서 가져와서 Callable 객체를 던져서 Thread 를 실행시킨다.
-        // Future< ? > >>> thread 가 끝나면 객체를 반환받는다.
-        Future<View> f = executor.submit(() -> {
-            View view = inflater.inflate(R.layout.welcome_view, null);
+        View view = inflater.inflate(R.layout.welcome_view, null);
 
-            view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
-            view.findViewById(R.id.button_sign_up).setOnClickListener(v -> interactionInterface.signUp());
+        view.findViewById(R.id.close_button).setOnClickListener(v -> interactionInterface.close());
+        view.findViewById(R.id.button_sign_up).setOnClickListener(v -> context.startActivity(new Intent(context, SignUpActivity.class)));
 
-            return view;
-        });
-
-        try {
-            return f.get(); // thread process 가 끝나면 return 값 반환
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return view;
     }
 
     class GeneralViewFactory implements Callable<View> {
@@ -111,12 +94,10 @@ public class ViewFactory {
             // recycler view setting
             recyclerView = view.findViewById(R.id.general_recycler_view);
 
-            Log.d("JUWONLEE", " here is call & thread name : " + Thread.currentThread().getName());
-
             if (classes == null)
                 recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context));
             else
-                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
+//                recyclerView.setAdapter(new GeneralRecyclerViewAdapter(context, classes));
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             // title setting
@@ -131,30 +112,18 @@ public class ViewFactory {
         }
     }
 
-    public View getGeneralView(String title, List<Class> classes) {
-        Future<View> f = executor.submit(new GeneralViewFactory(title, classes));
-        Log.d("JUWONLEE", "here is get general view & thread name : " + Thread.currentThread().getName());
-
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public View getGeneralView(String title) {
-        return getGeneralView(title, null);
+    public View getGeneralView(String title, List<Class> classes) throws Exception {
+        return new GeneralViewFactory(title, classes).call();
     }
 
     class GroupViewFactory implements Callable<View> {
         String title;
-        List<Group> groupList;
+        List<Group> groups;
 
 
-        public GroupViewFactory(String title, List<Group> groupList) {
+        public GroupViewFactory(String title, List<Group> groups) {
             this.title = title;
-            this.groupList = groupList;
+            this.groups = groups;
         }
 
         @Override
@@ -165,24 +134,17 @@ public class ViewFactory {
             recyclerView = view.findViewById(R.id.group_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groupList, context));
+//            recyclerView.setAdapter(new GroupRecyclerViewAdapter(groups, context));
 
             // title setting
-            ((TextView) view.findViewById(R.id.text_view_title2)).setText(title);
+            ((TextView) view.findViewById(R.id.text_view_title)).setText(title);
 
             return view;
         }
     }
 
-    public View getGroupView(String title, List<Group> groupList) {
-        Future<View> f = executor.submit(new GroupViewFactory(title, groupList));
-
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public View getGroupView(String title, List<Group> groupList) throws Exception {
+        return new GroupViewFactory(title, groupList).call();
     }
 
     class DiscoverViewFactory implements Callable<View> {
@@ -216,111 +178,81 @@ public class ViewFactory {
 
             recyclerView = view.findViewById(R.id.recycler_view_discover);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            recyclerView.setAdapter(new DiscoverRecyclerViewAdapter(context, discoverClass.getFeaturedClasses()));
+//            recyclerView.setAdapter(new DiscoverRecyclerViewAdapter(context, discoverClass.getFeaturedClasses()));
 
             return view;
         }
-
     }
-    public View getDiscoverView(DiscoverClass discoverClass) {
-        Future<View> f = executor.submit(new DiscoverViewFactory(discoverClass));
 
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public View getDiscoverView(DiscoverClass discoverClass) throws Exception {
+        return new DiscoverViewFactory(discoverClass).call();
     }
-    public View getDiscoverView() {
+
+    public View getDiscoverView() throws Exception {
         return getDiscoverView(null);
     }
 
     public View getYourClassesView() {
-        Future<View> f = executor.submit(
-                () -> {
-                    View view = inflater.inflate(R.layout.your_classes_view, null);
+        View view = inflater.inflate(R.layout.your_classes_view, null);
 
-                    view.findViewById(R.id.image_view_thumbnail).setOnClickListener(
-                        v -> {
+        view.findViewById(R.id.text_view_download).setOnClickListener(
+                v -> {
 
-                        }
-                    );
-                    return view;
                 }
         );
 
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        view.findViewById(R.id.image_view_thumbnail).setOnClickListener(
+                v -> {
+
+                }
+        );
+
+        return view;
     }
 
-    public View getMeView(User user) {
-        Future<View> f = executor.submit(
-                () -> {
-                    // main thread 에서 굳이 해주지 않아도 된다
-                    View view = inflater.inflate(R.layout.me_view, null);
+    public View getMeView() {
+        // main thread 에서 굳이 해주지 않아도 된다
+        View view = inflater.inflate(R.layout.me_view, null);
 
-                    // 이름, 닉네임 세팅
-                    ((TextView) view.findViewById(R.id.me_name)).setText(user.getName());
-                    ((TextView) view.findViewById(R.id.me_nickname)).setText(user.getNickname());
+        // 이름, 닉네임 세팅
+        User user = StateUtil.getInstance().getUserInstance();
 
-                    // followers, following <<< onClick setting...
-                    if (user.getFollowers() != null)
-                        ((TextView) view.findViewById(R.id.me_followers)).setText(user.getFollowers().size() + " Followers");
-                    else
-                        ((TextView) view.findViewById(R.id.me_followers)).setText("0 Followers");
+        ((TextView) view.findViewById(R.id.me_name)).setText(user.getName());
+        ((TextView) view.findViewById(R.id.me_nickname)).setText(user.getNickname());
 
-                    if (user.getFollowing() != null)
-                        ((TextView) view.findViewById(R.id.me_following)).setText("Following " + user.getFollowing().size());
-                    else
-                        ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
+        // followers, following <<< onClick setting...
+        if (user.getFollowers() != null)
+            ((TextView) view.findViewById(R.id.me_followers)).setText(user.getFollowers().size() + " Followers");
+        else
+            ((TextView) view.findViewById(R.id.me_followers)).setText("0 Followers");
 
-                    view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
+        if (user.getFollowing() != null)
+            ((TextView) view.findViewById(R.id.me_following)).setText("Following " + user.getFollowing().size());
+        else
+            ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
 
-                    return view;
-                }
-        );
+        view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
 
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return view;
     }
 
     public View getMeSkillView(List<String> skills) {
-        Future<View> f = executor.submit(
-                () -> {
-                    View view = inflater.inflate(R.layout.me_skill_view, null);
-                    RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
-                    FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
-                    layoutManager.setFlexDirection(FlexDirection.ROW);
+        View view = inflater.inflate(R.layout.me_skill_view, null);
 
-                    recyclerViewSkills.setLayoutManager(layoutManager);
-                    recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
+        RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        recyclerViewSkills.setLayoutManager(layoutManager);
+        recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
 
-                    Button personalize = view.findViewById(R.id.personalize);
-                    personalize.setOnClickListener(v -> interactionInterface.select());
-                    if (skills == null)
-                        view.findViewById(R.id.divider).setVisibility(View.GONE);
-                    else
-                        view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.personalize).setOnClickListener(v -> interactionInterface.select());
 
-                    return view;
-                }
-        );
+        if (skills == null || skills.size() == 0)
+            view.findViewById(R.id.divider).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return view;
     }
 
     public View getMeSkillView() {
@@ -328,35 +260,22 @@ public class ViewFactory {
     }
 
     public View getNotSignedInMeView() {
-        Future<View> f = executor.submit(
-                () -> {
-                    View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
-                    view.findViewById(R.id.button_sign_up).setOnClickListener(v -> {
-                        interactionInterface.signUp();
-                    });
-                    view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
-                        interactionInterface.signIn();
-                    });
-                    return view;
-                }
-        );
+        View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
 
-        try {
-            return f.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        view.findViewById(R.id.button_sign_up).setOnClickListener(v -> {
+            context.startActivity(new Intent(context, SignUpActivity.class));
+        });
+
+        view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
+            context.startActivity(new Intent(context, SignInActivity.class));
+        });
+
+        return view;
     }
 
     public interface InteractionInterface {
         // welcome view 닫기
         void close();
-
-        // sign up / in page 이동
-        void signUp();
-
-        void signIn();
 
         // select activity 로 이동
         void select();
@@ -366,37 +285,5 @@ public class ViewFactory {
 
         // sign out
         void signOut();
-    }
-
-    // 안쓰는 ====================================================================
-    class ToolbarFactory implements Runnable {
-        Toolbar toolbar_with_back_button;
-
-        @Override
-        public void run() {
-            toolbar_with_back_button = (Toolbar) inflater.inflate(R.layout.toolbar_with_back_button, null);
-            toolbar_with_back_button.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.toolbar_button_back) {
-                    interactionInterface.close();
-                }
-                return false;
-            });
-        }
-
-        public Toolbar getToolbar() {
-            return toolbar_with_back_button;
-        }
-    }
-
-    public Toolbar getToolbarWithBackButton() {
-        ToolbarFactory toolbarFactory = new ToolbarFactory();
-        Thread t = new Thread(toolbarFactory);
-        try {
-            t.join();
-            return toolbarFactory.toolbar_with_back_button;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

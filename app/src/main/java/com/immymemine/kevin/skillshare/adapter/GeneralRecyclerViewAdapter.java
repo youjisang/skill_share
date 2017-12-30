@@ -3,7 +3,6 @@ package com.immymemine.kevin.skillshare.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,19 +25,32 @@ import java.util.List;
  */
 
 public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecyclerViewAdapter.GeneralViewHolder>{
+
     Context context;
     List<Class> classes;
+
     public GeneralRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
-    public GeneralRecyclerViewAdapter(Context context, List<Class> classes) {
-        this.context = context;
+    public void update(List<Class> classes) {
         this.classes = classes;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(classes == null || classes.size() == 0) {
+            return ConstantUtil.NO_ITEM;
+        }
+        return super.getItemViewType(position);
     }
 
     @Override
     public GeneralViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == ConstantUtil.NO_ITEM)
+            return null;
+
         View view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_general, parent, false);
         return new GeneralViewHolder(view);
     }
@@ -47,7 +59,6 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     public void onBindViewHolder(GeneralViewHolder holder, int position) {
         if(classes != null) {
             Class mClass = classes.get(position);
-            Log.d("JUWONLEE", "here is general rv adapter & thread name : " + Thread.currentThread().getName());
             holder.classId = mClass.get_id();
             holder.textViewTitle.setText(mClass.getTitle());
             holder.textViewTutor.setText(mClass.getTutorName());
@@ -63,7 +74,8 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
     public int getItemCount() {
         if(classes != null)
             return classes.size();
-        return 5; // for test
+
+        return 0;
     }
 
     class GeneralViewHolder extends RecyclerView.ViewHolder {
@@ -75,7 +87,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         public GeneralViewHolder(View v) {
             super(v);
 
-            imageView = v.findViewById(R.id.image_view_tutor);
+            imageView = v.findViewById(R.id.image_view_group);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
             textViewTutor = v.findViewById(R.id.text_view_tutor_name);

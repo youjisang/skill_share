@@ -10,4 +10,19 @@ public class Group {
     String groupThumbnail;
     String memberCount;
 
+    public String get_id() {
+        return _id;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public String getGroupThumbnail() {
+        return groupThumbnail;
+    }
+
+    public String getMemberCount() {
+        return memberCount;
+    }
 }

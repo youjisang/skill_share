@@ -20,14 +20,14 @@ public class DiscoverClass {
     String tutorName;
     String tutorImageUrl;
     String followersCount;
-    List<FeaturedClass> featuredClasses;
-    List<Map<String, List<Class>>> classes;
+    List<Class> featuredClasses;
+    Map<String, List<Class>> classes;
 
     public String getTutorImageUrl() {
         return tutorImageUrl;
     }
 
-    public List<Map<String, List<Class>>> getClasses() {
+    public Map<String, List<Class>> getClasses() {
         return classes;
     }
 
@@ -67,7 +67,7 @@ public class DiscoverClass {
         return followersCount;
     }
 
-    public List<FeaturedClass> getFeaturedClasses() {
+    public List<Class> getFeaturedClasses() {
         return featuredClasses;
     }
 }

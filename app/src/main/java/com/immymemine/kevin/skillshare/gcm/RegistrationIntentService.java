@@ -52,10 +52,8 @@ public class RegistrationIntentService extends IntentService {
         requestBody.setRegistrationId(registrationId);
 
         // retrofit
-        GCMService deviceService = RetrofitHelper.createApi(GCMService.class);
-
-        // post
-        deviceService.register(requestBody)
+        RetrofitHelper.createApi(GCMService.class)
+                .register(requestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
