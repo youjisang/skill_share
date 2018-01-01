@@ -33,7 +33,7 @@ import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
-import com.immymemine.kevin.skillshare.model.dummy.Group;
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.Following;
 import com.immymemine.kevin.skillshare.model.user.SubscribeClass;
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
     // user followed skills
     List<String> followSkills = new ArrayList<>();
 
-    //group
-    List<Group> mygroupList, groupList1, groupList2;
+    List<Group> myGroup = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe(this::setHomeViewContainer, this::handleError);
 
-                                        groupDummyDataSetting();
 
                                         setContainer();
                                     }
@@ -220,6 +219,18 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::setHomeViewContainer, this::handleError);
+
+            //TODO 지상 groups 부분 test
+
+
+            RetrofitHelper.createApi(HomeService.class)
+                    .getGroups()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::setGroupViewContainer, this::handleError);
+
+            Log.e("group1", "groups--check");
+
 
             setContainer();
         }
@@ -302,43 +313,25 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
             if (f.get())
                 setViews();
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
 
-    private void groupDummyDataSetting() {
-        //TODO 지상 group dummydata 만들기
-
-        groupList1 = new ArrayList<Group>();
-        groupList1.add(new Group("6.4k", "Ux/Ui", "https://cdn-images-1.medium.com/max/2000/1*7pjzaWKedACc3-olWUghLg.png"));
-        groupList1.add(new Group("4.6k", "Design a Beautiful App", "https://learn.canva.com/wp-content/uploads/2015/10/40-People-Through-History-Who-Changed-Design-For-Good-04.png"));
-        groupList1.add(new Group("5.6k", "Moblie/App", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIeQXRYXiQyOD3f_Kbw3lvlvo92XMcMImEJrqcwKq1JliJQkfj"));
-
-
-        groupList2 = new ArrayList<>();
-        groupList2.add(new Group("2.1k", "codings", "http://cfile23.uf.tistory.com/image/9907AF3359C0C1153C71D2"));
-        groupList2.add(new Group("3.8k", "music", "https://i.ytimg.com/vi/eqEcRwmV2vU/maxresdefault.jpg"));
-        groupList2.add(new Group("7.1k", "marketing", "http://img2.sbs.co.kr/img/sbs_cms/CH/2016/06/06/CH82423479_w300_h300.jpg"));
-
-
-        mygroupList = new ArrayList<>();
-        //----------------------------------
-
-    }
 
     Future<LinearLayout> g;
     Future<View> y, m;
 
     private void setViews() {
 
-        g = executor.submit(
-                () -> {
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
-                    return group_view_container;
-                }
-        );
+//        g = executor.submit(
+//                () -> {
+//                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), myGroup));
+//                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), featuredGroup));
+//                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), recentlyActiveGroup));
+//                    return group_view_container;
+//                }
+//        );
 
         y = executor.submit(
                 () -> {
@@ -349,15 +342,32 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
 
         m = executor.submit(
                 () -> {
-                    if (isSignIn) {
+//                    if (isSignIn) {
                         meView = viewFactory.getMeView(user);
                         return meView;
-                    } else {
-                        notSignedInMeView = viewFactory.getNotSignedInMeView();
-                        return notSignedInMeView;
-                    }
+//                    } else {
+//                        notSignedInMeView = viewFactory.getNotSignedInMeView();
+//                        return notSignedInMeView;
+//                    }
                 }
         );
+    }
+
+    private void setGroupViewContainer(Map<String, List<Group>> groups) {
+
+        Log.e("group2", "groups--check");
+        progressBar.setVisibility(View.VISIBLE);
+
+        int i = group_view_container.getChildCount();
+        for (String key : groups.keySet()) {
+            group_view_container.addView(viewFactory.getGroupView(key, groups.get(key)), i);
+            i++;
+        }
+        drawingView(group_view_container);
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+
     }
 
     private void setDiscoverViewContainer() {
@@ -547,6 +557,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     } else {
                         changeToolbar(R.id.navigation_groups);
 
+                        drawingView(group_view_container);
+
                         try {
                             drawingView(g.get());
                         } catch (Exception e) {
@@ -586,12 +598,12 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     } else {
                         changeToolbar(R.id.navigation_me);
 
-                        if (isSignIn) {
+//                        if (isSignIn) {
                             setMeViewContainer();
                             drawingView(me_view_container);
-                        } else {
-                            drawingView(notSignedInMeView);
-                        }
+//                        } else {
+//                            drawingView(notSignedInMeView);
+//                        }
 
                         return true;
                     }
@@ -707,7 +719,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::setHomeViewContainer, this::handleError);
 
-                groupDummyDataSetting();
+//                groupDummyDataSetting();
                 setContainer();
             }
 
@@ -718,36 +730,37 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
 
                     int groupItemPosition = data.getIntExtra("position", 0);
+                    String group_id = data.getStringExtra("groupId");
                     String groupTitle_s = data.getStringExtra("groupName");
                     String groupNum_s = data.getStringExtra("groupJoinNum");
                     String imageUri_s = data.getStringExtra("groupImageUri");
-                    mygroupList.add(new Group(groupNum_s, groupTitle_s, imageUri_s));
-                    int i;
-                    for (i = 0; i < groupList1.size(); i++) {
-                        if (groupTitle_s.equals(groupList1.get(i).getGroupName())) {
-                            groupList1.remove(i);
-                        }
-                    }
+                    myGroup.add(new Group(group_id, groupTitle_s, imageUri_s, groupNum_s));
 
-                    for (i = 0; i < groupList2.size(); i++) {
-                        if (groupTitle_s.equals(groupList2.get(i).getGroupName())) {
-                            groupList2.remove(i);
-                        }
-                    }
+                }
 
-                    Log.e("MainActivity", "check============" + mygroupList.get(0).getGroupName());
-                    Log.e("MainActivity", "check position============" + groupItemPosition);
-                    group_view_container.removeAllViews();
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-                    group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), groupList2));
 
+                group_view_container.removeAllViews();
+                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), myGroup));
+//                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), myGroup));
+//                group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), featuredGroup));
+//                group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), recentlyActiveGroup));
+
+
+            } else if (requestCode == 982) {
+                Log.e("MainActivity2", "fromViewFactory");
+                if (resultCode == RESULT_OK) {
+
+                    viewFactory.getRealPathFromURI(data.getData());
+                   
 
                 }
             }
-            //--------------------------------------------------------------------------------------------------------------
+
+
         }
+        //--------------------------------------------------------------------------------------------------------------
     }
+
 
     @Override
     protected void onDestroy() {

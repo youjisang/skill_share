@@ -1,6 +1,11 @@
 package com.immymemine.kevin.skillshare.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,12 +19,13 @@ import android.widget.TextView;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.adapter.DiscoverRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.GroupRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
-import com.immymemine.kevin.skillshare.model.dummy.Group;
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
@@ -280,6 +286,15 @@ public class ViewFactory {
                         ((TextView) view.findViewById(R.id.me_following)).setText("Following 0");
 
                     view.findViewById(R.id.me_button).setOnClickListener(v -> interactionInterface.signOut());
+                    view.findViewById(R.id.me_image).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_PICK);
+                            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            ((Activity)context).startActivityForResult(intent,982);
+                        }
+                    });
 
                     return view;
                 }
@@ -292,6 +307,19 @@ public class ViewFactory {
             return null;
         }
     }
+
+    public String getRealPathFromURI(Uri imgUri){
+
+        int column_index =0;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(imgUri,proj,null,null,null);
+        if(cursor.moveToFirst()){
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        }
+        return cursor.getString(column_index);
+    }
+
+
 
     public View getMeSkillView(List<String> skills) {
         Future<View> f = executor.submit(
@@ -399,4 +427,6 @@ public class ViewFactory {
             return null;
         }
     }
+
+
 }

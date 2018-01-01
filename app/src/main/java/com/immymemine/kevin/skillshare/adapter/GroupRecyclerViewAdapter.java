@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.GroupActivity;
-import com.immymemine.kevin.skillshare.model.dummy.Group;
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -63,8 +62,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         if (dataValidationCheck) {
             Group group = groups.get(position);
             holder.textViewGroup.setText(group.getGroupName());
-            holder.textViewCount.setText(group.getGroupJoinNum());
-            Glide.with(context).load(group.getImageUrl()).into(holder.imageView);
+            holder.textViewCount.setText(group.getMemberCount());
+            Glide.with(context).load(group.getGroupThumbnail()).into(holder.imageView);
         }
     }
 
@@ -95,8 +94,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
                     intent.putExtra("position", getLayoutPosition());
                     intent.putExtra("groupName", groups.get(getLayoutPosition()).getGroupName());
-                    intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getGroupJoinNum());
-                    intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getImageUrl());
+                    intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getMemberCount());
+                    intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getGroupThumbnail());
 
                     ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
 

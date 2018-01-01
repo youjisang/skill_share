@@ -57,7 +57,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     private Button groupJoin;
     private ImageButton back;
     private TextView groupTitle, groupNum;
-    private String groupTitle_s, groupNum_s, imageUri_s;
+    private String group_id, groupTitle_s, groupNum_s, imageUri_s;
     private int position;
     private LinearLayout layout_discussion;
 
@@ -151,10 +151,11 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
 
                 //TODO 지상 로그인이 되어 있을 때, ▽
 
-                if (StateUtil.getInstance().getState()==true) {
+                if (StateUtil.getInstance().getState()==false) {
                     Log.e("check",""+StateUtil.getInstance().getState());
                     Intent intent = new Intent();
                     intent.putExtra("position", position);
+                    intent.putExtra("group_id", group_id );
                     intent.putExtra("groupName", groupTitle_s);
                     intent.putExtra("groupJoinNum", groupNum_s);
                     intent.putExtra("groupImageUri", imageUri_s);

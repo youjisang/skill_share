@@ -3,6 +3,7 @@ package com.immymemine.kevin.skillshare.network.api;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
+import com.immymemine.kevin.skillshare.model.user.User;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface HomeService {
     Observable<List<Map<String, List<Class>>>> getHomeClasses(@Query("types") List<String> types);
 
     @GET("group")
-    Observable< List< List<Group> > > getGroups(@Query("my_groups") List<String> groups);
+    Observable<Map<String, List<Group>>> getGroups();
 
     @GET("discover")
     Observable<DiscoverClass> getDiscoverClass();
