@@ -55,6 +55,8 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     @Override
     public int getItemCount() {
+        if(classes == null)
+            return 0;
         return classes.size();
     }
 

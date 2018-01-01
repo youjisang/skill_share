@@ -6,76 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/background_light"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <ImageButton
-            android:id="@+id/toolbar_button_r"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@android:color/transparent"
-            android:paddingRight="8dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/image_search_24dp"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <ImageButton
-            android:id="@+id/toolbar_button_l"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@android:color/transparent"
-            android:paddingRight="8dp"
-            app:srcCompat="@drawable/ic_home_black_24dp"
-            tools:layout_editor_absoluteX="387dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-    </android.support.v7.widget.Toolbar>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="659dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-        <ScrollView
-            android:id="@+id/scroll_view"
+        app:layout_constraintStart_toStartOf="parent">
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
-            <!--
-            <LinearLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
-            -->
-        </ScrollView>
+            android:layout_height="match_parent">
+            <fragment
+                android:name="com.immymemine.kevin.skillshare.fragment.main_f.HomeFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <!--Bottom Navigation Bar-->

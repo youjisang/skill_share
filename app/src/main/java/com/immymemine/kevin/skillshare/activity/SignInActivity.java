@@ -22,6 +22,7 @@ import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -162,7 +163,9 @@ public class SignInActivity extends AppCompatActivity{
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
-            intent.putExtra(ConstantUtil.USER_ID_FLAG, response.getUserId());
+            StateUtil state = StateUtil.getInstance();
+            state.setState(true);
+            state.setUserInstance(response.getUser());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             startActivity(intent);
         } else {

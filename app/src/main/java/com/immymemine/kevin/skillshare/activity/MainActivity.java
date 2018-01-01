@@ -9,67 +9,30 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
-import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.fragment.main_f.DiscoverFragment;
+import com.immymemine.kevin.skillshare.fragment.main_f.GroupFragment;
+import com.immymemine.kevin.skillshare.fragment.main_f.HomeFragment;
+import com.immymemine.kevin.skillshare.fragment.main_f.MeFragment;
+import com.immymemine.kevin.skillshare.fragment.main_f.OfflineMeFragment;
+import com.immymemine.kevin.skillshare.fragment.main_f.YourClassesFragment;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
-import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
-import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.model.user.User;
-import com.immymemine.kevin.skillshare.network.RetrofitHelper;
-import com.immymemine.kevin.skillshare.network.api.HomeService;
-import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
-import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-public class MainActivity extends AppCompatActivity implements ViewFactory.InteractionInterface {
-
-    // view factory
-    ViewFactory viewFactory;
-    ExecutorService executor = Executors.newCachedThreadPool();
-
-    // toolbar initiate
-    Toolbar toolbar;
-    TextView toolbar_title;
-    ImageButton toolbar_left_button, toolbar_right_button;
-
-    // view container
-    LinearLayout home_view_container, group_view_container, discover_view_container, me_view_container;
-    View discoverView, yourClassesView, meView, meSkillView, notSignedInMeView;
-    SkillsRecyclerViewAdapter meSkillRecyclerViewAdapter;
-    GeneralRecyclerViewAdapter generalRecyclerViewAdapter;
-
-    // attach view container to scroll view
-    ScrollView scrollView;
+public class MainActivity extends AppCompatActivity {
 
     AHBottomNavigation bottomNavigation; // bottom navigation view
     ProgressBar progressBar; // progress bar
@@ -93,9 +56,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         initiateView(); // initiate view
         setBottomNavigation(); // navigation view setting
 
-        viewFactory = ViewFactory.getInstance(this); // view 생성을 담당할 view factory
-        home_view_container = viewFactory.getViewContainer(); // view container
-
         stateUtil = StateUtil.getInstance(); // user state check util
         setState();
 
@@ -108,42 +68,15 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         // 로그인 상태 확인
         Intent intent = getIntent();
 
-        if (intent.getAction() != null) {
-            stateUtil.setState(true);
-
+        if (stateUtil.getState()) {
             switch (intent.getAction()) {
                 case ConstantUtil.SIGN_IN_SUCCESS:
-                    String userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
-
-                    RetrofitHelper.createApi(UserService.class)
-                            .getUser(userId)
-                            .observeOn(Schedulers.io())
-                            .subscribeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    (User user) -> {
-                                        stateUtil.setUserInstance(user);
-
-                                        RetrofitHelper.createApi(HomeService.class)
-                                                .getHomeClasses(user.getFollowingSkills())
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(this::setHomeViewContainer, this::handleError);
-
-                                        setContainer();
-
-                                    }, (Throwable error) -> {
-                                        // TODO handle networking error
-                                    }
-                            );
                     break;
                 case ConstantUtil.SIGN_IN_BY_GOOGLE:
                     account = GoogleSignIn.getLastSignedInAccount(this);
                     break;
                 case ConstantUtil.SIGN_UP_SUCCESS:
-                    userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
                     user = stateUtil.getUserInstance();
-                    user.set_id(userId);
-                    user.setName(intent.getStringExtra(ConstantUtil.USER_NAME_FLAG));
                     startActivityForResult(new Intent(MainActivity.this, SelectSkillsActivity.class), ConstantUtil.INIT_SKILLS_REQUEST_CODE);
                     break;
                 case ConstantUtil.SIGN_UP_BY_GOOGLE:
@@ -151,75 +84,21 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     account = GoogleSignIn.getLastSignedInAccount(this);
                     break;
                 case ConstantUtil.SIGN_OUT:
-                    stateUtil.setState(false);
-                    home_view_container.addView(viewFactory.getWelcomeView());
+                    stateUtil.setUserInstance(null);
                     bottomNavigation.setCurrentItem(4);
                     break;
             }
-        } else {
-            stateUtil.setState(false);
-
-            RetrofitHelper.createApi(HomeService.class)
-                    .getHomeClasses(followSkills)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::setHomeViewContainer, this::handleError);
-
-            setContainer();
         }
     }
 
-    private void setHomeViewContainer(List<Map<String, List<Class>>> classes) {
-        progressBar.setVisibility(View.VISIBLE);
-
-        Future<Boolean> future = executor.submit(
-                () -> {
-                    if(!stateUtil.getState())
-                        addWelcomeView();
-
-                    // 기본 view 추가
-                    int i = home_view_container.getChildCount();
-
-                    for (Map<String, List<Class>> item : classes) {
-                        for (String key : item.keySet()) {
-                            try {
-                                home_view_container.addView(viewFactory.getGeneralView(key, item.get(key)), i);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            i++;
-                        }
-                    }
-
-                    return true;
-                }
-        );
-
-        try {
-            if(future.get()) {
-                drawingView(home_view_container);
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addWelcomeView() {
-        home_view_container.addView(viewFactory.getWelcomeView());
-    }
-
-    private void handleError(Throwable error) {
-        Log.e("JUWONLEE", error.getMessage());
-    }
+    HomeFragment homeFragment;
+    GroupFragment groupFragment;
+    DiscoverFragment discoverFragment;
+    YourClassesFragment yourClassesFragment;
+    MeFragment meFragment;
+    OfflineMeFragment offlineMeFragment;
 
     private void initiateView() {
-        toolbar = findViewById(R.id.toolbar);
-        toolbar_title = findViewById(R.id.toolbar_title);
-        toolbar_left_button = findViewById(R.id.toolbar_button_l);
-        toolbar_right_button = findViewById(R.id.toolbar_button_r);
-
-        scrollView = findViewById(R.id.scroll_view);
 
         // refresh view setting
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
@@ -233,195 +112,7 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         });
         refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
 
-        toolbar_right_button.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-            startActivity(intent);
-        });
-
         progressBar = findViewById(R.id.progress_bar);
-    }
-    
-    private void setContainer() {
-        Future<Boolean> f = executor.submit(
-                () -> {
-                    // view container 만들기
-                    group_view_container = viewFactory.getViewContainer();
-                    discover_view_container = viewFactory.getViewContainer();
-                    me_view_container = viewFactory.getViewContainer();
-                    return true;
-                }
-        );
-
-        try {
-            if (f.get())
-                setViews();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    Future<LinearLayout> g;
-    Future<View> y, m;
-
-    private void setYourClassesView() {
-
-    }
-
-    private void setViews() {
-
-        y = executor.submit(
-                () -> {
-                    yourClassesView = viewFactory.getYourClassesView();
-                    return yourClassesView;
-                }
-        );
-    }
-
-    private void setGroupViewContainer() {
-        try {
-//            group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), mygroupList));
-//            group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), groupList1));
-//            group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups),groupList2));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void setDiscoverViewContainer() {
-        progressBar.setVisibility(View.VISIBLE);
-
-        RetrofitHelper.createApi(HomeService.class)
-                .getDiscoverClass()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        (DiscoverClass discoverClass) -> {
-                            View discoverView = viewFactory.getDiscoverView(discoverClass);
-
-                            Glide.with(this).load(discoverClass.getTutorImageUrl())
-                                    .apply(RequestOptions.circleCropTransform())
-                                    .into((ImageView) discoverView.findViewById(R.id.image_view_group));
-
-                            Glide.with(this).load(discoverClass.getImageUrl())
-                                    .apply(RequestOptions.centerCropTransform())
-                                    .into((ImageView) discoverView.findViewById(R.id.image_view_featured_class));
-
-                            discover_view_container.addView(discoverView);
-
-//                            for (Map<String, List<Class>> item : discoverClass.getClasses()) {
-//                                for (String key : item.keySet()) {
-//                                    discover_view_container.addView(viewFactory.getGeneralView(key, item.get(key)));
-//                                }
-//                            }
-
-                            drawingView(discover_view_container);
-
-                            progressBar.setVisibility(View.INVISIBLE);
-
-                        }, this::handleError
-                );
-    }
-
-    private void setYourClassesViewContainer() {
-        progressBar.setVisibility(View.VISIBLE);
-
-        yourClassesView = viewFactory.getYourClassesView();
-
-        if (stateUtil.getState() && stateUtil.getUserInstance().getSubscribeClass() != null) {
-            ((TextView)yourClassesView.findViewById(R.id.text_view_subscribed_count))
-                    .setText(stateUtil.getUserInstance().getSubscribeClass().size() + " Classes");
-
-            Glide.with(MainActivity.this)
-                    .load(user.getSubscribeClass().get(0).getClassThumbnail())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into((ImageView) yourClassesView.findViewById(R.id.image_view_thumbnail));
-        }
-
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    private void setMeViewContainer() {
-        progressBar.setVisibility(View.VISIBLE);
-
-        if(stateUtil.getState()) {
-            meView = viewFactory.getMeView();
-        } else {
-            notSignedInMeView = viewFactory.getNotSignedInMeView();
-            return;
-        }
-
-        Glide.with(this)
-                .load(user.getImageUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .apply(RequestOptions.placeholderOf(R.drawable.image_profile))
-                .into(((ImageView) meView.findViewById(R.id.me_image)));
-
-        me_view_container.addView(meView);
-
-        if (followSkills.size() > 3)
-            meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
-        else
-            meSkillView = viewFactory.getMeSkillView();
-
-        meSkillRecyclerViewAdapter = (SkillsRecyclerViewAdapter) ((RecyclerView) meSkillView.findViewById(R.id.recycler_view_skills)).getAdapter();
-
-        me_view_container.addView(meSkillView);
-
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
-    private void drawingView(LinearLayout viewContainer) {
-        // remove previous view
-        scrollView.removeAllViewsInLayout();
-        scrollView.requestLayout();
-
-        // add selected view
-        scrollView.addView(viewContainer);
-    }
-
-    private void drawingView(View view) {
-        // remove previous view
-        scrollView.removeAllViewsInLayout();
-        scrollView.requestLayout();
-
-        // add selected view
-        scrollView.addView(view);
-    }
-
-    private void changeToolbar(int id) {
-        // to do on main thread
-        if (id == R.id.navigation_home) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_title.setText("Home");
-            toolbar_left_button.setVisibility(View.GONE);
-            toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if (id == R.id.navigation_groups) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_title.setText("Groups");
-            toolbar_left_button.setVisibility(View.GONE);
-            toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if (id == R.id.navigation_discover) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_title.setText("Discover");
-            toolbar_left_button.setVisibility(View.VISIBLE);
-            toolbar_right_button.setVisibility(View.VISIBLE);
-        } else if (id == R.id.navigation_your_classes) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_title.setText("Your Classes");
-            toolbar_left_button.setVisibility(View.GONE);
-            toolbar_right_button.setVisibility(View.GONE);
-        } else if (id == R.id.navigation_me) {
-
-            if (stateUtil.getState())
-                toolbar.setVisibility(View.GONE);
-            else {
-                toolbar.setVisibility(View.VISIBLE);
-                toolbar_title.setText("Me");
-                toolbar_left_button.setVisibility(View.GONE);
-                toolbar_right_button.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     // 네비게이션바
@@ -440,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#ffffff"));
 
         // Change colors
-        bottomNavigation.setAccentColor(getResources().getColor(R.color.IcActive));
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.IcInactive));
+//        bottomNavigation.setAccentColor(getResources().getColor(R.color.IcActive));
+//        bottomNavigation.setInactiveColor(getResources().getColor(R.color.IcInactive));
 
         // Force to tint the drawable (useful for font with icon for example)
         bottomNavigation.setForceTint(true);
@@ -467,23 +158,38 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     if (wasSelected) {
                         return false;
                     } else {
-                        // toolbar 바꾸기
-                        changeToolbar(R.id.navigation_home);
+                        if(homeFragment == null) {
+                            homeFragment = new HomeFragment();
 
-                        // container 에 담기 ( 그리기 )
-                        drawingView(home_view_container);
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .add(R.id.fragment_container, homeFragment)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, homeFragment)
+                                    .commit();
+                        }
+
                         return true;
                     }
                 case 1:
                     if (wasSelected) {
                         return false;
                     } else {
-                        changeToolbar(R.id.navigation_groups);
+                        if(groupFragment == null) {
+                            groupFragment = new GroupFragment();
 
-                        try {
-                            drawingView(g.get());
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .add(R.id.fragment_container, groupFragment)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, groupFragment)
+                                    .commit();
                         }
                         return true;
                     }
@@ -491,26 +197,41 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     if (wasSelected) {
                         return false;
                     } else {
-                        changeToolbar(R.id.navigation_discover);
+                        if(discoverFragment == null) {
+                            discoverFragment = new DiscoverFragment();
 
-                        if(discover_view_container.getChildCount() < 3)
-                            setDiscoverViewContainer();
-                        else
-                            drawingView(discover_view_container);
-
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .add(R.id.fragment_container, discoverFragment)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, discoverFragment)
+                                    .commit();
+                        }
                         return true;
                     }
                 case 3:
                     if (wasSelected) {
                         return false;
                     } else {
-                        changeToolbar(R.id.navigation_your_classes);
+                        if(yourClassesFragment == null) {
+                            Log.d("JUWONLEE", "YOUR NULL");
+                            yourClassesFragment = new YourClassesFragment();
 
-                        if (yourClassesView == null) {
-                            setYourClassesViewContainer();
-                            drawingView(yourClassesView);
-                        } else
-                            drawingView(yourClassesView);
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .add(R.id.fragment_container, yourClassesFragment)
+                                    .commit();
+                        } else {
+                            Log.d("JUWONLEE", "YOUR NOT NULL");
+
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, yourClassesFragment)
+                                    .commit();
+                        }
 
                         return true;
                     }
@@ -518,15 +239,40 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                     if (wasSelected) {
                         return false;
                     } else {
-                        changeToolbar(R.id.navigation_me);
+                        if(stateUtil.getState()) {
+                            if(meFragment == null) {
+                                Log.d("JUWONLEE", "ME NULL");
+                                meFragment = new MeFragment();
 
-                        if (stateUtil.getState()) {
-                            setMeViewContainer();
-                            drawingView(me_view_container);
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .add(R.id.fragment_container, meFragment)
+                                        .commit();
+                            } else {
+                                Log.d("JUWONLEE", "ME NOT NULL");
+
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.fragment_container, meFragment)
+                                        .commit();
+                            }
+
                         } else {
-                            drawingView(notSignedInMeView);
-                        }
+                            if(offlineMeFragment == null) {
+                                Log.d("JUWONLEE", "OFFLINE");
+                                offlineMeFragment = new OfflineMeFragment();
 
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .add(R.id.fragment_container, offlineMeFragment)
+                                        .commit();
+                            } else {
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.fragment_container, offlineMeFragment)
+                                        .commit();
+                            }
+                        }
                         return true;
                     }
             }
@@ -558,32 +304,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         }
     }
 
-    // Interaction Listener
-    @Override
-    public void close() {
-        home_view_container.removeViewAt(0);
-    }
-
-    @Override
-    public void select() {
-        // 선택된 카테고리들을 받아와서 그려줘야 함
-        // startActivityForResult();
-        Intent intent = new Intent(MainActivity.this, SelectSkillsActivity.class);
-        if (user.getFollowingSkills() != null)
-            intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) user.getFollowingSkills());
-        startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
-    }
-
-    @Override
-    public void seeAll(String type) {
-        Intent intent = new Intent(MainActivity.this, SeeAllActivity.class);
-        // title >> int
-        // ConstantUtil
-        intent.putExtra(ConstantUtil.TYPE_FLAG, type);
-        startActivity(intent);
-    }
-
-    @Override
     public void signOut() {
 //        if(isSignIn) {
 //            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(status -> {
@@ -608,9 +328,6 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
         if (resultCode == RESULT_OK) {
             if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
-                if (skills != null && skills.size() > 0)
-                    meSkillView.findViewById(R.id.divider).setVisibility(View.VISIBLE);
-                meSkillRecyclerViewAdapter.update(skills);
                 user.setFollowingSkills(skills);
             } else if(requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
@@ -621,24 +338,9 @@ public class MainActivity extends AppCompatActivity implements ViewFactory.Inter
                 followSkills.addAll(skills);
                 followSkills.add(ConstantUtil.TRENDING_NOW);
                 followSkills.add(ConstantUtil.BEST_THIS_MONTH);
-
-                RetrofitHelper.createApi(HomeService.class)
-                        .getHomeClasses(followSkills)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::setHomeViewContainer, this::handleError);
-
-                setContainer();
             }
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewFactory.destroyViewFactory();
-    }
-
 }
 
 

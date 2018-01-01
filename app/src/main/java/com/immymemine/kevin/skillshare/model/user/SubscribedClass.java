@@ -4,9 +4,9 @@ package com.immymemine.kevin.skillshare.model.user;
  * Created by quf93 on 2017-11-29.
  */
 
-public class SubscribeClass {
+public class SubscribedClass {
     // test
-    public SubscribeClass(String classThumbnail, String feedback, String title, String totalDuration, String classId, String views, String tutorName) {
+    public SubscribedClass(String classThumbnail, String feedback, String title, String totalDuration, String classId, String views, String tutorName) {
         this.classThumbnail = classThumbnail;
         this.feedback = feedback;
         this.title = title;

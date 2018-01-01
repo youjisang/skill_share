@@ -54,10 +54,9 @@ public class DiscoverFragment extends Fragment {
         RecyclerView recyclerViewTrendingClasses = view.findViewById(R.id.recycler_view_t);
         RecyclerView recyclerViewPopularClasses = view.findViewById(R.id.recycler_view_p);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewDiscover.setLayoutManager(layoutManager);
-        recyclerViewTrendingClasses.setLayoutManager(layoutManager);
-        recyclerViewPopularClasses.setLayoutManager(layoutManager);
+        recyclerViewDiscover.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewTrendingClasses.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewPopularClasses.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
         dAdapter = new GeneralRecyclerViewAdapter(context);
         recyclerViewDiscover.setAdapter(dAdapter);
@@ -76,29 +75,24 @@ public class DiscoverFragment extends Fragment {
     }
 
     private void handleResponse(DiscoverClass discoverClass) {
-        new Thread() {
-            @Override
-            public void run() {
-                ((TextView)view.findViewById(R.id.text_view_featured_class_title)).setText(discoverClass.getTitle());
-                ((TextView)view.findViewById(R.id.text_view_featured_class_duration)).setText(TimeUtil.calculateVideoTime(discoverClass.getDuration()));
-                ((TextView)view.findViewById(R.id.text_view_featured_class_review_percent)).setText(discoverClass.getReviewPercent()+"%");
-                ((TextView)view.findViewById(R.id.text_view_featured_class_subscriber_count)).setText(discoverClass.getSubscriberCount());
+        ((TextView)view.findViewById(R.id.text_view_featured_class_title)).setText(discoverClass.getTitle());
+        ((TextView)view.findViewById(R.id.text_view_featured_class_duration)).setText(TimeUtil.calculateVideoTime(discoverClass.getDuration()));
+        ((TextView)view.findViewById(R.id.text_view_featured_class_review_percent)).setText(discoverClass.getReviewPercent()+"%");
+        ((TextView)view.findViewById(R.id.text_view_featured_class_subscriber_count)).setText(discoverClass.getSubscriberCount());
 
-                ((TextView)view.findViewById(R.id.text_view_tutor_name)).setText(discoverClass.getTutorName());
+        ((TextView)view.findViewById(R.id.text_view_tutor_name)).setText(discoverClass.getTutorName());
 
-                view.findViewById(R.id.relative_layout_class).setOnClickListener(v -> {
-                    // class activity 이동
-                    String classId = discoverClass.get_id();
-                    Toast.makeText(context, "Class ID : " + classId, Toast.LENGTH_LONG).show();
-                });
+        view.findViewById(R.id.relative_layout_class).setOnClickListener(v -> {
+            // class activity 이동
+            String classId = discoverClass.get_id();
+            Toast.makeText(context, "Class ID : " + classId, Toast.LENGTH_LONG).show();
+        });
 
-                view.findViewById(R.id.relative_layout_tutor).setOnClickListener(v -> {
-                    // profile activity 이동
-                    String tutorId = discoverClass.getTutorId();
-                    Toast.makeText(context, "Tutor ID : " + tutorId, Toast.LENGTH_LONG).show();
-                });
-            }
-        }.start();
+        view.findViewById(R.id.relative_layout_tutor).setOnClickListener(v -> {
+            // profile activity 이동
+            String tutorId = discoverClass.getTutorId();
+            Toast.makeText(context, "Tutor ID : " + tutorId, Toast.LENGTH_LONG).show();
+        });
 
         Glide.with(this).load(discoverClass.getImageUrl())
                 .apply(RequestOptions.centerCropTransform())

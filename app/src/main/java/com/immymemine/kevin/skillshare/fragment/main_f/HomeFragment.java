@@ -2,21 +2,25 @@ package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SearchActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.HomeRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
@@ -36,16 +40,9 @@ public class HomeFragment extends Fragment {
     Context context;
     HomeRecyclerViewAdapter adapter;
 
+    Toolbar toolbar;
     public HomeFragment() {
         // Required empty public constructor
-    }
-
-    public static HomeFragment newInstace(List<String> followSkills) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putStringArrayList(ConstantUtil.FOLLOW_SKILLS, (ArrayList<String>) followSkills);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -55,19 +52,34 @@ public class HomeFragment extends Fragment {
 
         context = getActivity();
 
+        toolbar = view.findViewById(R.id.toolbar);
+
         if(!StateUtil.getInstance().getState()) {
             FrameLayout welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
-            welcomeViewContainer.addView(ViewFactory.getInstance(context).getWelcomeView());
+            View welcomeView = ViewFactory.getInstance(context).getWelcomeView();
+            welcomeView.findViewById(R.id.close_button).setOnClickListener(
+                    v -> {
+                        welcomeViewContainer.removeView(welcomeView);
+                    }
+            );
+            welcomeViewContainer.addView(welcomeView);
         }
 
-        if( getArguments() != null ) {
-            List<String> followSkills = getArguments().getStringArrayList(ConstantUtil.FOLLOW_SKILLS);
-            RetrofitHelper.createApi(HomeService.class)
-                    .getHomeClasses(followSkills)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleResponse, this::handleError);
-        }
+        view.findViewById(R.id.toolbar_button_search).setOnClickListener(
+                v -> {
+                    Intent intent = new Intent(context, SearchActivity.class);
+                    startActivity(intent);
+                }
+        );
+
+        List<String> followSkills = (StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) ?
+                StateUtil.getInstance().getUserInstance().getFollowingSkills() : new ArrayList<>();
+
+        RetrofitHelper.createApi(HomeService.class)
+                .getHomeClasses(followSkills)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleResponse, this::handleError);
 
         // RecyclerView setting
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_home);
@@ -84,5 +96,12 @@ public class HomeFragment extends Fragment {
 
     private void handleError(Throwable error) {
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ((AppCompatActivity)context).setSupportActionBar(toolbar);
     }
 }

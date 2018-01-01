@@ -10,7 +10,7 @@ import java.util.List;
 
 public class User
 {
-    private List<SubscribeClass> subscribeClass;
+    private List<SubscribedClass> subscribedClasses;
 
     private List<Discussion> discussion;
 
@@ -45,6 +45,14 @@ public class User
     private List<String> followingSkills;
 
     private List<Group> groups;
+
+    public List<SubscribedClass> getSubscribedClasses() {
+        return subscribedClasses;
+    }
+
+    public void setSubscribedClasses(List<SubscribedClass> subscribedClasses) {
+        this.subscribedClasses = subscribedClasses;
+    }
 
     public String getRegistrationId ()
     {
@@ -106,14 +114,6 @@ public class User
         this.name = name;
     }
 
-    public List<SubscribeClass> getSubscribeClass() {
-        return subscribeClass;
-    }
-
-    public void setSubscribeClass(List<SubscribeClass> subscribeClass) {
-        this.subscribeClass = subscribeClass;
-    }
-
     public List<Discussion> getDiscussion() {
         return discussion;
     }
@@ -165,6 +165,6 @@ public class User
     @Override
     public String toString()
     {
-        return "ClassPojo [subsribeClass = "+subscribeClass+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", imageUrl = "+imageUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", groups = "+groups+"]";
+        return "ClassPojo [subsribedClasses = "+subscribedClasses+", discussion = "+discussion+", registrationId = "+registrationId+", nickname = "+nickname+", password = "+password+", project = "+project+", following = "+following+", followers = "+followers+", imageUrl = "+imageUrl+", email = "+email+", userId = "+_id+", name = "+name+", followingSkills = "+followingSkills+", groups = "+groups+"]";
     }
 }

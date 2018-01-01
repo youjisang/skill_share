@@ -34,11 +34,6 @@ public class GroupFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GroupFragment newInstance() {
-        GroupFragment fragment = new GroupFragment();
-        return fragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,8 +58,8 @@ public class GroupFragment extends Fragment {
 
         RetrofitHelper.createApi(HomeService.class)
                 .getGroups()
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
 
         return view;
