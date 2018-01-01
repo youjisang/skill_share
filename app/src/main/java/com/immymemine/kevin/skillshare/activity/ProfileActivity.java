@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void handleResponse(User user) {
         ViewFactory viewFactory = ViewFactory.getInstance(this);
-        View meView = viewFactory.getMeView(user);
+        View meView = viewFactory.getMeView();
         profileContainer.addView(meView);
         if(user.getFollowingSkills() != null && user.getFollowingSkills().size() > 0) {
             View meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());

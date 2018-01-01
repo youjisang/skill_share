@@ -47,10 +47,10 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.FragmentAdapter;
-import com.immymemine.kevin.skillshare.fragment.AboutFragment;
-import com.immymemine.kevin.skillshare.fragment.DiscussionsFragment;
-import com.immymemine.kevin.skillshare.fragment.LessonsFragment;
+import com.immymemine.kevin.skillshare.adapter.class_adapter.FragmentAdapter;
+import com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment;
+import com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment;
+import com.immymemine.kevin.skillshare.fragment.class_f.LessonsFragment;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;

@@ -22,6 +22,7 @@ public class ConstantUtil {
     // Sign in
     public static final String SIGN_IN_SUCCESS = "sign-in success";
     public static final String SIGN_IN_BY_GOOGLE = "sign-in by google";
+    public static final int OFFLINE = 199;
     // Sign out
     public static final String SIGN_OUT = "sign-out";
 
@@ -42,6 +43,7 @@ public class ConstantUtil {
     public static final String USER_ID_FLAG = "user id";
     public static final String USER_NAME_FLAG = "user name";
     public static final String TOOLBAR_TITLE_FLAG = "ttf";
+    public static final String FOLLOW_SKILLS = "fss";
     public static final String ID_FLAG = "id";
     public static final String SEE_ALL_FLAG = "see all";
     public static final String URL_FLAG = "url";
@@ -62,3 +64,24 @@ public class ConstantUtil {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

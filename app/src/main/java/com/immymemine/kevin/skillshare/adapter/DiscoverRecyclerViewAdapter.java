@@ -65,7 +65,7 @@ public class DiscoverRecyclerViewAdapter extends RecyclerView.Adapter<DiscoverRe
 
         public MainHolder(View view) {
             super(view);
-            imageViewFeaturedClass = view.findViewById(R.id.image_view_tutor);
+            imageViewFeaturedClass = view.findViewById(R.id.image_view_group);
             textViewTime = view.findViewById(R.id.text_view_time);
             textViewTitle = view.findViewById(R.id.text_view_title);
             textViewTutorName = view.findViewById(R.id.text_view_tutor_name);

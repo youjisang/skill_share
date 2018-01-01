@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:fadeScrollbars="true"
-    tools:context="com.immymemine.kevin.skillshare.fragment.AboutFragment">
+    tools:context="com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

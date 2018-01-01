@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter.fragment_adapter;
+package com.immymemine.kevin.skillshare.adapter.class_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -14,35 +14,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
-import com.immymemine.kevin.skillshare.entity.GroupItem;
-import com.immymemine.kevin.skillshare.model.user.Group;
-import com.immymemine.kevin.skillshare.utility.ConstantUtil;
-
-import org.w3c.dom.Text;
-
-
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
 import com.immymemine.kevin.skillshare.entity.GroupItem;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
-
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class GroupActivity extends AppCompatActivity implements GroupChattingAdapter.OnLoadMoreListener
@@ -57,10 +40,9 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     private Button groupJoin;
     private ImageButton back;
     private TextView groupTitle, groupNum;
-    private String group_id, groupTitle_s, groupNum_s, imageUri_s;
+    private String groupTitle_s, groupNum_s, imageUri_s;
     private int position;
     private LinearLayout layout_discussion;
-
 
 
     @Override
@@ -82,6 +64,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
         settingViewFromData();
 
         initRecycler();
+
 
         groupItemList = new ArrayList<>();
 
@@ -155,7 +138,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
                     Log.e("check",""+StateUtil.getInstance().getState());
                     Intent intent = new Intent();
                     intent.putExtra("position", position);
-                    intent.putExtra("group_id", group_id );
+
                     intent.putExtra("groupName", groupTitle_s);
                     intent.putExtra("groupJoinNum", groupNum_s);
                     intent.putExtra("groupImageUri", imageUri_s);
@@ -189,7 +172,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     protected void onStart() {
         super.onStart();
         Log.d("GroupActivity_", "onStart");
-        loadData();
+//        loadData();
     }
 
     @Override
@@ -199,7 +182,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
             @Override
             public void run() {
                 swipeRefresh.setRefreshing(false);
-                loadData();
+//                loadData();
 
             }
         }, 2000);
@@ -208,49 +191,60 @@ public class GroupActivity extends AppCompatActivity implements GroupChattingAda
     @SuppressLint("StaticFieldLeak")
     @Override
     public void onLoadMore() {
-        new AsyncTask<Void, Void, List<GroupItem>>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mAdapter.showLoading();
-            }
-
-            // swype add item에 대한 코드
-            @Override
-            protected List<GroupItem> doInBackground(Void... voids) {
-                int start = mAdapter.getItemCount() - 1;
-                int end = start + 10;
-                List<GroupItem> list = new ArrayList<>();
-                if (end < 200) {
-                    for (int i = start + 1; i <= end; i++) {
-                        list.add(new GroupItem("GroupItem " + i));
-                    }
-                }
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return list;
-            }
-
-            @Override
-            protected void onPostExecute(List<GroupItem> groupItems) {
-                super.onPostExecute(groupItems);
-                mAdapter.dismissLoading();
-                mAdapter.addItemMore(groupItems);
-                mAdapter.setMore(true);
-            }
-        }.execute();
 
     }
 
-    private void loadData() {
-        groupItemList.clear();
-        for (int i = 1; i <= 20; i++) {
-            groupItemList.add(new GroupItem("GroupItem " + i));
-        }
-        mAdapter.addAll(groupItemList);
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
+
+//    @SuppressLint("StaticFieldLeak")
+//    @Override
+//    public void onLoadMore() {
+//        new AsyncTask<Void, Void, List<GroupItem>>() {
+//            @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//                mAdapter.showLoading();
+//            }
+//
+//            // swype add item에 대한 코드
+//            @Override
+//            protected List<GroupItem> doInBackground(Void... voids) {
+//                int start = mAdapter.getItemCount() - 1;
+//                int end = start + 10;
+//                List<GroupItem> list = new ArrayList<>();
+//                if (end < 200) {
+//                    for (int i = start + 1; i <= end; i++) {
+//                        list.add(new GroupItem("GroupItem " + i));
+//                    }
+//                }
+//                try {
+//                    Thread.sleep(1500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                return list;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<GroupItem> groupItems) {
+//                super.onPostExecute(groupItems);
+//                mAdapter.dismissLoading();
+//                mAdapter.addItemMore(groupItems);
+//                mAdapter.setMore(true);
+//            }
+//        }.execute();
+//
+//    }
+//
+//    private void loadData() {
+//        groupItemList.clear();
+//        for (int i = 1; i <= 20; i++) {
+//            groupItemList.add(new GroupItem("GroupItem " + i));
+//        }
+//        mAdapter.addAll(groupItemList);
+//    }
 }
 

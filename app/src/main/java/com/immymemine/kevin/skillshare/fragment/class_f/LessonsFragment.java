@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.fragment;
+package com.immymemine.kevin.skillshare.fragment.class_f;
 
 
 import android.content.Context;
@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ProfileActivity;
-import com.immymemine.kevin.skillshare.adapter.fragment_adapter.LessonsAdapter;
+import com.immymemine.kevin.skillshare.adapter.class_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -85,7 +85,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         // tutor 정보
         textViewTutor = v.findViewById(R.id.text_view_tutor_name);
         textViewFollowersCount = v.findViewById(R.id.text_view_followers);
-        imageViewTutor = v.findViewById(R.id.image_view_tutor);
+        imageViewTutor = v.findViewById(R.id.image_view_group);
         imageViewTutor.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProfileActivity.class);
             startActivity(intent);

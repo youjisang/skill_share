@@ -215,7 +215,7 @@
             android:background="@android:color/background_light">
 
             <TextView
-                android:id="@+id/button_see_all"
+                android:id="@+id/button_see_all_t"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -227,7 +227,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/text_view_title"
+                android:id="@+id/text_view_title_t"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -237,7 +237,7 @@
                 android:textSize="22sp" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/general_recycler_view"
+                android:id="@+id/recycler_view_t"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="56dp"
@@ -264,7 +264,7 @@
             android:background="@android:color/background_light">
 
             <TextView
-                android:id="@+id/button_see_all"
+                android:id="@+id/button_see_all_p"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -276,7 +276,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/text_view_title"
+                android:id="@+id/text_view_title_p"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -286,7 +286,7 @@
                 android:textSize="22sp" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/general_recycler_view"
+                android:id="@+id/recycler_view_p"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="56dp"

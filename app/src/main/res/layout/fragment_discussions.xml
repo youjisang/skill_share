@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     android:orientation="vertical"
-    tools:context="com.immymemine.kevin.skillshare.fragment.DiscussionsFragment">
+    tools:context="com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

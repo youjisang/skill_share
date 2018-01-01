@@ -37,7 +37,7 @@ public class RegistrationIntentService extends IntentService {
             // token 값 생성
             InstanceID instanceID = InstanceID.getInstance(this);
             String registrationId = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            MainActivity.user.setRegistrationId(registrationId);
+//            MainActivity.user.setRegistrationId(registrationId);
             // 서버 통신
             registerDevice(userId, registrationId);
         } catch (Exception e ) {
@@ -52,10 +52,8 @@ public class RegistrationIntentService extends IntentService {
         requestBody.setRegistrationId(registrationId);
 
         // retrofit
-        GCMService deviceService = RetrofitHelper.createApi(GCMService.class);
-
-        // post
-        deviceService.register(requestBody)
+        RetrofitHelper.createApi(GCMService.class)
+                .register(requestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
