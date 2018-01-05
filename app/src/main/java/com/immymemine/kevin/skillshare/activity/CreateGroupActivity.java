@@ -22,7 +22,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_group_dialog);
+        setContentView(R.layout.dialog_create_group);
         initView();
     }
 

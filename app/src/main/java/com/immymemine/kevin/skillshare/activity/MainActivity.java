@@ -7,9 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -101,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
     private void initiateView() {
 
         // refresh view setting
-        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
-        refreshLayout.setOnRefreshListener(() -> {
-            // 데이터 변화 감지 ( ? )
-
-            // 다른 부분이 있으면 view 를 추가하거나 삭제
-
-            // 완료 되면 호출 ∇
-            refreshLayout.setRefreshing(false);
-        });
-        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
+//        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
+//        refreshLayout.setOnRefreshListener(() -> {
+//            // 데이터 변화 감지 ( ? )
+//
+//            // 다른 부분이 있으면 view 를 추가하거나 삭제
+//
+//            // 완료 되면 호출 ∇
+//            refreshLayout.setRefreshing(false);
+//        });
+//        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
 
         progressBar = findViewById(R.id.progress_bar);
     }
@@ -166,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
                         } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("show", false);
+                            homeFragment.setArguments(bundle);
+
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, homeFragment)
@@ -217,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     } else {
                         if(yourClassesFragment == null) {
-                            Log.d("JUWONLEE", "YOUR NULL");
                             yourClassesFragment = new YourClassesFragment();
 
                             getSupportFragmentManager()
@@ -225,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
                         } else {
-                            Log.d("JUWONLEE", "YOUR NOT NULL");
-
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, yourClassesFragment)
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         if(stateUtil.getState()) {
                             if(meFragment == null) {
-                                Log.d("JUWONLEE", "ME NULL");
                                 meFragment = new MeFragment();
 
                                 getSupportFragmentManager()
@@ -249,8 +247,6 @@ public class MainActivity extends AppCompatActivity {
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
                             } else {
-                                Log.d("JUWONLEE", "ME NOT NULL");
-
                                 getSupportFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.fragment_container, meFragment)
@@ -259,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             if(offlineMeFragment == null) {
-                                Log.d("JUWONLEE", "OFFLINE");
                                 offlineMeFragment = new OfflineMeFragment();
 
                                 getSupportFragmentManager()

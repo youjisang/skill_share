@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SignInActivity;
+import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 /**
@@ -27,7 +30,7 @@ public class DialogUtil {
 
     private void showCreateGroupDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.create_group_dialog, null, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_create_group, null, false);
         int limit = 40;
         ImageButton toolbarCloseButton = view.findViewById(R.id.toolbar_close_button);
         EditText editTextGroupName = view.findViewById(R.id.edit_text_group_name);
@@ -53,5 +56,21 @@ public class DialogUtil {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message);
         builder.show();
+    }
+
+    public static void showSignDialog(Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_sign, null, false);
+
+        view.findViewById(R.id.sign_in).setOnClickListener(
+                v -> context.startActivity(new Intent(context, SignInActivity.class))
+        );
+
+        view.findViewById(R.id.sign_up).setOnClickListener(
+                v -> context.startActivity(new Intent(context, SignUpActivity.class))
+        );
+
+        builder.setView(view).show();
     }
 }

@@ -16,7 +16,7 @@
         android:src="@drawable/skill_design" />
 
     <TextView
-        android:id="@+id/text_view_tutor_name"
+        android:id="@+id/text_view_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -32,7 +32,7 @@
         android:id="@+id/expandable_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_view_tutor_name"
+        android:layout_alignLeft="@+id/text_view_user_name"
         android:layout_below="@+id/image_view_profile"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"

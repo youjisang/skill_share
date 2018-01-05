@@ -72,7 +72,7 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
             holder = view;
 
             imageViewProfile = view.findViewById(R.id.image_view_profile);
-            textViewProfile = view.findViewById(R.id.text_view_tutor_name);
+            textViewProfile = view.findViewById(R.id.text_view_user_name);
 
             expandableTextView = view.findViewById(R.id.expandable_text_view);
             expandableTextView.setTrimLength(8);

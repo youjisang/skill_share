@@ -6,6 +6,7 @@ package com.immymemine.kevin.skillshare.model.m_class;
 
 public class Video {
     String _id;
+    String url;
     String title;
     String duration;
     String thumbnailUrl;
@@ -13,11 +14,13 @@ public class Video {
 
     // for test
     public Video(String _id,
+                 String url,
             String order,
             String title,
             String duration,
             String thumbnailUrl) {
         this._id = _id;
+        this.url = url;
         this.order = order;
         this.title = title;
         this.duration = duration;
@@ -26,6 +29,10 @@ public class Video {
 
     public String get_id() {
         return _id;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getTitle() {

@@ -33,7 +33,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LessonsFragment extends Fragment implements LessonsAdapter.FragmentAndRecyclerViewInteractionInterface {
+public class LessonsFragment extends Fragment {
 
     // view
     ScrollView scrollView;
@@ -83,7 +83,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         textViewSubscriberCount = v.findViewById(R.id.text_view_subscriber_count);
 
         // tutor 정보
-        textViewTutor = v.findViewById(R.id.text_view_tutor_name);
+        textViewTutor = v.findViewById(R.id.text_view_user_name);
         textViewFollowersCount = v.findViewById(R.id.text_view_followers);
         imageViewTutor = v.findViewById(R.id.image_view_group);
         imageViewTutor.setOnClickListener(view -> {
@@ -104,7 +104,7 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
         recyclerViewLessons = v.findViewById(R.id.recycler_view_lessons);
         recyclerViewLessons.setNestedScrollingEnabled(false);
 
-        adapter = new LessonsAdapter(context, this);
+        adapter = new LessonsAdapter(context);
         recyclerViewLessons.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewLessons.setAdapter(adapter);
     }
@@ -136,10 +136,5 @@ public class LessonsFragment extends Fragment implements LessonsAdapter.Fragment
 
     private void handleError(Throwable error) {
 
-    }
-
-    @Override
-    public void focus(int position, int height) {
-        scrollView.scrollTo(0, height * position);
     }
 }

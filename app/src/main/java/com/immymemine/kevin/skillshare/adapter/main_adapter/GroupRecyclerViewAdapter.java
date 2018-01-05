@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.GroupActivity;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
@@ -63,6 +65,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             Glide.with(context).load(group.getGroupThumbnail())
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageViewGroup);
+
+            holder.position = position;
         }
     }
 
@@ -77,6 +81,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         ImageView imageViewGroup;
         TextView textViewMemberCount, textViewGroupName;
 
+        int position;
+
         public Holder(View view) {
             super(view);
             if(groups != null && groups.size() != 0) {
@@ -86,7 +92,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
                 view.setOnClickListener(
                         v -> {
-
+                            Intent intent = new Intent(context, GroupActivity.class);
+                            Group group = groups.get(position);
+                            intent.putExtra("group", group);
+                            context.startActivity(intent);
                         }
                 );
             }

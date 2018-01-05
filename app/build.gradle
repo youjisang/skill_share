@@ -62,15 +62,15 @@ dependencies {
     // rx binding
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
 
-    // exo player
-    implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
-
     // retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    // exo player
+    implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
 
     //flexbox layout
     implementation 'com.google.android:flexbox:0.3.1'

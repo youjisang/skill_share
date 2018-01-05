@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter;
+package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -95,7 +95,7 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
             imageView = v.findViewById(R.id.image_view_group);
             textViewTime = v.findViewById(R.id.text_view_time);
             textViewTitle = v.findViewById(R.id.text_view_title);
-            textViewTutor = v.findViewById(R.id.text_view_tutor_name);
+            textViewTutor = v.findViewById(R.id.text_view_user_name);
 
             // item layout 자체에 onClick listener 를 달아준다. >>> item 어디를 클릭해도 이동
             v.setOnClickListener(view -> {

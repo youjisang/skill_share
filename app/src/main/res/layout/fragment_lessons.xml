@@ -129,7 +129,7 @@
 
 
             <TextView
-                android:id="@+id/text_view_tutor_name"
+                android:id="@+id/text_view_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/button_follow"
@@ -144,9 +144,9 @@
                 android:id="@+id/text_view_followers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/text_view_tutor_name"
-                android:layout_alignStart="@+id/text_view_tutor_name"
-                android:layout_below="@+id/text_view_tutor_name"
+                android:layout_alignLeft="@+id/text_view_user_name"
+                android:layout_alignStart="@+id/text_view_user_name"
+                android:layout_below="@+id/text_view_user_name"
                 android:text="621 Follower"
                 android:textColor="@color/IcInactive" />
 

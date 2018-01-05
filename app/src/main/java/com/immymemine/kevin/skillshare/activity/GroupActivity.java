@@ -1,228 +1,150 @@
-//package com.immymemine.kevin.skillshare.activity;
-//
-//import android.content.Intent;
-//import android.os.Bundle;
-//import android.os.Handler;
-//import android.support.v4.widget.SwipeRefreshLayout;
-//import android.support.v7.app.AppCompatActivity;
-//import android.support.v7.widget.LinearLayoutManager;
-//import android.support.v7.widget.RecyclerView;
-//import android.support.v7.widget.Toolbar;
-//import android.util.Log;
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.ImageButton;
-//import android.widget.LinearLayout;
-//import android.widget.TextView;
-//
-//import com.immymemine.kevin.skillshare.R;
-//import com.immymemine.kevin.skillshare.adapter.GroupChattingAdapter;
-//
-//
-//public class GroupActivity extends AppCompatActivity implements GroupChattingAdapter.OnLoadMoreListener
-//        , SwipeRefreshLayout.OnRefreshListener {
-//
-//
-//    private Toolbar toolbar;
-//    private GroupChattingAdapter mAdapter;
-//    private SwipeRefreshLayout swipeRefresh;
-//    private RecyclerView mRecyclerView;
-//    private Button groupJoin;
-//    private ImageButton back;
-//    private TextView groupTitle, groupNum;
-//    private String groupTitle_s, groupNum_s, imageUri_s;
-//    private int position;
-//    private LinearLayout layout_discussion;
-//    boolean check = false;
-//
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_group);
-//
-//
-//        initiateView();
-//
-//        toolbarSetting();
-//
-//        checkJoinOrNot();
-//
-//        backButton();
-//
-//        fromGroupRecylcerViewAdapter();
-//
-//        settingViewFromData();
-//
-//        initRecycler();
-//
-//
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                LinearLayoutManager llManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                if (llManager.findLastCompletelyVisibleItemPosition() == (mAdapter.getItemCount() - 4)) {
-//                    mAdapter.showLoading();
-//                }
-//            }
-//        });
-//    }
-//
-//
-//    //TODO 지상 ----------------------------------------------------
-//    private void toolbarSetting() {
-//
-//        setSupportActionBar(toolbar);
-//        toolbar.inflateMenu(R.menu.chatting_toolbar_menu);
-//    }
-//
-//    private void initiateView() {
-//        mRecyclerView = findViewById(R.id.recycler_view_chatting);
-//        groupJoin = findViewById(R.id.button_join);
-//        toolbar = findViewById(R.id.toolbar);
-//        groupTitle = findViewById(R.id.toolbar_title);
-//        groupNum = findViewById(R.id.textview_lookup_number);
-//        layout_discussion = findViewById(R.id.layout_frame_discussion);
-//        back = findViewById(R.id.toolbar_button_back);
-//
-//    }
-//
-//    private void initRecycler() {
-//
-//        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-//        mAdapter = new GroupChattingAdapter(this);
-//        mRecyclerView.setAdapter(mAdapter);
-//    }
-//
-//    private void fromGroupRecylcerViewAdapter() {
-//
-//        Intent intent = getIntent();
-//        position = intent.getIntExtra("position", 0);
-//        groupTitle_s = intent.getStringExtra("groupName");
-//        groupNum_s = intent.getStringExtra("groupJoinNum");
-//        imageUri_s = intent.getStringExtra("groupImageUri");
-//        Log.e("groupActivity", "========groupname========" + groupTitle_s + "=========groupjoinnum==========" + groupNum_s + "========groupImageUri===========" + imageUri_s);
-//
-//    }
-//
-//    private void settingViewFromData() {
-//        groupNum.setText(groupNum_s);
-//        groupTitle.setText(groupTitle_s);
-//
-//    }
-//
-//    private void checkJoinOrNot() {
-//
-//
-//        groupJoin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent();
-//                intent.putExtra("position", position);
-//                intent.putExtra("groupName", groupTitle_s);
-//                intent.putExtra("groupJoinNum", groupNum_s);
-//                intent.putExtra("groupImageUri", imageUri_s);
-//                setResult(RESULT_OK, intent);
-//                groupJoin.setVisibility(View.GONE);
-//                layout_discussion.setVisibility(View.VISIBLE);
-//                finish();
-//                Log.e("GroupActivity intent", "check============" + intent);
-//
-//
-//            }
-//        });
-//    }
-//
-//    private void backButton() {
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                finish();
-//
-//            }
-//        });
-//    }
-//
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Log.d("GroupActivity_", "onStart");
-////        loadData();
-//    }
-//
-//    @Override
-//    public void onRefresh() {
-//        Log.d("GroupActivity_", "onRefresh");
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeRefresh.setRefreshing(false);
-////                loadData();
-//
-//            }
-//        }, 2000);
-//    }
-//
-//    @Override
-//    public void onLoadMore() {
-//
-//    }
-//
-//    @Override
-//    public void onPointerCaptureChanged(boolean hasCapture) {
-//
-//    }
-//
-////    @SuppressLint("StaticFieldLeak")
-////    @Override
-////    public void onLoadMore() {
-////        new AsyncTask<Void, Void, List<GroupItem>>() {
-////            @Override
-////            protected void onPreExecute() {
-////                super.onPreExecute();
-////                mAdapter.showLoading();
-////            }
-////
-////            // swype add item에 대한 코드
-////            @Override
-////            protected List<GroupItem> doInBackground(Void... voids) {
-////                int start = mAdapter.getItemCount() - 1;
-////                int end = start + 10;
-////                List<GroupItem> list = new ArrayList<>();
-////                if (end < 200) {
-////                    for (int i = start + 1; i <= end; i++) {
-////                        list.add(new GroupItem("GroupItem " + i));
-////                    }
-////                }
-////                try {
-////                    Thread.sleep(1500);
-////                } catch (InterruptedException e) {
-////                    e.printStackTrace();
-////                }
-////                return list;
-////            }
-////
-////            @Override
-////            protected void onPostExecute(List<GroupItem> groupItems) {
-////                super.onPostExecute(groupItems);
-////                mAdapter.dismissLoading();
-////                mAdapter.addItemMore(groupItems);
-////                mAdapter.setMore(true);
-////            }
-////        }.execute();
-////
-////    }
-////
-////    private void loadData() {
-////        groupItemList.clear();
-////        for (int i = 1; i <= 20; i++) {
-////            groupItemList.add(new GroupItem("GroupItem " + i));
-////        }
-////        mAdapter.addAll(groupItemList);
-////    }
-//}
+package com.immymemine.kevin.skillshare.activity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.adapter.GroupChatAdapter;
+import com.immymemine.kevin.skillshare.model.group.Chat;
+import com.immymemine.kevin.skillshare.model.group.Group;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.GroupService;
+import com.immymemine.kevin.skillshare.utility.DialogUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+
+public class GroupActivity extends AppCompatActivity implements GroupChatAdapter.OnLoadMoreListener {
+
+    Toolbar toolbar;
+    GroupChatAdapter mAdapter;
+    RecyclerView mRecyclerView;
+    Button buttonJoinGroup;
+    ImageButton buttonBack;
+    LinearLayout layout_discussion;
+
+    Group mGroup;
+    StateUtil state;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_group);
+
+        Intent intent = getIntent();
+        mGroup = intent.getParcelableExtra("group");
+
+        state = StateUtil.getInstance();
+
+        initiateView();
+        initiateRecyclerView();
+    }
+
+    private void initiateView() {
+        // toolbar
+        buttonBack = findViewById(R.id.toolbar_button_back);
+        buttonBack.setOnClickListener(v -> finish());
+        ((TextView)findViewById(R.id.toolbar_title)).setText(mGroup.getGroupName());
+        ((TextView)findViewById(R.id.text_view_member_count)).setText(mGroup.getMemberCount() + " Members");
+        toolbar = findViewById(R.id.toolbar);
+        Glide.with(this).asDrawable().load(mGroup.getGroupThumbnail()).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                toolbar.setBackground(resource);
+            }
+        });
+        setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.chatting_toolbar_menu);
+
+        // chat
+        mRecyclerView = findViewById(R.id.recycler_view_chatting);
+
+        buttonJoinGroup = findViewById(R.id.button_join);
+        layout_discussion = findViewById(R.id.layout_frame_discussion);
+
+        buttonJoinGroup.setOnClickListener(v -> {
+            if(state.getState()) {
+                buttonJoinGroup.setVisibility(View.GONE);
+                layout_discussion.setVisibility(View.VISIBLE);
+
+                List<Group> groups = (state.getUserInstance().getGroups() != null) ?
+                        state.getUserInstance().getGroups() : new ArrayList<>();
+                groups.add(mGroup);
+            } else {
+                DialogUtil.showSignDialog(this);
+            }
+        });
+    }
+
+    private void initiateRecyclerView() {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new GroupChatAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager llManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (llManager.findLastCompletelyVisibleItemPosition() == (mAdapter.getItemCount() - 4)) {
+                    onLoadMore();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RetrofitHelper.createApi(GroupService.class)
+                .getChatList(mGroup.get_id(),mAdapter.getItemCount())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        (List<Chat> chatList) -> {
+                            mAdapter.addAll(chatList);
+                        }, (Throwable error) -> {
+
+                        }
+                );
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void onLoadMore() {
+        mAdapter.setMore(true);
+        mAdapter.showLoading();
+
+        RetrofitHelper.createApi(GroupService.class)
+                .getChatList(mGroup.get_id(),mAdapter.getItemCount())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        (List<Chat> chatList) -> {
+                            mAdapter.dismissLoading();
+                            mAdapter.addItemMore(chatList);
+                        }, (Throwable error) -> {
+
+                        }
+                );
+    }
+}

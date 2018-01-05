@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.main_adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -80,7 +80,7 @@ public class DiscoverFragment extends Fragment {
         ((TextView)view.findViewById(R.id.text_view_featured_class_review_percent)).setText(discoverClass.getReviewPercent()+"%");
         ((TextView)view.findViewById(R.id.text_view_featured_class_subscriber_count)).setText(discoverClass.getSubscriberCount());
 
-        ((TextView)view.findViewById(R.id.text_view_tutor_name)).setText(discoverClass.getTutorName());
+        ((TextView)view.findViewById(R.id.text_view_user_name)).setText(discoverClass.getTutorName());
 
         view.findViewById(R.id.relative_layout_class).setOnClickListener(v -> {
             // class activity 이동

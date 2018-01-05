@@ -3,6 +3,7 @@ package com.immymemine.kevin.skillshare.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -11,7 +12,6 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
-import com.immymemine.kevin.skillshare.activity.SignInActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
@@ -83,17 +83,23 @@ public class ViewFactory {
         return view;
     }
 
-    public View getNotSignedInMeView() {
-        View view = inflater.inflate(R.layout.me_view_not_signed_in, null);
+    public Toolbar getToolbar(int type) {
+        Toolbar toolbar = null;
 
-        view.findViewById(R.id.button_sign_up).setOnClickListener(v -> {
-            context.startActivity(new Intent(context, SignUpActivity.class));
-        });
+        switch (type) {
+            case 42:
+                toolbar = (Toolbar) inflater.inflate(R.layout.toolbar_home, null);
+                break;
+            case 43:
+                break;
+            case 44:
+                break;
+            case 45:
+                break;
+            case 46:
+                break;
+        }
 
-        view.findViewById(R.id.button_sign_in).setOnClickListener(v -> {
-            context.startActivity(new Intent(context, SignInActivity.class));
-        });
-
-        return view;
+        return toolbar;
     }
 }
