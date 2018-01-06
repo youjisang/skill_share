@@ -53,4 +53,13 @@ public class TimeUtil {
 
         return "time error";
     }
+
+    public static String calculateVideoTimeByColon(String timeString) {
+        long time = Long.parseLong(timeString);
+
+        int minutes = (int)(time / 60000);
+        int seconds = (int)((time % 60000) / 1000);
+
+        return minutes + ":" + seconds;
+    }
 }

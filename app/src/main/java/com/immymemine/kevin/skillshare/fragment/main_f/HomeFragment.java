@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SearchActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.HomeRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -46,6 +48,9 @@ public class HomeFragment extends Fragment {
 
         context = getActivity();
 
+        view.findViewById(R.id.toolbar_button_search)
+                .setOnClickListener(v -> context.startActivity(new Intent(context, SearchActivity.class)));
+
         if(!StateUtil.getInstance().getState() &&
                 (getArguments() != null) ? getArguments().getBoolean("show") : true) {
             FrameLayout welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
@@ -70,6 +75,7 @@ public class HomeFragment extends Fragment {
 
         // RecyclerView setting
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_home);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new HomeRecyclerViewAdapter(context);
         recyclerView.setAdapter(adapter);

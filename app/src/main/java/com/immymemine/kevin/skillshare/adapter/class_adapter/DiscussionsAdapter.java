@@ -96,10 +96,18 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             holder.position = position;
 
             // profile
-            holder.imageUrl = discussion.getImageUrl();
-            Glide.with(context).load(holder.imageUrl)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imageViewProfile);
+            if(discussion.getImageUrl() == null || discussion.getImageUrl().equals("")) {
+                holder.imageUrl = discussion.getImageUrl();
+                Glide.with(context).load(holder.imageUrl)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(holder.imageViewProfile);
+            } else {
+                holder.imageUrl = discussion.getImageUrl();
+                Glide.with(context).load(holder.imageUrl)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(holder.imageViewProfile);
+            }
+
             holder.textViewProfile.setText(discussion.getName());
             // content
             holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
@@ -120,8 +128,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public int getItemCount() {
         if(discussions==null)
             return 1;
-        else
-            return discussions.size();
+        return discussions.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -151,7 +158,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             super(v);
             if(discussions != null) {
                 // profile
-                imageViewProfile = v.findViewById(R.id.image_view_profile);
+                imageViewProfile = v.findViewById(R.id.image_view_thumbnail);
                 imageViewProfile.setOnClickListener(view -> {
                     // profile activity 이동
                 });

@@ -22,7 +22,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -51,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="4dp"
-                android:text="47m"
+                android:text="00m"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="18sp" />
 
@@ -92,7 +91,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:text="170"
+                android:text="000"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="18sp" />
 
@@ -118,11 +117,14 @@
                 android:id="@+id/button_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="44dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/select_button"
+                android:checked="false"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
                 android:textColor="@color/IcActive"
                 android:textOff="+ Follow"
                 android:textOn="Following" />
@@ -136,7 +138,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_toEndOf="@+id/image_view_group"
                 android:layout_toRightOf="@+id/image_view_group"
-                android:text="Mel Armstrong"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
@@ -147,7 +148,6 @@
                 android:layout_alignLeft="@+id/text_view_user_name"
                 android:layout_alignStart="@+id/text_view_user_name"
                 android:layout_below="@+id/text_view_user_name"
-                android:text="621 Follower"
                 android:textColor="@color/IcInactive" />
 
             <ImageView
@@ -157,8 +157,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:src="@mipmap/ic_launcher_round" />
+                android:layout_marginStart="16dp" />
 
 
         </RelativeLayout>

@@ -129,7 +129,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public GroupChattingHolder(View v) {
             super(v);
-            imageViewProfile = v.findViewById(R.id.image_view_profile);
+            imageViewProfile = v.findViewById(R.id.image_view_thumbnail);
             textViewUserName = v.findViewById(R.id.text_view_user_name);
             textViewUserHashtag = v.findViewById(R.id.text_view_user_hashtag);
             expandableTextView = v.findViewById(R.id.expandable_text_view);

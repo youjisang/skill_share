@@ -8,7 +8,7 @@
     android:background="@android:color/background_light">
 
     <ImageView
-        android:id="@+id/image_view_profile"
+        android:id="@+id/image_view_thumbnail"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
-        android:layout_toRightOf="@+id/image_view_profile"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
         android:text="Amanda Benett"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text_view_user_name"
-        android:layout_below="@+id/image_view_profile"
+        android:layout_below="@+id/image_view_thumbnail"
         android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
         android:textColor="@android:color/black"

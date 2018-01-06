@@ -1,5 +1,6 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.model.discover.SearchClass;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
@@ -35,4 +36,6 @@ public interface ClassService {
     @POST("class/like")
     Observable<Response> like();
 
+    @GET("class/search/{content}")
+    Observable<List<SearchClass>> search(@Path("content") String searchContent);
 }

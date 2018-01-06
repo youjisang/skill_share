@@ -57,8 +57,6 @@ public class AboutFragment extends Fragment {
     SubscribersAdapter subscribersAdapter;
     RelatedClassAdapter relatedClassAdapter;
     ReviewAdapter reviewAdapter;
-    // about ( test data )
-    About about;
 
     Context context;
     // class id
@@ -71,12 +69,13 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-        initiateView(view);
-        setSeeAllOnClickListener();
-        classId = getArguments().getString(ConstantUtil.ID_FLAG);
-        // empty constructor >>> recycler view 초기화
-        context = getActivity();
 
+        context = getActivity();
+        classId = getArguments().getString(ConstantUtil.ID_FLAG);
+
+        initiateView(view);
+
+        // empty constructor >>> recycler view 초기화
         projectAdapter = new ProjectAdapter(context);
         recyclerViewProject.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewProject.setAdapter(projectAdapter);
@@ -125,6 +124,14 @@ public class AboutFragment extends Fragment {
             }
             textViewReviewPercent.setText((likeCount * 100 / size)+"% Positive Reviews");
             reviewAdapter.updateData(reviews.get(size-1));
+
+            textViewReviewSeeAll.setOnClickListener(view -> {
+                Intent intent = new Intent(context, SeeAllActivity.class);
+                intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.REVIEW_ITEM);
+                intent.putExtra(ConstantUtil.ID_FLAG, classId);
+                intent.putParcelableArrayListExtra(ConstantUtil.REVIEWS_FLAG, (ArrayList<? extends Parcelable>) reviews);
+                context.startActivity(intent);
+            });
         } else {
             textViewReviewPercent.setText("No Reviews");
             textViewReviewSeeAll.setVisibility(View.GONE);
@@ -136,6 +143,15 @@ public class AboutFragment extends Fragment {
         if(count != 0) {
             textViewSubscriberNum.setVisibility(View.VISIBLE);
             textViewSubscriberNum.setText(count + " Subscribers");
+
+            textViewSubscriberSeeAll.setOnClickListener(view -> {
+                Intent intent = new Intent(context, SeeAllActivity.class);
+                intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.SUBSCRIBER_ITEM);
+                intent.putExtra(ConstantUtil.ID_FLAG, classId);
+                intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, textViewSubscriberNum.getText().toString());
+                intent.putParcelableArrayListExtra(ConstantUtil.SUBSCRIBERS_FLAG, (ArrayList<? extends Parcelable>) subscribers);
+                context.startActivity(intent);
+            });
         } else
             textViewSubscriberNum.setVisibility(View.GONE);
         subscribersAdapter.update(subscribers);
@@ -156,6 +172,13 @@ public class AboutFragment extends Fragment {
         textViewProjectCount = view.findViewById(R.id.text_view_project_count);
         textViewProjectSeeAll = view.findViewById(R.id.text_view_project_see_all);
         recyclerViewProject = view.findViewById(R.id.recycler_view_project);
+        textViewProjectSeeAll.setOnClickListener(v -> {
+            Intent intent = new Intent(context, SeeAllActivity.class);
+            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
+            intent.putExtra(ConstantUtil.ID_FLAG, classId);
+            context.startActivity(intent);
+        });
+
         // review
         textViewReviewPercent = view.findViewById(R.id.text_view_review_percent);
         textViewReviewSeeAll = view.findViewById(R.id.text_view_review_see_all);
@@ -166,31 +189,5 @@ public class AboutFragment extends Fragment {
         recyclerViewSubscribers = view.findViewById(R.id.recycler_view_subscribers);
         // related class
         recyclerViewRelatedClass = view.findViewById(R.id.recycler_view_related_class);
-    }
-
-    private void setSeeAllOnClickListener() {
-        textViewProjectSeeAll.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
-            intent.putExtra(ConstantUtil.ID_FLAG, classId);
-            context.startActivity(intent);
-        });
-
-        textViewSubscriberSeeAll.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.SUBSCRIBER_ITEM);
-            intent.putExtra(ConstantUtil.ID_FLAG, classId);
-            intent.putExtra(ConstantUtil.TOOLBAR_TITLE_FLAG, textViewSubscriberNum.getText().toString());
-            intent.putParcelableArrayListExtra(ConstantUtil.SUBSCRIBERS_FLAG, (ArrayList<? extends Parcelable>) about.getSubscribers());
-            context.startActivity(intent);
-        });
-
-        textViewReviewSeeAll.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), SeeAllActivity.class);
-            intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.REVIEW_ITEM);
-            intent.putExtra(ConstantUtil.ID_FLAG, classId);
-            intent.putParcelableArrayListExtra(ConstantUtil.REVIEWS_FLAG, (ArrayList<? extends Parcelable>) about.getReviews());
-            context.startActivity(intent);
-        });
     }
 }

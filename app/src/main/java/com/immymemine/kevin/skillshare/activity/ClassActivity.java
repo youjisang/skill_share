@@ -311,6 +311,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         super.onPause();
     }
 
+    boolean isFollow;
     @Override
     protected void onDestroy() {
         releasePlayer();

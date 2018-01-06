@@ -71,7 +71,7 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
             super(view);
             holder = view;
 
-            imageViewProfile = view.findViewById(R.id.image_view_profile);
+            imageViewProfile = view.findViewById(R.id.image_view_thumbnail);
             textViewProfile = view.findViewById(R.id.text_view_user_name);
 
             expandableTextView = view.findViewById(R.id.expandable_text_view);

@@ -63,11 +63,11 @@ public class DialogUtil {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_sign, null, false);
 
-        view.findViewById(R.id.sign_in).setOnClickListener(
+        view.findViewById(R.id.button_sign_in).setOnClickListener(
                 v -> context.startActivity(new Intent(context, SignInActivity.class))
         );
 
-        view.findViewById(R.id.sign_up).setOnClickListener(
+        view.findViewById(R.id.button_sign_up).setOnClickListener(
                 v -> context.startActivity(new Intent(context, SignUpActivity.class))
         );
 

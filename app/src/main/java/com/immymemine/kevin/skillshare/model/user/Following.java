@@ -4,22 +4,18 @@ package com.immymemine.kevin.skillshare.model.user;
  * Created by quf93 on 2017-11-29.
  */
 
-public class Following
-{
-    private String pictureUrl;
-
-    private String name;
-
+public class Following {
+    private String _id;
     private String userId;
+    private String name;
+    private String imageUrl;
 
-    public String getPictureUrl ()
-    {
-        return pictureUrl;
+    public String get_id() {
+        return _id;
     }
 
-    public void setPictureUrl (String pictureUrl)
-    {
-        this.pictureUrl = pictureUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getName ()
@@ -27,24 +23,16 @@ public class Following
         return name;
     }
 
-    public void setName (String name)
-    {
-        this.name = name;
-    }
-
     public String getUserId ()
     {
         return userId;
     }
 
-    public void setUserId (String userId)
-    {
-        this.userId = userId;
-    }
-
     @Override
-    public String toString()
-    {
-        return "ClassPojo [pictureUrl = "+pictureUrl+", name = "+name+", userId = "+userId+"]";
+    public boolean equals(Object obj) {
+        if(obj instanceof Following) {
+            return ((Following)obj).get_id().equals(this.get_id());
+        }
+        return super.equals(obj);
     }
 }

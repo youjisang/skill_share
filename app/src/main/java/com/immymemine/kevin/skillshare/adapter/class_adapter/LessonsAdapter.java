@@ -55,7 +55,7 @@ public class LessonsAdapter extends RecyclerView.Adapter<LessonsAdapter.Holder> 
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageViewVideo);
             holder.textViewVideoTitle.setText(video.getTitle());
-            holder.textViewDuration.setText(TimeUtil.calculateVideoTime(video.getDuration()));
+            holder.textViewDuration.setText(TimeUtil.calculateVideoTimeByColon(video.getDuration()));
             holder.id = video.get_id();
             holder.url = video.getUrl();
         }
