@@ -22,6 +22,7 @@ import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.SeeAllService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -144,7 +145,8 @@ public class SeeAllActivity extends AppCompatActivity {
                 textViewSendReply = findViewById(R.id.text_view_send_reply);
 
                 // TODO stateUtil 사용
-                if(MainActivity.user == null || MainActivity.user.get_id() == null) {
+                User user = StateUtil.getInstance().getUserInstance();
+                if(user == null || user.get_id() == null) {
 
                     findViewById(R.id.linear_layout_discussion).setVisibility(View.GONE);
                     findViewById(R.id.linear_layout_sign_message).setVisibility(View.VISIBLE);
@@ -176,8 +178,6 @@ public class SeeAllActivity extends AppCompatActivity {
 
                     textViewSendReply.setOnClickListener(
                             view -> {
-
-                                User user = MainActivity.user;
                                 Reply reply = new Reply(
                                         user.getName(),
                                         user.getImageUrl(),

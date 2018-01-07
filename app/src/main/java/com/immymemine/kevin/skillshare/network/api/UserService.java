@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,4 +25,7 @@ public interface UserService {
 
     @GET("user/{id}")
     Observable<User> getUser(@Path("id") String id);
+
+    @PUT("/user/sign-up/{id}")
+    Observable<User> imageSetting(@Body User user,@Path("imageUrl") String imageUri);
 }

@@ -23,6 +23,7 @@ import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.PreferenceUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -30,7 +31,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity{
     // TODO (4) 비밀번호 찾기 >>> EMAIL... 비밀번호 찾는
 
     // for google sign_in
@@ -53,17 +54,16 @@ public class SignInActivity extends AppCompatActivity {
         initiateView();
         setReactEditText();
         setGoogleSignIn();
-
     }
 
     private void initiateView() {
         // back / close 버튼
-        findViewById(R.id.toolbar_close_button).setOnClickListener(v ->
-                finish()
+        findViewById(R.id.toolbar_close_button).setOnClickListener( v ->
+            finish()
         );
 
         // google login 버튼
-        findViewById(R.id.google_sign_in).setOnClickListener(v -> {
+        findViewById(R.id.google_sign_in).setOnClickListener( v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
@@ -81,11 +81,11 @@ public class SignInActivity extends AppCompatActivity {
             // String authToken = Credentials.basic(editTextEmail.getText().toString(), editTextPassword.getText().toString());
             String email = editTextEmail.getText().toString();
             String password = editTextPassword.getText().toString();
-            if (ValidationUtil.isValidEmailAddress(email)) {
+            if(ValidationUtil.isValidEmailAddress(email)) {
                 warning_email.setVisibility(View.INVISIBLE);
-                if (ValidationUtil.isValidPassword(password)) {
+                if(ValidationUtil.isValidPassword(password)) {
                     warning_password.setVisibility(View.INVISIBLE);
-                    Log.d("email & pw : ", email + " / " + password);
+                    Log.d("email & pw : ", email +" / "+ password);
                     RetrofitHelper
                             .createApi(UserService.class)
                             .signIn(email, password)
@@ -132,7 +132,7 @@ public class SignInActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if (account != null) {
+            if(account != null) {
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                 intent.setAction(ConstantUtil.SIGN_IN_BY_GOOGLE);
                 // 로그인이 성공하면 기존 Activity Stack 에 있는 Activities 종료
@@ -153,30 +153,32 @@ public class SignInActivity extends AppCompatActivity {
 
         // Observable 1 과 Observable 2 를 결합해서 결과값을 반환
         Observable.combineLatest(o1, o2, (e, p) -> ValidationUtil.isValidEmailAddress(e.toString()) && ValidationUtil.isValidPassword(p.toString()))
-                .subscribe(
-                        (validity) -> {
-                            if (validity) {
-                                buttonSignIn.setTextColor(Color.BLACK);
-                            } else {
-                                buttonSignIn.setTextColor(Color.LTGRAY);
-                            }
-                        }
-                );
+        .subscribe(
+                (validity) -> {
+                    if(validity) {
+                        buttonSignIn.setTextColor(Color.BLACK);
+                    } else {
+                        buttonSignIn.setTextColor(Color.LTGRAY);
+                    }
+                }
+        );
     }
 
     private void handleResponse(UserResponse response) {
-        if (ConstantUtil.SUCCESS.equals(response.getResult())) {
-            intent = new Intent(SignInActivity.this, MainActivity.class);
+        if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
-            intent.putExtra(ConstantUtil.USER_ID_FLAG, response.getUserId());
+            StateUtil state = StateUtil.getInstance();
+            state.setState(true);
+            state.setUserInstance(response.getUser());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             //Todo 지상 자동로그인
-
+//
 //            PreferenceUtil.setValue(this, "success", ConstantUtil.SIGN_IN_SUCCESS);
-//            PreferenceUtil.setValue(this, ConstantUtil.USER_ID_FLAG, response.getUserId());
+//            PreferenceUtil.setValue(this, ConstantUtil.USER_ID_FLAG, response.getUser().get_id());
 //            PreferenceUtil.setValue(this, "auto_sign", "true");
 //            Log.e("success", "check = " + ConstantUtil.SIGN_IN_SUCCESS);
-//            Log.e("USER_ID_FLAG", "check = " + response.getUserId());
+//            Log.e("USER_ID_FLAG", "check = " + response.getUser().get_id());
 
 
             startActivity(intent);

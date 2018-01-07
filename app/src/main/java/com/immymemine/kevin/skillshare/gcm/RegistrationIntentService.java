@@ -13,6 +13,7 @@ import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.GCMService;
 import com.immymemine.kevin.skillshare.network.gcm.RegisterRequestBody;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -37,7 +38,7 @@ public class RegistrationIntentService extends IntentService {
             // token 값 생성
             InstanceID instanceID = InstanceID.getInstance(this);
             String registrationId = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-//            MainActivity.user.setRegistrationId(registrationId);
+            StateUtil.getInstance().getUserInstance().setRegistrationId(registrationId);
             // 서버 통신
             registerDevice(userId, registrationId);
         } catch (Exception e ) {

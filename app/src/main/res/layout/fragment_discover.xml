@@ -1,311 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"
-        android:orientation="vertical">
+        android:minHeight="?attr/actionBarSize">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discover"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
-        <RelativeLayout
-            android:id="@+id/relative_layout_class"
+        <ImageButton
+            android:id="@+id/toolbar_button_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@android:color/transparent"
+            android:paddingRight="8dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/image_search_24dp"
+            tools:layout_editor_absoluteX="387dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:src="@android:drawable/ic_lock_idle_alarm"
-                android:tint="@color/cardview_dark_background" />
 
-            <TextView
-                android:id="@+id/text_view_featured_class_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/imageView3"
-                android:text="47m"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/text_view_featured_class_duration"
-                android:src="@drawable/plus" />
-
-            <TextView
-                android:id="@+id/text_view_featured_class_review_percent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/imageView5"
-                android:text="100%"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/text_view_featured_class_review_percent"
-                android:src="@drawable/ic_group"
-                android:tint="@color/cardview_dark_background" />
-
-            <TextView
-                android:id="@+id/text_view_featured_class_subscriber_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_featured_class_title"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/imageView6"
-                android:text="170"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="18sp" />
-
-            <FrameLayout
-                android:id="@+id/frame_layout"
+            <RelativeLayout
+                android:id="@+id/relative_layout_class"
                 android:layout_width="match_parent"
-                android:layout_height="240dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/image_view_featured_class"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/skill_design" />
+                    android:id="@+id/imageView3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@android:drawable/ic_lock_idle_alarm"
+                    android:tint="@color/cardview_dark_background" />
 
                 <TextView
+                    android:id="@+id/text_view_featured_class_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/IcActive"
-                    android:paddingBottom="4dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="4dp"
-                    android:text="Featured Class"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:text="47m"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/text_view_featured_class_duration"
+                    android:src="@drawable/plus" />
+
+                <TextView
+                    android:id="@+id/text_view_featured_class_review_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/imageView5"
+                    android:text="100%"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/text_view_featured_class_review_percent"
+                    android:src="@drawable/ic_group"
+                    android:tint="@color/cardview_dark_background" />
+
+                <TextView
+                    android:id="@+id/text_view_featured_class_subscriber_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_view_featured_class_title"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/imageView6"
+                    android:text="170"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="18sp" />
+
+                <FrameLayout
+                    android:id="@+id/frame_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp">
+
+                    <ImageView
+                        android:id="@+id/image_view_featured_class"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/skill_design" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/IcActive"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:text="Featured Class"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/text_view_featured_class_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/frame_layout"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_layout_tutor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/text_view_tutor_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/button_follow"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toEndOf="@+id/image_view_group"
+                    android:layout_toRightOf="@+id/image_view_group"
+                    android:text="Mel Armstrong"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view_group"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.065"
+                    app:layout_constraintStart_toEndOf="@+id/image_view_group"
+                    app:layout_constraintTop_toTopOf="@+id/image_view_group" />
+
+                <TextView
+                    android:id="@+id/text_view_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/text_view_tutor_name"
+                    android:layout_alignStart="@+id/text_view_tutor_name"
+                    android:layout_below="@+id/text_view_tutor_name"
+                    android:text="621 Followers"
+                    android:textColor="@color/IcInactive"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.261"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_tutor_name" />
+
+                <ImageView
+                    android:id="@+id/image_view_group"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher_round"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.025"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_discover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                tools:listitem="@layout/recycler_view_item_discover" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#c8d9d9d9" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_light">
+
+                <TextView
+                    android:id="@+id/button_see_all_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/see_all"
+                    android:textColor="@color/IcActive"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/text_view_title_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/trending_classes"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_t"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="56dp"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/recycler_view_item_general">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#c8d9d9d9" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/text_view_featured_class_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/frame_layout"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relative_layout_tutor"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:id="@+id/text_view_tutor_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/button_follow"
-                android:layout_marginLeft="16dp"
-                android:layout_toEndOf="@+id/image_view_group"
-                android:layout_toRightOf="@+id/image_view_group"
-                android:text="Mel Armstrong"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/image_view_group"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.065"
-                app:layout_constraintStart_toEndOf="@+id/image_view_group"
-                app:layout_constraintTop_toTopOf="@+id/image_view_group" />
-
-            <TextView
-                android:id="@+id/text_view_followers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/text_view_tutor_name"
-                android:layout_alignStart="@+id/text_view_tutor_name"
-                android:layout_below="@+id/text_view_tutor_name"
-                android:text="621 Followers"
-                android:textColor="@color/IcInactive"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.261"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_tutor_name" />
-
-            <ImageView
-                android:id="@+id/image_view_group"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_launcher_round"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.025"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
-
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_discover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            tools:listitem="@layout/recycler_view_item_discover" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#c8d9d9d9" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_light">
-
-            <TextView
-                android:id="@+id/button_see_all_t"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="12dp"
-                android:layout_marginTop="14dp"
-                android:background="@android:color/transparent"
-                android:text="@string/see_all"
-                android:textColor="@color/IcActive"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/text_view_title_t"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/trending_classes"
-                android:textColor="@android:color/black"
-                android:textSize="22sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_t"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="56dp"
-                android:orientation="horizontal"
-                tools:listitem="@layout/recycler_view_item_general">
+                android:background="@android:color/background_light">
 
-            </android.support.v7.widget.RecyclerView>
+                <TextView
+                    android:id="@+id/button_see_all_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/see_all"
+                    android:textColor="@color/IcActive"
+                    android:textSize="18sp" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:background="#c8d9d9d9" />
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/text_view_title_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/popular_classes"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_light">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_p"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="56dp"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/recycler_view_item_general">
 
-            <TextView
-                android:id="@+id/button_see_all_p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="12dp"
-                android:layout_marginTop="14dp"
-                android:background="@android:color/transparent"
-                android:text="@string/see_all"
-                android:textColor="@color/IcActive"
-                android:textSize="18sp" />
+                </android.support.v7.widget.RecyclerView>
 
-            <TextView
-                android:id="@+id/text_view_title_p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/popular_classes"
-                android:textColor="@android:color/black"
-                android:textSize="22sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#c8d9d9d9" />
+            </FrameLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_p"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="56dp"
-                android:orientation="horizontal"
-                tools:listitem="@layout/recycler_view_item_general">
+        </LinearLayout>
+    </ScrollView>
 
-            </android.support.v7.widget.RecyclerView>
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:background="#c8d9d9d9" />
-        </FrameLayout>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

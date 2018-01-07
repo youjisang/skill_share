@@ -1,0 +1,109 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    tools:context="com.immymemine.kevin.skillshare.fragment.main_f.YourClassesFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Classes"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageButton
+        android:id="@+id/button_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/image_download_32dp" />
+
+    <TextView
+        android:id="@+id/text_view_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="22dp"
+        android:layout_toRightOf="@+id/button_download"
+        android:text="Downloads"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_lists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_download"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="24dp"
+        android:text="Lists"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_subscribed_classes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_thumbnail"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
+        android:text="Subscribed Classes"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_subscribed_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_subscribed_classes"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
+        android:text="0 Classes"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/image_view_thumbnail"
+        android:layout_width="108dp"
+        android:layout_height="56dp"
+        android:layout_below="@+id/text_view_lists"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/IcDisabled"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="48dp"
+        android:layout_height="56dp"
+        android:layout_alignRight="@+id/image_view_thumbnail"
+        android:layout_below="@+id/text_view_lists"
+        android:layout_marginTop="24dp"
+        android:background="@color/cardview_shadow_start_color"
+        android:scaleType="centerCrop"
+        android:tint="@color/BottomNaviBackground"
+        app:srcCompat="@drawable/ic_dashboard_black_24dp" />
+
+</RelativeLayout>

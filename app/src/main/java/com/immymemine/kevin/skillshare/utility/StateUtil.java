@@ -24,7 +24,7 @@ public class StateUtil {
     }
 
     // get sign in state
-    private static boolean state = false;
+    private boolean state = false;
 
     public boolean getState() {
         return state;
@@ -35,7 +35,13 @@ public class StateUtil {
     }
 
     public void setUserInstance(User user) {
-        this.user = user;
+        if(user == null) {
+            this.user = null;
+            state = false;
+        } else {
+            this.user = user;
+            state = true;
+        }
     }
 
     // get user state

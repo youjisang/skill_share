@@ -14,6 +14,7 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.PreferenceUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -70,19 +71,24 @@ public class SplashActivity extends AppCompatActivity {
     //TODO 지상 자동로그인 처리
     String success;
     String userId;
+    StateUtil state = StateUtil.getInstance();
+
+    UserResponse response;
 
     private void autoLogin() {
 
-        if (PreferenceUtil.getString(this, "auto_sign").equals("true")) {
-            Intent intent = new Intent(this, MainActivity.class);
-            success = PreferenceUtil.getString(this, "success");
-            userId = PreferenceUtil.getString(this, ConstantUtil.USER_ID_FLAG);
-            intent.setAction(success);
-            Log.e("success","check success = "+success);
-            intent.putExtra(ConstantUtil.USER_ID_FLAG, userId);
-            Log.e("userId","check userId = "+userId);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
+
+
+//        if (PreferenceUtil.getString(this, "auto_sign").equals("true")) {
+//            state.setState(true);
+//            state.setUserInstance(response.getUser());
+//            Intent intent = new Intent(this, MainActivity.class);
+//            success = PreferenceUtil.getString(this, "success");
+//            userId = PreferenceUtil.getString(this, ConstantUtil.USER_ID_FLAG);
+//            Log.e("success","check success = "+success);
+//            Log.e("userId","check userId = "+userId);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//        }
     }
 }

@@ -13,6 +13,7 @@ import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -79,8 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             intent.setAction(ConstantUtil.SIGN_UP_SUCCESS); // 회원 가입 성공 Action >>> Main 에서 처리 ( follow skills 띄우기 )
-            intent.putExtra(ConstantUtil.USER_ID_FLAG, response.getUserId());
-            intent.putExtra(ConstantUtil.USER_NAME_FLAG, name);
+            StateUtil.getInstance().setUserInstance(response.getUser());
             startActivity(intent);
         } else {
             if(response.getMessage().equals(ConstantUtil.ALREADY_EXISTED_EMAIL)) {

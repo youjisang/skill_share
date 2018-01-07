@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.GroupActivity;
+
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
@@ -60,7 +60,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        if(groups == null || groups.size() == 0) {
+        if(groups != null && groups.size() != 0) {
             Group group = groups.get(position);
 
             holder.textViewGroupName.setText(group.getGroupName());
@@ -91,14 +91,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
                 view.setOnClickListener(
                         v -> {
-                            intent = new Intent(context, GroupActivity.class);
-
-                            intent.putExtra("position", getLayoutPosition());
-                            intent.putExtra("groupName", groups.get(getLayoutPosition()).getGroupName());
-                            intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getMemberCount());
-                            intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getGroupThumbnail());
-
-                            ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
+//                            intent = new Intent(context, GroupActivity.class);
+//
+//                            intent.putExtra("position", getLayoutPosition());
+//                            intent.putExtra("groupName", groups.get(getLayoutPosition()).getGroupName());
+//                            intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getMemberCount());
+//                            intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getGroupThumbnail());
+//
+//                            ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
                         }
                 );
             }

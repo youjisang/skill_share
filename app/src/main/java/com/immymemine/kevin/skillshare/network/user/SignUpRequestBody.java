@@ -19,7 +19,13 @@ public class SignUpRequestBody {
     public void setName(String name) {
         this.name = name;
     }
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     public String getPhotoUrl() {
         return photoUrl;
     }
+
+
 }

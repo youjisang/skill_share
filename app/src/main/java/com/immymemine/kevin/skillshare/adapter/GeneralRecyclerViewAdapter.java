@@ -33,6 +33,11 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         this.context = context;
     }
 
+    public GeneralRecyclerViewAdapter(Context context, List<Class> classes) {
+        this.context = context;
+        this.classes = classes;
+    }
+
     public void update(List<Class> classes) {
         this.classes = classes;
         notifyDataSetChanged();
