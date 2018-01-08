@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.fragment.class_f;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SignInActivity;
+import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.class_adapter.DiscussionsAdapter;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
@@ -45,7 +48,7 @@ public class DiscussionsFragment extends Fragment {
     DiscussionsAdapter adapter;
 
     EditText editText;
-    LinearLayout linearLayoutDiscussion;
+    LinearLayout linearLayoutSignMessage;
     Context context;
 
 //    List<Discussion> discussions;
@@ -62,12 +65,25 @@ public class DiscussionsFragment extends Fragment {
         context = getActivity();
 
         recyclerViewDiscussion = view.findViewById(R.id.recycler_view_discussion);
-        adapter = new DiscussionsAdapter(getActivity());
+        adapter = new DiscussionsAdapter(context);
         recyclerViewDiscussion.setLayoutManager(new LinearLayoutManager(context));
         recyclerViewDiscussion.setAdapter(adapter);
         recyclerViewDiscussion.setNestedScrollingEnabled(false);
 
-        linearLayoutDiscussion = view.findViewById(R.id.linear_layout_discussion);
+        if(StateUtil.getInstance().getState()) {
+            view.findViewById(R.id.linear_layout_sign_message).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.linear_layout_discussion).setVisibility(View.GONE);
+            linearLayoutSignMessage = view.findViewById(R.id.linear_layout_sign_message);
+
+            linearLayoutSignMessage.findViewById(R.id.sign_in).setOnClickListener(
+                    v -> context.startActivity(new Intent(context, SignInActivity.class))
+            );
+
+            linearLayoutSignMessage.findViewById(R.id.sign_up).setOnClickListener(
+                    v -> context.startActivity(new Intent(context, SignUpActivity.class))
+            );
+        }
 
         textViewDiscussion = view.findViewById(R.id.text_view_discussion);
 
@@ -104,6 +120,7 @@ public class DiscussionsFragment extends Fragment {
                     user.getName(),
                     user.getImageUrl(),
                     user.getRegistrationId(),
+                    new ArrayList<>(),
                     new ArrayList<>()
             );
 
@@ -119,9 +136,9 @@ public class DiscussionsFragment extends Fragment {
     List<Discussion> discussions;
 
     private void handleResponse(List<Discussion> discussions) {
-
         Collections.reverse(discussions);
         this.discussions = discussions;
+
         // TODO list reverse or get data by sort
         if(discussions == null || discussions.size() == 0) {
             textViewDiscussion.setVisibility(View.GONE);
@@ -140,7 +157,6 @@ public class DiscussionsFragment extends Fragment {
 
     @Subscribe
     public void updateReplies(Map<Integer, List<Reply>> data) {
-        Log.d("JUWONLEE", "successful subscribe");
         for(int position : data.keySet()) {
             if (position != -1) {
                 Discussion discussion = discussions.get(position);

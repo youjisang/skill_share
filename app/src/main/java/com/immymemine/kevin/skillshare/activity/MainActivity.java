@@ -97,19 +97,6 @@ public class MainActivity extends AppCompatActivity {
     OfflineMeFragment offlineMeFragment;
 
     private void initiateView() {
-
-        // refresh view setting
-//        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
-//        refreshLayout.setOnRefreshListener(() -> {
-//            // 데이터 변화 감지 ( ? )
-//
-//            // 다른 부분이 있으면 view 를 추가하거나 삭제
-//
-//            // 완료 되면 호출 ∇
-//            refreshLayout.setRefreshing(false);
-//        });
-//        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
-
         progressBar = findViewById(R.id.progress_bar);
     }
 

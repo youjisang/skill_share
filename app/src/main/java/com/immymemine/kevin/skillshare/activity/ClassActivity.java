@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -184,6 +185,19 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // 세로
+            
+        } else if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+        }
+
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void play(String url) {
         mediaSource = buildMediaSource(Uri.parse(url));
         player.prepare(mediaSource);
@@ -311,7 +325,6 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         super.onPause();
     }
 
-    boolean isFollow;
     @Override
     protected void onDestroy() {
         releasePlayer();

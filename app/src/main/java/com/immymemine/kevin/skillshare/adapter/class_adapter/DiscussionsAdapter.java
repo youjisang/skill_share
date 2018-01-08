@@ -17,11 +17,14 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
+import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.LikeBody;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
-import com.immymemine.kevin.skillshare.network.api.GCMService;
-import com.immymemine.kevin.skillshare.network.gcm.SendMessageBody;
+import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.DialogUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
@@ -92,13 +95,12 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             Discussion discussion = discussions.get(position);
             // identifier
             holder.discussionId = discussion.get_id();
-            holder.userId = discussion.getUserId();
+            holder.resId = discussion.getResId();
             holder.position = position;
 
             // profile
             if(discussion.getImageUrl() == null || discussion.getImageUrl().equals("")) {
-                holder.imageUrl = discussion.getImageUrl();
-                Glide.with(context).load(holder.imageUrl)
+                Glide.with(context).load(R.drawable.ic_profile)
                         .apply(RequestOptions.circleCropTransform())
                         .into(holder.imageViewProfile);
             } else {
@@ -107,15 +109,63 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         .apply(RequestOptions.circleCropTransform())
                         .into(holder.imageViewProfile);
             }
-
             holder.textViewProfile.setText(discussion.getName());
+
             // content
             holder.expandableTextView.setText(discussion.getContent(), TextView.BufferType.NORMAL);
+
             // time
             holder.time = discussion.getTime();
             holder.textViewTime.setText( TimeUtil.calculateTime(holder.time) );
+
             // like
+            if(StateUtil.getInstance().getState()) {
+                if(discussion.getLikeUsersIds() != null && discussion.getLikeUsersIds().size() != 0) {
+                    String userId = StateUtil.getInstance().getUserInstance().get_id();
+                    if(discussion.getLikeUsersIds().contains(userId))
+                        holder.imageButtonLike.setChecked(true);
+                }
+
+                User user = StateUtil.getInstance().getUserInstance();
+                holder.imageButtonLike.setOnCheckedChangeListener(
+                        (buttonView, isChecked) -> {
+                            if(isChecked) {
+                                RetrofitHelper.createApi(ClassService.class)
+                                        .like(new LikeBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                (Response response) -> {
+                                                    holder.textViewLikeCount.setText(response.getLikeCount());
+                                                }, (Throwable error) -> {
+                                                    Log.d("JUWON LEE", "error : " + error.getMessage());
+                                                }
+                                        );
+                            } else {
+                                RetrofitHelper.createApi(ClassService.class)
+                                        .unLike(new LikeBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(
+                                                (Response response) -> {
+                                                    holder.textViewLikeCount.setText(response.getLikeCount());
+                                                }, (Throwable error) -> {
+                                                    Log.d("JUWON LEE", "error : " + error.getMessage());
+                                                }
+                                        );
+                            }
+                        }
+                );
+            } else {
+                holder.imageButtonLike.setOnCheckedChangeListener(
+                        (buttonView, isChecked) -> {
+                            buttonView.setChecked(false);
+                            DialogUtil.showSignDialog(context);
+                        }
+                );
+            }
             holder.textViewLikeCount.setText(discussion.getLikeCount());
+
             // reply
             if( discussion.getReplies() != null ) {
                 holder.setReply(discussion.getReplies());
@@ -134,7 +184,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // id
         String discussionId;
-        String userId;
+        String resId;
         int position;
 
         // profile
@@ -177,25 +227,6 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 textViewTime = v.findViewById(R.id.text_view_time);
                 // like
                 imageButtonLike = v.findViewById(R.id.image_button_like);
-                imageButtonLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if(isChecked) {
-                        textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) + 1) + "");
-                        // if(login) >>> notification message else dialog 띄우기
-                        RetrofitHelper.createApi(GCMService.class)
-                                .sendMessage(new SendMessageBody("JUWON LEE", userId))
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(
-                                        (Response response) -> {
-                                            Log.d("JUWON LEE", "result : " + response.getResult() + ", message : " + response.getMessage());
-                                        }, (Throwable error) -> {
-                                            Log.d("JUWON LEE", "error : " + error.getMessage());
-                                        }
-                                );
-                    } else {
-                        textViewLikeCount.setText((Integer.parseInt(textViewLikeCount.getText().toString()) - 1) + "");
-                    }
-                });
                 textViewLikeCount = v.findViewById(R.id.text_view_like_count);
 
                 // reply

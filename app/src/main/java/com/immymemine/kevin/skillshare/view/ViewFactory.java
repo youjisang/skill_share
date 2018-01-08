@@ -3,7 +3,6 @@ package com.immymemine.kevin.skillshare.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -81,25 +80,5 @@ public class ViewFactory {
             view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
         return view;
-    }
-
-    public Toolbar getToolbar(int type) {
-        Toolbar toolbar = null;
-
-        switch (type) {
-            case 42:
-                toolbar = (Toolbar) inflater.inflate(R.layout.toolbar_home, null);
-                break;
-            case 43:
-                break;
-            case 44:
-                break;
-            case 45:
-                break;
-            case 46:
-                break;
-        }
-
-        return toolbar;
     }
 }
