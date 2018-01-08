@@ -7,19 +7,17 @@
 
 
     <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="64dp"
         app:srcCompat="@drawable/search_icon" />
 
     <TextView
-        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="200dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="48dp"
         android:text="Your search didn't match any classes"
         android:textAlignment="center"
         android:textColor="@color/cardview_dark_background"
@@ -27,13 +25,12 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="240dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="80dp"
         android:text="Please try a different search."
         android:textAlignment="center"
-        android:textSize="16dp"
-        android:textColor="@color/IcInactive" />
+        android:textColor="@color/IcInactive"
+        android:textSize="16dp" />
 </FrameLayout>

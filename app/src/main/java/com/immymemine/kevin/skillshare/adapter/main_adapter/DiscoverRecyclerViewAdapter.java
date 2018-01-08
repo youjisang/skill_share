@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter;
+package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +68,7 @@ public class DiscoverRecyclerViewAdapter extends RecyclerView.Adapter<DiscoverRe
             imageViewFeaturedClass = view.findViewById(R.id.image_view_group);
             textViewTime = view.findViewById(R.id.text_view_time);
             textViewTitle = view.findViewById(R.id.text_view_title);
-            textViewTutorName = view.findViewById(R.id.text_view_tutor_name);
+            textViewTutorName = view.findViewById(R.id.text_view_user_name);
 
             view.setOnClickListener(v -> {
                 // Class Activity

@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.model.m_class.Tutor;
+import com.immymemine.kevin.skillshare.model.user.Following;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
@@ -26,6 +28,12 @@ public interface UserService {
     @GET("user/{id}")
     Observable<User> getUser(@Path("id") String id);
 
-    @PUT("/user/sign-up/{id}")
-    Observable<User> imageSetting(@Body User user,@Path("imageUrl") String imageUri);
+    @PUT("user/follow/{userId}")
+    Observable<Following> follow(@Path("userId") String userId, @Body Tutor tutor);
+
+    @PUT("user/imageUrl/{userId}/{imageUrl}")
+    Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);
+
+    @GET("user/imageUrl/{userId}")
+    Observable<User> imageUrl(@Path("userId") String userId);
 }

@@ -21,14 +21,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:hint="What do you want to learn"
+            android:hint="What do you want to learn?"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
             android:maxLines="1"
             android:maxWidth="300dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="32dp"
+            android:singleLine="true"
             android:textColor="@android:color/black"
             android:textColorHint="#888888"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:textSize="20sp" />
 
         <ImageButton
             android:id="@+id/toolbar_button_back"

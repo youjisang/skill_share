@@ -8,7 +8,6 @@
     tools:context="com.immymemine.kevin.skillshare.fragment.main_f.HomeFragment">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"
@@ -36,7 +35,7 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -58,6 +57,6 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/general_view" />
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

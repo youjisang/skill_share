@@ -1,6 +1,5 @@
 package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-
+import com.immymemine.kevin.skillshare.activity.GroupActivity;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
@@ -27,8 +26,6 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     Context context;
     List<Group> groups;
-    Intent intent;
-
     public GroupRecyclerViewAdapter(Context context) {
         this.context = context;
     }
@@ -68,6 +65,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             Glide.with(context).load(group.getGroupThumbnail())
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageViewGroup);
+
+            holder.position = position;
         }
     }
 
@@ -82,6 +81,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         ImageView imageViewGroup;
         TextView textViewMemberCount, textViewGroupName;
 
+        int position;
+
         public Holder(View view) {
             super(view);
             if(groups != null && groups.size() != 0) {
@@ -91,14 +92,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
                 view.setOnClickListener(
                         v -> {
-//                            intent = new Intent(context, GroupActivity.class);
-//
-//                            intent.putExtra("position", getLayoutPosition());
-//                            intent.putExtra("groupName", groups.get(getLayoutPosition()).getGroupName());
-//                            intent.putExtra("groupJoinNum", groups.get(getLayoutPosition()).getMemberCount());
-//                            intent.putExtra("groupImageUri", groups.get(getLayoutPosition()).getGroupThumbnail());
-//
-//                            ((Activity) context).startActivityForResult(intent, ConstantUtil.ALREADY_JOIN_GROUP);
+                            Intent intent = new Intent(context, GroupActivity.class);
+                            Group group = groups.get(position);
+                            intent.putExtra("group", group);
+                            context.startActivity(intent);
                         }
                 );
             }

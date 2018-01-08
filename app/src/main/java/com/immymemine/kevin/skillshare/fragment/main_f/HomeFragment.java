@@ -4,13 +4,9 @@ package com.immymemine.kevin.skillshare.fragment.main_f;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +37,6 @@ public class HomeFragment extends Fragment {
     Context context;
     HomeRecyclerViewAdapter adapter;
 
-    Toolbar toolbar;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -50,12 +45,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        Log.e("error","home1");
+
         context = getActivity();
 
-        toolbar = view.findViewById(R.id.toolbar);
+        view.findViewById(R.id.toolbar_button_search)
+                .setOnClickListener(v -> context.startActivity(new Intent(context, SearchActivity.class)));
 
-        if(!StateUtil.getInstance().getState()) {
+        if(!StateUtil.getInstance().getState() &&
+                (getArguments() != null) ? getArguments().getBoolean("show") : true) {
             FrameLayout welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
             View welcomeView = ViewFactory.getInstance(context).getWelcomeView();
             welcomeView.findViewById(R.id.close_button).setOnClickListener(
@@ -63,51 +60,34 @@ public class HomeFragment extends Fragment {
                         welcomeViewContainer.removeView(welcomeView);
                     }
             );
+
             welcomeViewContainer.addView(welcomeView);
         }
 
-        view.findViewById(R.id.toolbar_button_search).setOnClickListener(
-                v -> {
-                    Intent intent = new Intent(context, SearchActivity.class);
-                    startActivity(intent);
-                }
-        );
-        Log.e("error","home2");
-        List<String>
-                followSkills = (StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) ?
+        List<String> followSkills = (StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) ?
                 StateUtil.getInstance().getUserInstance().getFollowingSkills() : new ArrayList<>();
-        Log.e("error","home3");
+
         RetrofitHelper.createApi(HomeService.class)
                 .getHomeClasses(followSkills)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
-        Log.e("error","home3");
+
         // RecyclerView setting
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_home);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new HomeRecyclerViewAdapter(context);
         recyclerView.setAdapter(adapter);
-        Log.e("error","home4");
+
         return view;
     }
 
     private void handleResponse(List<Map<String, List<Class>>> classes) {
-        Log.e("error","home5");
-        Log.e("classes","classes"+classes);
-
         adapter.update(classes);
     }
 
     private void handleError(Throwable error) {
-        Log.e("error","home6"+error.toString());
 
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        ((AppCompatActivity)context).setSupportActionBar(toolbar);
     }
 }

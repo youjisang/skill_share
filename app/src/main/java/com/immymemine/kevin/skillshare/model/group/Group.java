@@ -1,10 +1,13 @@
 package com.immymemine.kevin.skillshare.model.group;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by quf93 on 2017-12-12.
  */
 
-public class Group {
+public class Group implements Parcelable {
     String _id;
     String groupName;
     String groupThumbnail;
@@ -17,35 +20,51 @@ public class Group {
         this.memberCount = memberCount;
     }
 
-    public String get_id() {
-        return _id;
+    protected Group(Parcel in) {
+        _id = in.readString();
+        groupName = in.readString();
+        groupThumbnail = in.readString();
+        memberCount = in.readString();
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
+
+    public String get_id() {
+        return _id;
     }
 
     public String getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
     public String getGroupThumbnail() {
         return groupThumbnail;
-    }
-
-    public void setGroupThumbnail(String groupThumbnail) {
-        this.groupThumbnail = groupThumbnail;
     }
 
     public String getMemberCount() {
         return memberCount;
     }
 
-    public void setMemberCount(String memberCount) {
-        this.memberCount = memberCount;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_id);
+        dest.writeString(groupName);
+        dest.writeString(groupThumbnail);
+        dest.writeString(memberCount);
     }
 }

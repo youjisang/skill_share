@@ -1,8 +1,7 @@
 package com.immymemine.kevin.skillshare.activity;
 
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,12 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ToggleButton;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.ViewTarget;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -48,6 +45,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.class_adapter.FragmentAdapter;
+import com.immymemine.kevin.skillshare.adapter.class_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.LessonsFragment;
@@ -56,73 +54,54 @@ import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassActivity extends AppCompatActivity {
+public class ClassActivity extends AppCompatActivity implements LessonsAdapter.InteractionInterface {
 
     // views
     ViewPager tabPager;
     TabLayout tabLayout;
-    ImageButton start_button;
-    ToggleButton subscribe_button;
-    FrameLayout Frame_layout_videoThumbnail;
+    ImageButton startButton;
+
     // fragments
     AboutFragment aboutfragment;
     DiscussionsFragment discussionsfragment;
     LessonsFragment lessonsfragment;
 
-
     String classId, url;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
+
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
         classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
-        // 2. model object 에 담아주고
-
-
-        // 3. view 에서 model object 를 사용
 
         initiateView();
         setTabLayout();
         setTabPager();
-        connectTabAndPager();
 
         initiatePlayer();
+        initiateFullScreenDialog();
     }
 
     private void initiateView() {
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
-        start_button = findViewById(R.id.start_button);
-        subscribe_button = findViewById(R.id.button_subscribe2);
-        Frame_layout_videoThumbnail = findViewById(R.id.Frame_layout_videoThumbnail);
+        startButton = findViewById(R.id.start_button);
 
-
-        start_button.setOnClickListener(
-                v -> {
-                    player.setPlayWhenReady(true);
-
-                    // code refactoring...
-                    start_button.setVisibility(View.GONE);
-                    findViewById(R.id.button_share2).setVisibility(View.GONE);
-                    findViewById(R.id.button_back2).setVisibility(View.GONE);
-                    findViewById(R.id.button_subscribe2).setVisibility(View.GONE);
-
-                    // controller
-                    simpleExoPlayerView.setUseController(true); //Set media controller
-                    simpleExoPlayerView.showController();
-                });
+//        findViewById(R.id.button_share).setVisibility(View.GONE);
+//        findViewById(R.id.button_back).setVisibility(View.GONE);
+//        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
     }
-
 
     private void setTabLayout() {
         tabLayout.addTab(tabLayout.newTab().setText("Lessons"));
         tabLayout.addTab(tabLayout.newTab().setText("About"));
         tabLayout.addTab(tabLayout.newTab().setText("Discussion"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabPager));
     }
 
     private void setTabPager() {
@@ -143,24 +122,11 @@ public class ClassActivity extends AppCompatActivity {
         fragmentList.add(discussionsfragment);
 
         tabPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragmentList));
-    }
-
-    // 탭 레이아웃과 뷰페이저를 연결한다.
-    private void connectTabAndPager() {
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(tabPager));
         tabPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
 
     // share button 클릭 리스너
     public void share(View view) {
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        String url = "https://www.skillshare.com/";
-        String subject = "music"; // 해당 클래스 비디오 제목
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        intent.setType("text/plain");
-        Intent chooser = Intent.createChooser(intent, "skillShare");
-        startActivity(chooser);
 
     }
 
@@ -170,28 +136,79 @@ public class ClassActivity extends AppCompatActivity {
         finish();
     }
 
-
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
 
-        if (subscribe_button.isChecked()) {
-            subscribe_button.setBackgroundDrawable(getResources().getDrawable(R.drawable.image_used_bookmark));
-            Snackbar.make(view, "Saved class for later", Snackbar.LENGTH_LONG).show();
+    }
 
+    public void start(View view) {
+        player.setPlayWhenReady(true);
 
-        } else {
-            subscribe_button.setBackgroundDrawable(getResources().getDrawable(R.drawable.image_unused_bookmark));
-            Snackbar.make(view, "unsaved", Snackbar.LENGTH_LONG).show();
+        // code refactoring...
+        startButton.setVisibility(View.GONE);
+        findViewById(R.id.button_share).setVisibility(View.GONE);
+        findViewById(R.id.button_back).setVisibility(View.GONE);
+        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
 
-        }
+        // controller
+        simpleExoPlayerView.setUseController(true); //Set media controller
+        simpleExoPlayerView.showController();
+    }
 
+    Dialog fullScreenDialog;
+    boolean isFullScreen;
+
+    private void initiateFullScreenDialog() {
+        fullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+            @Override
+            public void onBackPressed() {
+                super.onBackPressed();
+                if (isFullScreen)
+                    closeFullScreen();
+            }
+        };
+    }
+
+    public void openFullScreen(View view) {
+        if (isFullScreen)
+            closeFullScreen();
+
+        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        fullScreenDialog.addContentView(simpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        isFullScreen = true;
+        fullScreenDialog.show();
+    }
+
+    public void closeFullScreen() {
+        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        ((FrameLayout) findViewById(R.id.player_frame)).addView(simpleExoPlayerView);
+        isFullScreen = false;
+        fullScreenDialog.dismiss();
+    }
+
+    @Override
+    public void play(String url) {
+        mediaSource = buildMediaSource(Uri.parse(url));
+        player.prepare(mediaSource);
+        player.setPlayWhenReady(true);
+
+        // code refactoring...
+        startButton.setVisibility(View.GONE);
+        findViewById(R.id.button_share).setVisibility(View.GONE);
+        findViewById(R.id.button_back).setVisibility(View.GONE);
+        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
+
+        // controller
+        simpleExoPlayerView.setUseController(true); //Set media controller
+        simpleExoPlayerView.showController();
     }
 
     // Exo Player -----------------------------------------------------------------------
     // video play step : 1. networking  2. buffering  3. extraction  4. decoding  5. rendering
 
     private static final String TAG = "Player on classes_activity";
-    private static final String URL = "http://yt-dash-mse-test.commondatastorage.googleapis.com/media/oops-20120802-manifest.mpd";
+    private final String URL = "https://f1.media.brightcove.com/12/3695997568001/3695997568001_4607435803001_4204665411001.mp4?pubId=3695997568001&videoId=4204665411001";
+//    private final String URL = "http://yt-dash-mse-test.commondatastorage.googleapis.com/media/oops-20120802-manifest.mpd";
 
     private String userAgent;
     private SimpleExoPlayerView simpleExoPlayerView; // view
@@ -297,6 +314,8 @@ public class ClassActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    boolean isFollow;
+
     @Override
     protected void onDestroy() {
         releasePlayer();
@@ -349,6 +368,4 @@ public class ClassActivity extends AppCompatActivity {
             Log.v(TAG, "Listener-onPlaybackParametersChanged...");
         }
     }
-
-
 }

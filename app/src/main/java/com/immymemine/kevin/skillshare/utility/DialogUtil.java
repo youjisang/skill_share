@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SignInActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -32,7 +30,7 @@ public class DialogUtil {
 
     private void showCreateGroupDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.create_group_dialog, null, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_create_group, null, false);
         int limit = 40;
         ImageButton toolbarCloseButton = view.findViewById(R.id.toolbar_close_button);
         EditText editTextGroupName = view.findViewById(R.id.edit_text_group_name);
@@ -60,17 +58,19 @@ public class DialogUtil {
         builder.show();
     }
 
+    public static void showSignDialog(Context context) {
 
-
-    //TODO 지상 회원가입 및 로그인이 안되어있을 때, 다이얼로그 처리
-    public static void showGroupDialog(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.popup_group_sign_out,null,false);
-        Button button_sign_in = view.findViewById(R.id.button_sign_In);
-        Button button_sign_up = view.findViewById(R.id.button_sign_up);
-        button_sign_in.setOnClickListener(v -> view.getContext().startActivity(new Intent(context,SignInActivity.class)));
-        button_sign_up.setOnClickListener(v -> view.getContext().startActivity(new Intent(context,SignUpActivity.class)));
-        builder.setView(view);
-        builder.show();
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_sign, null, false);
+
+        view.findViewById(R.id.button_sign_in).setOnClickListener(
+                v -> context.startActivity(new Intent(context, SignInActivity.class))
+        );
+
+        view.findViewById(R.id.button_sign_up).setOnClickListener(
+                v -> context.startActivity(new Intent(context, SignUpActivity.class))
+        );
+
+        builder.setView(view).show();
     }
 }

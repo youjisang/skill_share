@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/corner_rounded_button2" android:state_checked="true" android:text="Following" android:textColor="@color/white" />
+    <item android:drawable="@drawable/corner_rounded_button2"
+        android:state_checked="true"
+        android:text="Following" />
 
-    <item android:drawable="@drawable/corner_rounded_button" android:state_checked="false" android:text="+ Follower" android:textColor="@color/IcActive" />
+    <item android:drawable="@drawable/corner_rounded_button"
+        android:state_checked="false"
+        android:text="+ Follower" />
 </selector>

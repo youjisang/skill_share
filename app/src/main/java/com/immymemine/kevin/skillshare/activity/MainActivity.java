@@ -7,9 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initiateView() {
 
-//        // refresh view setting
+        // refresh view setting
 //        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
 //        refreshLayout.setOnRefreshListener(() -> {
 //            // 데이터 변화 감지 ( ? )
@@ -111,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
 //            refreshLayout.setRefreshing(false);
 //        });
 //        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
-//
-//        progressBar = findViewById(R.id.progress_bar);
+
+        progressBar = findViewById(R.id.progress_bar);
     }
 
     // 네비게이션바
@@ -166,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
                         } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("show", false);
+                            homeFragment.setArguments(bundle);
+
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, homeFragment)
@@ -217,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     } else {
                         if(yourClassesFragment == null) {
-                            Log.d("JUWONLEE", "YOUR NULL");
                             yourClassesFragment = new YourClassesFragment();
 
                             getSupportFragmentManager()
@@ -225,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
                         } else {
-                            Log.d("JUWONLEE", "YOUR NOT NULL");
-
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, yourClassesFragment)
@@ -241,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         if(stateUtil.getState()) {
                             if(meFragment == null) {
-                                Log.d("JUWONLEE", "ME NULL");
                                 meFragment = new MeFragment();
 
                                 getSupportFragmentManager()
@@ -249,8 +247,6 @@ public class MainActivity extends AppCompatActivity {
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
                             } else {
-                                Log.d("JUWONLEE", "ME NOT NULL");
-
                                 getSupportFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.fragment_container, meFragment)
@@ -259,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
                             if(offlineMeFragment == null) {
-                                Log.d("JUWONLEE", "OFFLINE");
                                 offlineMeFragment = new OfflineMeFragment();
 
                                 getSupportFragmentManager()
@@ -329,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
                 user.setFollowingSkills(skills);
-            } else if (requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
+            } else if(requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
                 user.setFollowingSkills(skills);
 
@@ -339,33 +334,6 @@ public class MainActivity extends AppCompatActivity {
                 followSkills.add(ConstantUtil.TRENDING_NOW);
                 followSkills.add(ConstantUtil.BEST_THIS_MONTH);
             }
-
-//            //TODO 지상 그룹 부분 -------------------------------------------------------------------------------
-//            else if (requestCode == ConstantUtil.ALREADY_JOIN_GROUP) {
-//                Log.e("MainActivity1", "check1");
-//                if (resultCode == RESULT_OK) {
-//                    Toast.makeText(MainActivity.this, "success", Toast.LENGTH_LONG).show();
-//
-//                    int groupItemPosition = data.getIntExtra("position", 0);
-//                    String group_id = data.getStringExtra("groupId");
-//                    String groupTitle_s = data.getStringExtra("groupName");
-//                    String groupNum_s = data.getStringExtra("groupJoinNum");
-//                    String imageUri_s = data.getStringExtra("groupImageUri");
-////                    myGroup.add(new Group(group_id, groupTitle_s, imageUri_s, groupNum_s));
-//
-//                }
-//
-//
-////                group_view_container.removeAllViews();
-////                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), myGroup));
-////                group_view_container.addView(viewFactory.getGroupView(getString(R.string.my_groups), myGroup));
-////                group_view_container.addView(viewFactory.getGroupView(getString(R.string.featured_groups), featuredGroup));
-////                group_view_container.addView(viewFactory.getGroupView(getString(R.string.recently_active_groups), recentlyActiveGroup));
-//
-//
-//            }
-
-
         }
     }
 }

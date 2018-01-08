@@ -1,146 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     android:background="@android:color/background_light">
 
 
     <View
-        android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="#c8d9d9d9"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_below="@+id/image_view_duration"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#c8d9d9d9" />
 
 
     <TextView
-        android:id="@+id/text_view_title5"
-        android:layout_width="0dp"
+        android:id="@+id/text_view_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_thumbnail"
         android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Create a Desktop Calendar/Wallpaper using a Pattern"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.37"
-        app:layout_constraintStart_toEndOf="@+id/image_view_profile"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/text_view_tutor3"
+        android:id="@+id/text_view_tutor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_title"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
         android:ellipsize="end"
         android:lines="1"
         android:text="Mel Armstrong"
         android:textColor="@color/IcInactive"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_view_profile"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_title5" />
+        android:textSize="18sp" />
 
     <ImageView
-        android:id="@+id/image_view_profile"
+        android:id="@+id/image_view_thumbnail"
         android:layout_width="120dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/skill_design" />
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/design" />
+        android:background="@color/IcDisabled"
+        android:scaleType="centerCrop" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+    <ImageView
+        android:id="@+id/image_view_duration"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignLeft="@+id/image_view_thumbnail"
+        android:layout_below="@+id/image_view_thumbnail"
+        android:layout_gravity="center_vertical"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@android:drawable/ic_lock_idle_alarm"
+        android:tint="@color/cardview_dark_background" />
+
+    <TextView
+        android:id="@+id/text_view_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_duration"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_toRightOf="@+id/image_view_duration"
+        android:text="47m"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="18sp" />
 
+    <ImageView
+        android:id="@+id/image_view_review_percent"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@+id/image_view_duration"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/text_view_duration"
+        android:src="@drawable/plus" />
 
-        <ImageView
-            android:id="@+id/image_view_duration"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@android:drawable/ic_lock_idle_alarm"
-            android:tint="@color/cardview_dark_background" />
+    <TextView
+        android:id="@+id/text_view_review_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_duration"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/image_view_review_percent"
+        android:text="100%"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/text_view_duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:text="47m"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="18sp" />
+    <ImageView
+        android:id="@+id/image_view_subscriber_count"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@+id/image_view_duration"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/text_view_review_percent"
+        android:src="@drawable/ic_group"
+        android:tint="@color/cardview_dark_background" />
 
-        <ImageView
-            android:id="@+id/image_view_thumUp"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/plus" />
-
-        <TextView
-            android:id="@+id/text_view_thumbUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="100%"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/image_view_attendanceStudents"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_group"
-            android:tint="@color/cardview_dark_background" />
-
-        <TextView
-            android:id="@+id/text_view_attendanceStudents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="170"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/text_view_subscriber_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_duration"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/image_view_subscriber_count"
+        android:text="170"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="18sp" />
+</RelativeLayout>

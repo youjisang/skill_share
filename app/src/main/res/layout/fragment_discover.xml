@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar3"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_light"
@@ -73,7 +73,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/imageView3"
-                    android:text="47m"
+                    android:text="m"
                     android:textColor="@color/cardview_dark_background"
                     android:textSize="18sp" />
 
@@ -99,7 +99,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/imageView5"
-                    android:text="100%"
+                    android:text="%"
                     android:textColor="@color/cardview_dark_background"
                     android:textSize="18sp" />
 
@@ -126,7 +126,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/imageView6"
-                    android:text="170"
+                    android:text="0"
                     android:textColor="@color/cardview_dark_background"
                     android:textSize="18sp" />
 
@@ -139,8 +139,7 @@
                         android:id="@+id/image_view_featured_class"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/skill_design" />
+                        android:scaleType="centerCrop" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -165,7 +164,6 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="16dp"
-                    android:text="Create a Desktop Calendar/ Wallpaper using a Pattern"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -181,14 +179,13 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/text_view_tutor_name"
+                    android:id="@+id/text_view_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/button_follow"
                     android:layout_marginLeft="16dp"
                     android:layout_toEndOf="@+id/image_view_group"
                     android:layout_toRightOf="@+id/image_view_group"
-                    android:text="Mel Armstrong"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/image_view_group"
@@ -201,15 +198,14 @@
                     android:id="@+id/text_view_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/text_view_tutor_name"
-                    android:layout_alignStart="@+id/text_view_tutor_name"
-                    android:layout_below="@+id/text_view_tutor_name"
-                    android:text="621 Followers"
+                    android:layout_alignLeft="@+id/text_view_user_name"
+                    android:layout_alignStart="@+id/text_view_user_name"
+                    android:layout_below="@+id/text_view_user_name"
                     android:textColor="@color/IcInactive"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.261"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_view_tutor_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_user_name" />
 
                 <ImageView
                     android:id="@+id/image_view_group"
@@ -217,7 +213,6 @@
                     android:layout_height="56dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher_round"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.025"
                     app:layout_constraintStart_toStartOf="parent"

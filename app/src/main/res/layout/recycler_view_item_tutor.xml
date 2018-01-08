@@ -51,7 +51,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/text_view_tutor_name"
+        android:id="@+id/text_view_user_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

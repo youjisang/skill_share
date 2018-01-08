@@ -96,12 +96,12 @@ public class SavedRecyclerViewAdapter extends RecyclerView.Adapter<SavedRecycler
             super(v);
 
             if (size != 0) {
-                title = v.findViewById(R.id.text_view_title5);
+//                title = v.findViewById(R.id.text_view_title5);
                 tutorName = v.findViewById(R.id.text_view_tutor3);
                 duration = v.findViewById(R.id.text_view_duration_s);
                 thumbUpPercent = v.findViewById(R.id.text_view_thumbUp_s);
                 attendance = v.findViewById(R.id.text_view_attendanceStudents_s);
-                imageUrl = v.findViewById(R.id.image_view_profile);
+//                imageUrl = v.findViewById(R.id.image_view_profile);
                 dots = v.findViewById(R.id.image_view_dots);
 
                 dots.setOnClickListener(new View.OnClickListener() {

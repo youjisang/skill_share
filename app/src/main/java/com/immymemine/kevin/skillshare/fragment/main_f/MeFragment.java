@@ -1,13 +1,18 @@
 package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
@@ -45,9 +51,11 @@ public class MeFragment extends Fragment {
     ImageButton meButton;
     LinearLayout container;
 
+
     StateUtil state;
     User user;
     Uri imageUri;
+    Context context;
 
     public MeFragment() {
         // Required empty public constructor
@@ -59,7 +67,7 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
 
-        Context context = getActivity();
+       context = getActivity();
 
         initiateView(view);
 
@@ -67,9 +75,13 @@ public class MeFragment extends Fragment {
         user = state.getUserInstance();
 
         if (user.getImageUrl() != null) {
-            Glide.with(context).load(user.getImageUrl())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(meImage);
+
+            RetrofitHelper.createApi(UserService.class).imageUrl(user.get_id())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleResponse, this::handleError);
+
+
         } else {
             meImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,17 +108,19 @@ public class MeFragment extends Fragment {
     }
 
     private void initiateView(View view) {
+
         meImage = view.findViewById(R.id.me_image);
         meName = view.findViewById(R.id.me_name);
         meNickname = view.findViewById(R.id.me_nickname);
         meFollowers = view.findViewById(R.id.me_followers);
         meFollowing = view.findViewById(R.id.me_following);
-
         meButton = view.findViewById(R.id.me_button); // sign out button
         container = view.findViewById(R.id.container);
+
+
     }
 
-    String imageAddress;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,24 +129,38 @@ public class MeFragment extends Fragment {
         if (requestCode == 982 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             meImage.setImageURI(imageUri);
-            Log.e("check1","imageUri"+imageUri);
+            user.setImageUrl(imageUri.toString());
 
 
-//            // retrofit
-//            RetrofitHelper.createApi(UserService.class).imageSetting(user)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(this::handleResponse, this::handleError);
+            // retrofit
+            RetrofitHelper.createApi(UserService.class).putImageUrl(user.get_id(),user.getImageUrl())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleResponse, this::handleError);
         }
 
     }
 
     private void handleResponse(User user) {
-        Log.e("handleError", "USER"+user.getImageUrl().toString());
+        Log.e("handleResponse", "USER"+user.getImageUrl());
+        Glide.with(this).load(imageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(meImage);
     }
 
     private void handleError(Throwable throwable) {
         Log.e("handleError", "throwable message" + throwable.getMessage());
     }
+
+//    public String getPathFromUri(Uri uri){
+//        Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null );
+//        cursor.moveToNext();
+//        path = cursor.getString( cursor.getColumnIndex( "_data" ) );
+//
+//        cursor.close();
+//
+//        return path;
+//    }
+
 
 }

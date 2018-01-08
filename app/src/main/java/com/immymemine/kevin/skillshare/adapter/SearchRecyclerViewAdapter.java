@@ -1,7 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.dummy.Search;
+import com.immymemine.kevin.skillshare.activity.ClassActivity;
+import com.immymemine.kevin.skillshare.model.discover.SearchClass;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -22,18 +23,16 @@ import java.util.List;
  */
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
-    Context context;
-    List<Search> data;
-    int state;
 
-    public SearchRecyclerViewAdapter(Context context, List<Search> data) {
+    Context context;
+    List<SearchClass> searchClasses;
+
+    public SearchRecyclerViewAdapter(Context context) {
         this.context = context;
-        this.data = data;
     }
 
-    public void setData(List<Search> data, int state) {
-        this.data = data;
-        this.state = state;
+    public void setData(List<SearchClass> searchClasses) {
+        this.searchClasses = searchClasses;
         notifyDataSetChanged();
     }
 
@@ -41,9 +40,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public int getItemViewType(int position) {
-        if (state == 0)
+        if(searchClasses == null || searchClasses.size() == 0)
             return ConstantUtil.FAIL_SEARCH;
-
         return super.getItemViewType(position);
     }
 
@@ -60,43 +58,57 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (state != 0) {
-            Search dummy = data.get(position);
-            holder.text_view_title.setText(dummy.getTitle());
-            holder.text_view_tutor.setText(dummy.getTutor());
-            holder.text_view_duration.setText(dummy.getDuration());
-            holder.text_view_attendanceStudents.setText(dummy.getAttendanceNum());
-            holder.text_view_thumbUp.setText(dummy.getThumbup());
-            Glide.with(context).load(Uri.parse(dummy.getImageUrl())).apply(RequestOptions.centerCropTransform()).into(holder.image_view_profile);
+        if (searchClasses != null && searchClasses.size() != 0) {
+            SearchClass searchClass = searchClasses.get(position);
+            holder.classId = searchClass.get_id();
+            // image
+            Glide.with(context).load(searchClass.getImageUrl())
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(holder.imageViewThumbnail);
+            // text
+            holder.textViewTitle.setText(searchClass.getTitle());
+            holder.textViewTutorName.setText(searchClass.getTutorName());
+            holder.textViewDuration.setText(searchClass.getTotalDuration());
+            holder.textViewSubscriberCount.setText(searchClass.getSubscriberCount());
+            holder.textViewReviewPercent.setText(searchClass.getReviewPercent() + "%");
         }
 
     }
 
     @Override
     public int getItemCount() {
-        if (state == 0)
+        if (searchClasses == null || searchClasses.size() == 0)
             return 1;
-        return data.size();
+
+        return searchClasses.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text_view_title, text_view_tutor, text_view_duration, text_view_thumbUp, text_view_attendanceStudents;
-        ImageView image_view_profile, image_view_duration, image_view_thumUp, image_view_attendanceStudents;
+
+        String classId;
+
+        TextView textViewTitle, textViewTutorName, textViewDuration,
+                textViewReviewPercent, textViewSubscriberCount;
+        ImageView imageViewThumbnail;
 
         public ViewHolder(View v) {
             super(v);
-            if (state != 0) {
-                text_view_title = v.findViewById(R.id.text_view_title5);
-                text_view_tutor = v.findViewById(R.id.text_view_tutor3);
-                text_view_duration = v.findViewById(R.id.text_view_duration);
-                text_view_thumbUp = v.findViewById(R.id.text_view_thumbUp);
-                text_view_attendanceStudents = v.findViewById(R.id.text_view_attendanceStudents);
-                image_view_profile = v.findViewById(R.id.image_view_profile);
-                image_view_duration = v.findViewById(R.id.image_view_duration);
-                image_view_thumUp = v.findViewById(R.id.image_view_thumUp);
-                image_view_attendanceStudents = v.findViewById(R.id.image_view_attendanceStudents);
-            }
 
+            if (searchClasses != null) {
+                textViewTitle = v.findViewById(R.id.text_view_title);
+                textViewTutorName = v.findViewById(R.id.text_view_tutor_name);
+                imageViewThumbnail = v.findViewById(R.id.image_view_thumbnail);
+
+                textViewDuration = v.findViewById(R.id.text_view_duration);
+                textViewReviewPercent = v.findViewById(R.id.text_view_review_percent);
+                textViewSubscriberCount = v.findViewById(R.id.text_view_subscriber_count);
+
+                v.setOnClickListener( view -> {
+                    Intent intent = new Intent(context, ClassActivity.class);
+                    intent.putExtra(ConstantUtil.ID_FLAG, classId);
+                    context.startActivity(intent);
+                });
+            }
         }
     }
 }

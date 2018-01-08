@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
-import com.immymemine.kevin.skillshare.adapter.GeneralRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 

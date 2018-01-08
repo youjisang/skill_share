@@ -8,7 +8,7 @@
     >
 
     <ImageView
-        android:id="@+id/image_view_profile"
+        android:id="@+id/image_view_thumbnail"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_toRightOf="@+id/image_view_profile"
+        android:layout_toRightOf="@+id/image_view_thumbnail"
         android:text="Name"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -32,7 +32,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/image_view_profile"
+        android:layout_below="@+id/image_view_thumbnail"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"

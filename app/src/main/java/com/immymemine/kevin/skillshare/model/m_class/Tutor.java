@@ -5,28 +5,24 @@ package com.immymemine.kevin.skillshare.model.m_class;
  */
 
 public class Tutor {
-    String _id;
+    String tutorId;
     String name;
     String followers;
     String imageUrl;
 
     // for test
-    public Tutor(String _id,
+    public Tutor(String tutorId,
             String name,
             String followers,
             String imageUrl) {
-        this._id = _id;
+        this.tutorId = tutorId;
         this.name = name;
         this.followers = followers;
         this.imageUrl = imageUrl;
     }
 
-    public String get_id() {
-        return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
+    public String getTutorId() {
+        return tutorId;
     }
 
     public String getName() {
