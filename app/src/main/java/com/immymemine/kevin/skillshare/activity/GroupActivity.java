@@ -1,16 +1,15 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,8 +20,11 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.GroupChatAdapter;
 import com.immymemine.kevin.skillshare.model.group.Chat;
 import com.immymemine.kevin.skillshare.model.group.Group;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.GroupService;
+import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 
@@ -39,7 +41,6 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
     GroupChatAdapter mAdapter;
     RecyclerView mRecyclerView;
     Button buttonJoinGroup;
-    ImageButton buttonBack;
     LinearLayout layout_discussion;
 
     Group mGroup;
@@ -49,9 +50,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        Intent intent = getIntent();
-        mGroup = intent.getParcelableExtra("group");
-
+        mGroup = getIntent().getParcelableExtra("group");
         state = StateUtil.getInstance();
 
         initiateView();
@@ -60,8 +59,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
 
     private void initiateView() {
         // toolbar
-        buttonBack = findViewById(R.id.toolbar_button_back);
-        buttonBack.setOnClickListener(v -> finish());
+        findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
         ((TextView)findViewById(R.id.toolbar_title)).setText(mGroup.getGroupName());
         ((TextView)findViewById(R.id.text_view_member_count)).setText(mGroup.getMemberCount() + " Members");
         toolbar = findViewById(R.id.toolbar);
@@ -80,18 +78,65 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
         buttonJoinGroup = findViewById(R.id.button_join);
         layout_discussion = findViewById(R.id.layout_frame_discussion);
 
-        buttonJoinGroup.setOnClickListener(v -> {
-            if(state.getState()) {
-                buttonJoinGroup.setVisibility(View.GONE);
-                layout_discussion.setVisibility(View.VISIBLE);
+        if(state.getState()) {
+            if(state.getUserInstance().getGroups() != null) {
+                if(state.getUserInstance().getGroups().contains(mGroup)) {
+                    buttonJoinGroup.setVisibility(View.GONE);
+                    layout_discussion.setVisibility(View.VISIBLE);
+                } else {
+                    buttonJoinGroup.setOnClickListener(v -> {
+                        buttonJoinGroup.setVisibility(View.GONE);
+                        layout_discussion.setVisibility(View.VISIBLE);
 
-                List<Group> groups = (state.getUserInstance().getGroups() != null) ?
-                        state.getUserInstance().getGroups() : new ArrayList<>();
-                groups.add(mGroup);
+                        RetrofitHelper.createApi(UserService.class)
+                                .joinGroup(mGroup, state.getUserInstance().get_id())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        (Response response) -> {
+                                            if(ConstantUtil.SUCCESS.equals(response.getResult()))
+                                                state.getUserInstance().getGroups().add(mGroup);
+                                            else {
+                                                // TODO 실패 메시지
+                                            }
+
+                                        }, (Throwable error) -> {
+                                            Log.e("join group error :  ", error.getMessage());
+                                        }
+                                );
+                    });
+                }
             } else {
-                DialogUtil.showSignDialog(this);
+                buttonJoinGroup.setOnClickListener(v -> {
+                    buttonJoinGroup.setVisibility(View.GONE);
+                    layout_discussion.setVisibility(View.VISIBLE);
+
+                    RetrofitHelper.createApi(UserService.class)
+                            .joinGroup(mGroup, state.getUserInstance().get_id())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    (Response response) -> {
+                                        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                            state.getUserInstance().setGroups(new ArrayList<>());
+                                            state.getUserInstance().getGroups().add(mGroup);
+                                        }
+
+                                        else {
+                                            // TODO 실패 메시지
+                                        }
+
+                                    }, (Throwable error) -> {
+                                        Log.e("join group error :  ", error.getMessage());
+                                    }
+                            );
+                });
             }
-        });
+        } else {
+            buttonJoinGroup.setOnClickListener(v -> {
+                DialogUtil.showSignDialog(this);
+            });
+        }
     }
 
     private void initiateRecyclerView() {
@@ -116,7 +161,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
     protected void onStart() {
         super.onStart();
         RetrofitHelper.createApi(GroupService.class)
-                .getChatList(mGroup.get_id(),mAdapter.getItemCount())
+                .getChatList(mGroup.get_id(), 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

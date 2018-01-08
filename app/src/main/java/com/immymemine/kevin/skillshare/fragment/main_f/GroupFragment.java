@@ -74,10 +74,10 @@ public class GroupFragment extends Fragment {
             }
         }
 
-        List<Group> featuredGroups = groups.get("f");
+        List<Group> featuredGroups = groups.get("Featured Groups");
         fAdapter.update(featuredGroups);
 
-        List<Group> recentlyActiveGroups = groups.get("r");
+        List<Group> recentlyActiveGroups = groups.get("Recently Active Groups");
         rAdapter.update(recentlyActiveGroups);
     }
 

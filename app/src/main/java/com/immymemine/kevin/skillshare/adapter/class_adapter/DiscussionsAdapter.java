@@ -18,7 +18,7 @@ import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.user.User;
-import com.immymemine.kevin.skillshare.network.LikeBody;
+import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
@@ -131,7 +131,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                         (buttonView, isChecked) -> {
                             if(isChecked) {
                                 RetrofitHelper.createApi(ClassService.class)
-                                        .like(new LikeBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
+                                        .like(new LikeRequestBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
@@ -143,7 +143,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                                         );
                             } else {
                                 RetrofitHelper.createApi(ClassService.class)
-                                        .unLike(new LikeBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
+                                        .unLike(new LikeRequestBody(holder.discussionId, user.get_id(), user.getName(), holder.resId))
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(

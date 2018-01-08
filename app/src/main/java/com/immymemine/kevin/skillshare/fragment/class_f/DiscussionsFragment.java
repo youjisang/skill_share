@@ -51,8 +51,6 @@ public class DiscussionsFragment extends Fragment {
     LinearLayout linearLayoutSignMessage;
     Context context;
 
-//    List<Discussion> discussions;
-
     String classId;
     public DiscussionsFragment() {
         // Required empty public constructor
