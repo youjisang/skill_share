@@ -16,6 +16,8 @@ import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
+import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
+import com.immymemine.kevin.skillshare.utility.communication_util.Subscribe;
 
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,8 @@ public class GroupFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
 
+        Bus.getInstance().register(this);
+
         return view;
     }
 
@@ -85,4 +89,8 @@ public class GroupFragment extends Fragment {
 
     }
 
+    @Subscribe
+    public void updateMyGroups(List<Group> groups) {
+        mAdapter.update(groups);
+    }
 }
