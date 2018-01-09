@@ -1,5 +1,8 @@
 package com.immymemine.kevin.skillshare.utility.communication_util;
 
+import android.util.Log;
+
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 
 import java.lang.reflect.Method;
@@ -54,6 +57,19 @@ public class Bus {
         }
     }
 
+    // TODO [ FIX ] 다형성을 가진 객체가 넘어올 때 TYPE 이 맞지 않아서 null 값이 전달된다
+    public void post(List<Group> groups) {
+        invokeSubscriber(subscriptionByType.get(java.util.List.class), groups);
+    }
+
+    private void invokeSubscriber(Subscription subscription, List<Group> groups) {
+        try {
+            subscription.subscriberMethod.method.invoke(subscription.subscriber, groups);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // TODO module 화
     public void post(Object data) {
         invokeSubscriber(subscriptionByType.get(data.getClass()), data);
@@ -70,11 +86,12 @@ public class Bus {
     private SubscriberMethod getMethod(Class<?> subscriberClass) {
         for(Method method : subscriberClass.getMethods()) {
             Subscribe annotation = method.getAnnotation(Subscribe.class);
-
             if(annotation != null) { // annotation null check
                 Class<?>[] parameters = method.getParameterTypes();
-                if(parameters.length == 1)
+
+                if(parameters.length == 1) {
                     return new SubscriberMethod(method, parameters[0]); // method, parameter type
+                }
             }
         }
 

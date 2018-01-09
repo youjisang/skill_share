@@ -27,6 +27,7 @@ import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
+import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
                 toolbar.setBackground(resource);
             }
         });
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.chatting_toolbar_menu);
 
@@ -80,10 +82,13 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
 
         if(state.getState()) {
             if(state.getUserInstance().getGroups() != null) {
+                Log.d("JUWONLEE", "groups not null");
                 if(state.getUserInstance().getGroups().contains(mGroup)) {
                     buttonJoinGroup.setVisibility(View.GONE);
                     layout_discussion.setVisibility(View.VISIBLE);
+                    Log.d("JUWONLEE", "groups contained");
                 } else {
+                    Log.d("JUWONLEE", "groups not contained");
                     buttonJoinGroup.setOnClickListener(v -> {
                         buttonJoinGroup.setVisibility(View.GONE);
                         layout_discussion.setVisibility(View.VISIBLE);
@@ -94,10 +99,12 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
                                         (Response response) -> {
-                                            if(ConstantUtil.SUCCESS.equals(response.getResult()))
+                                            if(ConstantUtil.SUCCESS.equals(response.getResult())) {
                                                 state.getUserInstance().getGroups().add(mGroup);
-                                            else {
+                                                Bus.getInstance().post(state.getUserInstance().getGroups());
+                                            } else {
                                                 // TODO 실패 메시지
+                                                Log.d("JUWONLEE","failed");
                                             }
 
                                         }, (Throwable error) -> {
@@ -107,6 +114,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
                     });
                 }
             } else {
+                Log.d("JUWONLEE", "groups null");
                 buttonJoinGroup.setOnClickListener(v -> {
                     buttonJoinGroup.setVisibility(View.GONE);
                     layout_discussion.setVisibility(View.VISIBLE);
@@ -120,6 +128,7 @@ public class GroupActivity extends AppCompatActivity implements GroupChatAdapter
                                         if(ConstantUtil.SUCCESS.equals(response.getResult())) {
                                             state.getUserInstance().setGroups(new ArrayList<>());
                                             state.getUserInstance().getGroups().add(mGroup);
+                                            Bus.getInstance().post(state.getUserInstance().getGroups());
                                         }
 
                                         else {
