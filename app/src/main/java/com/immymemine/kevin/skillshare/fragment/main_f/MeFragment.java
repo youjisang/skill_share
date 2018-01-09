@@ -73,15 +73,15 @@ public class MeFragment extends Fragment {
         state = StateUtil.getInstance();
         user = state.getUserInstance();
 
-        if (user.getImageUrl() != null) {
-
-            RetrofitHelper.createApi(UserService.class).imageUrl(user.get_id())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleResponse, this::handleError);
-
-
-        } else {
+//        if (user.getImageUrl() != null) {
+//
+//            RetrofitHelper.createApi(UserService.class).imageUrl(user.get_id())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(this::handleResponse, this::handleError);
+//
+//
+//        } else {
         meImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +91,7 @@ public class MeFragment extends Fragment {
 
             }
         });
-        }
+//        }
 
         meName.setText(user.getName());
         meNickname.setText("@" + user.getNickname());
