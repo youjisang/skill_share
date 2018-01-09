@@ -83,7 +83,6 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-
         <EditText
             android:id="@+id/editText_view_reply"
             android:layout_width="0dp"

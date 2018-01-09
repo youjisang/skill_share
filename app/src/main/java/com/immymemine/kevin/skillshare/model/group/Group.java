@@ -9,12 +9,14 @@ import android.os.Parcelable;
 
 public class Group implements Parcelable {
     String _id;
+    String groupId;
     String groupName;
     String groupThumbnail;
     String memberCount;
 
-    public Group(String _id, String groupName, String groupThumbnail, String memberCount) {
+    public Group(String _id, String groupId, String groupName, String groupThumbnail, String memberCount) {
         this._id = _id;
+        this.groupId = groupId;
         this.groupName = groupName;
         this.groupThumbnail = groupThumbnail;
         this.memberCount = memberCount;
@@ -22,6 +24,7 @@ public class Group implements Parcelable {
 
     protected Group(Parcel in) {
         _id = in.readString();
+        groupId = in.readString();
         groupName = in.readString();
         groupThumbnail = in.readString();
         memberCount = in.readString();
@@ -41,6 +44,10 @@ public class Group implements Parcelable {
 
     public String get_id() {
         return _id;
+    }
+
+    public String getGroupId() {
+        return groupId;
     }
 
     public String getGroupName() {
@@ -63,8 +70,17 @@ public class Group implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(_id);
+        dest.writeString(groupId);
         dest.writeString(groupName);
         dest.writeString(groupThumbnail);
         dest.writeString(memberCount);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Group) {
+            return this.groupName.equals( ((Group)obj).getGroupName() );
+        }
+        return super.equals(obj);
     }
 }

@@ -1,8 +1,10 @@
 package com.immymemine.kevin.skillshare.network.api;
 
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.user.Following;
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 
@@ -30,6 +32,9 @@ public interface UserService {
 
     @PUT("user/follow/{userId}")
     Observable<Following> follow(@Path("userId") String userId, @Body Tutor tutor);
+
+    @POST("user/joinGroup")
+    Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
 
     @PUT("user/imageUrl/{userId}/{imageUrl}")
     Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);

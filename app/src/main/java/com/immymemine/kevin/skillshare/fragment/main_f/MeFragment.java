@@ -129,7 +129,7 @@ public class MeFragment extends Fragment {
             meImage.setImageURI(imageUri);
             user.setImageUrl(imageUri.toString());
 
-//            Glide.with(this).load(imageUri)
+//            Glide.with(context).load(imageUri)
 //                    .apply(RequestOptions.circleCropTransform())
 //                    .into(meImage);
 
