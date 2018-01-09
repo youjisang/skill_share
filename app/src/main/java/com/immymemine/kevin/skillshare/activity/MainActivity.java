@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
-                            Log.e("Fragment Check","home1");
+
                         } else {
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("show", false);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, homeFragment)
                                     .commit();
-                            Log.e("Fragment Check","home2");
+
                         }
 
                         return true;
@@ -177,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, groupFragment)
                                     .commit();
-                            Log.e("Fragment Check","group1");
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, groupFragment)
                                     .commit();
-                            Log.e("Fragment Check","group2");
+
                         }
                         return true;
                     }
@@ -199,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
                                     .add(R.id.fragment_container, discoverFragment)
                                     .commit();
 
-                            Log.e("Fragment Check","dis1");
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, discoverFragment)
                                     .commit();
-                            Log.e("Fragment Check","dis2");
+
                         }
                         return true;
                     }
@@ -220,13 +220,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
-                            Log.e("Fragment Check","yourClass1");
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, yourClassesFragment)
                                     .commit();
-                            Log.e("Fragment Check","yourClass2");
+
                         }
 
                         return true;
@@ -243,13 +243,13 @@ public class MainActivity extends AppCompatActivity {
                                         .beginTransaction()
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
-                                Log.e("Fragment Check","meFrag1");
+
                             } else {
                                 getSupportFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.fragment_container, meFragment)
                                         .commit();
-                                Log.e("Fragment Check","meFrag2");
+
                             }
 
                         } else {
