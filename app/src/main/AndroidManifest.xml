@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- internet permission -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 
 
@@ -36,9 +37,12 @@
         <activity android:name=".activity.SignUpActivity" />
         <activity
             android:name=".activity.ClassActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".activity.SearchActivity"/>
         <activity android:name=".activity.GroupActivity"/>
+        <activity android:name=".activity.ProfileActivity" />
+
         <!-- gcm receiver -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -73,7 +77,5 @@
         <service
             android:name=".gcm.RegistrationIntentService"
             android:exported="false" />
-
-        <activity android:name=".activity.ProfileActivity" />
     </application>
 </manifest>

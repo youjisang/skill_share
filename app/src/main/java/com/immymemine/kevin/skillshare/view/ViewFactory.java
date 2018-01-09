@@ -3,11 +3,9 @@ package com.immymemine.kevin.skillshare.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
-
+import android.view.ViewGroup;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -15,15 +13,11 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
-
 import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
-
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
-
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Main Activity 에서 사용하는 View Factory
@@ -64,7 +58,7 @@ public class ViewFactory {
     }
 
     public View getMeSkillView(List<String> skills) {
-        View view = inflater.inflate(R.layout.me_skill_view, null);
+        View view = inflater.inflate(R.layout.me_skill_view,null);
 
         RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
@@ -87,25 +81,5 @@ public class ViewFactory {
             view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
 
         return view;
-    }
-
-    public Toolbar getToolbar(int type) {
-        Toolbar toolbar = null;
-
-        switch (type) {
-            case 42:
-                toolbar = (Toolbar) inflater.inflate(R.layout.toolbar_home, null);
-                break;
-            case 43:
-                break;
-            case 44:
-                break;
-            case 45:
-                break;
-            case 46:
-                break;
-        }
-
-        return toolbar;
     }
 }

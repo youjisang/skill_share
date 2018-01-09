@@ -51,10 +51,9 @@ public class MeFragment extends Fragment {
     ImageButton meButton;
     LinearLayout container;
 
-
     StateUtil state;
     User user;
-    Uri imageUri;
+    Uri imageUri = null;
     Context context;
 
     public MeFragment() {
@@ -67,7 +66,7 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
 
-       context = getActivity();
+        context = getActivity();
 
         initiateView(view);
 
@@ -83,15 +82,15 @@ public class MeFragment extends Fragment {
 
 
         } else {
-            meImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                    startActivityForResult(intent, 982);
+        meImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, 982);
 
-                }
-            });
+            }
+        });
         }
 
         meName.setText(user.getName());
@@ -121,7 +120,6 @@ public class MeFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -131,9 +129,12 @@ public class MeFragment extends Fragment {
             meImage.setImageURI(imageUri);
             user.setImageUrl(imageUri.toString());
 
+//            Glide.with(this).load(imageUri)
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .into(meImage);
 
             // retrofit
-            RetrofitHelper.createApi(UserService.class).putImageUrl(user.get_id(),user.getImageUrl())
+            RetrofitHelper.createApi(UserService.class).putImageUrl(user.get_id(), user.getImageUrl())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleResponse, this::handleError);
@@ -142,25 +143,13 @@ public class MeFragment extends Fragment {
     }
 
     private void handleResponse(User user) {
-        Log.e("handleResponse", "USER"+user.getImageUrl());
-        Glide.with(this).load(imageUri)
-                .apply(RequestOptions.circleCropTransform())
-                .into(meImage);
+        Log.e("handleResponse", "USER" + user.getImageUrl());
+
     }
 
     private void handleError(Throwable throwable) {
         Log.e("handleError", "throwable message" + throwable.getMessage());
     }
-
-//    public String getPathFromUri(Uri uri){
-//        Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null );
-//        cursor.moveToNext();
-//        path = cursor.getString( cursor.getColumnIndex( "_data" ) );
-//
-//        cursor.close();
-//
-//        return path;
-//    }
 
 
 }

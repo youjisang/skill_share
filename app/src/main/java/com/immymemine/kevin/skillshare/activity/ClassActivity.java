@@ -2,9 +2,9 @@ package com.immymemine.kevin.skillshare.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -67,7 +67,6 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     LessonsFragment lessonsfragment;
 
     String classId, url;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,33 +156,45 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     Dialog fullScreenDialog;
     boolean isFullScreen;
-
     private void initiateFullScreenDialog() {
         fullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
-                if (isFullScreen)
+                if(isFullScreen)
                     closeFullScreen();
             }
         };
     }
 
     public void openFullScreen(View view) {
-        if (isFullScreen)
+        if(isFullScreen)
             closeFullScreen();
 
-        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        ((ViewGroup)simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
         fullScreenDialog.addContentView(simpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         isFullScreen = true;
         fullScreenDialog.show();
     }
 
     public void closeFullScreen() {
-        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
-        ((FrameLayout) findViewById(R.id.player_frame)).addView(simpleExoPlayerView);
+        ((ViewGroup)simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        ((FrameLayout)findViewById(R.id.player_frame)).addView(simpleExoPlayerView);
         isFullScreen = false;
         fullScreenDialog.dismiss();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // 세로
+            
+        } else if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+        }
+
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -254,7 +265,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         // [ 1, 2, 3 ( ? ) ]
         mediaSource = buildMediaSource(Uri.parse(URL));
 
-        if (resumePosition > 0)
+        if(resumePosition > 0)
             player.seekTo(resumePosition);
         player.prepare(mediaSource);
     }
@@ -300,7 +311,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
 
     private void releasePlayer() {
-        if (player != null) {
+        if(player != null) {
             saveResumePosition();
             player.release();
             player = null;
@@ -313,8 +324,6 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         player.setPlayWhenReady(false);
         super.onPause();
     }
-
-    boolean isFollow;
 
     @Override
     protected void onDestroy() {
@@ -337,7 +346,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            Log.v(TAG, "Listener-onLoadingChanged...isLoading:" + isLoading);
+            Log.v(TAG, "Listener-onLoadingChanged...isLoading:"+isLoading);
         }
 
         @Override

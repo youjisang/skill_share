@@ -168,6 +168,20 @@
         android:textColor="@color/IcInactive"
         android:textSize="16sp"
         android:visibility="gone" />
-    />
+
+
+    <TextView
+        android:id="@+id/text_view_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/expandable_text_view"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="24dp"
+        android:text="5"
+        android:textColor="@color/IcInactive"
+        android:textSize="16sp" />
+
 
 </RelativeLayout>

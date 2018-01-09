@@ -7,11 +7,15 @@ package com.immymemine.kevin.skillshare.network;
 public class Response {
     private String result;
     private String message;
+    private String likeCount;
 
     public String getResult() {
         return result;
     }
     public String getMessage() {
         return message;
+    }
+    public String getLikeCount() {
+        return likeCount;
     }
 }

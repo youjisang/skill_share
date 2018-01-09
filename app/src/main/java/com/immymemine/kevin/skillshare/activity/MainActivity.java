@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -97,19 +98,6 @@ public class MainActivity extends AppCompatActivity {
     OfflineMeFragment offlineMeFragment;
 
     private void initiateView() {
-
-        // refresh view setting
-//        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_layout);
-//        refreshLayout.setOnRefreshListener(() -> {
-//            // 데이터 변화 감지 ( ? )
-//
-//            // 다른 부분이 있으면 view 를 추가하거나 삭제
-//
-//            // 완료 되면 호출 ∇
-//            refreshLayout.setRefreshing(false);
-//        });
-//        refreshLayout.setColorSchemeResources(R.color.ProgressBarColor);
-
         progressBar = findViewById(R.id.progress_bar);
     }
 
@@ -163,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
+                            Log.e("Fragment Check","home1");
                         } else {
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("show", false);
@@ -172,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, homeFragment)
                                     .commit();
+                            Log.e("Fragment Check","home2");
                         }
 
                         return true;
@@ -187,11 +177,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, groupFragment)
                                     .commit();
+                            Log.e("Fragment Check","group1");
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, groupFragment)
                                     .commit();
+                            Log.e("Fragment Check","group2");
                         }
                         return true;
                     }
@@ -206,11 +198,14 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, discoverFragment)
                                     .commit();
+
+                            Log.e("Fragment Check","dis1");
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, discoverFragment)
                                     .commit();
+                            Log.e("Fragment Check","dis2");
                         }
                         return true;
                     }
@@ -225,11 +220,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
+                            Log.e("Fragment Check","yourClass1");
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, yourClassesFragment)
                                     .commit();
+                            Log.e("Fragment Check","yourClass2");
                         }
 
                         return true;
@@ -246,11 +243,13 @@ public class MainActivity extends AppCompatActivity {
                                         .beginTransaction()
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
+                                Log.e("Fragment Check","meFrag1");
                             } else {
                                 getSupportFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.fragment_container, meFragment)
                                         .commit();
+                                Log.e("Fragment Check","meFrag2");
                             }
 
                         } else {
