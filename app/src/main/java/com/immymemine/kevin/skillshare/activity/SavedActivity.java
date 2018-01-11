@@ -17,6 +17,8 @@ import java.util.List;
 public class SavedActivity extends AppCompatActivity {
 
 
+
+
     RecyclerView savedRecyclerView;
     List<Saved> savedList;
     ImageButton toolbar_button_back;
