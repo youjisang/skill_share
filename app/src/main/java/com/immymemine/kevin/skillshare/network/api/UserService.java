@@ -7,7 +7,7 @@ import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
-
+import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,6 +21,7 @@ import retrofit2.http.Query;
  */
 
 public interface UserService {
+
     @POST("user/sign-up")
     Observable<UserResponse> signUp(@Body SignUpRequestBody body);
 
@@ -41,4 +42,8 @@ public interface UserService {
 
     @GET("user/imageUrl/{userId}")
     Observable<User> imageUrl(@Path("userId") String userId);
+
+    //TODO client단에서는 변경사항이 있는지 여부만 확인하고 있으면 server 측 데이터를 아예 바꾸기
+    @PUT("user/followSkills/{userId}")
+    Observable<User> followSkills(@Path("userId") String userId, @Body List<String> skills);
 }

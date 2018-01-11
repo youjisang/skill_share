@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
+import android.Manifest;
+
 /**
  * Created by quf93 on 2017-11-26.
  */
@@ -60,7 +62,11 @@ public class ConstantUtil {
     //Group
     public static final int ALREADY_JOIN_GROUP = 590;
 
-
+    public static final int REQ_CODE = 999;
+    public static final String permissions[] = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
 
 }
