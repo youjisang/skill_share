@@ -3,10 +3,8 @@ package com.immymemine.kevin.skillshare.network.api;
 import com.immymemine.kevin.skillshare.model.discover.DiscoverClass;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.home.Class;
-
 import java.util.List;
 import java.util.Map;
-
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

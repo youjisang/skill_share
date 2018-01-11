@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.toolbar_button_search)
                 .setOnClickListener(v -> context.startActivity(new Intent(context, SearchActivity.class)));
 
-        if(!StateUtil.getInstance().getState() &&
+        if(StateUtil.getInstance().getUserInstance() == null &&
                 (getArguments() != null) ? getArguments().getBoolean("show") : true) {
             FrameLayout welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
             View welcomeView = ViewFactory.getInstance(context).getWelcomeView();

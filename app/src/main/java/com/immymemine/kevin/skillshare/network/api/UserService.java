@@ -3,6 +3,7 @@ package com.immymemine.kevin.skillshare.network.api;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.user.Following;
+import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
@@ -35,4 +36,7 @@ public interface UserService {
 
     @POST("user/joinGroup")
     Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
+
+    @POST("user/subscribeClass")
+    Observable<SubscribedClass> subscribeClass(@Query("classId") String classId);
 }

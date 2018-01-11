@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter;
+package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 import android.content.Context;
 import android.content.Intent;

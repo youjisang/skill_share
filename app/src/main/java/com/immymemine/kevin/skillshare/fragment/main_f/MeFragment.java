@@ -48,11 +48,20 @@ public class MeFragment extends Fragment {
         StateUtil state = StateUtil.getInstance();
         User user = state.getUserInstance();
 
-        Glide.with(context).load(user.getImageUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(meImage);
+        if(user.getImageUrl() == null || user.getImageUrl().equals("")) {
+            Glide.with(context).load(R.drawable.image_profile)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
+        } else {
+            Glide.with(context).load(user.getImageUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
+        }
+
         meName.setText(user.getName());
-        meNickname.setText("@"+user.getNickname());
+        if(user.getNickname() != null)
+            meNickname.setText("@"+user.getNickname());
+
         meFollowers.setText(user.getFollowers().size() + " Followers");
         meFollowing.setText("Following " + user.getFollowing().size());
 
