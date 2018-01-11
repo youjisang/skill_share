@@ -61,7 +61,7 @@ public class YourClassesFragment extends Fragment {
                 List<SubscribedClass> subscribedClasses = user.getSubscribedClasses();
                 int size = subscribedClasses.size();
                 textViewSubscribedCount.setText(size + " Classes");
-                Glide.with(context).load(subscribedClasses.get(size-1).getClassThumbnail())
+                Glide.with(context).load(subscribedClasses.get(size-1).getImageUrl())
                         .apply(RequestOptions.centerCropTransform())
                         .into(imageViewThumbnail);
 

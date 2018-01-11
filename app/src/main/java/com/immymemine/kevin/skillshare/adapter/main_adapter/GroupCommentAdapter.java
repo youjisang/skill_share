@@ -1,4 +1,4 @@
-package com.immymemine.kevin.skillshare.adapter;
+package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 
 import android.os.Handler;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.GroupActivity;
-import com.immymemine.kevin.skillshare.model.group.Chat;
+import com.immymemine.kevin.skillshare.model.group.Comment;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
@@ -25,11 +25,12 @@ import java.util.List;
  */
 
 
-public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    private ArrayList<Chat> chatList;
+    private ArrayList<Comment> comments;
 
     private OnLoadMoreListener onLoadMoreListener;
 
@@ -39,33 +40,33 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onLoadMore();
     }
 
-    public GroupChatAdapter(GroupActivity onLoadMoreListener) {
+    public GroupCommentAdapter(GroupActivity onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
-        chatList = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return chatList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        return comments.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_ITEM) {
-            return new GroupChattingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_chatting, parent, false));
+            return new GroupChattingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item_comment, parent, false));
         } else {
             return new ProgressViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_progress, parent, false));
         }
     }
 
     public void showLoading() {
-        if (isMoreLoading && chatList != null && onLoadMoreListener != null) {
+        if (isMoreLoading && comments != null && onLoadMoreListener != null) {
             isMoreLoading = false;
             new Handler().post(() -> {
                 // progress bar holder 호출
-                chatList.add(null);
-                notifyItemInserted(chatList.size() - 1);
+                comments.add(null);
+                notifyItemInserted(comments.size() - 1);
                 // data load
                 onLoadMoreListener.onLoadMore();
             });
@@ -77,62 +78,65 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void dismissLoading() {
-        if (chatList != null && chatList.size() > 0) {
-            chatList.remove(chatList.size() - 1);
-            notifyItemRemoved(chatList.size());
+        if (comments != null && comments.size() > 0) {
+            comments.remove(comments.size() - 1);
+            notifyItemRemoved(comments.size());
         }
     }
 
-    public void addAll(List<Chat> lst) {
-        chatList.clear();
-        chatList.addAll(lst);
+    public void addAll(List<Comment> lst) {
+        comments.clear();
+        comments.addAll(lst);
         notifyDataSetChanged();
     }
 
-    public void addItemMore(List<Chat> lst) {
-        int sizeInit = chatList.size();
-        chatList.addAll(lst);
-        notifyItemRangeChanged(sizeInit, chatList.size());
+    public void addItemMore(List<Comment> lst) {
+        int sizeInit = comments.size();
+        comments.addAll(lst);
+        notifyItemRangeChanged(sizeInit, comments.size());
     }
 
-    public void clear() {
-        chatList.clear();
-        notifyDataSetChanged();
+    public void addItem(Comment comment) {
+        comments.add(comment);
+        notifyItemInserted(comments.size());
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof GroupChattingHolder) {
-            Chat chat = chatList.get(position);
+            Comment comment = comments.get(position);
+
             GroupChattingHolder chatHolder = (GroupChattingHolder) holder;
-            chatHolder.userId = chat.getUserId();
-            chatHolder.textViewUserName.setText(chat.getUserName());
-            chatHolder.textViewUserHashtag.setText(chat.getUserHashTag());
-            chatHolder.expandableTextView.setText(chat.getComment());
-            chatHolder.textViewTime.setText(TimeUtil.calculateTime(chat.getTime()));
+
+            chatHolder.userId = comment.getUserId();
+            chatHolder.textViewName.setText(comment.getUserName());
+            chatHolder.textViewNickname.setText(comment.getUserNickname());
+            chatHolder.expandableTextView.setText(comment.getComment());
+            chatHolder.textViewTime.setText(TimeUtil.calculateTime(comment.getTime()));
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return chatList.size();
+        return comments.size();
     }
 
     static class GroupChattingHolder extends RecyclerView.ViewHolder {
 
         String userId;
         ImageView imageViewProfile;
-        TextView textViewUserName, textViewUserHashtag, textViewTime;
+        TextView textViewName, textViewNickname, textViewTime;
         ExpandableTextView expandableTextView;
         TextView reply;
 
         public GroupChattingHolder(View v) {
             super(v);
             imageViewProfile = v.findViewById(R.id.image_view_thumbnail);
-            textViewUserName = v.findViewById(R.id.text_view_user_name);
-            textViewUserHashtag = v.findViewById(R.id.text_view_user_hashtag);
+            textViewName = v.findViewById(R.id.text_view_user_name);
+            textViewNickname = v.findViewById(R.id.text_view_user_nickname);
             expandableTextView = v.findViewById(R.id.expandable_text_view);
+            expandableTextView.setTrimLength(8);
             textViewTime = v.findViewById(R.id.text_view_time);
             reply = v.findViewById(R.id.text_view_reply);
         }

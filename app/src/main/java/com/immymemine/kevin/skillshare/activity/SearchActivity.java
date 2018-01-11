@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.SearchRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.main_adapter.SearchRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.discover.SearchClass;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;

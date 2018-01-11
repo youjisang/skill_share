@@ -18,10 +18,9 @@ import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.user.User;
-import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
-import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
+import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
@@ -135,8 +134,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
-                                                (Response response) -> {
-                                                    holder.textViewLikeCount.setText(response.getLikeCount());
+                                                (String likeCount) -> {
+                                                    holder.textViewLikeCount.setText(likeCount);
                                                 }, (Throwable error) -> {
                                                     Log.d("JUWON LEE", "error : " + error.getMessage());
                                                 }
@@ -147,8 +146,8 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
-                                                (Response response) -> {
-                                                    holder.textViewLikeCount.setText(response.getLikeCount());
+                                                (String likeCount) -> {
+                                                    holder.textViewLikeCount.setText(likeCount);
                                                 }, (Throwable error) -> {
                                                     Log.d("JUWON LEE", "error : " + error.getMessage());
                                                 }

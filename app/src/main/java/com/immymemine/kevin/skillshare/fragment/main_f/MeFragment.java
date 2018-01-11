@@ -35,7 +35,7 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
-import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -109,8 +109,20 @@ public class MeFragment extends Fragment {
 
 //        }
 
+        if(user.getImageUrl() == null || user.getImageUrl().equals("")) {
+            Glide.with(context).load(R.drawable.image_profile)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
+        } else {
+            Glide.with(context).load(user.getImageUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
+        }
+
         meName.setText(user.getName());
-        meNickname.setText("@" + user.getNickname());
+        if(user.getNickname() != null)
+            meNickname.setText("@"+user.getNickname());
+
         meFollowers.setText(user.getFollowers().size() + " Followers");
         meFollowing.setText("Following " + user.getFollowing().size());
         Glide.with(context).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(meImage);
@@ -172,14 +184,14 @@ public class MeFragment extends Fragment {
 
             user.setImageUrl(imageUri.toString());
 
-            RetrofitHelper.createApi(UserService.class).putImageUrl(user.get_id(), user.getImageUrl())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe((User user) -> {
-                        Log.e("handleResponse", "USER" + user.getImageUrl());
-                    }, (Throwable error) -> {
-                        Log.e("handleError", "throwable message" + error.getMessage());
-                    });
+//            RetrofitHelper.createApi(UserService.class).putImageUrl(user.get_id(), user.getImageUrl())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe((User user) -> {
+//                        Log.e("handleResponse", "USER" + user.getImageUrl());
+//                    }, (Throwable error) -> {
+//                        Log.e("handleError", "throwable message" + error.getMessage());
+//                    });
 
         } else if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE && resultCode == RESULT_OK) {
 

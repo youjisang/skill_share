@@ -38,7 +38,7 @@
             android:layout_below="@+id/me_name"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:text="@jwl"
+            android:text="@"
             android:textSize="18sp" />
 
         <TextView

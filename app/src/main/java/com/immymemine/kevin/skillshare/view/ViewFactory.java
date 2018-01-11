@@ -13,7 +13,7 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
-import com.immymemine.kevin.skillshare.adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;

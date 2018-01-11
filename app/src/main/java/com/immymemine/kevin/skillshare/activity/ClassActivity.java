@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -49,10 +50,18 @@ import com.immymemine.kevin.skillshare.adapter.class_adapter.LessonsAdapter;
 import com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.LessonsFragment;
+import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.DialogUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class ClassActivity extends AppCompatActivity implements LessonsAdapter.InteractionInterface {
 
@@ -137,7 +146,26 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
+        if(StateUtil.getInstance().getState()) {
+            RetrofitHelper.createApi(UserService.class)
+                    .subscribeClass(classId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            (SubscribedClass subscribedClass) -> {
+                                if(subscribedClass != null) {
+                                    StateUtil.getInstance().getUserInstance()
+                                            .getSubscribedClasses().add(subscribedClass);
+                                } else {
+                                    Toast.makeText(this, "failed to subscribe this class", Toast.LENGTH_LONG).show();
+                                }
+                            }, (Throwable error) -> {
 
+                            }
+                    );
+        } else {
+            DialogUtil.showSignDialog(this);
+        }
     }
 
     public void start(View view) {
