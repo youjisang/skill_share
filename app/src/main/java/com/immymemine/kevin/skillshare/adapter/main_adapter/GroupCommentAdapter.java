@@ -97,8 +97,8 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addItem(Comment comment) {
-        comments.add(comment);
-        notifyItemInserted(comments.size());
+        comments.add(0, comment);
+        notifyItemInserted(0);
     }
 
     @Override

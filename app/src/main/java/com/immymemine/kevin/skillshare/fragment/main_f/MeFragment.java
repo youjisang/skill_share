@@ -81,6 +81,13 @@ public class MeFragment extends Fragment {
         meFollowing = view.findViewById(R.id.me_following);
 
         meButton = view.findViewById(R.id.me_button); // sign out button
+        meButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StateUtil.getInstance().setUserInstance(null);
+
+            }
+        });
         container = view.findViewById(R.id.container);
     }
 }
