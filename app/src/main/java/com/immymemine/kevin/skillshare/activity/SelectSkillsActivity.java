@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 import net.colindodd.toggleimagebutton.ToggleImageButton;
 
@@ -35,8 +36,8 @@ public class SelectSkillsActivity extends Activity implements CompoundButton.OnC
         intent = getIntent();
 
         // 초기화
-        if(intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG) != null) {
-            skills = intent.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
+        if(StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) {
+            skills = StateUtil.getInstance().getUserInstance().getFollowingSkills();
             setAlreadyCheckedSkills(skills);
         } else {
             skills = new ArrayList<>();

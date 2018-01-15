@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -57,7 +58,7 @@ public class ViewFactory {
     }
 
     public View getMeSkillView(List<String> skills) {
-        View view = inflater.inflate(R.layout.me_skill_view, null);
+        View view = inflater.inflate(R.layout.me_skill_view,null);
 
         RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);

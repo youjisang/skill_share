@@ -8,12 +8,15 @@ import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
-
+import java.util.List;
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -22,6 +25,7 @@ import retrofit2.http.Query;
  */
 
 public interface UserService {
+
     @POST("user/sign-up")
     Observable<UserResponse> signUp(@Body SignUpRequestBody body);
 
@@ -37,6 +41,21 @@ public interface UserService {
     @POST("user/joinGroup")
     Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
 
+//    @PUT("user/imageUrl/{userId}/{imageUrl}")
+//    Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);
+
+    //TODO client단에서는 변경사항이 있는지 여부만 확인하고 있으면 server 측 데이터를 아예 바꾸기
+    @PUT("user/followSkills/{userId}")
+    Observable<User> followSkills(@Path("userId") String userId, @Body List<String> skills);
+
     @POST("user/subscribeClass")
     Observable<SubscribedClass> subscribeClass(@Query("classId") String classId);
+
+    @Multipart
+    @POST("user/imageFile/{userId}")
+    Observable<User> uploadImage(@Path("userId")String userId, @Part MultipartBody.Part image);
+
+    @GET("user/imageFile/{userId}")
+    Observable<User> downloadImage(@Path("userId")String userId);
+
 }

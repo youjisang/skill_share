@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
+
                         } else {
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("show", false);
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, homeFragment)
                                     .commit();
+
                         }
 
                         return true;
@@ -174,11 +177,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, groupFragment)
                                     .commit();
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, groupFragment)
                                     .commit();
+
                         }
                         return true;
                     }
@@ -193,11 +198,14 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, discoverFragment)
                                     .commit();
+
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, discoverFragment)
                                     .commit();
+
                         }
                         return true;
                     }
@@ -212,11 +220,13 @@ public class MainActivity extends AppCompatActivity {
                                     .beginTransaction()
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
+
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.fragment_container, yourClassesFragment)
                                     .commit();
+
                         }
 
                         return true;
@@ -233,11 +243,13 @@ public class MainActivity extends AppCompatActivity {
                                         .beginTransaction()
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
+
                             } else {
                                 getSupportFragmentManager()
                                         .beginTransaction()
                                         .replace(R.id.fragment_container, meFragment)
                                         .commit();
+
                             }
 
                         } else {

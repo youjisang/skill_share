@@ -18,10 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.PreferenceUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -41,6 +43,9 @@ public class SignInActivity extends AppCompatActivity{
     Button buttonSignIn, buttonForgotPw;
     TextView warning_email, warning_password;
     private static final int RC_SIGN_IN = 239;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +172,11 @@ public class SignInActivity extends AppCompatActivity{
             state.setState(true);
             state.setUserInstance(response.getUser());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
+            //Todo 지상 자동로그인
+
+//            PreferenceUtil.setValue(this, ConstantUtil.SIGN_IN_SUCCESS, ConstantUtil.SIGN_IN_SUCCESS);
+//            PreferenceUtil.setValue(this, "currentState", state.getState());
+
             startActivity(intent);
         } else {
             Toast.makeText(SignInActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();

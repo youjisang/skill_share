@@ -1,18 +1,24 @@
 package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.MainActivity;
+import com.immymemine.kevin.skillshare.activity.SavedActivity;
 import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
@@ -29,9 +35,11 @@ public class YourClassesFragment extends Fragment {
     TextView textViewSubscribedCount;
     ImageView imageViewThumbnail;
 
+
     public YourClassesFragment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -45,6 +53,7 @@ public class YourClassesFragment extends Fragment {
         textViewSubscribedCount = view.findViewById(R.id.text_view_subscribed_count);
         imageViewThumbnail = view.findViewById(R.id.image_view_thumbnail);
 
+
         StateUtil state = StateUtil.getInstance();
         if(state.getState()) {
             User user = state.getUserInstance();
@@ -55,8 +64,18 @@ public class YourClassesFragment extends Fragment {
                 Glide.with(context).load(subscribedClasses.get(size-1).getImageUrl())
                         .apply(RequestOptions.centerCropTransform())
                         .into(imageViewThumbnail);
+
+//                imageViewThumbnail.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(context, SavedActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
             }
         }
+
+
 
         return view;
     }

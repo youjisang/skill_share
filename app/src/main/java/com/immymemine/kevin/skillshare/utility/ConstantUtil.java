@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
+import android.Manifest;
+
 /**
  * Created by quf93 on 2017-11-26.
  */
@@ -25,23 +27,6 @@ public class ConstantUtil {
     public static final int OFFLINE = 199;
     // Sign out
     public static final String SIGN_OUT = "sign-out";
-
-    // URL
-    public static final String BASE_URL = "http://localhost/8079/";
-
-    // selectSkill
-    public static final String DESIGN = "Design";
-    public static final String PHOTOGRAPHY = "PhotoGraphy";
-    public static final String BUSINESS = "Business";
-    public static final String TECHNOLOGY = "Technology";
-    public static final String CRAFTS = "Crafts";
-    public static final String CULINARY = "Culinary";
-    public static final String FILM = "Film";
-    public static final String FASHION = "Fashion";
-    public static final String MUSIC = "Music";
-    public static final String LIFESTYLE = "LifeStyle";
-    public static final String GAMING = "Gaming";
-    public static final String TEACHING = "Teaching";
 
     public static final int NO_ITEM = -9;
 
@@ -74,9 +59,16 @@ public class ConstantUtil {
     //Search
     public static final int FAIL_SEARCH = 293;
 
-    //GROUP
+    //Group
     public static final int ALREADY_JOIN_GROUP = 590;
-    public static final int NOT_JOIN_GROUP = 591;
+
+    public static final int REQ_CODE = 999;
+//    public static final String permissions[] = {
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//    };
+
+
 }
 
 

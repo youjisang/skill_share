@@ -32,8 +32,8 @@
 
         <ImageButton
             android:id="@+id/button_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
@@ -53,19 +53,20 @@
             android:tint="@android:color/background_light"
             app:srcCompat="?android:attr/actionModeCloseDrawable" />
 
-        <ImageButton
-            android:id="@+id/button_subscribe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ToggleButton
+            android:id="@+id/button_subscribe2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="right"
             android:layout_marginRight="40dp"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/image_unused_bookmark"
+            android:backgroundTint="@android:color/background_light"
             android:onClick="subscribe"
-            android:tint="@android:color/background_light"
-            app:srcCompat="@android:drawable/ic_lock_lock" />
-
+            android:textOff=""
+            android:textOn="" />
     </FrameLayout>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"

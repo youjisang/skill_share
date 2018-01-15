@@ -26,8 +26,8 @@ public class SkillsRecyclerViewAdapter extends RecyclerView.Adapter<SkillsRecycl
     }
 
     public void update(List<String> skills) {
-        if(this.skills != null)
-            this.skills.clear();
+//        if(this.skills != null)
+//            this.skills.clear();
         this.skills = skills;
         notifyDataSetChanged();
     }
