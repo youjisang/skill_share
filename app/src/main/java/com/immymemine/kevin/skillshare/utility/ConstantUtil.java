@@ -63,10 +63,10 @@ public class ConstantUtil {
     public static final int ALREADY_JOIN_GROUP = 590;
 
     public static final int REQ_CODE = 999;
-    public static final String permissions[] = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+//    public static final String permissions[] = {
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//    };
 
 
 }
