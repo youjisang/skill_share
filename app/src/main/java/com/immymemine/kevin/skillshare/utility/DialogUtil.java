@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +14,14 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SignInActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
+import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.Response;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by quf93 on 2017-11-26.
@@ -79,10 +87,25 @@ public class DialogUtil {
         );
 
         buttonSubmit.setOnClickListener(v -> {
-            if(buttonSubmit.getText().length() > 0) {
-                // TODO network communication
-                StateUtil.getInstance().getUserInstance().setNickname(buttonSubmit.getText().toString());
-                dialog.dismiss();
+            String nickname = editTextNickname.getText().toString();
+
+            if( nickname.length() > 0 ) {
+                User user = StateUtil.getInstance().getUserInstance();
+
+                RetrofitHelper.createApi(UserService.class)
+                        .setNickname(user.get_id(), nickname)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                (Response response) -> {
+                                    if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                        StateUtil.getInstance().getUserInstance().setNickname(nickname);
+                                        dialog.dismiss();
+                                    }
+                                }, (Throwable error) -> {
+                                    Log.d("JUWONLEE", "set nickname error : " + error.getMessage());
+                                }
+                        );
             }
         });
 

@@ -59,7 +59,7 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
 
         public Holder(View view) {
             super(view);
-            imageViewProfile = view.findViewById(R.id.image_view_thumbnail);
+            imageViewProfile = view.findViewById(R.id.image_view_profile);
             textViewName = view.findViewById(R.id.text_view_name);
         }
     }

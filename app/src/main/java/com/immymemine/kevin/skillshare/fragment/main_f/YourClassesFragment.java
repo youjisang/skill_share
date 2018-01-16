@@ -1,24 +1,18 @@
 package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.activity.SavedActivity;
 import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
@@ -51,7 +45,7 @@ public class YourClassesFragment extends Fragment {
         context = getActivity();
 
         textViewSubscribedCount = view.findViewById(R.id.text_view_subscribed_count);
-        imageViewThumbnail = view.findViewById(R.id.image_view_thumbnail);
+        imageViewThumbnail = view.findViewById(R.id.image_view_profile);
 
 
         StateUtil state = StateUtil.getInstance();

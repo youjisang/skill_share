@@ -207,7 +207,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             super(v);
             if(discussions != null) {
                 // profile
-                imageViewProfile = v.findViewById(R.id.image_view_thumbnail);
+                imageViewProfile = v.findViewById(R.id.image_view_profile);
                 imageViewProfile.setOnClickListener(view -> {
                     // profile activity 이동
                 });

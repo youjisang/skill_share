@@ -9,11 +9,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,10 +61,27 @@ public class ProfileActivity extends AppCompatActivity {
         ViewFactory viewFactory = ViewFactory.getInstance(this);
 
         // TODO user setting
+        if( !ValidationUtil.isEmpty(user.getImageUrl()) ) {
+            Glide.with(this)
+                    .load(user.getImageUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
+        }
         meName.setText(user.getName());
+        if( !ValidationUtil.isEmpty(user.getNickname()) ) {
+            meNickname.setText(user.getNickname());
+        }
+
+        if(user.getFollowers() != null) {
+            meFollowers.setText(user.getFollowers().size() + " Followers");
+        }
+        if(user.getFollowing() != null) {
+            meFollowing.setText("Following " + user.getFollowing().size());
+        }
 
         if(user.getFollowingSkills() != null && user.getFollowingSkills().size() > 0) {
             View meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
+            profileContainer.addView(meSkillView);
         }
     }
 

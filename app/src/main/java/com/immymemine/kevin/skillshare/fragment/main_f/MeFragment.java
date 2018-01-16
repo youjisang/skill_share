@@ -3,8 +3,6 @@ package com.immymemine.kevin.skillshare.fragment.main_f;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +10,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,27 +25,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
-import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
-import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -79,8 +66,6 @@ public class MeFragment extends Fragment {
     List<String> skills;
     FlexboxLayoutManager layoutManager;
 
-    String imagePath;
-
     StateUtil state;
     User user;
 
@@ -96,39 +81,22 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         meFragment = inflater.inflate(R.layout.fragment_me, container, false);
         context = getActivity();
-        selectSkillView = LayoutInflater.from(context).inflate(R.layout.me_skill_view, container, false);
+//        selectSkillView = LayoutInflater.from(context).inflate(R.layout.me_skill_view, container, false);
 
-        MeFragmentInitiateView(meFragment);
-        MeSkillViewinitiateView2(selectSkillView);
+        initiateView(meFragment);
+//        initiateMeSkillView(selectSkillView);
 
         state = StateUtil.getInstance();
         user = state.getUserInstance();
 
         if (user.getImageUrl() != null) {
+            String imageUrl = RetrofitHelper.BASE_URL+user.getImageUrl();
 
-            RetrofitHelper.createApi(UserService.class).downloadImage(user.get_id())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe((User user) -> {
-                        Log.e("success2", "success2");
-
-                        Glide.with(context).load(new File("C:/Users/JisangYou/workspace/Team_Project/skillShareProject/skill_share_node.js/" + user.getImageUrl()).getPath()).apply(RequestOptions.circleCropTransform()).into(meImage);
-
-                        Log.e("total url  ", "C:/Users/JisangYou/workspace/Team_Project/skillShareProject/skill_share_node.js/" + user.getImageUrl());
-                    }, (Throwable error) -> {
-                        Log.e("handleError2", "throwable message2" + error.getMessage());
-                    });
-
-
+            Glide.with(context)
+                    .load(imageUrl)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(meImage);
         }
-//        else {
-//            if (user.getImageUrl() == null || user.getImageUrl().equals("")) {
-//                Glide.with(context).load(R.drawable.image_profile)
-//                        .apply(RequestOptions.circleCropTransform())
-//                        .into(meImage);
-//            }
-//        }
-
 
         meName.setText(user.getName());
         if (user.getNickname() != null)
@@ -138,22 +106,18 @@ public class MeFragment extends Fragment {
         meFollowing.setText("Following " + user.getFollowing().size());
 //        Glide.with(context).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(meImage);
 
-        recyclerViewSetting();
+//        recyclerViewSetting();
 
         return meFragment;
     }
 
-    private void MeFragmentInitiateView(View view) {
-
+    private void initiateView(View view) {
         meImage = view.findViewById(R.id.me_image);
-        meImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    checkPermission();
-                } else {
-                    getImageFile();
-                }
+        meImage.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                checkPermission();
+            } else {
+                getImageFile();
             }
         });
         meName = view.findViewById(R.id.me_name);
@@ -164,106 +128,97 @@ public class MeFragment extends Fragment {
         meButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO refresh !!
                 StateUtil.getInstance().setUserInstance(null);
 
             }
         });
         container = view.findViewById(R.id.container);
-
-
+        container.addView(ViewFactory.getInstance(context).getMeSkillView(user.getFollowingSkills()));
     }
 
-    public void MeSkillViewinitiateView2(View selectView) {
+//    public void initiateMeSkillView(View meSkillView) {
+//        mePersonaize = meSkillView.findViewById(R.id.personalize);
+//        mePersonaize.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, SelectSkillsActivity.class);
+//            startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
+//        });
+//        recyclerViewSkills = meSkillView.findViewById(R.id.recycler_view_skills);
+//        container.addView(meSkillView);
+//    }
 
-        mePersonaize = selectView.findViewById(R.id.personalize);
-        recyclerViewSkills = selectView.findViewById(R.id.recycler_view_skills);
-        container.addView(selectView);
-        mePersonaize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, SelectSkillsActivity.class);
-                startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
-            }
-        });
+    public void uploadImageFile(String path) {
+        File imageFile = new File(path);
 
+        RequestBody requestFile =
+                RequestBody.create(
+                        MediaType.parse("image/*"),
+                        imageFile
+                );
 
-    }
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData(
+                        "image",
+                        imageFile.getName(),
+                        requestFile
+                );
 
-    public void uploadImage(String Path) {
-        File file = new File(Path);
-
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        Log.e("requestFile", "   requestFile ==   " + requestFile + "     file ==    " + file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("uploadImageFile", file.getName(), requestFile);
-        Log.e("body", "  body ==   " + requestFile + "    file.getName() ==   " + file.getName());
-
-
-        RetrofitHelper.createApi(UserService.class).uploadImage(user.get_id(), body)
+        RetrofitHelper.createApi(UserService.class)
+                .uploadImageFile(user.get_id(), body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((User user) -> {
-                    Log.e("success", "success");
-                    imagePath = "";
-                }, (Throwable error) -> {
-                    Log.e("handleError", "throwable message" + error.getMessage());
-                });
+                .subscribe((Response response) -> {
 
+                }, (Throwable error) -> {
+
+                });
     }
 
     public void getImageFile() {
-        final Intent galleryIntent = new Intent();
-        galleryIntent.setAction(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
 
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Image to Upload");
-
-        startActivityForResult(chooserIntent, 982);
-
+        startActivityForResult(intent, ConstantUtil.GALLERY_REQUEST_CODE);
     }
 
-
-    Uri imageUri = null;
+    private String getPathFromUri(Uri uri) {
+        try (
+                Cursor cursor =
+                     context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA},
+                             null, null, null)
+        ) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 982 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
+        if (requestCode == ConstantUtil.GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if(data != null && data.getData() != null) {
+                Uri imageUri = data.getData();
+                String imagePath = getPathFromUri(imageUri);
 
-//            Glide.with(context).load(imageUri).apply(RequestOptions.circleCropTransform()).into(meImage);
-//            user.setImageUrl(imageUri.toString()); // 유저 정보에 이미지 저장
-            //Todo 지상 파일 만들기
+                Glide.with(context)
+                        .load(new File(imagePath))
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(meImage);
 
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = context.getContentResolver().query(imageUri, filePathColumn, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                Log.e("columnIndex", "columnIndex = " + columnIndex);
-                Log.e("filePathColumn", "filePathColumn = " + filePathColumn[0]);
-
-                imagePath = cursor.getString(columnIndex);
-
-                Glide.with(context).load(new File(imagePath)).apply(RequestOptions.circleCropTransform()).into(meImage);
-
-                Log.e("imagePath", "imagePath = " + imagePath);
-
-                cursor.close();
+                uploadImageFile(imagePath);
             }
-
-            uploadImage(imagePath);
-
-
         } else if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE && resultCode == RESULT_OK) {
-
             skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
 
             user.setFollowingSkills(skills);
 
-            recyclerViewSetting();
+//            recyclerViewSetting();
 
             RetrofitHelper.createApi(UserService.class).followSkills(user.get_id(), user.getFollowingSkills())
                     .subscribeOn(Schedulers.io())
@@ -312,13 +267,11 @@ public class MeFragment extends Fragment {
         }
     }
 
-
-    public void recyclerViewSetting() {
-
-        layoutManager = new FlexboxLayoutManager(context);
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        recyclerViewSkills.setLayoutManager(layoutManager);
-        recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, user.getFollowingSkills()));
-    }
+//    public void recyclerViewSetting() {
+//        layoutManager = new FlexboxLayoutManager(context);
+//        layoutManager.setFlexDirection(FlexDirection.ROW);
+//        recyclerViewSkills.setLayoutManager(layoutManager);
+//        recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, user.getFollowingSkills()));
+//    }
 
 }

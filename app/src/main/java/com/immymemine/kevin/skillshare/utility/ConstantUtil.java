@@ -1,7 +1,5 @@
 package com.immymemine.kevin.skillshare.utility;
 
-import android.Manifest;
-
 /**
  * Created by quf93 on 2017-11-26.
  */
@@ -56,6 +54,7 @@ public class ConstantUtil {
     public static final String SUBSCRIBERS_FLAG = "subscribers";
     public static final String REVIEWS_FLAG = "reviews";
     public static final String PROJECTS_FLAG = "projects";
+    public static final int GALLERY_REQUEST_CODE = 392;
     //Search
     public static final int FAIL_SEARCH = 293;
 
