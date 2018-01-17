@@ -104,19 +104,22 @@ public class MeFragment extends Fragment {
         state = StateUtil.getInstance();
         user = state.getUserInstance();
 
+
+
         if (user.getImageUrl() != null) {
 
-            RetrofitHelper.createApi(UserService.class).downloadImage(user.get_id())
+            RetrofitHelper.createApi(UserService.class).downloadImage(user.get_id(),user.getImageUrl())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe((User user) -> {
                         Log.e("success2", "success2");
 
-                        Glide.with(context).load(new File("C:/Users/JisangYou/workspace/Team_Project/skillShareProject/skill_share_node.js/" + user.getImageUrl()).getPath()).apply(RequestOptions.circleCropTransform()).into(meImage);
 
-                        Log.e("total url  ", "C:/Users/JisangYou/workspace/Team_Project/skillShareProject/skill_share_node.js/" + user.getImageUrl());
+                        Glide.with(context).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(meImage);
+
+                        Log.e("user.getImageUrl()  ", "user.getImageUrl()  " + user.getImageUrl());
                     }, (Throwable error) -> {
-                        Log.e("handleError2", "throwable message2" + error.getMessage());
+                        Log.e("handleError2", "throwable message2  " + error.getMessage());
                     });
 
 
@@ -136,7 +139,7 @@ public class MeFragment extends Fragment {
 
         meFollowers.setText(user.getFollowers().size() + " Followers");
         meFollowing.setText("Following " + user.getFollowing().size());
-//        Glide.with(context).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(meImage);
+
 
         recyclerViewSetting();
 
@@ -161,6 +164,13 @@ public class MeFragment extends Fragment {
         meFollowers = view.findViewById(R.id.me_followers);
         meFollowing = view.findViewById(R.id.me_following);
         meButton = view.findViewById(R.id.me_button); // sign out button
+        meButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StateUtil.getInstance().setUserInstance(null);
+
+            }
+        });
         container = view.findViewById(R.id.container);
 
 

@@ -1,14 +1,17 @@
 package com.immymemine.kevin.skillshare.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -92,29 +95,37 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                     layout_discussion.setVisibility(View.VISIBLE);
                 } else {
                     buttonJoinGroup.setOnClickListener(v -> {
-                        // TODO nickname 설정 다이얼로그
+                        if(state.getUserInstance().getNickname() == null || state.getUserInstance().getNickname().equals("")) {
+                            AlertDialog dialog = DialogUtil.showSettingNicknameDialog(this);
+                            dialog.setOnDismissListener(d -> {
+                                if(state.getUserInstance().getNickname() != null) {
+                                    buttonJoinGroup.setVisibility(View.GONE);
+                                    layout_discussion.setVisibility(View.VISIBLE);
 
-                        buttonJoinGroup.setVisibility(View.GONE);
-                        layout_discussion.setVisibility(View.VISIBLE);
+                                    RetrofitHelper.createApi(UserService.class)
+                                            .joinGroup(mGroup, state.getUserInstance().get_id())
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(
+                                                    (Response response) -> {
+                                                        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                                            state.getUserInstance().getGroups().add(mGroup);
+                                                            Bus.getInstance().post(state.getUserInstance().getGroups());
+                                                        } else {
+                                                            // TODO 실패 메시지
+                                                            Log.d("JUWONLEE","failed");
+                                                        }
 
-                        RetrofitHelper.createApi(UserService.class)
-                                .joinGroup(mGroup, state.getUserInstance().get_id())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(
-                                        (Response response) -> {
-                                            if(ConstantUtil.SUCCESS.equals(response.getResult())) {
-                                                state.getUserInstance().getGroups().add(mGroup);
-                                                Bus.getInstance().post(state.getUserInstance().getGroups());
-                                            } else {
-                                                // TODO 실패 메시지
-                                                Log.d("JUWONLEE","failed");
-                                            }
-
-                                        }, (Throwable error) -> {
-                                            Log.e("join group error :  ", error.getMessage());
-                                        }
-                                );
+                                                    }, (Throwable error) -> {
+                                                        Log.e("join group error :  ", error.getMessage());
+                                                    }
+                                            );
+                                } else {
+                                    buttonJoinGroup.setVisibility(View.VISIBLE);
+                                    layout_discussion.setVisibility(View.GONE);
+                                }
+                            });
+                        }
                     });
                 }
             } else {
@@ -178,6 +189,9 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                     );
 
                     editTextComment.setText("");
+                    // 키보드 닫기
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow( editTextComment.getWindowToken(), 0);
 
                     RetrofitHelper.createApi(GroupService.class)
                             .sendComment(mGroup.getGroupName(), comment)
@@ -187,6 +201,7 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                                     (Response response) -> {
                                         if(ConstantUtil.SUCCESS.equals(response.getResult())) {
                                             mAdapter.addItem(comment);
+                                            mRecyclerView.scrollToPosition(0);
                                         } else {
                                             // 에러 메시지
                                         }
@@ -210,18 +225,26 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llManager.findLastCompletelyVisibleItemPosition() == (mAdapter.getItemCount() - 4)) {
-                    onLoadMore();
+                    mAdapter.setMore(true);
+                    mAdapter.showLoading();
                 }
             }
         });
     }
 
+    String groupId;
     @Override
     protected void onStart() {
         super.onStart();
         // TODO data 후방부터 가져오기 position 값 전달 X
+        if(mGroup.getGroupId() == null || mGroup.getGroupId().equals("")) {
+            groupId = mGroup.get_id();
+        } else {
+            groupId = mGroup.getGroupId();
+        }
+
         RetrofitHelper.createApi(GroupService.class)
-                .getComments(mGroup.get_id(), 0)
+                .getComments(groupId, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -236,17 +259,17 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
     @SuppressLint("StaticFieldLeak")
     @Override
     public void onLoadMore() {
-        mAdapter.setMore(true);
-        mAdapter.showLoading();
-
         RetrofitHelper.createApi(GroupService.class)
-                .getComments(mGroup.get_id(),mAdapter.getItemCount())
+                .getComments(groupId, mAdapter.getItemCount()-1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        (List<Comment> chatList) -> {
+                        (List<Comment> comments) -> {
                             mAdapter.dismissLoading();
-                            mAdapter.addItemMore(chatList);
+                            mAdapter.addItemMore(comments);
+                            if(comments.size() < 20) {
+                                mRecyclerView.addOnScrollListener(null);
+                            }
                         }, (Throwable error) -> {
 
                         }

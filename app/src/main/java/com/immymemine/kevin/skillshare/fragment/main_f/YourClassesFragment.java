@@ -17,8 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
-import com.immymemine.kevin.skillshare.activity.SavedActivity;
+
 import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
