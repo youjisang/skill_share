@@ -105,7 +105,7 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                                     RetrofitHelper.createApi(UserService.class)
                                             .joinGroup(mGroup, state.getUserInstance().get_id())
                                             .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .observeOn(Schedulers.io())
                                             .subscribe(
                                                     (Response response) -> {
                                                         if(ConstantUtil.SUCCESS.equals(response.getResult())) {

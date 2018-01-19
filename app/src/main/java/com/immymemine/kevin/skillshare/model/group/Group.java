@@ -3,6 +3,8 @@ package com.immymemine.kevin.skillshare.model.group;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by quf93 on 2017-12-12.
  */
@@ -13,6 +15,7 @@ public class Group implements Parcelable {
     String groupName;
     String groupThumbnail;
     String memberCount;
+    List<String> memberNicknames;
 
     protected Group(Parcel in) {
         _id = in.readString();
@@ -52,6 +55,10 @@ public class Group implements Parcelable {
 
     public String getMemberCount() {
         return memberCount;
+    }
+
+    public List<String> getMemberNicknames() {
+        return memberNicknames;
     }
 
     @Override

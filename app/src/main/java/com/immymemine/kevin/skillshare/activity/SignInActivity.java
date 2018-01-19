@@ -18,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
@@ -42,10 +41,6 @@ public class SignInActivity extends AppCompatActivity{
     EditText editTextEmail, editTextPassword;
     Button buttonSignIn, buttonForgotPw;
     TextView warning_email, warning_password;
-    private static final int RC_SIGN_IN = 239;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +60,7 @@ public class SignInActivity extends AppCompatActivity{
         // google login 버튼
         findViewById(R.id.google_sign_in).setOnClickListener( v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            startActivityForResult(signInIntent, ConstantUtil.REQUEST_CODE_SIGN_IN);
         });
 
         // to Validity check
@@ -85,7 +80,7 @@ public class SignInActivity extends AppCompatActivity{
                 warning_email.setVisibility(View.INVISIBLE);
                 if(ValidationUtil.isValidPassword(password)) {
                     warning_password.setVisibility(View.INVISIBLE);
-                    Log.d("email & pw : ", email +" / "+ password);
+
                     RetrofitHelper
                             .createApi(UserService.class)
                             .signIn(email, password)
@@ -121,7 +116,7 @@ public class SignInActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == ConstantUtil.REQUEST_CODE_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -152,7 +147,9 @@ public class SignInActivity extends AppCompatActivity{
         Observable<CharSequence> o2 = RxTextView.textChanges(editTextPassword);
 
         // Observable 1 과 Observable 2 를 결합해서 결과값을 반환
-        Observable.combineLatest(o1, o2, (e, p) -> ValidationUtil.isValidEmailAddress(e.toString()) && ValidationUtil.isValidPassword(p.toString()))
+        Observable.combineLatest(o1, o2,
+                (e, p) -> ValidationUtil.isValidEmailAddress(e.toString()) &&
+                        ValidationUtil.isValidPassword(p.toString()))
         .subscribe(
                 (validity) -> {
                     if(validity) {
@@ -166,17 +163,17 @@ public class SignInActivity extends AppCompatActivity{
 
     private void handleResponse(UserResponse response) {
         if( ConstantUtil.SUCCESS.equals(response.getResult()) ) {
+            // user instance manage
+            StateUtil state = StateUtil.getInstance();
+            state.setUserInstance(response.getData());
+
+            // save token to sharedpreferences
+            PreferenceUtil.setStringValue(this, ConstantUtil.AUTHORIZATION_FLAG, response.getToken());
+
+            // intent clear all activity stack and move to MainActivity
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
-            StateUtil state = StateUtil.getInstance();
-            state.setState(true);
-            state.setUserInstance(response.getUser());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
-            //Todo 지상 자동로그인
-
-//            PreferenceUtil.setValue(this, ConstantUtil.SIGN_IN_SUCCESS, ConstantUtil.SIGN_IN_SUCCESS);
-//            PreferenceUtil.setValue(this, "currentState", state.getState());
-
             startActivity(intent);
         } else {
             Toast.makeText(SignInActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();

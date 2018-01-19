@@ -10,9 +10,10 @@
         android:id="@+id/me_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/me_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/image_profile" />
 
     <TextView

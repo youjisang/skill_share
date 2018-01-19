@@ -13,6 +13,7 @@ import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.PreferenceUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.ValidationUtil;
 
@@ -80,12 +81,12 @@ public class SignUpActivity extends AppCompatActivity {
             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // activity stack 정리
             intent.setAction(ConstantUtil.SIGN_UP_SUCCESS); // 회원 가입 성공 Action >>> Main 에서 처리 ( follow skills 띄우기 )
-            StateUtil.getInstance().setUserInstance(response.getUser());
+            StateUtil.getInstance().setUserInstance(response.getData());
+            PreferenceUtil.setStringValue(this, ConstantUtil.AUTHORIZATION_FLAG, response.getToken());
             startActivity(intent);
         } else {
             if(response.getMessage().equals(ConstantUtil.ALREADY_EXISTED_EMAIL)) {
                 // 경고 메시지 보여주기 <<< 중복된 이메일 있다 바꿔라
-
             }
             Toast.makeText(SignUpActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
         }

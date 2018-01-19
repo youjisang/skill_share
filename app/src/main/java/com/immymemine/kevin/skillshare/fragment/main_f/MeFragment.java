@@ -13,12 +13,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,9 +23,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -58,13 +53,8 @@ public class MeFragment extends Fragment {
     ImageButton meButton;
     LinearLayout container;
 
-    Button mePersonaize;
-    View selectSkillView;
     View meFragment;
-    RecyclerView recyclerViewSkills;
-    SkillsRecyclerViewAdapter adapter;
     List<String> skills;
-    FlexboxLayoutManager layoutManager;
 
     StateUtil state;
     User user;
@@ -81,13 +71,13 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         meFragment = inflater.inflate(R.layout.fragment_me, container, false);
         context = getActivity();
-//        selectSkillView = LayoutInflater.from(context).inflate(R.layout.me_skill_view, container, false);
-
-        initiateView(meFragment);
-//        initiateMeSkillView(selectSkillView);
 
         state = StateUtil.getInstance();
         user = state.getUserInstance();
+
+        initiateView(meFragment);
+//        selectSkillView = LayoutInflater.from(context).inflate(R.layout.me_skill_view, container, false);
+//        initiateMeSkillView(selectSkillView);
 
         if (user.getImageUrl() != null) {
             String imageUrl = RetrofitHelper.BASE_URL+user.getImageUrl();
@@ -104,7 +94,8 @@ public class MeFragment extends Fragment {
 
         meFollowers.setText(user.getFollowers().size() + " Followers");
         meFollowing.setText("Following " + user.getFollowing().size());
-//        Glide.with(context).load(user.getImageUrl()).apply(RequestOptions.circleCropTransform()).into(meImage);
+
+        container.addView(ViewFactory.getInstance(context).getMeSkillView(user.getFollowingSkills()));
 
 //        recyclerViewSetting();
 
@@ -134,7 +125,6 @@ public class MeFragment extends Fragment {
             }
         });
         container = view.findViewById(R.id.container);
-        container.addView(ViewFactory.getInstance(context).getMeSkillView(user.getFollowingSkills()));
     }
 
 //    public void initiateMeSkillView(View meSkillView) {
@@ -201,6 +191,27 @@ public class MeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(resultCode == RESULT_OK) {
+            if(requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE ) {
+                List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
+
+                RetrofitHelper.createApi(UserService.class)
+                        .followSkills(user.get_id(), skills)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                (Response response) -> {
+                                    if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                        user.setFollowingSkills(skills);
+                                    }
+                                }, (Throwable error) -> {
+
+                                }
+                        );
+            }
+        } else {
+
+        }
         if (requestCode == ConstantUtil.GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
             if(data != null && data.getData() != null) {
                 Uri imageUri = data.getData();
@@ -217,19 +228,6 @@ public class MeFragment extends Fragment {
             skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
 
             user.setFollowingSkills(skills);
-
-//            recyclerViewSetting();
-
-            RetrofitHelper.createApi(UserService.class).followSkills(user.get_id(), user.getFollowingSkills())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            (User user) -> {
-                                Log.e("handleResponse", "USER" + user.getFollowingSkills());
-                            }, (Throwable error) -> {
-                                Log.e("handleError", "throwable message" + error.getMessage());
-                            }
-                    );
         }
     }
 

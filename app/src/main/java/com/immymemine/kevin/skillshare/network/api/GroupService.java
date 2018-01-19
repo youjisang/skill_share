@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.network.api;
 
 import com.immymemine.kevin.skillshare.model.group.Comment;
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.network.Response;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import retrofit2.http.Query;
 public interface GroupService {
     @GET("group/getComments/{groupId}/{position}")
     Observable<List<Comment>> getComments(@Path("groupId") String groupId, @Path("position") int position);
+
+    @GET("group/{groupId}")
+    Observable<Group> getGroupInitiateData(@Path("groupId") String groupId);
 
     @POST("group/sendComment")
     Observable<Response> sendComment(@Query("groupName") String groupName, @Body Comment comment);

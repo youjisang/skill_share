@@ -17,11 +17,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
 
-    public static final String BASE_URL = "http://172.20.10.4:8079/";
+    public static final String BASE_URL = "http://10.0.2.2:8079/";
 
     // OkHttpClient
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-            .addInterceptor(createLogginInterceptor())
+            .addInterceptor(getLoggingInterceptor())
             .connectTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS);
@@ -55,7 +55,7 @@ public class RetrofitHelper {
 
     private static HttpLoggingInterceptor loggingInterceptor;
 
-    private static HttpLoggingInterceptor createLogginInterceptor() {
+    private static HttpLoggingInterceptor getLoggingInterceptor() {
         if(loggingInterceptor == null) {
             loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
