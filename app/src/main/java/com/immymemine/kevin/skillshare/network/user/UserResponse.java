@@ -9,7 +9,8 @@ import com.immymemine.kevin.skillshare.model.user.User;
 public class UserResponse {
     private String result;
     private String message;
-    private User user;
+    private User data;
+    private String token;
 
     public String getResult() {
         return result;
@@ -17,7 +18,10 @@ public class UserResponse {
     public String getMessage() {
         return message;
     }
-    public User getUser() {
-        return user;
+    public User getData() {
+        return data;
+    }
+    public String getToken() {
+        return token;
     }
 }

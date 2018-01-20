@@ -3,20 +3,24 @@ package com.immymemine.kevin.skillshare.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.fragment.main_f.MeFragment;
-import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.PreferenceUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
+import com.immymemine.kevin.skillshare.utility.ValidationUtil;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -28,61 +32,51 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
 
-        StateUtil state = StateUtil.getInstance();
-        User user = state.getUserInstance();
-        //TODO 자상
-//        autoLogin();
+        String token = PreferenceUtil.getStringValue(this, ConstantUtil.AUTHORIZATION_FLAG);
 
-        // glide gif
-        // gif 프레임 추출 > 프레임 사이즈 최적화 > 프레임 저장
-        Glide.with(this)
-                .load(R.raw.splash)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)) // decoded resource 를 Disk Cache 저장소에 저장해둔다
-                .into((ImageView) findViewById(R.id.splash_image));
+        if(!ValidationUtil.isEmpty(token)) {
+            RetrofitHelper.createApi(UserService.class)
+                    .getMyInfo(token)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            (UserResponse userResponse) -> {
+                                if(ConstantUtil.SUCCESS.equals(userResponse.getResult())) {
+                                    StateUtil.getInstance().setUserInstance(userResponse.getData());
+                                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                                    intent.setAction(ConstantUtil.SIGN_IN_SUCCESS);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(this, userResponse.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }, (Throwable error) -> {
 
-        // button get_started
-        findViewById(R.id.get_started).setOnClickListener(v -> {
-            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-            new Thread() {
-                public void run() {
-                    // data 가져오기
-                    // RetrofitHelper.createApi()... 끝나면 넘어가기
+                            }
+                    );
+        } else {
+            setContentView(R.layout.activity_splash);
 
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
-                }
-            }.start();
-        });
+            // glide gif
+            // gif 프레임 추출 > 프레임 사이즈 최적화 > 프레임 저장
+            Glide.with(this)
+                    .load(R.raw.splash)
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)) // decoded resource 를 Disk Cache 저장소에 저장해둔다
+                    .into((ImageView) findViewById(R.id.splash_image));
 
-        // textview sign_in
-        findViewById(R.id.text_view_sign_in).setOnClickListener(v -> {
-            // Sign in page
-            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
-        });
-    }
+            // button get_started
+            findViewById(R.id.get_started).setOnClickListener(v -> {
+                findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                finish();
+            });
 
-    @Override
-    protected void onResume() {
-        // sign_in activity 로 갔다가 다시 돌아왔을 때
-        // progress bar >>> GONE
-        findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-        super.onResume();
-    }
-
-
-    //TODO 지상 자동로그인 처리
-
-
-    private void autoLogin() {
-
-        if (PreferenceUtil.getBoolean(this, "currentState") == true) {
-
-            Intent intent = new Intent(this, MainActivity.class);
-
-
-            startActivity(intent);
+            // textview sign_in
+            findViewById(R.id.text_view_sign_in).setOnClickListener(v -> {
+                // Sign in page
+                startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+            });
         }
     }
 }

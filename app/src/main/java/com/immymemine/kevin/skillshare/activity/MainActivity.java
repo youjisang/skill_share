@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -25,11 +24,17 @@ import com.immymemine.kevin.skillshare.fragment.main_f.OfflineMeFragment;
 import com.immymemine.kevin.skillshare.fragment.main_f.YourClassesFragment;
 import com.immymemine.kevin.skillshare.gcm.RegistrationIntentService;
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.Response;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
+import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -320,18 +325,22 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE) {
+            if(requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
-                user.setFollowingSkills(skills);
-            } else if(requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
-                List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
-                user.setFollowingSkills(skills);
 
-                // TODO ConstantUtil 에서 쓰는 것들 삭제...
-                followSkills.add(ConstantUtil.FEATURED_ON_SKILLSHARE);
-                followSkills.addAll(skills);
-                followSkills.add(ConstantUtil.TRENDING_NOW);
-                followSkills.add(ConstantUtil.BEST_THIS_MONTH);
+                RetrofitHelper.createApi(UserService.class)
+                        .followSkills(user.get_id(), skills)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                (Response response) -> {
+                                    if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                        user.setFollowingSkills(skills);
+                                    }
+                                }, (Throwable error) -> {
+
+                                }
+                        );
             }
         }
     }

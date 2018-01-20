@@ -35,9 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView meName, meNickname, meFollowers, meFollowing;
     ImageButton meButton;
 
-    StateUtil stateUtil;
-    User user;
-
+    boolean isTutor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,27 +43,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         initiateView();
 
-        stateUtil = StateUtil.getInstance();
-        user = stateUtil.getUserInstance();
-
         Intent intent = getIntent();
-        String tutorId = intent.getStringExtra("tutorId");
+        String userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
+        isTutor = intent.getBooleanExtra(ConstantUtil.TUTOR_CHECK, false);
 
 
-        if (tutorId != user.get_id()) {
-            RetrofitHelper.createApi(ClassService.class)
-                    .getLessons(tutorId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            (Lessons lessons)->
-                    {
-                        lessons.getTutor().getTutorId()
-                    }, this::handleError);
-        }
 
         RetrofitHelper.createApi(UserService.class)
-                .getUser(tutorId)
+                .getUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
@@ -105,8 +90,13 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (user.getFollowingSkills() != null && user.getFollowingSkills().size() > 0) {
-            View meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
+            View meSkillView = viewFactory.createMeSkillView(user.getFollowingSkills());
             profileContainer.addView(meSkillView);
+        }
+
+        if(isTutor) {
+            View teachingClassesView = viewFactory.createTeachingClassesView(user.getTeachingClasses());
+            profileContainer.addView(teachingClassesView);
         }
     }
 

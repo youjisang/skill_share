@@ -1,10 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.immymemine.kevin.skillshare.model.user.User;
 
 /**
  * Created by JisangYou on 2017-12-02.
@@ -12,34 +9,29 @@ import com.immymemine.kevin.skillshare.model.user.User;
 
 public class PreferenceUtil {
 
-    private static final String filename = "skillShare_preference";
+    private static final String filename = "skill_share_pref";
 
-    private static SharedPreferences getPreference(Context context){
+    private static SharedPreferences getPreference(Context context) {
         return context.getSharedPreferences(filename, Context.MODE_PRIVATE);
     }
 
-    public static void setValue(Context context, String key, boolean value){
+    public static void setBooleanValue(Context context, String key, boolean value) {
         SharedPreferences.Editor editor = getPreference(context).edit();
         editor.putBoolean(key, value);
         editor.commit();
     }
-    public static void setValue(Context context, String key, String value){
+    public static void setStringValue(Context context, String key, String value) {
         SharedPreferences.Editor editor = getPreference(context).edit();
         editor.putString(key, value);
-        //editor.remove(key); 삭제하기
         editor.commit();
+        //editor.remove(key); 삭제하기
     }
 
-
-
-
-
-    public static Boolean getBoolean(Context context, String key){
+    public static Boolean getBooleanValue(Context context, String key) {
         return getPreference(context).getBoolean(key,false);
     }
 
-    public static String getLong(Context context, String key){
+    public static String getStringValue(Context context, String key) {
         return getPreference(context).getString(key,"");
     }
-
 }

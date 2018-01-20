@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -32,6 +33,9 @@ public interface UserService {
     @GET("users/sign-in")
     Observable<UserResponse> signIn(@Query("email") String email, @Query("password") String password);
 
+    @GET("user/authorization")
+    Observable<UserResponse> getMyInfo(@Header("authorization") String token);
+
     @GET("user/{id}")
     Observable<User> getUser(@Path("id") String id);
 
@@ -41,9 +45,8 @@ public interface UserService {
     @POST("user/joinGroup")
     Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
 
-    //TODO client단에서는 변경사항이 있는지 여부만 확인하고 있으면 server 측 데이터를 아예 바꾸기
     @PUT("user/followSkills/{userId}")
-    Observable<User> followSkills(@Path("userId") String userId, @Body List<String> skills);
+    Observable<Response> followSkills(@Path("userId") String userId, @Body List<String> skills);
 
     @POST("user/subscribeClass")
     Observable<SubscribedClass> subscribeClass(@Query("classId") String classId);

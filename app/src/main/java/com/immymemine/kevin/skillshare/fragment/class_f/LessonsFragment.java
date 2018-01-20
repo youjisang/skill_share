@@ -60,9 +60,9 @@ public class LessonsFragment extends Fragment {
     // follow button
     int followers;
 
-    // TODO 지상 tutor Id
     Tutor tutor;
     String tutorId;
+    String classId;
 
     public LessonsFragment() {
         // Required empty public constructor
@@ -76,8 +76,10 @@ public class LessonsFragment extends Fragment {
 
         initiateView(view);
 
+        classId = getArguments().getString(ConstantUtil.ID_FLAG);
+
         RetrofitHelper.createApi(ClassService.class)
-                .getLessons(getArguments().getString(ConstantUtil.ID_FLAG))
+                .getLessons(classId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
@@ -100,8 +102,10 @@ public class LessonsFragment extends Fragment {
         imageViewTutor = v.findViewById(R.id.image_view_group);
         imageViewTutor.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProfileActivity.class);
-            intent.putExtra("tutorId",tutorId);
-            // TODO 지상 이미 tutorId를 최초에 받아 왔으므로, 그냥 아이디를 넘겨준다.
+
+//            intent.putExtra(ConstantUtil.TUTOR_CHECK, tutorId);
+
+            intent.putExtra(ConstantUtil.USER_ID_FLAG, tutorId);
             startActivity(intent);
         });
 
@@ -122,17 +126,20 @@ public class LessonsFragment extends Fragment {
         // class 정보
         textViewTitle.setText(lessons.getTitle());
         textViewTime.setText(TimeUtil.calculateVideoTime(lessons.getTotalDuration()));
-        textViewReview.setText(lessons.getReviewPercent()+"%");
+        textViewReview.setText(lessons.getReviewPercent() + "%");
 
         textViewSubscriberCount.setText(lessons.getSubscriberCount());
 
         // tutor 정보
         tutor = lessons.getTutor();
         tutorId = tutor.getTutorId();
-        if(StateUtil.getInstance().getState()) {
+
+
+
+        if (StateUtil.getInstance().getState()) {
             List<Following> followings = StateUtil.getInstance().getUserInstance().getFollowing();
-            for(Following following : followings) {
-                if(following.getUserId().equals(tutorId)) {
+            for (Following following : followings) {
+                if (following.getUserId().equals(tutorId)) {
                     buttonFollow.setChecked(true);
                     buttonFollow.setTextColor(getResources().getColor(R.color.white));
                     break;
@@ -152,6 +159,7 @@ public class LessonsFragment extends Fragment {
 
                 textViewFollowersCount.setText(followers + " Followers");
             });
+
         } else {
             buttonFollow.setOnCheckedChangeListener((buttonView, isChecked) ->
                     {
@@ -191,7 +199,7 @@ public class LessonsFragment extends Fragment {
                         (Following following) -> {
                             List<Following> followings = user.getFollowing();
 
-                            if(followings.contains(following)) {
+                            if (followings.contains(following)) {
                                 followings.remove(following);
                             } else {
                                 followings.add(following);

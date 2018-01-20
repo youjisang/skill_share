@@ -2,9 +2,11 @@ package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -12,7 +14,9 @@ import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
+import com.immymemine.kevin.skillshare.adapter.ProfileRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
+import com.immymemine.kevin.skillshare.model.user.TeachingClass;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.ArrayList;
@@ -56,8 +60,8 @@ public class ViewFactory {
         return view;
     }
 
-    public View getMeSkillView(List<String> skills) {
-        View view = inflater.inflate(R.layout.me_skill_view,null);
+    public View createMeSkillView(List<String> skills) {
+        View view = inflater.inflate(R.layout.me_skill_view, null);
 
         RecyclerView recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
@@ -65,12 +69,12 @@ public class ViewFactory {
         recyclerViewSkills.setLayoutManager(layoutManager);
         recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, skills));
 
-        view.findViewById(R.id.personalize).setOnClickListener(
+        view.findViewById(R.id.button_view_seeAll).setOnClickListener(
                 v -> {
                     Intent intent = new Intent(context, SelectSkillsActivity.class);
                     if (skills != null)
                         intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
-                    ((MainActivity)context).startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
+                    ((MainActivity) context).startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
                 }
         );
 
@@ -81,4 +85,31 @@ public class ViewFactory {
 
         return view;
     }
+
+    public View createTeachingClassesView(List<TeachingClass> teachingClasses) {
+        View view = inflater.inflate(R.layout.teaching_class_view, null);
+
+        RecyclerView teachingRecyclerView = view.findViewById(R.id.recycler_view_teachingClass);
+
+        teachingRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        teachingRecyclerView.setAdapter(new ProfileRecyclerViewAdapter(teachingClasses, context));
+
+        view.findViewById(R.id.button_view_seeAll).setOnClickListener(
+                v -> {
+//                    Intent intent = new Intent(context, SelectSkillsActivity.class);
+//                    if (skills != null)
+//                        intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
+//                    ((MainActivity) context).startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
+                }
+        );
+
+        if (teachingClasses == null || teachingClasses.size() == 0)
+            view.findViewById(R.id.divider).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
+
+        return view;
+    }
+
+
 }

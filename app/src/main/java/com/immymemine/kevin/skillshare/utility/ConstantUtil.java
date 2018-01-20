@@ -11,6 +11,8 @@ public class ConstantUtil {
 
     // Permission
     public static final int PERMISSION_REQUEST_CODE = 7;
+
+    public static final int REQUEST_CODE_SIGN_IN = 239;
     // general
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";
@@ -55,6 +57,7 @@ public class ConstantUtil {
     public static final String REVIEWS_FLAG = "reviews";
     public static final String PROJECTS_FLAG = "projects";
     public static final int GALLERY_REQUEST_CODE = 392;
+    public static final String AUTHORIZATION_FLAG = "authorization";
     //Search
     public static final int FAIL_SEARCH = 293;
 
@@ -62,10 +65,8 @@ public class ConstantUtil {
     public static final int ALREADY_JOIN_GROUP = 590;
 
     public static final int REQ_CODE = 999;
-//    public static final String permissions[] = {
-//            Manifest.permission.READ_EXTERNAL_STORAGE,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE
-//    };
+
+    public static final String TUTOR_CHECK= "T";
 
 
 }

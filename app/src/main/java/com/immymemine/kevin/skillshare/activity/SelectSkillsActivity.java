@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
-
-import net.colindodd.toggleimagebutton.ToggleImageButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +17,13 @@ import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 
 public class SelectSkillsActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
 
-    Intent intent;
     List<String> skills;
 
     CustomToggleButton toggleButtonDesign, toggleButtonPhotography, toggleButtonBusiness, toggleButtonTechnology,
             toggleButtonCrafts, toggleButtonCulinary, toggleButtonFilm, toggleButtonFashion, toggleButtonMusic,
             toggleButtonLifestyle, toggleButtonGaming, toggleButtonTeaching;
 
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +31,10 @@ public class SelectSkillsActivity extends Activity implements CompoundButton.OnC
 
         initiateView();
 
-        intent = getIntent();
+        user = StateUtil.getInstance().getUserInstance();
 
         // 초기화
-        if(StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) {
+        if(user.getFollowingSkills() != null) {
             skills = StateUtil.getInstance().getUserInstance().getFollowingSkills();
             setAlreadyCheckedSkills(skills);
         } else {
@@ -71,6 +69,7 @@ public class SelectSkillsActivity extends Activity implements CompoundButton.OnC
         toggleButtonTeaching = findViewById(R.id.toggle_teaching);
 
         findViewById(R.id.toolbar_close_button).setOnClickListener(view -> {
+            Intent intent = new Intent();
             intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
             setResult(RESULT_OK, intent);
             finish();
