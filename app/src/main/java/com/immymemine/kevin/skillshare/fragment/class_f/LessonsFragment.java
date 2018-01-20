@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,10 @@ public class LessonsFragment extends Fragment {
     // follow button
     int followers;
 
+    // TODO 지상 tutor Id
+    Tutor tutor;
+    String tutorId;
+
     public LessonsFragment() {
         // Required empty public constructor
     }
@@ -95,6 +100,8 @@ public class LessonsFragment extends Fragment {
         imageViewTutor = v.findViewById(R.id.image_view_group);
         imageViewTutor.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProfileActivity.class);
+            intent.putExtra("tutorId",tutorId);
+            // TODO 지상 이미 tutorId를 최초에 받아 왔으므로, 그냥 아이디를 넘겨준다.
             startActivity(intent);
         });
 
@@ -110,7 +117,7 @@ public class LessonsFragment extends Fragment {
         recyclerViewLessons.setAdapter(adapter);
     }
 
-    Tutor tutor;
+
     private void handleResponse(Lessons lessons) {
         // class 정보
         textViewTitle.setText(lessons.getTitle());
@@ -121,7 +128,7 @@ public class LessonsFragment extends Fragment {
 
         // tutor 정보
         tutor = lessons.getTutor();
-        String tutorId = tutor.getTutorId();
+        tutorId = tutor.getTutorId();
         if(StateUtil.getInstance().getState()) {
             List<Following> followings = StateUtil.getInstance().getUserInstance().getFollowing();
             for(Following following : followings) {

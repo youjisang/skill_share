@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.network;
 
 /**
+ * for general response from node server
  * Created by quf93 on 2017-12-08.
  */
 

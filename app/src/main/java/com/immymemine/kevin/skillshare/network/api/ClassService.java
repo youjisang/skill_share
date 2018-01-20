@@ -41,4 +41,6 @@ public interface ClassService {
 
     @GET("class/search/{content}")
     Observable<List<SearchClass>> search(@Path("content") String searchContent);
+
+
 }

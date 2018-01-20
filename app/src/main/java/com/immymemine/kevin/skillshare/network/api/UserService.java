@@ -8,9 +8,7 @@ import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
-
 import java.util.List;
-
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -21,7 +19,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 /**
  * Created by quf93 on 2017-11-30.
@@ -44,9 +41,6 @@ public interface UserService {
     @POST("user/joinGroup")
     Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
 
-//    @PUT("user/imageUrl/{userId}/{imageUrl}")
-//    Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);
-
     //TODO client단에서는 변경사항이 있는지 여부만 확인하고 있으면 server 측 데이터를 아예 바꾸기
     @PUT("user/followSkills/{userId}")
     Observable<User> followSkills(@Path("userId") String userId, @Body List<String> skills);
@@ -55,11 +49,15 @@ public interface UserService {
     Observable<SubscribedClass> subscribeClass(@Query("classId") String classId);
 
     @Multipart
-    @POST("user/imageFile/{userId}")
-    Observable<User> uploadImage(@Path("userId") String userId, @Part MultipartBody.Part image);
+    @POST("user/uploadImageFile")
+    Observable<Response> uploadImageFile(@Query("userId") String userId, @Part MultipartBody.Part image);
 
     @GET("user/imageFile/{userId}")
-    Observable<User> downloadImage(@Path("userId")String userId, @Query("imageUrl") String imageUrl);
+    Observable<User> downloadImage(@Path("userId")String userId);
 
+    @POST("user/setNickname")
+    Observable<Response> setNickname(@Query("userId") String userId, @Query("nickname") String nickname);
 
+    //    @PUT("user/imageUrl/{userId}/{imageUrl}")
+//    Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);
 }

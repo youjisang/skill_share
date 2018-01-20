@@ -97,7 +97,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             if (searchClasses != null) {
                 textViewTitle = v.findViewById(R.id.text_view_title);
                 textViewTutorName = v.findViewById(R.id.text_view_tutor_name);
-                imageViewThumbnail = v.findViewById(R.id.image_view_thumbnail);
+                imageViewThumbnail = v.findViewById(R.id.image_view_profile);
 
                 textViewDuration = v.findViewById(R.id.text_view_duration);
                 textViewReviewPercent = v.findViewById(R.id.text_view_review_percent);

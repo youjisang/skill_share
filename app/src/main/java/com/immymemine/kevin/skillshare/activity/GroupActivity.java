@@ -42,7 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class GroupActivity extends AppCompatActivity implements GroupCommentAdapter.OnLoadMoreListener {
+public class GroupActivity extends AppCompatActivity implements GroupCommentAdapter.OnLoadMoreListener, GroupCommentAdapter.InteractionInterface {
 
     Toolbar toolbar;
     GroupCommentAdapter mAdapter;
@@ -182,7 +182,7 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                     Comment comment = new Comment(
                             user.get_id(),
                             user.getName(),
-                            user.getNickname(),
+                            "@" + user.getNickname(),
                             user.getImageUrl(),
                             editTextComment.getText().toString(),
                             System.currentTimeMillis() + ""
@@ -236,7 +236,7 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
     @Override
     protected void onStart() {
         super.onStart();
-        // TODO data 후방부터 가져오기 position 값 전달 X
+
         if(mGroup.getGroupId() == null || mGroup.getGroupId().equals("")) {
             groupId = mGroup.get_id();
         } else {
@@ -268,11 +268,25 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                             mAdapter.dismissLoading();
                             mAdapter.addItemMore(comments);
                             if(comments.size() < 20) {
-                                mRecyclerView.addOnScrollListener(null);
+                                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                    @Override
+                                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                        super.onScrolled(recyclerView, dx, dy);
+                                    }
+                                });
                             }
                         }, (Throwable error) -> {
 
                         }
                 );
+    }
+
+    @Override
+    public void reply(String nickname) {
+        if(editTextComment.getText().length() > 0) {
+            editTextComment.setText(nickname+" ");
+        } else {
+            editTextComment.append(" " + nickname+" ");
+        }
     }
 }

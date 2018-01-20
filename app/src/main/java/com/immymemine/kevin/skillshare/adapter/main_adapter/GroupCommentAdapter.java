@@ -1,6 +1,8 @@
 package com.immymemine.kevin.skillshare.adapter.main_adapter;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.GroupActivity;
+import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.model.group.Comment;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
 import com.immymemine.kevin.skillshare.view.ExpandableTextView;
 
@@ -27,21 +30,32 @@ import java.util.List;
 
 public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEW_ITEM = 1;
-    private final int VIEW_PROG = 0;
+    final int VIEW_ITEM = 1;
+    final int VIEW_PROG = 0;
 
-    private ArrayList<Comment> comments;
+    ArrayList<Comment> comments;
 
-    private OnLoadMoreListener onLoadMoreListener;
+    Context context;
+    OnLoadMoreListener onLoadMoreListener;
+    InteractionInterface interactionInterface;
 
-    private boolean isMoreLoading = true;
+    boolean isMoreLoading = true;
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public GroupCommentAdapter(GroupActivity onLoadMoreListener) {
-        this.onLoadMoreListener = onLoadMoreListener;
+    public GroupCommentAdapter(Context context) {
+        this.context = context;
+
+        if(context instanceof OnLoadMoreListener) {
+            this.onLoadMoreListener = (OnLoadMoreListener) context;
+        }
+
+        if(context instanceof InteractionInterface) {
+            this.interactionInterface = (InteractionInterface) context;
+        }
+
         comments = new ArrayList<>();
     }
 
@@ -111,6 +125,10 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             chatHolder.userId = comment.getUserId();
             chatHolder.textViewName.setText(comment.getUserName());
             chatHolder.textViewNickname.setText(comment.getUserNickname());
+            if(comment.getComment().contains("@")) {
+                int index = comment.getComment().indexOf("@");
+
+            }
             chatHolder.expandableTextView.setText(comment.getComment());
             chatHolder.textViewTime.setText(TimeUtil.calculateTime(comment.getTime()));
         }
@@ -122,7 +140,7 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return comments.size();
     }
 
-    static class GroupChattingHolder extends RecyclerView.ViewHolder {
+    public class GroupChattingHolder extends RecyclerView.ViewHolder {
 
         String userId;
         ImageView imageViewProfile;
@@ -132,17 +150,29 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public GroupChattingHolder(View v) {
             super(v);
-            imageViewProfile = v.findViewById(R.id.image_view_thumbnail);
+            imageViewProfile = v.findViewById(R.id.image_view_profile);
+            imageViewProfile.setOnClickListener(
+                    view -> {
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        intent.putExtra(ConstantUtil.USER_ID_FLAG, userId);
+                        context.startActivity(intent);
+                    }
+            );
             textViewName = v.findViewById(R.id.text_view_user_name);
             textViewNickname = v.findViewById(R.id.text_view_user_nickname);
             expandableTextView = v.findViewById(R.id.expandable_text_view);
             expandableTextView.setTrimLength(8);
             textViewTime = v.findViewById(R.id.text_view_time);
             reply = v.findViewById(R.id.text_view_reply);
+            reply.setOnClickListener(
+                    view -> {
+                        interactionInterface.reply(textViewNickname.getText().toString());
+                    }
+            );
         }
     }
 
-    static class ProgressViewHolder extends RecyclerView.ViewHolder {
+    public class ProgressViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar pBar;
 
         public ProgressViewHolder(View v) {
@@ -151,6 +181,9 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public interface InteractionInterface {
+        void reply(String nickname);
+    }
 }
 
 

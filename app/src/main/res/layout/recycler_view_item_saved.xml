@@ -36,7 +36,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.37"
-        app:layout_constraintStart_toEndOf="@+id/image_view_thumbnail"
+        app:layout_constraintStart_toEndOf="@+id/image_view_profile"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -51,11 +51,11 @@
         android:textColor="@color/IcInactive"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_view_thumbnail"
+        app:layout_constraintStart_toEndOf="@+id/image_view_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
 
     <ImageView
-        android:id="@+id/image_view_thumbnail"
+        android:id="@+id/image_view_profile"
         android:layout_width="120dp"
         android:layout_height="80dp"
         android:layout_marginLeft="8dp"

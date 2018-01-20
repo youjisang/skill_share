@@ -1,25 +1,21 @@
 package com.immymemine.kevin.skillshare.fragment.main_f;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SearchActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.HomeRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.home.Class;
-import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.HomeService;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
@@ -60,7 +56,7 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.toolbar_button_search)
                 .setOnClickListener(v -> context.startActivity(new Intent(context, SearchActivity.class)));
 
-        if (!StateUtil.getInstance().getState() &&
+        if (!(StateUtil.getInstance().getState()) &&
                 (getArguments() != null) ? getArguments().getBoolean("show") : true) {
             welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
             welcomeView = ViewFactory.getInstance(context).getWelcomeView();
@@ -73,12 +69,9 @@ public class HomeFragment extends Fragment {
             welcomeViewContainer.addView(welcomeView);
         }
 
-        // Todo 지상 : 로그인하고 들어오면 welcomeView 사라지게....
-        // 이게 안사라지니까 yourClass fragment, mefragment에서 버튼 클릭할때 welcomeView가 뜸.
-        if (StateUtil.getInstance().getUserInstance() != null) {
-            welcomeViewContainer.removeView(welcomeView);
-        }
-        // TODO 여기까지......................................
+//        if (StateUtil.getInstance().getUserInstance() != null) {
+//            welcomeViewContainer.removeView(welcomeView);
+//        }
 
         List<String> followSkills = (StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) ?
                 StateUtil.getInstance().getUserInstance().getFollowingSkills() : new ArrayList<>();
