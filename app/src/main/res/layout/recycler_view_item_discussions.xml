@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/skill_design" />
+        android:src="@drawable/image_profile" />
 
     <TextView
         android:id="@+id/text_view_user_name"
@@ -76,23 +76,10 @@
         android:layout_gravity="center_vertical"
         android:layout_marginRight="8dp"
         android:layout_marginTop="24dp"
-        android:layout_toLeftOf="@+id/text_view_reply"
+        android:layout_toLeftOf="@+id/text_view_like_count"
         android:tint="@color/BottomNaviNotiBackground"
-        app:srcCompat="@drawable/heart_disenabled" />
+        app:srcCompat="@drawable/heart_enabled" />
 
-
-    <TextView
-        android:id="@+id/text_view_reply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/expandable_text_view"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:text="5"
-        android:textColor="@color/IcInactive"
-        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/text_view_time"
@@ -126,8 +113,9 @@
         android:layout_alignLeft="@+id/text_view_replies"
         android:layout_below="@+id/text_view_replies"
         android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
         android:visibility="gone"
-        app:srcCompat="@drawable/skill_music" />
+        app:srcCompat="@drawable/image_profile" />
 
     <TextView
         android:id="@+id/text_view_reply_profile"

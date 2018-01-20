@@ -77,6 +77,7 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void showLoading() {
         if (isMoreLoading && comments != null && onLoadMoreListener != null) {
             isMoreLoading = false;
+
             new Handler().post(() -> {
                 // progress bar holder 호출
                 comments.add(null);

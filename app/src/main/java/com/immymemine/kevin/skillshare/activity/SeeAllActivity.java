@@ -35,7 +35,7 @@ import java.util.Map;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SeeAllActivity extends AppCompatActivity {
+public class SeeAllActivity extends AppCompatActivity implements SubscriberSeeAllRecyclerViewAdapter.OnLoadMoreListener {
 
     // intent
     Intent intent;
@@ -129,7 +129,7 @@ public class SeeAllActivity extends AppCompatActivity {
         );
 
         // recycler view
-        recyclerView = findViewById(R.id.recycler_view_seeAll);
+        recyclerView = findViewById(R.id.recycler_view_see_all);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         switch (type) {
@@ -144,9 +144,7 @@ public class SeeAllActivity extends AppCompatActivity {
                 editTextReply = findViewById(R.id.edit_text_reply);
                 textViewSendReply = findViewById(R.id.text_view_send_reply);
 
-                // TODO stateUtil 사용
-                User user = StateUtil.getInstance().getUserInstance();
-                if(user == null || user.get_id() == null) {
+                if(!StateUtil.getInstance().getState()) {
 
                     findViewById(R.id.linear_layout_discussion).setVisibility(View.GONE);
                     findViewById(R.id.linear_layout_sign_message).setVisibility(View.VISIBLE);
@@ -176,6 +174,7 @@ public class SeeAllActivity extends AppCompatActivity {
                             }
                     );
 
+                    User user = StateUtil.getInstance().getUserInstance();
                     textViewSendReply.setOnClickListener(
                             view -> {
                                 Reply reply = new Reply(
@@ -251,8 +250,51 @@ public class SeeAllActivity extends AppCompatActivity {
                 textViewToolbarTitle.setText("Subscribers");
 
                 List<Subscriber> subscribers = intent.getParcelableArrayListExtra(ConstantUtil.SUBSCRIBERS_FLAG);
-                recyclerView.setAdapter(new SubscriberSeeAllRecyclerViewAdapter(this, subscribers));
+                // adapter
+                adapter = new SubscriberSeeAllRecyclerViewAdapter(this, subscribers);
+                recyclerView.setAdapter(adapter);
+                // scroll listener
+                LinearLayoutManager llManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        if (llManager.findLastCompletelyVisibleItemPosition()
+                                == (adapter.getItemCount() - 4)) {
+                            ((SubscriberSeeAllRecyclerViewAdapter)adapter).setMore(true);
+                            ((SubscriberSeeAllRecyclerViewAdapter)adapter).showLoading();
+                        }
+                        super.onScrolled(recyclerView, dx, dy);
+                    }
+                });
+
+
                 break;
+        }
+    }
+
+    @Override
+    public void onLoadMore() {
+        if(type.equals(ConstantUtil.SUBSCRIBER_ITEM)) {
+            RetrofitHelper.createApi(SeeAllService.class)
+                    .getSeeAllSubscribers(id, adapter.getItemCount())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            (List<Subscriber> partOfSubscribers) -> {
+                                ((SubscriberSeeAllRecyclerViewAdapter)adapter).dismissLoading();
+                                ((SubscriberSeeAllRecyclerViewAdapter)adapter).addItemMore(partOfSubscribers);
+                                if(partOfSubscribers.size() < 20) {
+                                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                        @Override
+                                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                            super.onScrolled(recyclerView, dx, dy);
+                                        }
+                                    });
+                                }
+                            }, (Throwable error) -> {
+
+                            }
+                    );
         }
     }
 }

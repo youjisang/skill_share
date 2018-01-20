@@ -1,5 +1,7 @@
 package com.immymemine.kevin.skillshare.utility;
 
+import android.util.Log;
+
 import com.immymemine.kevin.skillshare.model.user.User;
 
 /**
@@ -8,7 +10,7 @@ import com.immymemine.kevin.skillshare.model.user.User;
 
 public class StateUtil {
 
-    private User user;
+    private static User user;
     private static StateUtil stateUtil;
 
     // singleton
@@ -17,30 +19,32 @@ public class StateUtil {
     }
 
     public static StateUtil getInstance() {
-        if(stateUtil == null)
+        if(stateUtil == null) {
             stateUtil = new StateUtil();
-
+        }
         return stateUtil;
     }
 
     // get sign in state
-    private boolean state = false;
+    private static boolean state;
 
     public boolean getState() {
         return state;
     }
 
-    public void setState(boolean isSignIn) {
+    private void setState(boolean isSignIn) {
         state = isSignIn;
     }
 
     public void setUserInstance(User user) {
         if(user == null) {
+            Log.d("JUWONLEE", "set user null");
             this.user = null;
-            state = false;
+            setState(false);
         } else {
+            Log.d("JUWONLEE", "set user not null");
             this.user = user;
-            state = true;
+            setState(true);
         }
     }
 

@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.view.View;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
-import com.immymemine.kevin.skillshare.activity.MainActivity;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
@@ -70,7 +70,7 @@ public class ViewFactory {
                     Intent intent = new Intent(context, SelectSkillsActivity.class);
                     if (skills != null)
                         intent.putStringArrayListExtra(ConstantUtil.SKILLS_FLAG, (ArrayList<String>) skills);
-                    ((MainActivity)context).startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
+                    ((AppCompatActivity)context).startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
                 }
         );
 

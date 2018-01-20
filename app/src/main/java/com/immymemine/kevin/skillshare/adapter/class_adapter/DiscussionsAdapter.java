@@ -18,6 +18,7 @@ import com.immymemine.kevin.skillshare.activity.SeeAllActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
 import com.immymemine.kevin.skillshare.model.user.User;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
@@ -98,11 +99,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
             holder.position = position;
 
             // profile
-            if(discussion.getImageUrl() == null || discussion.getImageUrl().equals("")) {
-                Glide.with(context).load(R.drawable.ic_profile)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(holder.imageViewProfile);
-            } else {
+            if(discussion.getImageUrl() != null) {
                 holder.imageUrl = discussion.getImageUrl();
                 Glide.with(context).load(holder.imageUrl)
                         .apply(RequestOptions.circleCropTransform())
@@ -134,7 +131,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
-                                                (String likeCount) -> {
+                                                (Response response) -> {
+                                                    String likeCount = response.getResult();
+                                                    discussion.setLikeCount(likeCount);
                                                     holder.textViewLikeCount.setText(likeCount);
                                                 }, (Throwable error) -> {
                                                     Log.d("JUWON LEE", "error : " + error.getMessage());
@@ -146,7 +145,9 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
-                                                (String likeCount) -> {
+                                                (Response response) -> {
+                                                    String likeCount = response.getResult();
+                                                    discussion.setLikeCount(likeCount);
                                                     holder.textViewLikeCount.setText(likeCount);
                                                 }, (Throwable error) -> {
                                                     Log.d("JUWON LEE", "error : " + error.getMessage());
@@ -261,9 +262,12 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 Reply reply = replies.get(replies.size()-1);
                 textViewReplyProfile.setText(reply.getName());
                 textViewTimeReply.setText( TimeUtil.calculateTime(reply.getTime()) );
-                Glide.with(context).load(reply.getImageUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageViewReplyProfile);
+
+                if(reply.getImageUrl() != null)
+                    Glide.with(context).load(reply.getImageUrl())
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(imageViewReplyProfile);
+
                 expandableTextViewReply.setTrimLength(4);
                 expandableTextViewReply.setText(reply.getContent(), TextView.BufferType.NORMAL);
             } else {

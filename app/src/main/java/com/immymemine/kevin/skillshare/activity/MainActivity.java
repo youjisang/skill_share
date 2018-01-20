@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -56,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // state
+        stateUtil = StateUtil.getInstance(); // user state check util
+        setState();
+
         // view
         initiateView(); // initiate view
         setBottomNavigation(); // navigation view setting
-
-        stateUtil = StateUtil.getInstance(); // user state check util
-        setState();
 
         // BroadCast Receiver 등록 for gcm
         registerReceiver();
@@ -323,8 +325,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.d("JUWONLEE","MainActivity result");
         if (resultCode == RESULT_OK) {
+            Log.d("JUWONLEE","MainActivity result ok");
             if(requestCode == ConstantUtil.INIT_SKILLS_REQUEST_CODE) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
 
@@ -344,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
 
 

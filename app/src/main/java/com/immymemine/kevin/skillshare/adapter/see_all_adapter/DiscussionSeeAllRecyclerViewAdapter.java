@@ -47,10 +47,12 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
             holder.holder.setBackground(context.getResources().getDrawable(R.drawable.reply_boundary));
         }
         Reply reply = replies.get(position);
+        if(reply.getImageUrl() != null) {
+            Glide.with(context).load(reply.getImageUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.imageViewProfile);
+        }
 
-        Glide.with(context).load(reply.getImageUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.imageViewProfile);
         holder.textViewProfile.setText(reply.getName());
         holder.expandableTextView.setText(reply.getContent(), TextView.BufferType.NORMAL);
         holder.textViewTime.setText(TimeUtil.calculateTime(reply.getTime()));
