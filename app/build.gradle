@@ -45,7 +45,6 @@ dependencies {
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 
-    // TODO toggle 버튼 정리...
     // toggle button
     implementation 'me.rishabhkhanna:CustomToggle:1.0.0'
     // toggle image button

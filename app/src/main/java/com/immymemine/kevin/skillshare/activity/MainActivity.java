@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -97,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    List<Fragment> fragments = new ArrayList<>();
+    int stack = 0;
+
     HomeFragment homeFragment;
     GroupFragment groupFragment;
     DiscoverFragment discoverFragment;
@@ -139,9 +143,6 @@ public class MainActivity extends AppCompatActivity {
         // Use colored navigation with circle reveal effect
         bottomNavigation.setColored(true);
 
-        // Set current item programmatically
-        bottomNavigation.setCurrentItem(0);
-
         // Customize notification (title, background, typeface)
         bottomNavigation.setNotificationBackgroundColor(getResources().getColor(R.color.BottomNaviNotiBackground));
 
@@ -149,28 +150,40 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     if (wasSelected) {
+                        Log.d("JUWONLEE", "0 was selected");
                         return false;
                     } else {
                         if(homeFragment == null) {
+                            Log.d("JUWONLEE", "0 null");
                             homeFragment = new HomeFragment();
+
+                            fragments.add(homeFragment);
 
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .add(R.id.fragment_container, homeFragment)
                                     .commit();
 
-                        } else {
-                            Bundle bundle = new Bundle();
-                            bundle.putBoolean("show", false);
-                            homeFragment.setArguments(bundle);
-
+                            stack = fragments.indexOf(homeFragment);
+                        } else if(fragments.contains(homeFragment)) {
+                            Log.d("JUWONLEE", "0 contains");
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragment_container, homeFragment)
+                                    .hide(fragments.get(stack))
+                                    .show(homeFragment)
                                     .commit();
 
-                        }
+                            stack = fragments.indexOf(homeFragment);
+                        } else {
+                            Log.d("JUWONLEE", "0 else");
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .hide(fragments.get(stack))
+                                    .show(homeFragment)
+                                    .commit();
 
+                            stack = fragments.indexOf(homeFragment);
+                        }
                         return true;
                     }
                 case 1:
@@ -178,19 +191,38 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     } else {
                         if(groupFragment == null) {
+                            Log.d("JUWONLEE", "1 null");
                             groupFragment = new GroupFragment();
+
+                            fragments.add(groupFragment);
 
                             getSupportFragmentManager()
                                     .beginTransaction()
+                                    .hide(fragments.get(stack))
                                     .add(R.id.fragment_container, groupFragment)
                                     .commit();
 
-                        } else {
+                            stack = fragments.indexOf(groupFragment);
+                        } else if(!fragments.contains(groupFragment)) {
+                            Log.d("JUWONLEE", "1 not contains");
+                            fragments.add(groupFragment);
+
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragment_container, groupFragment)
+                                    .hide(fragments.get(stack))
+                                    .add(R.id.fragment_container, groupFragment)
                                     .commit();
 
+                            stack = fragments.indexOf(groupFragment);
+                        } else {
+                            Log.d("JUWONLEE", "1 else");
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .hide(fragments.get(stack))
+                                    .show(groupFragment)
+                                    .commit();
+
+                            stack = fragments.indexOf(groupFragment);
                         }
                         return true;
                     }
@@ -199,20 +231,28 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     } else {
                         if(discoverFragment == null) {
+                            Log.d("JUWONLEE", "2 null");
                             discoverFragment = new DiscoverFragment();
+
+                            fragments.add(discoverFragment);
 
                             getSupportFragmentManager()
                                     .beginTransaction()
+                                    .hide(fragments.get(stack))
                                     .add(R.id.fragment_container, discoverFragment)
                                     .commit();
 
-
+                            stack = fragments.indexOf(discoverFragment);
                         } else {
+                            Log.d("JUWONLEE", "2 else");
+
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragment_container, discoverFragment)
+                                    .hide(fragments.get(stack))
+                                    .show(discoverFragment)
                                     .commit();
 
+                            stack = fragments.indexOf(discoverFragment);
                         }
                         return true;
                     }
@@ -221,19 +261,29 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     } else {
                         if(yourClassesFragment == null) {
+                            Log.d("JUWONLEE", "3 null");
+
                             yourClassesFragment = new YourClassesFragment();
+
+                            fragments.add(yourClassesFragment);
 
                             getSupportFragmentManager()
                                     .beginTransaction()
+                                    .hide(fragments.get(stack))
                                     .add(R.id.fragment_container, yourClassesFragment)
                                     .commit();
 
+                            stack = fragments.indexOf(discoverFragment);
                         } else {
+                            Log.d("JUWONLEE", "3 else");
+
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.fragment_container, yourClassesFragment)
+                                    .hide(fragments.get(stack))
+                                    .show(yourClassesFragment)
                                     .commit();
 
+                            stack = fragments.indexOf(yourClassesFragment);
                         }
 
                         return true;
@@ -246,32 +296,46 @@ public class MainActivity extends AppCompatActivity {
                             if(meFragment == null) {
                                 meFragment = new MeFragment();
 
+                                fragments.add(meFragment);
+
                                 getSupportFragmentManager()
                                         .beginTransaction()
+                                        .hide(fragments.get(stack))
                                         .add(R.id.fragment_container, meFragment)
                                         .commit();
 
+                                stack = fragments.indexOf(meFragment);
                             } else {
                                 getSupportFragmentManager()
                                         .beginTransaction()
-                                        .replace(R.id.fragment_container, meFragment)
+                                        .hide(fragments.get(stack))
+                                        .show(meFragment)
                                         .commit();
 
+                                stack = fragments.indexOf(meFragment);
                             }
 
                         } else {
                             if(offlineMeFragment == null) {
                                 offlineMeFragment = new OfflineMeFragment();
 
+                                fragments.add(offlineMeFragment);
+
                                 getSupportFragmentManager()
                                         .beginTransaction()
+                                        .hide(fragments.get(stack))
                                         .add(R.id.fragment_container, offlineMeFragment)
                                         .commit();
+
+                                stack = fragments.indexOf(offlineMeFragment);
                             } else {
                                 getSupportFragmentManager()
                                         .beginTransaction()
-                                        .replace(R.id.fragment_container, offlineMeFragment)
+                                        .hide(fragments.get(stack))
+                                        .show(offlineMeFragment)
                                         .commit();
+
+                                stack = fragments.indexOf(offlineMeFragment);
                             }
                         }
                         return true;
@@ -279,6 +343,9 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        // Set current item programmatically
+        bottomNavigation.setCurrentItem(0);
     }
 
     // Broad Cast Receiver
