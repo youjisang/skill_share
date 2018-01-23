@@ -3,12 +3,14 @@ package com.immymemine.kevin.skillshare.network.api;
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.user.Following;
-import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.SignUpRequestBody;
+import com.immymemine.kevin.skillshare.network.user.SubscribeResponse;
 import com.immymemine.kevin.skillshare.network.user.UserResponse;
+
 import java.util.List;
+
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -45,11 +47,14 @@ public interface UserService {
     @POST("user/joinGroup")
     Observable<Response> joinGroup(@Body Group group, @Query("userId") String userId);
 
-    @PUT("user/followSkills/{userId}")
-    Observable<Response> followSkills(@Path("userId") String userId, @Body List<String> skills);
+    @POST("user/followSkills")
+    Observable<Response> followSkills(@Query("userId") String userId, @Query("skills") List<String> skills);
 
     @POST("user/subscribeClass")
-    Observable<SubscribedClass> subscribeClass(@Query("classId") String classId);
+    Observable<SubscribeResponse> subscribeClass(@Query("userId") String userId, @Query("classId") String classId);
+
+    @POST("user/unsubscribeClass")
+    Observable<SubscribeResponse> unsubscribeClass(@Query("userId") String userId, @Query("classId") String classId);
 
     @Multipart
     @POST("user/uploadImageFile")

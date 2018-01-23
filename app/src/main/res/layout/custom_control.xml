@@ -9,54 +9,62 @@
         style="@style/ExoMediaButton.Play"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@id/exo_pause"
         style="@style/ExoMediaButton.Pause"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:onClick="back"
+        android:scaleType="centerCrop"
         android:tint="@android:color/white"
         app:srcCompat="?android:attr/actionModeCloseDrawable" />
 
     <ImageButton
         android:id="@+id/button_subscribe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="right"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginRight="56dp"
+        android:layout_marginTop="12dp"
         android:background="@android:color/transparent"
+        android:onClick="subscribe"
+        android:scaleType="centerCrop"
         android:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_lock_lock" />
+        app:srcCompat="@drawable/image_unused_bookmark" />
 
     <ImageButton
         android:id="@+id/button_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_gravity="right"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:tint="@android:color/background_light"
+        android:onClick="share"
+        android:scaleType="centerCrop"
         app:srcCompat="@android:drawable/ic_menu_share" />
 
     <LinearLayout
+        android:id="@+id/controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#96000000"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/exo_position"

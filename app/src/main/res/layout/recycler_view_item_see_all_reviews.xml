@@ -14,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/image_likeit" />
+        android:src="@drawable/heart_enabled"
+        android:tint="@color/colorBottomNavigationNotification" />
 
     <TextView
         android:id="@+id/text_view_review"
@@ -38,7 +39,7 @@
         android:layout_below="@+id/text_view_review"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/app_icon" />
+        android:src="@drawable/image_profile" />
 
     <TextView
         android:id="@+id/text_view_reviewer_name"

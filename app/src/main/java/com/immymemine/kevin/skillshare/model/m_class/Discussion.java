@@ -79,6 +79,10 @@ public class Discussion {
         return likeCount;
     }
 
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public String getUserId() {
         return userId;
     }

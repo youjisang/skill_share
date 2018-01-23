@@ -4,6 +4,7 @@ import com.immymemine.kevin.skillshare.model.discover.SearchClass;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
 
 import java.util.List;
@@ -34,10 +35,10 @@ public interface ClassService {
     Observable<List<Discussion>> sendDiscussion(@Body Discussion discussion, @Query("classId") String classId);
 
     @POST("discussions/like")
-    Observable<String> like(@Body LikeRequestBody likeBody);
+    Observable<Response> like(@Body LikeRequestBody likeBody);
 
     @POST("discussions/unlike")
-    Observable<String> unLike(@Body LikeRequestBody likeBody);
+    Observable<Response> unLike(@Body LikeRequestBody likeBody);
 
     @GET("class/search/{content}")
     Observable<List<SearchClass>> search(@Path("content") String searchContent);

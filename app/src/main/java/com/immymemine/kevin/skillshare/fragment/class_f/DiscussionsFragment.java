@@ -111,12 +111,12 @@ public class DiscussionsFragment extends Fragment {
             editText.setText("");
             User user = StateUtil.getInstance().getUserInstance();
             Discussion discussion = new Discussion(
+                    user.getName(),
+                    user.getImageUrl(),
                     input,
                     System.currentTimeMillis()+"",
                     "0",
                     user.get_id(),
-                    user.getName(),
-                    user.getImageUrl(),
                     user.getRegistrationId(),
                     new ArrayList<>(),
                     new ArrayList<>()

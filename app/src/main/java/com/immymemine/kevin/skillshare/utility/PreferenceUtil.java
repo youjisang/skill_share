@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by JisangYou on 2017-12-02.
@@ -17,11 +18,14 @@ public class PreferenceUtil {
 
     public static void setBooleanValue(Context context, String key, boolean value) {
         SharedPreferences.Editor editor = getPreference(context).edit();
+
         editor.putBoolean(key, value);
         editor.commit();
     }
     public static void setStringValue(Context context, String key, String value) {
+        Log.d("JUWONLEE","save value");
         SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.clear();
         editor.putString(key, value);
         editor.commit();
         //editor.remove(key); 삭제하기

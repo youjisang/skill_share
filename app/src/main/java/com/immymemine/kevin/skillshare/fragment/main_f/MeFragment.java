@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,14 +25,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
+import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
-import com.immymemine.kevin.skillshare.view.ViewFactory;
 
 import java.io.File;
 import java.util.List;
@@ -51,10 +56,14 @@ public class MeFragment extends Fragment {
     ImageView meImage;
     TextView meName, meNickname, meFollowers, meFollowing;
     ImageButton meButton;
-    LinearLayout container;
+
+    LinearLayout mContainer;
+    RecyclerView recyclerViewSkills;
+    View divider;
+    Button personalize;
+    SkillsRecyclerViewAdapter adapter;
 
     View meFragment;
-    List<String> skills;
 
     StateUtil state;
     User user;
@@ -70,14 +79,13 @@ public class MeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         meFragment = inflater.inflate(R.layout.fragment_me, container, false);
+
         context = getActivity();
 
         state = StateUtil.getInstance();
         user = state.getUserInstance();
 
         initiateView(meFragment);
-//        selectSkillView = LayoutInflater.from(context).inflate(R.layout.me_skill_view, container, false);
-//        initiateMeSkillView(selectSkillView);
 
         if (user.getImageUrl() != null) {
             String imageUrl = RetrofitHelper.BASE_URL+user.getImageUrl();
@@ -95,9 +103,18 @@ public class MeFragment extends Fragment {
         meFollowers.setText(user.getFollowers().size() + " Followers");
         meFollowing.setText("Following " + user.getFollowing().size());
 
-        container.addView(ViewFactory.getInstance(context).createMeSkillView(user.getFollowingSkills()));
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(context);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        recyclerViewSkills.setLayoutManager(layoutManager);
 
-//        recyclerViewSetting();
+        if(user.getFollowingSkills() != null) {
+            adapter = new SkillsRecyclerViewAdapter(context, user.getFollowingSkills());
+            recyclerViewSkills.setAdapter(adapter);
+        } else {
+            adapter = new SkillsRecyclerViewAdapter(context);
+            recyclerViewSkills.setAdapter(adapter);
+            divider.setVisibility(View.GONE);
+        }
 
         return meFragment;
     }
@@ -121,21 +138,15 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 // TODO refresh !!
                 StateUtil.getInstance().setUserInstance(null);
-
             }
         });
-        container = view.findViewById(R.id.container);
-    }
 
-//    public void initiateMeSkillView(View meSkillView) {
-//        mePersonaize = meSkillView.findViewById(R.id.personalize);
-//        mePersonaize.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, SelectSkillsActivity.class);
-//            startActivityForResult(intent, ConstantUtil.SELECT_SKILLS_REQUEST_CODE);
-//        });
-//        recyclerViewSkills = meSkillView.findViewById(R.id.recycler_view_skills);
-//        container.addView(meSkillView);
-//    }
+        mContainer = view.findViewById(R.id.container);
+        recyclerViewSkills = view.findViewById(R.id.recycler_view_skills);
+        divider = view.findViewById(R.id.divider);
+        personalize = view.findViewById(R.id.personalize);
+        personalize.setOnClickListener(v -> startActivityForResult(new Intent(context, SelectSkillsActivity.class), ConstantUtil.SELECT_SKILLS_REQUEST_CODE));
+    }
 
     public void uploadImageFile(String path) {
         File imageFile = new File(path);
@@ -157,16 +168,20 @@ public class MeFragment extends Fragment {
                 .uploadImageFile(user.get_id(), body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((Response response) -> {
+                .subscribe(
+                        (Response response) -> {
+                            if(ConstantUtil.FAILURE.equals(response.getResult())) {
+                                // TODO SHOW ERROR PAGE
+                            }
+                        }, (Throwable error) -> {
 
-                }, (Throwable error) -> {
-
-                });
+                        }
+                );
     }
 
     public void getImageFile() {
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_PICK);
         intent.setType("image/*");
 
         startActivityForResult(intent, ConstantUtil.GALLERY_REQUEST_CODE);
@@ -190,7 +205,6 @@ public class MeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if(resultCode == RESULT_OK) {
             if(requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE ) {
                 List<String> skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
@@ -203,31 +217,27 @@ public class MeFragment extends Fragment {
                                 (Response response) -> {
                                     if(ConstantUtil.SUCCESS.equals(response.getResult())) {
                                         user.setFollowingSkills(skills);
+                                        adapter.update(user.getFollowingSkills());
                                     }
                                 }, (Throwable error) -> {
 
                                 }
                         );
+            } else if (requestCode == ConstantUtil.GALLERY_REQUEST_CODE) {
+                if(data != null && data.getData() != null) {
+                    Uri imageUri = data.getData();
+                    String imagePath = getPathFromUri(imageUri);
+
+                    Glide.with(context)
+                            .load(new File(imagePath))
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(meImage);
+
+                    uploadImageFile(imagePath);
+                }
             }
         } else {
 
-        }
-        if (requestCode == ConstantUtil.GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
-            if(data != null && data.getData() != null) {
-                Uri imageUri = data.getData();
-                String imagePath = getPathFromUri(imageUri);
-
-                Glide.with(context)
-                        .load(new File(imagePath))
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(meImage);
-
-                uploadImageFile(imagePath);
-            }
-        } else if (requestCode == ConstantUtil.SELECT_SKILLS_REQUEST_CODE && resultCode == RESULT_OK) {
-            skills = data.getStringArrayListExtra(ConstantUtil.SKILLS_FLAG);
-
-            user.setFollowingSkills(skills);
         }
     }
 
@@ -264,12 +274,4 @@ public class MeFragment extends Fragment {
                 break;
         }
     }
-
-//    public void recyclerViewSetting() {
-//        layoutManager = new FlexboxLayoutManager(context);
-//        layoutManager.setFlexDirection(FlexDirection.ROW);
-//        recyclerViewSkills.setLayoutManager(layoutManager);
-//        recyclerViewSkills.setAdapter(new SkillsRecyclerViewAdapter(context, user.getFollowingSkills()));
-//    }
-
 }

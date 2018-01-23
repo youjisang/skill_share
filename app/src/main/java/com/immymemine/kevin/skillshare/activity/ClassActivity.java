@@ -51,8 +51,10 @@ import com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.LessonsFragment;
 import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
+import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.network.user.SubscribeResponse;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
@@ -68,7 +70,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     // views
     ViewPager tabPager;
     TabLayout tabLayout;
-    ImageButton startButton;
+    ImageButton startButton, subscribeButton;
 
     // fragments
     AboutFragment aboutfragment;
@@ -76,6 +78,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     LessonsFragment lessonsfragment;
 
     String classId, url;
+    boolean isSubscribed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         Intent intent = getIntent();
         classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
         url = intent.getStringExtra(ConstantUtil.URL_FLAG);
+        isSubscribed = false;
 
         initiateView();
         setTabLayout();
@@ -98,10 +102,18 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         tabLayout = findViewById(R.id.tabLayout);
         tabPager = findViewById(R.id.tabPager);
         startButton = findViewById(R.id.start_button);
+        subscribeButton = findViewById(R.id.button_subscribe);
 
-//        findViewById(R.id.button_share).setVisibility(View.GONE);
-//        findViewById(R.id.button_back).setVisibility(View.GONE);
-//        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
+        if(StateUtil.getInstance().getState() &&
+                StateUtil.getInstance().getUserInstance().getSubscribedClasses() != null) {
+            for(SubscribedClass aClass : StateUtil.getInstance().getUserInstance().getSubscribedClasses()) {
+                if( classId.equals(aClass.getClassId()) ) {
+                    subscribeButton.setImageResource(R.drawable.image_used_bookmark);
+                    isSubscribed = true;
+                    break;
+                }
+            }
+        }
     }
 
     private void setTabLayout() {
@@ -140,29 +152,57 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     // back button 클릭 리스너
     public void back(View view) {
-        // video 상태 저장
+        // TODO video 상태 저장
         finish();
     }
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
         if(StateUtil.getInstance().getState()) {
-            RetrofitHelper.createApi(UserService.class)
-                    .subscribeClass(classId)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            (SubscribedClass subscribedClass) -> {
-                                if(subscribedClass != null) {
-                                    StateUtil.getInstance().getUserInstance()
-                                            .getSubscribedClasses().add(subscribedClass);
-                                } else {
-                                    Toast.makeText(this, "failed to subscribe this class", Toast.LENGTH_LONG).show();
-                                }
-                            }, (Throwable error) -> {
+            User user = StateUtil.getInstance().getUserInstance();
 
-                            }
-                    );
+            if(!isSubscribed) {
+                RetrofitHelper.createApi(UserService.class)
+                        .subscribeClass(user.get_id(), classId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                (SubscribeResponse subscribeResponse) -> {
+                                    if(ConstantUtil.SUCCESS.equals(subscribeResponse.getResult())) {
+                                        if(user.getSubscribedClasses() == null) {
+                                            List<SubscribedClass> subscribedClasses = new ArrayList<>();
+                                            subscribedClasses.add(subscribeResponse.getData());
+                                            user.setSubscribedClasses(subscribedClasses);
+                                        } else {
+                                            user.getSubscribedClasses().add(subscribeResponse.getData());
+                                        }
+
+                                        ((ImageButton)view).setImageResource(R.drawable.image_used_bookmark);
+                                    } else {
+                                        Toast.makeText(this, "failed to subscribe this class : " + subscribeResponse.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }, (Throwable error) -> {
+
+                                }
+                        );
+            } else {
+                RetrofitHelper.createApi(UserService.class)
+                        .unsubscribeClass(user.get_id(), classId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                (SubscribeResponse subscribeResponse) -> {
+                                    if(ConstantUtil.SUCCESS.equals(subscribeResponse.getResult())) {
+                                        user.getSubscribedClasses().remove(subscribeResponse.getData());
+                                        view.setBackground(getResources().getDrawable(R.drawable.image_unused_bookmark));
+                                    } else {
+                                        Toast.makeText(this, "failed to unsubscribe this class : " + subscribeResponse.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }, (Throwable error) -> {
+
+                                }
+                        );
+            }
         } else {
             DialogUtil.showSignDialog(this);
         }
@@ -170,16 +210,13 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     public void start(View view) {
         player.setPlayWhenReady(true);
-
-        // code refactoring...
-        startButton.setVisibility(View.GONE);
-        findViewById(R.id.button_share).setVisibility(View.GONE);
-        findViewById(R.id.button_back).setVisibility(View.GONE);
-        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
+        simpleExoPlayerView.setControllerHideOnTouch(true);
 
         // controller
-        simpleExoPlayerView.setUseController(true); //Set media controller
-        simpleExoPlayerView.showController();
+        startButton.setVisibility(View.GONE);
+        findViewById(R.id.controller).setVisibility(View.VISIBLE);
+        findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
+        findViewById(R.id.exo_pause).setVisibility(View.VISIBLE);
     }
 
     Dialog fullScreenDialog;
@@ -196,8 +233,10 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     }
 
     public void openFullScreen(View view) {
-        if(isFullScreen)
+        if(isFullScreen) {
             closeFullScreen();
+            return;
+        }
 
         ((ViewGroup)simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
         fullScreenDialog.addContentView(simpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -230,16 +269,12 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         mediaSource = buildMediaSource(Uri.parse(url));
         player.prepare(mediaSource);
         player.setPlayWhenReady(true);
+        simpleExoPlayerView.setControllerHideOnTouch(true);
 
-        // code refactoring...
         startButton.setVisibility(View.GONE);
-        findViewById(R.id.button_share).setVisibility(View.GONE);
-        findViewById(R.id.button_back).setVisibility(View.GONE);
-        findViewById(R.id.button_subscribe).setVisibility(View.GONE);
-
-        // controller
-        simpleExoPlayerView.setUseController(true); //Set media controller
-        simpleExoPlayerView.showController();
+        findViewById(R.id.controller).setVisibility(View.VISIBLE);
+        findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
+        findViewById(R.id.exo_pause).setVisibility(View.VISIBLE);
     }
 
     // Exo Player -----------------------------------------------------------------------
@@ -268,8 +303,9 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         simpleExoPlayerView = findViewById(R.id.simple_exo_player_view);
         simpleExoPlayerView.requestFocus(); // ( ? )
         simpleExoPlayerView.setUseArtwork(true);
-        simpleExoPlayerView.setUseController(false); //Set media controller
-        simpleExoPlayerView.hideController();
+        simpleExoPlayerView.setUseController(true); //Set media controller
+        simpleExoPlayerView.setControllerHideOnTouch(false);
+        simpleExoPlayerView.showController();
 
         // renders [ 4, 5 ]
         DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this, null);

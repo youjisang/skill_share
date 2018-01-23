@@ -19,13 +19,13 @@ import retrofit2.http.Query;
  */
 
 public interface SeeAllService {
-    @GET("SeeAll/review/{id}")
+    @GET("seeAll/review/{id}")
     Observable<List<Review>> getSeeAllReview(@Path("id") String id);
 
-    @GET("SeeAll/subscriber/{id}")
-    Observable<List<Subscriber>> getSeeAllSubscriber(@Path("id") String id);
+    @GET("seeAll/subscribers/{classId}/{position}")
+    Observable<List<Subscriber>> getSeeAllSubscribers(@Path("classId") String classId, @Path("position") int position);
 
-    @GET("SeeAll/project/{id}")
+    @GET("seeAll/project/{id}")
     Observable<List<Project>> getSeeAllProject(@Path("id") String id);
 
     @POST("discussions/addReply")

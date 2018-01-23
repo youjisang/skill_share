@@ -20,14 +20,16 @@ public class SkillsRecyclerViewAdapter extends RecyclerView.Adapter<SkillsRecycl
     List<String> skills;
     Context context;
 
+    public SkillsRecyclerViewAdapter(Context context) {
+        this.context = context;
+    }
+
     public SkillsRecyclerViewAdapter(Context context, List<String> skills) {
         this.context = context;
         this.skills = skills;
     }
 
     public void update(List<String> skills) {
-//        if(this.skills != null)
-//            this.skills.clear();
         this.skills = skills;
         notifyDataSetChanged();
     }

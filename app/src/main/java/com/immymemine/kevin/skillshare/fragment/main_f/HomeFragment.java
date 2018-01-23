@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("JUWONLEE", "Home Fragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         context = getActivity();
@@ -58,25 +57,34 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.toolbar_button_search)
                 .setOnClickListener(v -> context.startActivity(new Intent(context, SearchActivity.class)));
 
-        if (!(StateUtil.getInstance().getState()) &&
-                (getArguments() != null) ? getArguments().getBoolean("show") : true) {
-            welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
-            welcomeView = ViewFactory.getInstance(context).getWelcomeView();
-            welcomeView.findViewById(R.id.close_button).setOnClickListener(
-                    v -> {
-                        welcomeViewContainer.removeView(welcomeView);
-                    }
-            );
+        welcomeViewContainer = view.findViewById(R.id.welcome_view_container);
 
-            welcomeViewContainer.addView(welcomeView);
+        if (!StateUtil.getInstance().getState()) {
+            Log.d("JUWONLEE", "sign in welcome view");
+            if(getArguments() == null) {
+                Log.d("JUWONLEE", "arguments null");
+                welcomeView = ViewFactory.getInstance(context).getWelcomeView();
+                welcomeView.findViewById(R.id.close_button).setOnClickListener(
+                        v -> welcomeViewContainer.setVisibility(View.GONE)
+                );
+                welcomeViewContainer.addView(welcomeView);
+            }
+        } else {
+            welcomeViewContainer.setVisibility(View.GONE);
         }
 
-//        if (StateUtil.getInstance().getUserInstance() != null) {
-//            welcomeViewContainer.removeView(welcomeView);
-//        }
+        List<String> followSkills;
 
-        List<String> followSkills = (StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) ?
-                StateUtil.getInstance().getUserInstance().getFollowingSkills() : new ArrayList<>();
+        if(StateUtil.getInstance().getState()) {
+            if(StateUtil.getInstance().getUserInstance().getFollowingSkills() != null) {
+                followSkills = StateUtil.getInstance().getUserInstance().getFollowingSkills();
+            } else {
+                followSkills = new ArrayList<>();
+            }
+        } else {
+            followSkills = new ArrayList<>();
+        }
+
 
         RetrofitHelper.createApi(HomeService.class)
                 .getHomeClasses(followSkills)
@@ -96,7 +104,6 @@ public class HomeFragment extends Fragment {
 
 
     private void handleResponse(List<Map<String, List<Class>>> classes) {
-        Log.d("JUWONLEE", "Home Fragment handle response");
         adapter.update(classes);
     }
 
