@@ -200,7 +200,7 @@ public class LessonsFragment extends Fragment {
                             List<Following> followings = user.getFollowing();
 
                             if (followings.contains(following)) {
-                                followings.remove(following);
+                                followings.remove(following); //?
                             } else {
                                 followings.add(following);
                             }

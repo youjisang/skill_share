@@ -22,6 +22,9 @@ import retrofit2.http.Query;
 
 public interface ClassService {
 
+    @GET("class/{id}")
+    Observable<Lessons> getVideo(@Path("id") String id);
+
     @GET("class/lessons/{id}")
     Observable<Lessons> getLessons(@Path("id") String id);
 

@@ -45,15 +45,15 @@ public class User {
 
     private List<Group> groups;
 
-    private List<TeachingClass> teachingClasses;
+//    private List<TeachingClass> teachingClasses;
 
-    public List<TeachingClass> getTeachingClasses() {
-        return teachingClasses;
-    }
-
-    public void setTeachingClasses(List<TeachingClass> teachingClasses) {
-        this.teachingClasses = teachingClasses;
-    }
+//    public List<TeachingClass> getTeachingClasses() {
+//        return teachingClasses;
+//    }
+//
+//    public void setTeachingClasses(List<TeachingClass> teachingClasses) {
+//        this.teachingClasses = teachingClasses;
+//    }
 
     public List<SubscribedClass> getSubscribedClasses() {
         return subscribedClasses;

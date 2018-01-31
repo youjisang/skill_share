@@ -35,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
     TextView meName, meNickname, meFollowers, meFollowing;
     ImageButton meButton;
 
-    boolean isTutor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +44,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String userId = intent.getStringExtra(ConstantUtil.USER_ID_FLAG);
-        isTutor = intent.getBooleanExtra(ConstantUtil.TUTOR_CHECK, false);
-
-
 
         RetrofitHelper.createApi(UserService.class)
                 .getUser(userId)
@@ -71,32 +67,27 @@ public class ProfileActivity extends AppCompatActivity {
         ViewFactory viewFactory = ViewFactory.getInstance(this);
 
         // TODO user setting
-        if (!ValidationUtil.isEmpty(user.getImageUrl())) {
+        if( !ValidationUtil.isEmpty(user.getImageUrl()) ) {
             Glide.with(this)
                     .load(user.getImageUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(meImage);
         }
         meName.setText(user.getName());
-        if (!ValidationUtil.isEmpty(user.getNickname())) {
+        if( !ValidationUtil.isEmpty(user.getNickname()) ) {
             meNickname.setText(user.getNickname());
         }
 
-        if (user.getFollowers() != null) {
+        if(user.getFollowers() != null) {
             meFollowers.setText(user.getFollowers().size() + " Followers");
         }
-        if (user.getFollowing() != null) {
+        if(user.getFollowing() != null) {
             meFollowing.setText("Following " + user.getFollowing().size());
         }
 
-        if (user.getFollowingSkills() != null && user.getFollowingSkills().size() > 0) {
-            View meSkillView = viewFactory.createMeSkillView(user.getFollowingSkills());
+        if(user.getFollowingSkills() != null && user.getFollowingSkills().size() > 0) {
+            View meSkillView = viewFactory.getMeSkillView(user.getFollowingSkills());
             profileContainer.addView(meSkillView);
-        }
-
-        if(isTutor) {
-            View teachingClassesView = viewFactory.createTeachingClassesView(user.getTeachingClasses());
-            profileContainer.addView(teachingClassesView);
         }
     }
 
