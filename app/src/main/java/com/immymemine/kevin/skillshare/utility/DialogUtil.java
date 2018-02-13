@@ -20,11 +20,16 @@ import android.widget.TextView;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SignInActivity;
 import com.immymemine.kevin.skillshare.activity.SignUpActivity;
+import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.BusProvider;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.dialogPushEvent;
+
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.squareup.otto.Subscribe;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -36,6 +41,9 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class DialogUtil {
+
+
+
     // TODO custom dialog
     private void showAlertDialog(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -54,6 +62,7 @@ public class DialogUtil {
         TextView textViewCharactersLeft = view.findViewById(R.id.text_view_characters_left);
         Button buttonCreateGroup = view.findViewById(R.id.button_create_group);
         Button imageButtonGallery = view.findViewById(R.id.image_button_gallery);
+
 
 
         RxTextView.textChanges(editTextGroupName)
@@ -78,8 +87,10 @@ public class DialogUtil {
         buttonCreateGroup.setOnClickListener(
                 v -> {
 
+                    BusProvider.getInstance().post(new dialogPushEvent(editTextGroupName.getText().toString()));
 
                     dialog.dismiss();
+
 
                 }
         );
@@ -88,8 +99,8 @@ public class DialogUtil {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
             fragment.startActivityForResult(intent, ConstantUtil.GALLERY_REQUEST_CODE_FROM_DIALOG);
-        });
 
+        });
 
 
         toolbarCloseButton.setOnClickListener(
@@ -101,30 +112,6 @@ public class DialogUtil {
         return view;
     }
 
-
-//    private void showCreateGroupDialog(Context context) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        View view = LayoutInflater.from(context).inflate(R.layout.dialog_create_group, null, false);
-//        int limit = 40;
-//        ImageButton toolbarCloseButton = view.findViewById(R.id.toolbar_close_button);
-//        EditText editTextGroupName = view.findViewById(R.id.edit_text_group_name);
-//        TextView textViewCharactersLeft = view.findViewById(R.id.text_view_characters_left);
-//
-//        RxTextView.textChanges(editTextGroupName)
-//                .subscribe(charSequence -> {
-//                    int left = limit - charSequence.toString().length();
-//                    textViewCharactersLeft.setText(left + " characters left");
-//
-//                    if(left < 40) {
-//                        // button enabled
-//                    } else {
-//                        // disabled
-//                    }
-//                });
-//
-//        builder.setView(view);
-//        builder.show();
-//    }
 
     public static AlertDialog showSettingNicknameDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -164,7 +151,7 @@ public class DialogUtil {
                         .subscribe(
                                 (Response response) -> {
                                     if (ConstantUtil.SUCCESS.equals(response.getResult())) {
-                                        StateUtil.getInstance().getUserInstance().setNickname(nickname);
+                                        user.setNickname(nickname);
                                         dialog.dismiss();
                                     }
                                 }, (Throwable error) -> {

@@ -1,8 +1,10 @@
 package com.immymemine.kevin.skillshare.adapter.see_all_adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
+import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
+import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
 
@@ -109,6 +113,15 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
             super(view);
             imageViewProfile = view.findViewById(R.id.image_view_profile);
             textViewName = view.findViewById(R.id.text_view_name);
+            imageViewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.putExtra(ConstantUtil.ID_FLAG, userId);
+                    Log.e("userId","userId ============= "+userId);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

@@ -56,11 +56,11 @@ public class DiscussionSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Di
 
         }
 //
-//        if (reply.getImageUrl() != null) {
+        if (reply.getImageUrl() != null) {
             Glide.with(context).load(RetrofitHelper.BASE_URL + reply.getImageUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewProfile);
-//        }
+        }
 
         holder.textViewProfile.setText(reply.getName());
         holder.expandableTextView.setText(reply.getContent(), TextView.BufferType.NORMAL);

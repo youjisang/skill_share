@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.GeneralRecyclerViewAdapter;
@@ -60,7 +61,7 @@ public class SeeAllActivity extends AppCompatActivity implements SubscriberSeeAl
 
     // recycler view
     RecyclerView recyclerView;
-//    RecyclerView.Adapter adapter;
+
 
     // discussion
     EditText editTextReply;
@@ -214,16 +215,16 @@ public class SeeAllActivity extends AppCompatActivity implements SubscriberSeeAl
 
     private void aboutProjectSeeAll() {
         //TODO 지상
-        String test = intent.getStringExtra("a");
+        String classTitle = intent.getStringExtra(ConstantUtil.CLASS_TITLE);
+        Toast.makeText(this, classTitle, Toast.LENGTH_LONG).show();
         projectList = new ArrayList<>();
         textViewToolbarTitle.setText("Subscriber Projects");
-//        intent.getParcelableArrayListExtra(ConstantUtil.ID_FLAG);
         recyclerView = findViewById(R.id.recycler_view_see_all);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ProjectSeeAllRecyclerViewAdapter projectSeeAllRecyclerViewAdapter = new ProjectSeeAllRecyclerViewAdapter(this, projectList);
         recyclerView.setAdapter(projectSeeAllRecyclerViewAdapter);
 
-        service.getSeeAllProject(test).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+        service.getSeeAllProject(classTitle).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 (List<Project> projects) -> {
                     projectList = projects;
                     projectSeeAllRecyclerViewAdapter.update(projectList);

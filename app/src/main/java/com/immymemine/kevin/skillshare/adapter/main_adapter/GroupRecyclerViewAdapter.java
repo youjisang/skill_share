@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.GroupActivity;
 import com.immymemine.kevin.skillshare.model.group.Group;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     Context context;
     List<Group> groups;
+
     public GroupRecyclerViewAdapter(Context context) {
         this.context = context;
     }
@@ -37,7 +39,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public int getItemViewType(int position) {
-        if(groups == null || groups.size() == 0)
+        if (groups == null || groups.size() == 0)
             return ConstantUtil.NO_ITEM;
         else
             return super.getItemViewType(position);
@@ -47,7 +49,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
 
-        if(viewType == ConstantUtil.NO_ITEM)
+        if (viewType == ConstantUtil.NO_ITEM)
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_group, parent, false);
         else
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_group, parent, false);
@@ -57,12 +59,12 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        if(groups != null && groups.size() != 0) {
+        if (groups != null && groups.size() != 0) {
             Group group = groups.get(position);
 
             holder.textViewGroupName.setText(group.getGroupName());
             holder.textViewMemberCount.setText(group.getMemberCount());
-            Glide.with(context).load(group.getGroupThumbnail())
+            Glide.with(context).load( group.getGroupThumbnail())
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.imageViewGroup);
 
@@ -72,7 +74,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public int getItemCount() {
-        if(groups == null || groups.size() == 0)
+        if (groups == null || groups.size() == 0)
             return 1;
         return groups.size();
     }
@@ -85,7 +87,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
         public Holder(View view) {
             super(view);
-            if(groups != null && groups.size() != 0) {
+            if (groups != null && groups.size() != 0) {
                 imageViewGroup = view.findViewById(R.id.image_view_group);
                 textViewMemberCount = view.findViewById(R.id.text_view_member_count);
                 textViewGroupName = view.findViewById(R.id.text_view_group_name);

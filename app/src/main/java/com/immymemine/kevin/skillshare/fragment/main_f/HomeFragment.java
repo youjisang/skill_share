@@ -41,7 +41,6 @@ public class HomeFragment extends Fragment {
     FrameLayout welcomeViewContainer;
     View welcomeView;
 
-    Map<String, List<Class>> addFollowSkills;
     List<String> followSkills;
 
     public HomeFragment() {

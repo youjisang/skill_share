@@ -14,6 +14,10 @@ public class Subscriber implements Parcelable {
     String imageUrl;
 
     // for test
+    public Subscriber(){
+
+    }
+
     public Subscriber(String _id, String name, String imageUrl) {
         this._id = _id;
         this.name = name;

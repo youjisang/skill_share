@@ -1,6 +1,5 @@
 package com.immymemine.kevin.skillshare.utility.communication_util;
 
-import android.util.Log;
 
 import com.immymemine.kevin.skillshare.model.group.Group;
 import com.immymemine.kevin.skillshare.model.m_class.Reply;
@@ -69,6 +68,7 @@ public class Bus {
             e.printStackTrace();
         }
     }
+
 
     // TODO module 화
     public void post(Object data) {

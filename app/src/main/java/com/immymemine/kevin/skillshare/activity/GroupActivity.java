@@ -2,6 +2,7 @@ package com.immymemine.kevin.skillshare.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -54,6 +56,8 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
 
     Group mGroup;
     StateUtil state;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,16 +65,17 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
 
         mGroup = getIntent().getParcelableExtra("group");
         state = StateUtil.getInstance();
-
+        user = StateUtil.getInstance().getUserInstance();
         initiateView();
         initiateRecyclerView();
+
     }
 
     private void initiateView() {
         // toolbar
         findViewById(R.id.toolbar_button_back).setOnClickListener(v -> finish());
-        ((TextView)findViewById(R.id.toolbar_title)).setText(mGroup.getGroupName());
-        ((TextView)findViewById(R.id.text_view_member_count)).setText(mGroup.getMemberCount() + " Members");
+        ((TextView) findViewById(R.id.toolbar_title)).setText(mGroup.getGroupName());
+        ((TextView) findViewById(R.id.text_view_member_count)).setText(mGroup.getMemberCount() + " Members");
         toolbar = findViewById(R.id.toolbar);
         Glide.with(this).asDrawable().load(mGroup.getGroupThumbnail()).into(new SimpleTarget<Drawable>() {
             @Override
@@ -88,36 +93,39 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
         buttonJoinGroup = findViewById(R.id.button_join);
         layout_discussion = findViewById(R.id.layout_frame_discussion);
 
-        if(state.getState()) {
-            if(state.getUserInstance().getGroups() != null) {
-                if(state.getUserInstance().getGroups().contains(mGroup)) {
+
+
+        if (state.getState()) {
+            if (state.getUserInstance().getGroups() != null) {
+                if (state.getUserInstance().getGroups().contains(mGroup)) {
                     buttonJoinGroup.setVisibility(View.GONE);
                     layout_discussion.setVisibility(View.VISIBLE);
                 } else {
                     buttonJoinGroup.setOnClickListener(v -> {
-                        if(state.getUserInstance().getNickname() == null || state.getUserInstance().getNickname().equals("")) {
+
+                        if (state.getUserInstance().getNickname() == null || state.getUserInstance().getNickname().equals("")) {
+
                             AlertDialog dialog = DialogUtil.showSettingNicknameDialog(this);
                             dialog.setOnDismissListener(d -> {
-                                if(state.getUserInstance().getNickname() != null) {
+                                if (state.getUserInstance().getNickname() != null) {
                                     buttonJoinGroup.setVisibility(View.GONE);
                                     layout_discussion.setVisibility(View.VISIBLE);
 
                                     RetrofitHelper.createApi(UserService.class)
                                             .joinGroup(mGroup, state.getUserInstance().get_id())
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(Schedulers.io())
+                                            .subscribeOn(Schedulers.io())// subsctibeOn()은 observable의 작업을 시작하는 쓰레드를 선택,  Schedulers.io() - 동기 I/O를 별도로 처리시켜 비동기 효율을 얻기 위한 스케줄러입니다. 자체적인 스레드 풀 CachedThreadPool을 사용합니다. API 호출 등 네트워크를 사용한 호출 시 사용
+                                            .observeOn(AndroidSchedulers.mainThread()) // observeOn()은 이후에 나오는 오퍼레이터, subscribe의 스케쥴러를 변경,
                                             .subscribe(
                                                     (Response response) -> {
-                                                        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                                        if (ConstantUtil.SUCCESS.equals(response.getResult())) {
                                                             state.getUserInstance().getGroups().add(mGroup);
                                                             Bus.getInstance().post(state.getUserInstance().getGroups());
                                                         } else {
                                                             // TODO 실패 메시지
-                                                            Log.d("JUWONLEE","failed");
                                                         }
 
                                                     }, (Throwable error) -> {
-                                                        Log.e("join group error :  ", error.getMessage());
+
                                                     }
                                             );
                                 } else {
@@ -136,16 +144,14 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
                     RetrofitHelper.createApi(UserService.class)
                             .joinGroup(mGroup, state.getUserInstance().get_id())
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                            .observeOn(AndroidSchedulers.mainThread()) //AndroidSchedulers.mainThread() - 안드로이드의 UI 스레드에서 동작
                             .subscribe(
                                     (Response response) -> {
-                                        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                        if (ConstantUtil.SUCCESS.equals(response.getResult())) {
                                             state.getUserInstance().setGroups(new ArrayList<>());
                                             state.getUserInstance().getGroups().add(mGroup);
                                             Bus.getInstance().post(state.getUserInstance().getGroups());
-                                        }
-
-                                        else {
+                                        } else {
                                             // TODO 실패 메시지
                                         }
 
@@ -161,57 +167,58 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
             });
         }
 
-        editTextComment = findViewById(R.id.edit_text_comment);
-        buttonSend = findViewById(R.id.button_send);
+            editTextComment = findViewById(R.id.edit_text_comment);
+            buttonSend = findViewById(R.id.button_send);
 
-        RxTextView.textChanges(editTextComment).subscribe(
-                (CharSequence c) -> {
-                    if(c.length()>0) {
-                        buttonSend.setEnabled(true);
-                        buttonSend.setTextColor(getResources().getColor(R.color.IcActive));
-                    } else {
-                        buttonSend.setEnabled(false);
-                        buttonSend.setTextColor(getResources().getColor(R.color.IcInactive));
+            RxTextView.textChanges(editTextComment).subscribe(
+                    (CharSequence c) -> {
+                        if (c.length() > 0) {
+                            buttonSend.setEnabled(true);
+                            buttonSend.setTextColor(getResources().getColor(R.color.IcActive));
+                        } else {
+                            buttonSend.setEnabled(false);
+                            buttonSend.setTextColor(getResources().getColor(R.color.IcInactive));
+                        }
                     }
-                }
-        );
+            );
 
-        buttonSend.setOnClickListener(
-                v -> {
-                    User user = StateUtil.getInstance().getUserInstance();
-                    Comment comment = new Comment(
-                            user.get_id(),
-                            user.getName(),
-                            "@" + user.getNickname(),
-                            user.getImageUrl(),
-                            editTextComment.getText().toString(),
-                            System.currentTimeMillis() + ""
-                    );
+            buttonSend.setOnClickListener(
+                    v -> {
+                        Comment comment = new Comment(
+                                user.get_id(),
+                                user.getName(),
+                                "@" + user.getNickname(),
+                                user.getImageUrl(),
+                                editTextComment.getText().toString(),
+                                System.currentTimeMillis() + ""
+                        );
 
-                    editTextComment.setText("");
-                    // 키보드 닫기
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow( editTextComment.getWindowToken(), 0);
+                        editTextComment.setText("");
+                        // 키보드 닫기
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(editTextComment.getWindowToken(), 0);
 
-                    RetrofitHelper.createApi(GroupService.class)
-                            .sendComment(mGroup.getGroupName(), comment)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    (Response response) -> {
-                                        if(ConstantUtil.SUCCESS.equals(response.getResult())) {
-                                            mAdapter.addItem(comment);
-                                            mRecyclerView.scrollToPosition(0);
-                                        } else {
-                                            // 에러 메시지
+                        RetrofitHelper.createApi(GroupService.class)
+                                .sendComment(mGroup.getGroupName(), comment)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        (Response response) -> {
+
+                                            if (ConstantUtil.SUCCESS.equals(response.getResult())) {
+                                                mAdapter.addItem(comment);
+                                                mRecyclerView.scrollToPosition(0);
+                                            } else {
+                                                // 에러 메시지
+                                            }
+                                        }, (Throwable error) -> {
+
                                         }
-                                    }, (Throwable error) -> {
+                                );
+                    }
+            );
+        }
 
-                                    }
-                            );
-                }
-        );
-    }
 
     private void initiateRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
@@ -233,11 +240,12 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
     }
 
     String groupId;
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(mGroup.getGroupId() == null || mGroup.getGroupId().equals("")) {
+        if (mGroup.getGroupId() == null || mGroup.getGroupId().equals("")) {
             groupId = mGroup.get_id();
         } else {
             groupId = mGroup.getGroupId();
@@ -260,14 +268,14 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
     @Override
     public void onLoadMore() {
         RetrofitHelper.createApi(GroupService.class)
-                .getComments(groupId, mAdapter.getItemCount()-1)
+                .getComments(groupId, mAdapter.getItemCount() - 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         (List<Comment> comments) -> {
                             mAdapter.dismissLoading();
                             mAdapter.addItemMore(comments);
-                            if(comments.size() < 20) {
+                            if (comments.size() < 20) {
                                 mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                     @Override
                                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -283,10 +291,10 @@ public class GroupActivity extends AppCompatActivity implements GroupCommentAdap
 
     @Override
     public void reply(String nickname) {
-        if(editTextComment.getText().length() > 0) {
-            editTextComment.setText(nickname+" ");
+        if (editTextComment.getText().length() > 0) {
+            editTextComment.setText(nickname + " ");
         } else {
-            editTextComment.append(" " + nickname+" ");
+            editTextComment.append(" " + nickname + " ");
         }
     }
 }

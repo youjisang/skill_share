@@ -100,11 +100,12 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
             // profile
 
-//            if (RetrofitHelper.BASE_URL + discussion.getImageUrl() != null) {
-            Glide.with(context).load(RetrofitHelper.BASE_URL + discussion.getImageUrl())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.imageViewProfile);
-//            }
+            if (discussion.getImageUrl() != null) {
+                holder.imageUrl = discussion.getImageUrl();
+                Glide.with(context).load(RetrofitHelper.BASE_URL + discussion.getImageUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(holder.imageViewProfile);
+            }
             Log.e("onBindViewHolder", "check discussionImageUrl" + discussion.getImageUrl());
 
             holder.textViewProfile.setText(discussion.getName());
@@ -205,6 +206,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
         TextView textViewLikeCount;
 
         Reply reply;
+        String imageUrl;
 
 
         public Holder(View v) {
@@ -268,11 +270,11 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
                 textViewTimeReply.setText(TimeUtil.calculateTime(reply.getTime()));
 
 
-//                if (reply.getImageUrl() != null)
-                Glide.with(context).load(RetrofitHelper.BASE_URL + reply.getImageUrl())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageViewReplyProfile);
-                Log.e("setReply", "check replyImageUrl" + reply.getImageUrl());
+                if (reply.getImageUrl() != null)
+                    Glide.with(context).load(RetrofitHelper.BASE_URL + reply.getImageUrl())
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(imageViewReplyProfile);
+
 
                 expandableTextViewReply.setTrimLength(4);
                 expandableTextViewReply.setText(reply.getContent(), TextView.BufferType.NORMAL);
@@ -299,7 +301,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
             Reply newReply = new Reply(
                     textViewProfile.getText().toString(),
-                    reply.getImageUrl(),
+                    imageUrl,
                     expandableTextView.getText().toString(),
                     time);
 
@@ -307,6 +309,7 @@ public class DiscussionsAdapter extends RecyclerView.Adapter<DiscussionsAdapter.
 
             intent.putParcelableArrayListExtra(ConstantUtil.DISCUSSION_ITEM, (ArrayList) replies);
             context.startActivity(intent);
+
         }
     }
 }

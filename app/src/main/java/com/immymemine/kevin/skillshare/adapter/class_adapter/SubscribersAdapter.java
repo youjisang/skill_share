@@ -1,6 +1,7 @@
 package com.immymemine.kevin.skillshare.adapter.class_adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
 
     Context context;
     List<Subscriber> subscribers;
+
+
     public SubscribersAdapter(Context context) {
         this.context = context;
     }
@@ -32,9 +37,11 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public int getItemViewType(int position) {
-        if(subscribers == null || subscribers.size()==0)
+        if (subscribers == null || subscribers.size() == 0)
             return ConstantUtil.NO_ITEM;
 
         return super.getItemViewType(position);
@@ -44,7 +51,7 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
     public SubscriberHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
 
-        if(viewType == ConstantUtil.NO_ITEM) {
+        if (viewType == ConstantUtil.NO_ITEM) {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_no_subscriber, parent, false);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.recycler_view_item_subscribers, parent, false);
@@ -55,10 +62,10 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
 
     @Override
     public void onBindViewHolder(SubscriberHolder holder, int position) {
-        if(subscribers != null) {
-            Subscriber subscriber = subscribers.get(subscribers.size()-1-position);
+        if (subscribers != null) {
+            Subscriber subscriber = subscribers.get(subscribers.size() - 1 - position);
 
-            Glide.with(context).load(subscriber.getImageUrl())
+            Glide.with(context).load(RetrofitHelper.BASE_URL + subscriber.getImageUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.imageViewSubscriber);
 
@@ -68,7 +75,7 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
 
     @Override
     public int getItemCount() {
-        if(subscribers == null || subscribers.size() == 0)
+        if (subscribers == null || subscribers.size() == 0)
             return 1;
         return subscribers.size();
     }
@@ -79,9 +86,9 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
 
         public SubscriberHolder(View view) {
             super(view);
-            if(subscribers !=null && subscribers.size() != 0) {
+            if (subscribers != null && subscribers.size() != 0) {
                 imageViewSubscriber = view.findViewById(R.id.image_view_subscriber);
-                imageViewSubscriber.setOnClickListener( v -> {
+                imageViewSubscriber.setOnClickListener(v -> {
                     // profile 이동
                 });
             }

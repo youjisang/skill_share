@@ -29,6 +29,7 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.SelectSkillsActivity;
+import com.immymemine.kevin.skillshare.activity.SplashActivity;
 import com.immymemine.kevin.skillshare.adapter.main_adapter.SkillsRecyclerViewAdapter;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.Response;
@@ -143,6 +144,7 @@ public class MeFragment extends Fragment {
             public void onClick(View v) {
                 // TODO refresh !!
                 StateUtil.getInstance().setUserInstance(null);
+
             }
         });
 
@@ -243,7 +245,7 @@ public class MeFragment extends Fragment {
                 }
             }
         } else {
-
+            // error 처리.
         }
     }
 

@@ -26,10 +26,15 @@ import com.immymemine.kevin.skillshare.model.m_class.Project;
 import com.immymemine.kevin.skillshare.model.m_class.RelatedClass;
 import com.immymemine.kevin.skillshare.model.m_class.Review;
 import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
-import com.immymemine.kevin.skillshare.model.see_all.SeeAll;
+
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.BusProvider;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.PushEvent;
+
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.RemoveEvent;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +66,12 @@ public class AboutFragment extends Fragment {
     ReviewAdapter reviewAdapter;
 
     Context context;
-    // class id
+    // class id, class title;
     String classId;
+    String classTitle;
+    // from lessons
+    List<Subscriber> subscribers;
+
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -74,8 +83,10 @@ public class AboutFragment extends Fragment {
 
         context = getActivity();
         classId = getArguments().getString(ConstantUtil.ID_FLAG);
+        classTitle = getArguments().getString(ConstantUtil.CLASS_TITLE);
 
         initiateView(view);
+
 
         // empty constructor >>> recycler view 초기화
         projectAdapter = new ProjectAdapter(context);
@@ -100,6 +111,11 @@ public class AboutFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleResponse, this::handleError);
 
+
+        //Todo 지상 이벤트 감지
+        BusProvider.getInstance().register(this);
+
+
         return view;
     }
 
@@ -107,7 +123,7 @@ public class AboutFragment extends Fragment {
         // project
         List<Project> projects = about.getProjects();
         int projectsSize = projects.size();
-        if(projectsSize == 0) {
+        if (projectsSize == 0) {
             textViewProjectCount.setText("Subscriber Project");
             textViewProjectSeeAll.setVisibility(View.GONE);
         } else
@@ -115,14 +131,11 @@ public class AboutFragment extends Fragment {
 
         projectAdapter.update(projects); // <<< data 전달 & notifyDataSetChanged
 
-
-        String a = "SEO Today: Strategies to Earn Trust, Rank High, and Stand Out";
-
         textViewProjectSeeAll.setOnClickListener(view -> {
             Intent intent = new Intent(context, SeeAllActivity.class);
             intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.PROJECT_ITEM);
-//            intent.putExtra(ConstantUtil.ID_FLAG, classId);
-            intent.putExtra("a",a);
+            intent.putExtra(ConstantUtil.ID_FLAG, classId);
+            intent.putExtra(ConstantUtil.CLASS_TITLE, classTitle );
 
             context.startActivity(intent);
 
@@ -131,21 +144,20 @@ public class AboutFragment extends Fragment {
         // review
         List<Review> reviews = about.getReviews();
         int size = reviews.size();
-        if(size != 0) {
+        if (size != 0) {
             int likeCount = 0;
-            for(Review review : reviews) {
-                if( "like".equals(review.getLikeOrNot()) )
+            for (Review review : reviews) {
+                if ("like".equals(review.getLikeOrNot()))
                     likeCount++;
             }
-            textViewReviewPercent.setText((likeCount * 100 / size)+"% Positive Reviews");
-            reviewAdapter.updateData(reviews.get(size-1));
+            textViewReviewPercent.setText((likeCount * 100 / size) + "% Positive Reviews");
+            reviewAdapter.updateData(reviews.get(size - 1));
 
             textViewReviewSeeAll.setOnClickListener(view -> {
                 Intent intent = new Intent(context, SeeAllActivity.class);
                 intent.putExtra(ConstantUtil.SEE_ALL_FLAG, ConstantUtil.REVIEW_ITEM);
                 intent.putExtra(ConstantUtil.ID_FLAG, classId);
                 intent.putParcelableArrayListExtra(ConstantUtil.REVIEWS_FLAG, (ArrayList<? extends Parcelable>) reviews); // 굳이?
-                Log.e("Parcelable reviews","check ======= "+ reviews);
                 context.startActivity(intent);
             });
         } else {
@@ -153,12 +165,13 @@ public class AboutFragment extends Fragment {
             textViewReviewSeeAll.setVisibility(View.GONE);
         }
 
+
         // subscriber
-        List<Subscriber> subscribers = about.getSubscribers();
+        subscribers = about.getSubscribers();
         int count = subscribers.size();
-        if(count != 0) {
+        if (count != 0) {
             textViewSubscriberNum.setVisibility(View.VISIBLE);
-            textViewSubscriberNum.setText(count + " Subscribers");
+           textViewSubscriberNum.setText(count + " Subscribers");
 
             textViewSubscriberSeeAll.setOnClickListener(view -> {
                 Intent intent = new Intent(context, SeeAllActivity.class);
@@ -171,6 +184,7 @@ public class AboutFragment extends Fragment {
         } else
             textViewSubscriberNum.setVisibility(View.GONE);
         subscribersAdapter.update(subscribers);
+
 
         // related class
         List<RelatedClass> relatedClasses = about.getRelatedClasses();
@@ -206,4 +220,35 @@ public class AboutFragment extends Fragment {
         // related class
         recyclerViewRelatedClass = view.findViewById(R.id.recycler_view_related_class);
     }
+
+
+    Subscriber subscriber;
+
+    @Subscribe
+    public void addSubscriber(PushEvent pushEvent) {
+
+        subscriber = pushEvent.getSubscriber();
+        subscribers.add(subscriber);
+        textViewSubscriberNum.setText(subscribers.size() + " Subscribers");
+        subscribersAdapter.update(subscribers);
+    }
+
+    @Subscribe
+    public void removeSubscriber(RemoveEvent removeEvent) {
+
+        subscriber = removeEvent.removeSubscriber();
+        subscribers.remove(subscriber);
+        textViewSubscriberNum.setText(subscribers.size() + " Subscribers");
+        subscribersAdapter.update(subscribers);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+
+    }
+
 }

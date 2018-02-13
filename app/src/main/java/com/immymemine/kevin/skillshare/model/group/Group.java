@@ -17,6 +17,14 @@ public class Group implements Parcelable {
     String memberCount;
     List<String> memberNicknames;
 
+    public Group(String groupId, String groupName, String groupThumbnail, String memberCount, List<String> memberNicknames) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.groupThumbnail = groupThumbnail;
+        this.memberCount = memberCount;
+        this.memberNicknames = memberNicknames;
+    }
+
     protected Group(Parcel in) {
         _id = in.readString();
         groupId = in.readString();

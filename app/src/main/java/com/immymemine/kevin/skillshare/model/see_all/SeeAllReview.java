@@ -6,7 +6,7 @@ import java.util.List;
  * Created by quf93 on 2017-12-08.
  */
 
-public class SeeAllReview extends SeeAll {
+public class SeeAllReview {
     String reviewPercent;
     String positiveReviewCount;
     String negativeReviewCount;

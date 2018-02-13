@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -51,6 +52,7 @@ import com.immymemine.kevin.skillshare.fragment.class_f.AboutFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.DiscussionsFragment;
 import com.immymemine.kevin.skillshare.fragment.class_f.LessonsFragment;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.model.user.SubscribedClass;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
@@ -81,32 +83,29 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     String classId, url;
     String videoUrl;
+    String classTitle;
     boolean isSubscribed;
-    boolean check;
+
+    Lessons lessons;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
 
-        check = false;
         // 1. Intent 값을 통해 넘어온 data 를 이용해서 서버와 통신
         Intent intent = getIntent();
         classId = intent.getStringExtra(ConstantUtil.ID_FLAG); // class ID
-        Log.e("classId", "classId =======" + classId);
+        classTitle = intent.getStringExtra(ConstantUtil.CLASS_TITLE);
+        url = intent.getStringExtra(ConstantUtil.URL_FLAG);
 
-        url = intent.getStringExtra(ConstantUtil.URL_FLAG); // 왜 필요할까?
-
-//        classTitle = intent.getStringExtra(ConstantUtil.CLASS_TITLE);
 
         isSubscribed = false;
-
+        networkingClass();
         initiateView();
         setTabLayout();
         setTabPager();
-        //
-        networkingClass();
-        //
 
 
     }
@@ -142,6 +141,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
         Bundle bundle = new Bundle();
         bundle.putString(ConstantUtil.ID_FLAG, classId);
+        bundle.putString(ConstantUtil.CLASS_TITLE, classTitle);
 
         lessonsfragment = new LessonsFragment();
         lessonsfragment.setArguments(bundle);
@@ -161,6 +161,14 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
     // share button 클릭 리스너
     public void share(View view) {
 
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        String url = "https://www.skillshare.com/";
+        String subject = lessons.getTitle(); // 해당 클래스 비디오 제목
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.setType("text/plain");
+        Intent chooser = Intent.createChooser(intent, "skillShare");
+        startActivity(chooser);
     }
 
     // back button 클릭 리스너
@@ -171,10 +179,12 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
 
     // subscribe 버튼 클릭 리스너
     public void subscribe(View view) {
+
         if (StateUtil.getInstance().getState()) {
             User user = StateUtil.getInstance().getUserInstance();
 
             if (!isSubscribed) {
+                Snackbar.make(view, "Saved class for later", Snackbar.LENGTH_LONG).show();
                 RetrofitHelper.createApi(UserService.class)
                         .subscribeClass(user.get_id(), classId)
                         .subscribeOn(Schedulers.io())
@@ -191,6 +201,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
                                         }
 
                                         ((ImageButton) view).setImageResource(R.drawable.image_used_bookmark);
+                                        isSubscribed = true;
                                     } else {
                                         Toast.makeText(this, "failed to subscribe this class : " + subscribeResponse.getMessage(), Toast.LENGTH_LONG).show();
                                     }
@@ -199,6 +210,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
                                 }
                         );
             } else {
+                Snackbar.make(view, "unsaved", Snackbar.LENGTH_LONG).show();
                 RetrofitHelper.createApi(UserService.class)
                         .unsubscribeClass(user.get_id(), classId)
                         .subscribeOn(Schedulers.io())
@@ -208,6 +220,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
                                     if (ConstantUtil.SUCCESS.equals(subscribeResponse.getResult())) {
                                         user.getSubscribedClasses().remove(subscribeResponse.getData());
                                         view.setBackground(getResources().getDrawable(R.drawable.image_unused_bookmark));
+                                        isSubscribed = false;
                                     } else {
                                         Toast.makeText(this, "failed to unsubscribe this class : " + subscribeResponse.getMessage(), Toast.LENGTH_LONG).show();
                                     }
@@ -228,7 +241,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         (Lessons lesson) -> {
-                            check = true;
+                            lessons = lesson; // for sharing
                             videoUrl = lesson.getVideos().get(0).getUrl();
                             initiatePlayer();
                             initiateFullScreenDialog();
@@ -237,6 +250,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
                         }
                 );
     }
+
 
     public void start(View view) {
         player.setPlayWhenReady(true);
@@ -426,6 +440,7 @@ public class ClassActivity extends AppCompatActivity implements LessonsAdapter.I
         releasePlayer();
         super.onDestroy();
     }
+
 
     private class PlayerEventListener implements Player.EventListener {
         private static final String TAG = "skill share player";

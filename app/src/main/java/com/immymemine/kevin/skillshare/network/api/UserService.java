@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -62,8 +63,10 @@ public interface UserService {
     @POST("user/uploadImageFile")
     Observable<Response> uploadImageFile(@Query("userId") String userId, @Part MultipartBody.Part image);
 
-    @GET("user/imageFile/{userId}")
-    Observable<User> downloadImage(@Path("userId")String userId);
+    // 그룹 이미지파일과 바디를 함께 넘긴다.
+    @Multipart
+    @POST("user/group/uploadImageFile")
+    Observable<Response> uploadGroupImageFile(@Query("userId") String userId, @Part MultipartBody.Part image, @Part("groupId") RequestBody groupId, @Part("groupname") RequestBody groupname, @Part("memberCount") RequestBody memberCount);
 
     @POST("user/setNickname")
     Observable<Response> setNickname(@Query("userId") String userId, @Query("nickname") String nickname);
@@ -71,8 +74,5 @@ public interface UserService {
     @POST("user/DeletesubscribedClass")
     Observable<SubscribeResponse> deleteSubscribeClass(@Query("userId") String userId, @Body List<SubscribedClass> deleteSubscribeClass);
 
-//    @GET("user/downloadVideo/{}")
 
-    //    @PUT("user/imageUrl/{userId}/{imageUrl}")
-//    Observable<User> putImageUrl(@Path("userId") String userId, @Path("imageUrl") String imageUrl);
 }

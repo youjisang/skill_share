@@ -4,6 +4,7 @@ import com.immymemine.kevin.skillshare.model.discover.SearchClass;
 import com.immymemine.kevin.skillshare.model.m_class.About;
 import com.immymemine.kevin.skillshare.model.m_class.Discussion;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.network.Response;
 import com.immymemine.kevin.skillshare.network.user.LikeRequestBody;
 
@@ -11,8 +12,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -46,5 +49,9 @@ public interface ClassService {
     @GET("class/search/{content}")
     Observable<List<SearchClass>> search(@Path("content") String searchContent);
 
+    @POST("class/addSubscriber/{classId}")
+    Observable<About> addSubscriber(@Path("classId") String classId, @Body Subscriber subscriber);
 
+    @DELETE("class/removeSubscriber/{classId}")
+    Observable<About> removeSubscriber(@Path("classId")String classId,@Query("subscribeId")String subscribeId);
 }

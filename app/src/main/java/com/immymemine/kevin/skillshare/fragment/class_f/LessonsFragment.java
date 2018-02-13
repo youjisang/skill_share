@@ -21,18 +21,28 @@ import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.adapter.class_adapter.LessonsAdapter;
+import com.immymemine.kevin.skillshare.model.m_class.About;
+import com.immymemine.kevin.skillshare.model.m_class.Class;
 import com.immymemine.kevin.skillshare.model.m_class.Lessons;
+import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
 import com.immymemine.kevin.skillshare.model.m_class.Tutor;
 import com.immymemine.kevin.skillshare.model.user.Following;
 import com.immymemine.kevin.skillshare.model.user.User;
 import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.network.api.ClassService;
 import com.immymemine.kevin.skillshare.network.api.UserService;
+import com.immymemine.kevin.skillshare.utility.ChageCasting;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 import com.immymemine.kevin.skillshare.utility.DialogUtil;
 import com.immymemine.kevin.skillshare.utility.StateUtil;
 import com.immymemine.kevin.skillshare.utility.TimeUtil;
+import com.immymemine.kevin.skillshare.utility.communication_util.Bus;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.BusProvider;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.PushEvent;
+import com.immymemine.kevin.skillshare.utility.eventbusLibrary.RemoveEvent;
+import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,9 +74,17 @@ public class LessonsFragment extends Fragment {
     String tutorId;
     String classId;
 
+    // subscriber for About
+    About about;
+    Subscriber subscriber;
+    User user;
+
+
+
     public LessonsFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +95,7 @@ public class LessonsFragment extends Fragment {
         initiateView(view);
 
         classId = getArguments().getString(ConstantUtil.ID_FLAG);
+        user = StateUtil.getInstance().getUserInstance();
 
         RetrofitHelper.createApi(ClassService.class)
                 .getLessons(classId)
@@ -102,8 +121,6 @@ public class LessonsFragment extends Fragment {
         imageViewTutor = v.findViewById(R.id.image_view_group);
         imageViewTutor.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProfileActivity.class);
-
-//            intent.putExtra(ConstantUtil.TUTOR_CHECK, tutorId);
 
             intent.putExtra(ConstantUtil.USER_ID_FLAG, tutorId);
             startActivity(intent);
@@ -134,8 +151,6 @@ public class LessonsFragment extends Fragment {
         tutor = lessons.getTutor();
         tutorId = tutor.getTutorId();
 
-
-
         if (StateUtil.getInstance().getState()) {
             List<Following> followings = StateUtil.getInstance().getUserInstance().getFollowing();
             for (Following following : followings) {
@@ -146,17 +161,28 @@ public class LessonsFragment extends Fragment {
                 }
             }
 
+            about = new About();
+            subscriber = new Subscriber(user.get_id(), user.getName(), user.getImageUrl());
             buttonFollow.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     buttonView.setTextColor(getResources().getColor(R.color.white));
                     followers++;
+                    addOrCancelSubscriber();
                     toggleFollow();
+                    // 이벤트 버스
+                    BusProvider.getInstance().post(new PushEvent(subscriber));
+
+                    textViewSubscriberCount.setText(ChageCasting.FromIntegerToString(lessons.getSubscriberCount()));
+
                 } else {
                     buttonView.setTextColor(getResources().getColor(R.color.IcActive));
                     followers--;
+                    addOrCancelSubscriber();
                     toggleFollow();
+                    // 이벤트 버스
+                    BusProvider.getInstance().post(new RemoveEvent(subscriber));
+                    textViewSubscriberCount.setText(lessons.getSubscriberCount());
                 }
-
                 textViewFollowersCount.setText(followers + " Followers");
             });
 
@@ -189,7 +215,6 @@ public class LessonsFragment extends Fragment {
     }
 
     private void toggleFollow() {
-        User user = StateUtil.getInstance().getUserInstance();
 
         RetrofitHelper.createApi(UserService.class)
                 .follow(user.get_id(), tutor)
@@ -209,4 +234,21 @@ public class LessonsFragment extends Fragment {
                         }
                 );
     }
+
+    private void addOrCancelSubscriber() {
+
+        //TODO Class에 추가하기.
+        RetrofitHelper.createApi(ClassService.class)
+                .addSubscriber(classId, subscriber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        (About about) -> {
+                            about.getSubscribers().add(subscriber);
+
+                        }, (Throwable error) -> {
+                            Log.e("error", error.getMessage());
+                        }
+                );
+        }
 }
