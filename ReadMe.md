@@ -1,6 +1,6 @@
 # SkillShare copy project
 
-# - youtube 링크
+# youtube 링크
 
 - [시연동영상 project1](https://www.youtube.com/watch?v=N2Rs-Njy0DI)
 - [시연동영상 project2](https://www.youtube.com/watch?v=bN9aYZA0NYs&feature=youtu.be)
@@ -17,7 +17,7 @@
 - db: mongodb
 
 
-# - 사용 Library
+# 사용 Library
 
 #### Layout 및 뷰 관련 library
 
