@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.model.m_class.Subscriber;
+import com.immymemine.kevin.skillshare.network.RetrofitHelper;
 import com.immymemine.kevin.skillshare.utility.ConstantUtil;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
     public SubscriberSeeAllRecyclerViewAdapter(Context context, List<Subscriber> subscribers) {
         this.context = context;
 
-        if(context instanceof OnLoadMoreListener) {
+        if (context instanceof OnLoadMoreListener) {
             onLoadMoreListener = (OnLoadMoreListener) context;
         }
 
@@ -62,7 +63,7 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
 
         holder.userId = subscriber.get_id();
         holder.textViewName.setText(subscriber.getName());
-        Glide.with(context).load(subscriber.getImageUrl())
+        Glide.with(context).load(RetrofitHelper.BASE_URL + subscriber.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.imageViewProfile);
     }
@@ -118,7 +119,7 @@ public class SubscriberSeeAllRecyclerViewAdapter extends RecyclerView.Adapter<Su
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ProfileActivity.class);
                     intent.putExtra(ConstantUtil.ID_FLAG, userId);
-                    Log.e("userId","userId ============= "+userId);
+                    Log.e("userId", "userId ============= " + userId);
                     context.startActivity(intent);
                 }
             });

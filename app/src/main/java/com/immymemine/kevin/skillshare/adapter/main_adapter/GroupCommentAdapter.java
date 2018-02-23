@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.immymemine.kevin.skillshare.R;
 import com.immymemine.kevin.skillshare.activity.ProfileActivity;
 import com.immymemine.kevin.skillshare.model.group.Comment;
@@ -130,6 +132,7 @@ public class GroupCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 int index = comment.getComment().indexOf("@");
 
             }
+
             chatHolder.expandableTextView.setText(comment.getComment());
             chatHolder.textViewTime.setText(TimeUtil.calculateTime(comment.getTime()));
         }

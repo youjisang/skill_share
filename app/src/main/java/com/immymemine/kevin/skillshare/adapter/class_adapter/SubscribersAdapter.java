@@ -38,7 +38,6 @@ public class SubscribersAdapter extends RecyclerView.Adapter<SubscribersAdapter.
     }
 
 
-
     @Override
     public int getItemViewType(int position) {
         if (subscribers == null || subscribers.size() == 0)

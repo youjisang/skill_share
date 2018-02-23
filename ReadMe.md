@@ -1,13 +1,22 @@
-# SkillShare 사용 기술 stack
+# SkillShare copy project
 
-## __목차__
+# - youtube 링크
 
-### 1. __사용 library__
-### 2. __Application Structure__
-### 3. __Application Analysis__
-### 4. __Utility Class__
+- [project1](https://www.youtube.com/edit?o=U&video_id=N2Rs-Njy0DI)
+- [project2](https://www.youtube.com/watch?v=bN9aYZA0NYs&feature=youtu.be)
 
-# 1. 사용 Library
+-------------------------------------------------------------------------------
+
+# 기술 스택
+
+- language : Java, JavaScript
+- OS : Android
+- sever: nodeJs
+- server framework: express
+- db: mongodb
+
+
+# - 사용 Library
 
 #### Layout 및 뷰 관련 library
 
@@ -49,12 +58,9 @@
 
 - lambda
 
-# 2. Application structure
+# - Application analysis
 
-- 사진첨부
-
-# 3. Application analysis
-
+>> 각 액티비티의 이슈를 어떻게 해결했는지를 정리한 항목
 
 ## Splash Activity
 
@@ -1748,7 +1754,7 @@ editTextSearch.setOnKeyListener((v, keyCode, event) -> {
 
 ```
 
-# 4. Utility Class 
+# - Utility Class 
 
 ### RetrofitHelper
 
