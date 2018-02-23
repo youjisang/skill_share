@@ -2,7 +2,7 @@
 
 # - youtube 링크
 
-- [project1](https://www.youtube.com/edit?o=U&video_id=N2Rs-Njy0DI)
+- [project1](https://www.youtube.com/watch?v=N2Rs-Njy0DI)
 - [project2](https://www.youtube.com/watch?v=bN9aYZA0NYs&feature=youtu.be)
 
 -------------------------------------------------------------------------------
