@@ -2,8 +2,9 @@
 
 # - youtube 링크
 
-- [project1](https://www.youtube.com/watch?v=N2Rs-Njy0DI)
-- [project2](https://www.youtube.com/watch?v=bN9aYZA0NYs&feature=youtu.be)
+- [시연동영상 project1](https://www.youtube.com/watch?v=N2Rs-Njy0DI)
+- [시연동영상 project2](https://www.youtube.com/watch?v=bN9aYZA0NYs&feature=youtu.be)
+- 차례대로 보시고, 시청 시 한글 자막으로 키고 보는 것을 추천합니다.
 
 -------------------------------------------------------------------------------
 
